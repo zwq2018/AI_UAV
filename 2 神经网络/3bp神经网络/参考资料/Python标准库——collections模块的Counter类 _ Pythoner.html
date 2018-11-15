@@ -1,0 +1,1204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0032)http://www.pythoner.com/205.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<title>Python标准库——collections模块的Counter类 | Pythoner</title>
+<meta name="description" content="你像从前一样的Python学习笔记">
+
+<link rel="alternate" type="application/rss+xml" title="Pythoner RSS Feed" href="http://www.pythoner.com/feed">
+<link rel="alternate" type="application/atom+xml" title="Pythoner Atom Feed" href="http://www.pythoner.com/feed/atom"> 
+<link rel="pingback" href="http://www.pythoner.com/xmlrpc.php">
+
+<link rel="stylesheet" href="./Python标准库——collections模块的Counter类 _ Pythoner_files/style.css" type="text/css">
+<link rel="stylesheet" href="./Python标准库——collections模块的Counter类 _ Pythoner_files/comment-style.css" type="text/css">
+
+ 
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Pythoner » Python标准库——collections模块的Counter类评论Feed" href="http://www.pythoner.com/205.html/feed">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.pythoner.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.8"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Python标准库——collections模块的Counter类 _ Pythoner_files/wp-emoji-release.min.js.下载" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="crayon-css" href="./Python标准库——collections模块的Counter类 _ Pythoner_files/crayon.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="crayon-theme-son-of-obsidian-css" href="./Python标准库——collections模块的Counter类 _ Pythoner_files/son-of-obsidian.css" type="text/css" media="all">
+<link rel="stylesheet" id="crayon-font-monaco-css" href="./Python标准库——collections模块的Counter类 _ Pythoner_files/monaco.css" type="text/css" media="all">
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jquery.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jquery-migrate.min.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"http:\/\/www.pythoner.com\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/crayon.min.js.下载"></script>
+<link rel="https://api.w.org/" href="http://www.pythoner.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.pythoner.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.pythoner.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="安装CTeX后环境变量（Path）被覆盖的解决方法" href="http://www.pythoner.com/202.html">
+<link rel="next" title="《程序员度量》读书笔记" href="http://www.pythoner.com/206.html">
+<meta name="generator" content="WordPress 4.9.8">
+<link rel="shortlink" href="http://www.pythoner.com/?p=205">
+<link rel="alternate" type="application/json+oembed" href="http://www.pythoner.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.pythoner.com%2F205.html">
+<link rel="alternate" type="text/xml+oembed" href="http://www.pythoner.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.pythoner.com%2F205.html&amp;format=xml">
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jscript.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/comment.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/rollover.js.下载"></script>
+
+<!--[if IE 7]>
+<link rel="stylesheet" href="http://www.pythoner.com/wp-content/themes/flat/ie7.css" type="text/css" />
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" href="http://www.pythoner.com/wp-content/themes/flat/ie8.css" type="text/css" />
+<![endif]-->
+
+
+<style type="text/css">
+a, .post .title a:hover, .post_meta a:hover, #bread_crumb ul li a:hover, #previous_post a:hover, #next_post a:hover, .post a.more-link:hover, #right_col li a:hover, #copyright li a:hover, #archive_headline #keyword,
+   #comments_wrapper a:hover, #comment_header_right .comment_switch_active a, #comment_header_right .comment_switch_active a:hover, #comment_pager .current
+   { color:#00A19E; }
+
+#no_post a.back:hover, #wp-calendar td a:hover, #wp-calendar #prev a:hover, #wp-calendar #next a:hover, .page_navi a:hover, #submit_comment:hover
+ { background-color:#00A19E; }
+
+#guest_info input:focus, #comment_textarea textarea:focus
+ { border:1px solid #00A19E; }
+
+a:hover
+ { color:#BDC900; }
+
+body { font-size:13px; }
+
+
+
+</style>
+
+<link href="./Python标准库——collections模块的Counter类 _ Pythoner_files/bdsstyle.css" rel="stylesheet" type="text/css"><script src="./Python标准库——collections模块的Counter类 _ Pythoner_files/logger.js.下载"></script></head>
+
+<body><iframe frameborder="0" style="display: none;" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/saved_resource.html"></iframe><div id="bdshare_s" style="display: block;"><iframe id="bdsIfr" style="position:absolute;display:none;z-index:9999;" frameborder="0" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/saved_resource(1).html"></iframe><div id="bdshare_l" style="display: none;"><div id="bdshare_l_c"><h6>分享到</h6><ul><li><a href="http://www.pythoner.com/205.html#" class="bds_mshare mshare">一键分享</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_qzone qqkj">QQ空间</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsina xlwb">新浪微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdysc bdysc">百度云收藏</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_renren rrw">人人网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqq txwb">腾讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdxc bdxc">百度相册</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_kaixin001 kxw">开心网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqf txpy">腾讯朋友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tieba bdtb">百度贴吧</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_douban db">豆瓣网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsohu shwb">搜狐微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdhome bdhome">百度新首页</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_sqq sqq">QQ好友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_thx thx">和讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_more">更多...</a></li></ul><p><a href="http://www.pythoner.com/205.html#" class="goWebsite">百度分享</a></p></div></div></div><div id="bdshare_s" style="display: block;"><iframe id="bdsIfr" style="position:absolute;display:none;z-index:9999;" frameborder="0" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/saved_resource(2).html"></iframe><div id="bdshare_l" style="display: none;"><div id="bdshare_l_c"><h6>分享到</h6><ul><li><a href="http://www.pythoner.com/205.html#" class="bds_mshare mshare">一键分享</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_qzone qqkj">QQ空间</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsina xlwb">新浪微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdysc bdysc">百度云收藏</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_renren rrw">人人网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqq txwb">腾讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdxc bdxc">百度相册</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_kaixin001 kxw">开心网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqf txpy">腾讯朋友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tieba bdtb">百度贴吧</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_douban db">豆瓣网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsohu shwb">搜狐微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdhome bdhome">百度新首页</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_sqq sqq">QQ好友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_thx thx">和讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_more">更多...</a></li></ul><p><a href="http://www.pythoner.com/205.html#" class="goWebsite">百度分享</a></p></div></div></div><div id="bdshare_s" style="display: block;"><iframe id="bdsIfr" style="position:absolute;display:none;z-index:9999;" frameborder="0" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/saved_resource(3).html"></iframe><div id="bdshare_l" style="display: none;"><div id="bdshare_l_c"><h6>分享到</h6><ul><li><a href="http://www.pythoner.com/205.html#" class="bds_mshare mshare">一键分享</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_qzone qqkj">QQ空间</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsina xlwb">新浪微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdysc bdysc">百度云收藏</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_renren rrw">人人网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqq txwb">腾讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdxc bdxc">百度相册</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_kaixin001 kxw">开心网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tqf txpy">腾讯朋友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tieba bdtb">百度贴吧</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_douban db">豆瓣网</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_tsohu shwb">搜狐微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_bdhome bdhome">百度新首页</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_sqq sqq">QQ好友</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_thx thx">和讯微博</a></li><li><a href="http://www.pythoner.com/205.html#" class="bds_more">更多...</a></li></ul><p><a href="http://www.pythoner.com/205.html#" class="goWebsite">百度分享</a></p></div></div></div>
+
+ <div id="header">
+  <div class="header_menu">
+    <ul id="menu-nav" class="menu"><li id="menu-item-29" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-29"><a href="http://www.pythoner.com/category/programming-language/python">Python</a></li>
+<li id="menu-item-28" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-28"><a href="http://www.pythoner.com/category/note">读书笔记</a></li>
+<li id="menu-item-47" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-47"><a href="http://www.pythoner.com/about">About</a></li>
+</ul>    </div>
+  <!-- logo -->
+  <h1 class="logo_text"><a href="http://www.pythoner.com/">Pythoner</a></h1>
+<h2 id="site_description">你像从前一样的Python学习笔记</h2>
+ </div>
+
+ <div id="main_content" class="clearfix">
+
+  <div id="left_col">
+      <div id="bread_crumb">
+    <ul class="clearfix">
+     <li id="bc_home"><a href="http://www.pythoner.com/" title="首页">首页</a></li>
+     <li id="bc_cat"><a href="http://www.pythoner.com/category/programming-language">编程语言</a><a href="http://www.pythoner.com/category/programming-language/python">python</a></li>     <li class="last">Python标准库——collections模块的Counter类</li>
+    </ul>
+   </div>
+   
+   
+   <div class="post_wrap clearfix" id="single">
+    <div class="post">
+     <h3 class="title"><span>Python标准库——collections模块的Counter类</span></h3>
+     <div class="post_content">
+      <div class="post_baidushare_up clearfix">
+       <!-- Baidu Button BEGIN -->
+       <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+       <a class="bds_tsina" title="分享到新浪微博" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_renren" title="分享到人人网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_tqq" title="分享到腾讯微博" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_qzone" title="分享到QQ空间" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_douban" title="分享到豆瓣网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_diandian" title="分享到点点网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_twi" title="分享到Twitter" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_fbook" title="分享到Facebook" href="http://www.pythoner.com/205.html#"></a>
+       <span class="bds_more">更多</span>
+       <a class="shareCount" href="http://www.pythoner.com/205.html#" title="累计分享16次">16</a>
+       </div>
+       <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1482744" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/bds_s_v2.js.下载"></script>
+       
+       <script type="text/javascript">
+       document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+       </script>
+       <!-- Baidu Button END -->
+      </div>
+      <p>最近在看一本名叫《Python Algorithm: Mastering Basic Algorithms in the Python Language》的书，刚好看到提到这个Counter类（P84的Listing 4.6下的Tip）。</p>
+<h1>1.collections模块</h1>
+<p>collections模块自Python 2.4版本开始被引入，包含了dict、set、list、tuple以外的一些特殊的容器类型，分别是：</p>
+<ul>
+<li>OrderedDict类：排序字典，是字典的子类。引入自2.7。</li>
+<li>namedtuple()函数：命名元组，是一个工厂函数。引入自2.6。</li>
+<li>Counter类：为hashable对象计数，是字典的子类。引入自2.7。</li>
+<li>deque：双向队列。引入自2.4。</li>
+<li>defaultdict：使用工厂函数创建字典，使不用考虑缺失的字典键。引入自2.5。</li>
+</ul>
+<p>文档参见：<a href="http://docs.python.org/2/library/collections.html" title="collections文档" target="_blank">http://docs.python.org/2/library/collections.html</a>。<br>
+<span id="more-205"></span></p>
+<h1>2.Counter类</h1>
+<p>Counter类的目的是用来跟踪值出现的次数。它是一个无序的容器类型，以字典的键值对形式存储，其中元素作为key，其计数作为value。计数值可以是任意的Interger（包括0和负数）。Counter类和其他语言的bags或multisets很相似。</p>
+<h2>2.1 创建</h2>
+<p>下面的代码说明了Counter类创建的四种方法：</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5db79783945224" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">Counter类的创建</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter()  # 创建一个空的Counter类
+&gt;&gt;&gt; c = Counter('gallahad')  # 从一个可iterable对象（list、tuple、dict、字符串等）创建
+&gt;&gt;&gt; c = Counter({'a': 4, 'b': 2})  # 从一个字典对象创建
+&gt;&gt;&gt; c = Counter(a=4, b=2)  # 从一组键值对创建
+</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5db79783945224-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db79783945224-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5db79783945224-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db79783945224-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5db79783945224-5">5</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5db79783945224-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 创建一个空的Counter类</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db79783945224-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'gallahad'</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 从一个可iterable对象（list、tuple、dict、字符串等）创建</span></div><div class="crayon-line" id="crayon-5bc8044f5db79783945224-3"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">4</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 从一个字典对象创建</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db79783945224-4"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-v">a</span><span class="crayon-o">=</span><span class="crayon-cn">4</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">b</span><span class="crayon-o">=</span><span class="crayon-cn">2</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 从一组键值对创建</span></div><div class="crayon-line" id="crayon-5bc8044f5db79783945224-5">&nbsp;</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0027 seconds] -->
+<p> </p>
+<h2>2.2 计数值的访问与缺失的键</h2>
+<p>当所访问的键不存在时，返回0，而不是KeyError；否则返回它的计数。</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5db86527604088" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">计数值的访问</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter("abcdefgab")
+&gt;&gt;&gt; c["a"]
+2
+&gt;&gt;&gt; c["c"]
+1
+&gt;&gt;&gt; c["h"]
+0
+</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5db86527604088-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db86527604088-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5db86527604088-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db86527604088-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5db86527604088-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db86527604088-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5db86527604088-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db86527604088-8">8</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5db86527604088-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">"abcdefgab"</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db86527604088-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">"a"</span><span class="crayon-sy">]</span></div><div class="crayon-line" id="crayon-5bc8044f5db86527604088-3"><span class="crayon-cn">2</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db86527604088-4"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">"c"</span><span class="crayon-sy">]</span></div><div class="crayon-line" id="crayon-5bc8044f5db86527604088-5"><span class="crayon-cn">1</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db86527604088-6"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">"h"</span><span class="crayon-sy">]</span></div><div class="crayon-line" id="crayon-5bc8044f5db86527604088-7"><span class="crayon-cn">0</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db86527604088-8">&nbsp;</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0016 seconds] -->
+<p></p>
+<h2>2.3 计数器的更新（update和subtract）</h2>
+<p>可以使用一个iterable对象或者另一个Counter对象来更新键值。</p>
+<p>计数器的更新包括增加和减少两种。其中，增加使用update()方法：</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5db8d421829184" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">计数器的更新（update）</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter('which')
+&gt;&gt;&gt; c.update('witch')  # 使用另一个iterable对象更新
+&gt;&gt;&gt; c['h']
+3
+&gt;&gt;&gt; d = Counter('watch')
+&gt;&gt;&gt; c.update(d)  # 使用另一个Counter对象更新
+&gt;&gt;&gt; c['h']
+4
+</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5db8d421829184-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db8d421829184-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5db8d421829184-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db8d421829184-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5db8d421829184-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db8d421829184-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5db8d421829184-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db8d421829184-8">8</div><div class="crayon-num" data-line="crayon-5bc8044f5db8d421829184-9">9</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5db8d421829184-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'which'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db8d421829184-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">update</span><span class="crayon-sy">(</span><span class="crayon-s">'witch'</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 使用另一个iterable对象更新</span></div><div class="crayon-line" id="crayon-5bc8044f5db8d421829184-3"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">'h'</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db8d421829184-4"><span class="crayon-cn">3</span></div><div class="crayon-line" id="crayon-5bc8044f5db8d421829184-5"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'watch'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db8d421829184-6"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">update</span><span class="crayon-sy">(</span><span class="crayon-v">d</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 使用另一个Counter对象更新</span></div><div class="crayon-line" id="crayon-5bc8044f5db8d421829184-7"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">'h'</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db8d421829184-8"><span class="crayon-cn">4</span></div><div class="crayon-line" id="crayon-5bc8044f5db8d421829184-9">&nbsp;</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0024 seconds] -->
+<p> </p>
+<p>减少则使用subtract()方法：</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5db94482537297" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">计数器的更新（subtract）</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter('which')
+&gt;&gt;&gt; c.subtract('witch')  # 使用另一个iterable对象更新
+&gt;&gt;&gt; c['h']
+1
+&gt;&gt;&gt; d = Counter('watch')
+&gt;&gt;&gt; c.subtract(d)  # 使用另一个Counter对象更新
+&gt;&gt;&gt; c['a']
+-1
+</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5db94482537297-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db94482537297-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5db94482537297-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db94482537297-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5db94482537297-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db94482537297-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5db94482537297-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db94482537297-8">8</div><div class="crayon-num" data-line="crayon-5bc8044f5db94482537297-9">9</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5db94482537297-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'which'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db94482537297-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">subtract</span><span class="crayon-sy">(</span><span class="crayon-s">'witch'</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 使用另一个iterable对象更新</span></div><div class="crayon-line" id="crayon-5bc8044f5db94482537297-3"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">'h'</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db94482537297-4"><span class="crayon-cn">1</span></div><div class="crayon-line" id="crayon-5bc8044f5db94482537297-5"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'watch'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db94482537297-6"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">subtract</span><span class="crayon-sy">(</span><span class="crayon-v">d</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 使用另一个Counter对象更新</span></div><div class="crayon-line" id="crayon-5bc8044f5db94482537297-7"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">'a'</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db94482537297-8"><span class="crayon-o">-</span><span class="crayon-cn">1</span></div><div class="crayon-line" id="crayon-5bc8044f5db94482537297-9">&nbsp;</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0025 seconds] -->
+<p></p>
+<h2>2.4 键的删除</h2>
+<p>当计数值为0时，并不意味着元素被删除，删除元素应当使用<code>del</code>。</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5db9a627283569" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">键的删除</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter("abcdcba")
+&gt;&gt;&gt; c
+Counter({'a': 2, 'c': 2, 'b': 2, 'd': 1})
+&gt;&gt;&gt; c["b"] = 0
+&gt;&gt;&gt; c
+Counter({'a': 2, 'c': 2, 'd': 1, 'b': 0})
+&gt;&gt;&gt; del c["a"]
+&gt;&gt;&gt; c
+Counter({'c': 2, 'b': 2, 'd': 1})
+</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5db9a627283569-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db9a627283569-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5db9a627283569-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db9a627283569-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5db9a627283569-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db9a627283569-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5db9a627283569-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db9a627283569-8">8</div><div class="crayon-num" data-line="crayon-5bc8044f5db9a627283569-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5db9a627283569-10">10</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5db9a627283569-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">"abcdcba"</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db9a627283569-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span></div><div class="crayon-line" id="crayon-5bc8044f5db9a627283569-3"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'c'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'d'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db9a627283569-4"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">"b"</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">0</span></div><div class="crayon-line" id="crayon-5bc8044f5db9a627283569-5"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db9a627283569-6"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'c'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'d'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">0</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5db9a627283569-7"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-r">del</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">[</span><span class="crayon-s">"a"</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db9a627283569-8"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span></div><div class="crayon-line" id="crayon-5bc8044f5db9a627283569-9"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'c'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'d'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5db9a627283569-10">&nbsp;</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0042 seconds] -->
+<p> </p>
+<h2>2.5 elements()</h2>
+<p>返回一个迭代器。元素被重复了多少次，在该迭代器中就包含多少个该元素。元素排列无确定顺序，个数小于1的元素不被包含。</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5dba1722673906" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">elements()方法</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter(a=4, b=2, c=0, d=-2)
+&gt;&gt;&gt; list(c.elements())
+['a', 'a', 'a', 'a', 'b', 'b']</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5dba1722673906-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dba1722673906-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5dba1722673906-3">3</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5dba1722673906-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-v">a</span><span class="crayon-o">=</span><span class="crayon-cn">4</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">b</span><span class="crayon-o">=</span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-o">=</span><span class="crayon-cn">0</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-o">=</span><span class="crayon-o">-</span><span class="crayon-cn">2</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dba1722673906-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-k ">list</span><span class="crayon-sy">(</span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">elements</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dba1722673906-3"><span class="crayon-sy">[</span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-sy">]</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0023 seconds] -->
+<p> </p>
+<h2>2.6 most_common([n])</h2>
+<p>返回一个TopN列表。如果n没有被指定，则返回所有元素。当多个元素计数值相同时，排列是无确定顺序的。</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5dba8015395880" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">most_common()方法</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter('abracadabra')
+&gt;&gt;&gt; c.most_common()
+[('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)]
+&gt;&gt;&gt; c.most_common(3)
+[('a', 5), ('r', 2), ('b', 2)]</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5dba8015395880-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dba8015395880-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5dba8015395880-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dba8015395880-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5dba8015395880-5">5</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5dba8015395880-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">'abracadabra'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dba8015395880-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">most_common</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dba8015395880-3"><span class="crayon-sy">[</span><span class="crayon-sy">(</span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">5</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'r'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'b'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'c'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'d'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">)</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dba8015395880-4"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">most_common</span><span class="crayon-sy">(</span><span class="crayon-cn">3</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dba8015395880-5"><span class="crayon-sy">[</span><span class="crayon-sy">(</span><span class="crayon-s">'a'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">5</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'r'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-s">'b'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">)</span><span class="crayon-sy">]</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0033 seconds] -->
+<p> </p>
+<h2>2.7 fromkeys</h2>
+<p>未实现的类方法。</p>
+<h2>2.8 浅拷贝copy</h2>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5dbae073895170" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">浅拷贝copy</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter("abcdcba")
+&gt;&gt;&gt; c
+Counter({'a': 2, 'c': 2, 'b': 2, 'd': 1})
+&gt;&gt;&gt; d = c.copy()
+&gt;&gt;&gt; d
+Counter({'a': 2, 'c': 2, 'b': 2, 'd': 1})</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5dbae073895170-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbae073895170-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5dbae073895170-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbae073895170-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5dbae073895170-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbae073895170-6">6</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5dbae073895170-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-s">"abcdcba"</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbae073895170-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span></div><div class="crayon-line" id="crayon-5bc8044f5dbae073895170-3"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'c'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'d'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbae073895170-4"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-k ">copy</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dbae073895170-5"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">d</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbae073895170-6"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'c'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'d'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0031 seconds] -->
+<p> </p>
+<h2>2.9 算术和集合操作</h2>
+<p>+、-、&amp;、|操作也可以用于Counter。其中&amp;和|操作分别返回两个Counter对象各元素的最小值和最大值。需要注意的是，得到的Counter对象将删除小于1的元素。</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5dbb4400860935" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">Counter对象的算术和集合操作</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">&gt;&gt;&gt; c = Counter(a=3, b=1)
+&gt;&gt;&gt; d = Counter(a=1, b=2)
+&gt;&gt;&gt; c + d  # c[x] + d[x]
+Counter({'a': 4, 'b': 3})
+&gt;&gt;&gt; c - d  # subtract（只保留正数计数的元素）
+Counter({'a': 2})
+&gt;&gt;&gt; c &amp; d  # 交集:  min(c[x], d[x])
+Counter({'a': 1, 'b': 1})
+&gt;&gt;&gt; c | d  # 并集:  max(c[x], d[x])
+Counter({'a': 3, 'b': 2})</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5dbb4400860935-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbb4400860935-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5dbb4400860935-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbb4400860935-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5dbb4400860935-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbb4400860935-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5dbb4400860935-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbb4400860935-8">8</div><div class="crayon-num" data-line="crayon-5bc8044f5dbb4400860935-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbb4400860935-10">10</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5dbb4400860935-1"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-v">a</span><span class="crayon-o">=</span><span class="crayon-cn">3</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">b</span><span class="crayon-o">=</span><span class="crayon-cn">1</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbb4400860935-2"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-v">a</span><span class="crayon-o">=</span><span class="crayon-cn">1</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">b</span><span class="crayon-o">=</span><span class="crayon-cn">2</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dbb4400860935-3"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-e">d</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># c[x] + d[x]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbb4400860935-4"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">4</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">3</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dbb4400860935-5"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-e">c</span><span class="crayon-h"> </span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-e">d</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># subtract（只保留正数计数的元素）</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbb4400860935-6"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dbb4400860935-7"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">&amp;</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 交集:&nbsp;&nbsp;min(c[x], d[x])</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbb4400860935-8"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5bc8044f5dbb4400860935-9"><span class="crayon-o">&gt;&gt;&gt;</span><span class="crayon-h"> </span><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-h"> </span><span class="crayon-v">d</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 并集:&nbsp;&nbsp;max(c[x], d[x])</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbb4400860935-10"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">{</span><span class="crayon-s">'a'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">3</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'b'</span><span class="crayon-o">:</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-sy">}</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0049 seconds] -->
+<p> </p>
+<h1>3.常用操作</h1>
+<p>下面是一些Counter类的常用操作，来源于Python官方文档</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5bc8044f5dbbb461548801" class="crayon-syntax crayon-theme-son-of-obsidian crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">Counter类常用操作</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly="" style="tab-size: 4; font-size: 12px !important; line-height: 15px !important; z-index: 0; opacity: 0; overflow: hidden;">sum(c.values())  # 所有计数的总数
+c.clear()  # 重置Counter对象，注意不是删除
+list(c)  # 将c中的键转为列表
+set(c)  # 将c中的键转为set
+dict(c)  # 将c中的键值对转为字典
+c.items()  # 转为(elem, cnt)格式的列表
+Counter(dict(list_of_pairs))  # 从(elem, cnt)格式的列表转换为Counter类对象
+c.most_common()[:-n:-1]  # 取出计数最少的n-1个元素
+c += Counter()  # 移除0和负值</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5bc8044f5dbbb461548801-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbbb461548801-2">2</div><div class="crayon-num" data-line="crayon-5bc8044f5dbbb461548801-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbbb461548801-4">4</div><div class="crayon-num" data-line="crayon-5bc8044f5dbbb461548801-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbbb461548801-6">6</div><div class="crayon-num" data-line="crayon-5bc8044f5dbbb461548801-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5bc8044f5dbbb461548801-8">8</div><div class="crayon-num" data-line="crayon-5bc8044f5dbbb461548801-9">9</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5bc8044f5dbbb461548801-1"><span class="crayon-k ">sum</span><span class="crayon-sy">(</span><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">values</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 所有计数的总数</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbbb461548801-2"><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">clear</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 重置Counter对象，注意不是删除</span></div><div class="crayon-line" id="crayon-5bc8044f5dbbb461548801-3"><span class="crayon-k ">list</span><span class="crayon-sy">(</span><span class="crayon-v">c</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 将c中的键转为列表</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbbb461548801-4"><span class="crayon-k ">set</span><span class="crayon-sy">(</span><span class="crayon-v">c</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 将c中的键转为set</span></div><div class="crayon-line" id="crayon-5bc8044f5dbbb461548801-5"><span class="crayon-k ">dict</span><span class="crayon-sy">(</span><span class="crayon-v">c</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 将c中的键值对转为字典</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbbb461548801-6"><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">items</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 转为(elem, cnt)格式的列表</span></div><div class="crayon-line" id="crayon-5bc8044f5dbbb461548801-7"><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-k ">dict</span><span class="crayon-sy">(</span><span class="crayon-v">list_of_pairs</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 从(elem, cnt)格式的列表转换为Counter类对象</span></div><div class="crayon-line crayon-striped-line" id="crayon-5bc8044f5dbbb461548801-8"><span class="crayon-v">c</span><span class="crayon-sy">.</span><span class="crayon-e">most_common</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">[</span><span class="crayon-o">:</span><span class="crayon-o">-</span><span class="crayon-v">n</span><span class="crayon-o">:</span><span class="crayon-o">-</span><span class="crayon-cn">1</span><span class="crayon-sy">]</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 取出计数最少的n-1个元素</span></div><div class="crayon-line" id="crayon-5bc8044f5dbbb461548801-9"><span class="crayon-v">c</span><span class="crayon-h"> </span><span class="crayon-o">+=</span><span class="crayon-h"> </span><span class="crayon-e">Counter</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c"># 移除0和负值</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0031 seconds] -->
+<p> </p>
+<div class="post_copyright">
+<p>本文内容遵从<a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh">CC3.0版权协议</a>，转载请注明：转自<a href="http://www.pythoner.com/">Pythoner</a></p>
+<p>本文链接地址：<a href="http://www.pythoner.com/205.html">Python标准库——collections模块的Counter类</a></p>
+</div>
+            <div class="post_baidushare_down clearfix">
+       <!-- Baidu Button BEGIN -->
+       <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+       <a class="bds_tsina" title="分享到新浪微博" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_renren" title="分享到人人网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_tqq" title="分享到腾讯微博" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_qzone" title="分享到QQ空间" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_douban" title="分享到豆瓣网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_diandian" title="分享到点点网" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_twi" title="分享到Twitter" href="http://www.pythoner.com/205.html#"></a>
+       <a class="bds_fbook" title="分享到Facebook" href="http://www.pythoner.com/205.html#"></a>
+       <span class="bds_more"></span>
+       <a class="shareCount" href="http://www.pythoner.com/205.html#" title="累计分享16次">16</a>
+       </div>
+       <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1482744"></script>
+       
+       <script type="text/javascript">
+       document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+       </script>
+       <!-- Baidu Button END -->
+       </div>
+     </div><!-- END .post_content -->
+    </div>
+    <div class="meta">
+          <ul>
+            <li class="post_date clearfix">
+       <span class="date">18</span>
+       <span class="month">Jun</span>
+       <span class="year">2013</span>
+      </li>
+            <li class="post_author"><a href="http://www.pythoner.com/author/alioth310" title="由alioth310发布" rel="author">alioth310</a></li>      <li class="post_category"><a href="http://www.pythoner.com/category/programming-language/python" rel="category tag">python</a></li>      <li class="post_tag"><a href="http://www.pythoner.com/tag/collections" rel="tag">collections</a>, <a href="http://www.pythoner.com/tag/counter" rel="tag">Counter</a>, <a href="http://www.pythoner.com/tag/python" rel="tag">python</a>, <a href="http://www.pythoner.com/tag/%e6%a0%87%e5%87%86%e5%ba%93" rel="tag">标准库</a></li>      <li class="post_views"> 92,934 次围观</li>      <li class="post_comment"><a href="http://www.pythoner.com/205.html#comments">9 comments</a></li>            <li class="post_qrcode"><img src="http://chart.apis.google.com/chart?chs=100x100&amp;cht=qr&amp;chld=L|0&amp;chl=http://www.pythoner.com/205.html" title="获取本文二维码：Python标准库——collections模块的Counter类"></li>
+     </ul>
+         </div>
+   </div><!-- END .post_wrap -->
+
+   
+      <div id="comments_wrapper">
+    
+
+
+
+<div id="comment_header" class="clearfix">
+
+ <ul id="comment_header_left">
+  <li id="add_comment"><a href="http://www.pythoner.com/205.html#respond">发表评论</a></li>
+  <li id="comment_feed"><a href="http://www.pythoner.com/comments/feed" title="RSS订阅评论">RSS订阅评论</a></li>
+ </ul>
+
+ <ul id="comment_header_right">
+   <li id="trackback_switch"><a href="javascript:void(0);">Trackback ( 3 )</a></li>
+   <li id="comment_switch" class="comment_switch_active"><a href="javascript:void(0);">评论 ( 9 )</a></li>
+ </ul>
+
+
+
+</div><!-- END #comment_header -->
+
+<div id="comments">
+
+ <div id="comment_area">
+  <!-- start commnet -->
+  <ol class="commentlist">
+	
+ <li class="comment guest-comment even_comment" id="comment-2877">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://1.gravatar.com/avatar/782bef5d80ef52759b1203a736a455fc?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://1.gravatar.com/avatar/782bef5d80ef52759b1203a736a455fc?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://1.gravatar.com/avatar/782bef5d80ef52759b1203a736a455fc?s=35&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/782bef5d80ef52759b1203a736a455fc?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-2877">
+
+alyfrisk
+</span>
+     </li>
+     <li class="comment-date">2013/09/02 1:44下午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=2877#respond" onclick="return addComment.moveForm( &quot;comment-content-2877&quot;, &quot;2877&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给alyfrisk"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-2877&#39;, &#39;comment-2877&#39;, &#39;comment-content-2877&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-2877">
+    <p>什么时候用collections呢？</p>
+  </div>
+
+<ul class="children">
+
+ <li class="comment guest-comment even_comment_children" id="comment-27218">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://0.gravatar.com/avatar/fab7c1e109f72b2d402c180e94ffbf1f?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://0.gravatar.com/avatar/fab7c1e109f72b2d402c180e94ffbf1f?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://0.gravatar.com/avatar/fab7c1e109f72b2d402c180e94ffbf1f?s=35&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/fab7c1e109f72b2d402c180e94ffbf1f?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<a id="commentauthor-27218" class="url guest-url" href="http://www.zhidaow.com/" rel="external nofollow">
+
+alexkh
+</a>
+     </li>
+     <li class="comment-date">2014/12/02 10:26上午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=27218#respond" onclick="return addComment.moveForm( &quot;comment-content-27218&quot;, &quot;27218&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给alexkh"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-27218&#39;, &#39;comment-27218&#39;, &#39;comment-content-27218&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-27218">
+    <p>用于计数的，很方便。</p>
+<p>博主的介绍的也很详细，例子很实用，多谢了！</p>
+  </div>
+
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+ <li class="comment guest-comment odd_comment" id="comment-34831">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://1.gravatar.com/avatar/4d40d99398441dde4052cd5ed93d98fa?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://1.gravatar.com/avatar/4d40d99398441dde4052cd5ed93d98fa?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://1.gravatar.com/avatar/4d40d99398441dde4052cd5ed93d98fa?s=35&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/4d40d99398441dde4052cd5ed93d98fa?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<a id="commentauthor-34831" class="url guest-url" href="http://cangmean.org/" rel="external nofollow">
+
+mink
+</a>
+     </li>
+     <li class="comment-date">2015/04/15 1:54下午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=34831#respond" onclick="return addComment.moveForm( &quot;comment-content-34831&quot;, &quot;34831&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给mink"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-34831&#39;, &#39;comment-34831&#39;, &#39;comment-content-34831&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-34831">
+    <p>感谢博主分享, 英语不行看官文有点麻烦，看博主的一目了然啊 <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/good.gif" alt="[em_zan]" class="wp-smiley" style="height: 1em; max-height: 1em;"></p>
+  </div>
+
+</li><!-- #comment-## -->
+
+ <li class="comment guest-comment even_comment" id="comment-43572">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://0.gravatar.com/avatar/0d1613ce075d3047a314322239b801d6?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://0.gravatar.com/avatar/0d1613ce075d3047a314322239b801d6?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://0.gravatar.com/avatar/0d1613ce075d3047a314322239b801d6?s=35&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/0d1613ce075d3047a314322239b801d6?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-43572">
+
+Nicoder
+</span>
+     </li>
+     <li class="comment-date">2016/09/08 11:20上午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=43572#respond" onclick="return addComment.moveForm( &quot;comment-content-43572&quot;, &quot;43572&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给Nicoder"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-43572&#39;, &#39;comment-43572&#39;, &#39;comment-content-43572&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-43572">
+    <p>po主用的什么编辑器？我稀饭~</p>
+  </div>
+
+</li><!-- #comment-## -->
+
+ <li class="comment guest-comment odd_comment" id="comment-45352">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=35&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-45352">
+
+逆小苍
+</span>
+     </li>
+     <li class="comment-date">2017/03/24 3:35下午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=45352#respond" onclick="return addComment.moveForm( &quot;comment-content-45352&quot;, &quot;45352&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给逆小苍"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-45352&#39;, &#39;comment-45352&#39;, &#39;comment-content-45352&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-45352">
+    <p>博主您好，非常感谢您的分享，劣者有一疑惑：<br>
+您在上面2.6 most_common([n]) 中提到 当多个元素计数值相同时，按照字母序排列。<br>
+但是看下面输出<br>
+&gt;&gt;&gt; c = Counter(‘abracadabra’)<br>
+&gt;&gt;&gt; c.most_common()<br>
+[(‘a’, 5), (‘r’, 2), (‘b’, 2), (‘c’, 1), (‘d’, 1)]<br>
+其中 r 和 b的计数值相等; c和d的计数值相等<br>
+如果是按照字母升序  似乎应该输出[(‘a’, 5), (‘b’, 2), (‘r’, 2), (‘c’, 1), (‘d’, 1)]<br>
+如果是按照字母降序 似乎应该输出[(‘a’, 5), (‘r’, 2), (‘b’, 2), (‘d’, 1), (‘c’, 1)]<br>
+如果是在字符串中出现的先后顺序 似乎应该输出[(‘a’, 5), (‘b’, 2), (‘r’, 2), (‘c’, 1), (‘d’, 1)]<br>
+但实际的输出结果 [(‘a’, 5), (‘r’, 2), (‘b’, 2), (‘c’, 1), (‘d’, 1)] 显然与字母序并不符合<br>
+是否此处 在计数值相等的情况下 是随机排列的 ？</p>
+  </div>
+
+<ul class="children">
+
+ <li class="comment admin-comment odd_comment_children" id="comment-45390">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=35&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-45390">
+
+alioth310
+</span>
+     </li>
+     <li class="comment-date">2017/03/27 10:51上午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=45390#respond" onclick="return addComment.moveForm( &quot;comment-content-45390&quot;, &quot;45390&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给alioth310"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-45390&#39;, &#39;comment-45390&#39;, &#39;comment-content-45390&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-45390">
+    <p>抱歉，这里写错了，应该是任意排列的。（官方文档原文是：Elements with equal counts are ordered arbitrarily）</p>
+  </div>
+
+<ul class="children">
+
+ <li class="comment guest-comment even_comment_children" id="comment-45401">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=35&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/d14345cf1032f2da5f543274ee1feaac?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-45401">
+
+逆小苍
+</span>
+     </li>
+     <li class="comment-date">2017/03/27 4:30下午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=45401#respond" onclick="return addComment.moveForm( &quot;comment-content-45401&quot;, &quot;45401&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给逆小苍"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-45401&#39;, &#39;comment-45401&#39;, &#39;comment-content-45401&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-45401">
+    <p>博主客气了 <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/xiao.gif" alt="[em_xiao]" class="wp-smiley" style="height: 1em; max-height: 1em;"></p>
+  </div>
+
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+ <li class="comment guest-comment even_comment" id="comment-50049">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://1.gravatar.com/avatar/7b3dc362edc27a001221b26d5ea7ce82?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://1.gravatar.com/avatar/7b3dc362edc27a001221b26d5ea7ce82?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://1.gravatar.com/avatar/7b3dc362edc27a001221b26d5ea7ce82?s=35&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7b3dc362edc27a001221b26d5ea7ce82?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-50049">
+
+莫莫雨
+</span>
+     </li>
+     <li class="comment-date">2017/09/02 9:39上午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=50049#respond" onclick="return addComment.moveForm( &quot;comment-content-50049&quot;, &quot;50049&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给莫莫雨"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-50049&#39;, &#39;comment-50049&#39;, &#39;comment-content-50049&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-50049">
+    <p>c.most_common()[:-n:-1]  # 取出计数最少的n个元素<br>
+这个好像是最少的n-1个</p>
+  </div>
+
+<ul class="children">
+
+ <li class="comment admin-comment even_comment_children" id="comment-50218">
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img src="http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=35&amp;d=mm&amp;r=g" alt="" srcset="http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=70&amp;d=mm&amp;r=g 2x" class="avatar avatar-35 photo" height="35" width="35" data-lazy-loaded="true" style="display: block;"><noscript><img alt='' src='http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=35&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/99cf1bead3321742801039a02fee7a3f?s=70&#038;d=mm&#038;r=g 2x' class='avatar avatar-35 photo' height='35' width='35' /></noscript>  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-50218">
+
+alioth310
+</span>
+     </li>
+     <li class="comment-date">2017/09/04 10:33上午</li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><a rel="nofollow" class="comment-reply-link" href="http://www.pythoner.com/205.html?replytocom=50218#respond" onclick="return addComment.moveForm( &quot;comment-content-50218&quot;, &quot;50218&quot;, &quot;respond&quot;, &quot;205&quot; )" aria-label="回复给alioth310"><span><span>回复</span></span></a></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-50218&#39;, &#39;comment-50218&#39;, &#39;comment-content-50218&#39;, &#39;comment&#39;);">引用</a></li>
+       </ul>
+
+  </div>
+  <div class="comment-content" id="comment-content-50218">
+    <p>你说得对，这里写错了，感谢提醒</p>
+  </div>
+
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+  </ol>
+  <!-- comments END -->
+
+  
+ </div><!-- #comment-list END -->
+
+
+ <div id="trackback_area">
+ <!-- start trackback -->
+ 
+  <div id="trackback_url_wrapper">
+   <label for="trackback_url">TrackBack 地址</label>
+   <input type="text" name="trackback_url" id="trackback_url" size="60" value="http://www.pythoner.com/205.html/trackback" readonly="readonly" onfocus="this.select()">
+  </div>
+
+  <ol class="commentlist">
+         <li class="comment">
+    <div class="trackback_time">
+     2016/03/01         </div>
+    <div class="trackback_title">
+     Trackback 来自：<a href="http://www.imekaku.com/2016/03/01/%e5%ae%8c%e6%88%90%e8%b6%85%e5%a4%a7%e6%96%87%e6%9c%ac%e5%88%b0%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%bd%95%e5%85%a5%e5%92%8c%e6%96%87%e7%ab%a0%e8%a2%ab%e5%bc%95%e7%">完成超大文本到数据库的录入和文章被引用数的图形绘制 – Imekaku-Blog</a>
+    </div>
+   </li>
+      <li class="comment">
+    <div class="trackback_time">
+     2016/03/01         </div>
+    <div class="trackback_title">
+     Trackback 来自：<a href="http://www.imekaku.com/2016/03/01/%e5%ae%8c%e6%88%90%e8%b6%85%e5%a4%a7%e6%96%87%e6%9c%ac%e5%88%b0%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%bd%95%e5%85%a5%e5%92%8c%e6%96%87%e7%ab%a0%e8%a2%ab%e5%bc%95%e7%">完成超大文本到数据库的录入和文章被引用数的图形绘制 – Imekaku-Blog</a>
+    </div>
+   </li>
+      <li class="comment">
+    <div class="trackback_time">
+     2018/06/17         </div>
+    <div class="trackback_title">
+     Trackback 来自：<a href="http://tingkai.ca/python-collection/">Python Collection – Tingkai</a>
+    </div>
+   </li>
+        </ol>
+
+  <!-- trackback end -->
+ </div><!-- #trackbacklist END -->
+
+ 
+
+
+ 
+ <fieldset class="comment_form_wrapper" id="respond">
+
+    <div id="cancel_comment_reply"><a rel="nofollow" id="cancel-comment-reply-link" href="http://www.pythoner.com/205.html#respond" style="display:none;">点击这里取消回复。</a></div>
+  
+  <form action="http://www.pythoner.com/wp-comments-post.php" method="post" id="commentform">
+
+   
+   <div id="guest_info">
+    <div id="guest_name"><label for="author"><span>昵称</span>( 必须 )</label><input type="text" name="author" id="author" value="" size="22" tabindex="1" aria-required="true"></div>
+    <div id="guest_email"><label for="email"><span>E-MAIL</span>( 必须 ) - 不会公开 -</label><input type="text" name="email" id="email" value="" size="22" tabindex="2" aria-required="true"></div>
+    <div id="guest_url"><label for="url"><span>网址</span></label><input type="text" name="url" id="url" value="" size="22" tabindex="3"></div>
+   </div>
+
+   
+   <div id="comment_textarea">
+    <textarea name="comment" id="comment" cols="50" rows="10" tabindex="4" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById(&#39;submit_comment&#39;).click();return false};"></textarea>
+   </div>
+
+  <div id="custom_smilies">
+	<!-- Custom Smilies - Version 2.9.2 -->
+	<style type="text/css">
+	img.wp-smiley-select {cursor: pointer;}
+	</style>
+    <script type="text/javascript">
+    function grin(tag) {
+    	if (typeof tinyMCE != 'undefined') {
+    		grin_tinymcecomments(tag);
+    	} else {
+    		grin_plain(tag);
+    	}
+    }
+    function grin_tinymcecomments(tag) {
+    	tinyMCE.execCommand('mceInsertContent', false, ' ' + tag + ' ');
+    }
+    
+    function grin_plain(tag) {
+    	var myField;
+    	var myCommentTextarea = "comment";
+    	tag = ' ' + tag + ' ';
+        if (document.getElementById(myCommentTextarea) && document.getElementById(myCommentTextarea).type == 'textarea') {
+    		myField = document.getElementById(myCommentTextarea);
+    	} else {
+    		return false;
+    	}
+    	if (document.selection) {
+    		myField.focus();
+    		sel = document.selection.createRange();
+    		sel.text = tag;
+    		myField.focus();
+    	}
+    	else if (myField.selectionStart || myField.selectionStart == '0') {
+    		var startPos = myField.selectionStart;
+    		var endPos = myField.selectionEnd;
+    		var cursorPos = endPos;
+    		myField.value = myField.value.substring(0, startPos)
+    					  + tag
+    					  + myField.value.substring(endPos, myField.value.length);
+    		cursorPos += tag.length;
+    		myField.focus();
+    		myField.selectionStart = cursorPos;
+    		myField.selectionEnd = cursorPos;
+    	}
+    	else {
+    		myField.value += tag;
+    		myField.focus();
+    	}
+    }
+    
+    function moreSmilies() {
+    	document.getElementById('wp-smiley-more').style.display = 'inline';
+    	document.getElementById('wp-smiley-toggle').innerHTML = '<a href="javascript:lessSmilies()">&laquo;&nbsp;less</a></span>';
+    }
+    
+    function lessSmilies() {
+    	document.getElementById('wp-smiley-more').style.display = 'none';
+    	document.getElementById('wp-smiley-toggle').innerHTML = '<a href="javascript:moreSmilies()">more&nbsp;&raquo;</a>';
+    }
+    </script>
+<img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/good.gif" alt="[em_zan]" onclick="grin(&quot;[em_zan]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/yali.gif" alt="[em_yali]" onclick="grin(&quot;[em_yali]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/xiao.gif" alt="[em_xiao]" onclick="grin(&quot;[em_xiao]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/xhj.gif" alt="[em_xhj]" onclick="grin(&quot;[em_xhj]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/tucao.gif" alt="[em_tucao]" onclick="grin(&quot;[em_tucao]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/tu.gif" alt="[em_tu]" onclick="grin(&quot;[em_tu]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/tiaopi.gif" alt="[em_tiaopi]" onclick="grin(&quot;[em_tiaopi]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/shaoxiang.gif" alt="[em_sx]" onclick="grin(&quot;[em_sx]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/shudaizi.gif" alt="[em_sdz]" onclick="grin(&quot;[em_sdz]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/shangbuqi.gif" alt="[em_sbq]" onclick="grin(&quot;[em_sbq]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/mobai.gif" alt="[em_mobai]" onclick="grin(&quot;[em_mobai]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/kouzhao.gif" alt="[em_kzh]" onclick="grin(&quot;[em_kzh]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/ku.gif" alt="[em_ku]" onclick="grin(&quot;[em_ku]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/koushui.gif" alt="[em_ksh]" onclick="grin(&quot;[em_ksh]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/keai.gif" alt="[em_keai]" onclick="grin(&quot;[em_keai]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jiong.gif" alt="[em_jiong]" onclick="grin(&quot;[em_jiong]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jing.gif" alt="[em_jing]" onclick="grin(&quot;[em_jing]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/huaixiao.gif" alt="[em_hx]" onclick="grin(&quot;[em_hx]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/han.gif" alt="[em_han]" onclick="grin(&quot;[em_han]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/ganga.gif" alt="[em_ganga]" onclick="grin(&quot;[em_ganga]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/daxiao.gif" alt="[em_daxiao]" onclick="grin(&quot;[em_daxiao]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/cool.gif" alt="[em_cool]" onclick="grin(&quot;[em_cool]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/chi.gif" alt="[em_chi]" onclick="grin(&quot;[em_chi]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/bu.gif" alt="[em_bu]" onclick="grin(&quot;[em_bu]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/bizui.gif" alt="[em_bizui]" onclick="grin(&quot;[em_bizui]&quot;)" class="wp-smiley-select"> <img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/ai.gif" alt="[em_ai]" onclick="grin(&quot;[em_ai]&quot;)" class="wp-smiley-select"> </div>
+
+   <div id="submit_comment_wrapper">
+    <p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="edf8c8e28a"></p><p style="display: none;"></p>    <input name="submit" type="submit" id="submit_comment" tabindex="5" value="发表评论/Ctrl+Enter" title="发表评论/Ctrl+Enter" alt="发表评论/Ctrl+Enter">
+   </div>
+   <div id="input_hidden_field">
+        <input type="hidden" name="comment_post_ID" value="205" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+       </div>
+
+  <input type="hidden" id="ak_js" name="ak_js" value="1539835597257"></form>
+
+ </fieldset><!-- #comment-form-area END -->
+
+</div><!-- #comment end -->   </div>
+   
+      <div id="previous_next_post_single">
+    <div class="clearfix">
+     <p id="previous_post"><a href="http://www.pythoner.com/202.html" rel="prev">安装CTeX后环境变量（Path）被覆盖的解决方法</a></p>     <p id="next_post"><a href="http://www.pythoner.com/206.html" rel="next">《程序员度量》读书笔记</a></p>    </div>
+   </div>
+   
+
+  </div><!-- END #left_col -->
+
+  <div id="container" style="height: 5953px;"></div>
+
+    <div id="right_col">
+   
+<div id="info_area">
+ <div class="side_box clearfix" id="info_content">
+    <h3 class="side_title">扫描二维码访问本站</h3>
+    <div class="desc">
+   <p><img src="./Python标准库——collections模块的Counter类 _ Pythoner_files/pythoner_qrcode_150.png" alt="扫描二维码访问本站"></p>
+  </div>
+ </div>
+</div>
+
+<div class="side_box clearfix" id="side_meta_content">
+
+  <ul id="social_link" class="clearfix">
+    <li class="rss_button"><a class="target_blank" href="http://www.pythoner.com/feed" target="_blank">rss</a></li>
+          <li class="weibo_button"><a class="target_blank" href="http://weibo.com/alioth310" target="_blank">weibo</a></li>
+         </ul>
+ 
+  <div id="search_area">
+    <form method="get" id="searchform" action="http://www.pythoner.com/">
+   <div><input id="search_button" class="rollover" type="image" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/search_button.gif" alt="搜索一下" title="搜索一下"></div>
+   <div><input id="search_input" type="text" value="搜索一下" name="s" onfocus="if (this.value == &#39;搜索一下&#39;) this.value = &#39;&#39;;" onblur="if (this.value == &#39;&#39;) this.value = &#39;搜索一下&#39;;"></div>
+  </form>
+   </div>
+ 
+</div>
+
+
+<div id="side_top">
+
+ <div class="side_box widget_text" id="text-3">
+<h3 class="side_title">支持我</h3>
+			<div class="textwidget"><ul>
+  <li><a href="https://www.digitalocean.com/?refcode=32ac9c46cd67">DigitalOcean邀请注册（送10刀）</a></li>
+  <li>域名出售：
+    <ul>
+      <li>shangpolu.com（上坡路）</li>
+      <li>pythonsky.com</li>
+    </ul>
+  </li> 
+</ul></div>
+		</div>
+<div class="side_box widget_views" id="views-2">
+<h3 class="side_title">热门文章</h3>
+<ul>
+<li><a href="http://www.pythoner.com/205.html" title="Python标准库——collections模块的Counter类">Python标准库——collections模块的Counter类</a></li><li><a href="http://www.pythoner.com/83.html" title="Windows下PyQt4的安装">Windows下PyQt4的安装</a></li><li><a href="http://www.pythoner.com/106.html" title="Windows下Eclipse+PyDev安装Python开发环境">Windows下Eclipse+PyDev安装Python开发环境</a></li><li><a href="http://www.pythoner.com/46.html" title="Python函数式编程——map()、reduce()">Python函数式编程——map()、reduce()</a></li><li><a href="http://www.pythoner.com/89.html" title="使用eric创建一个PyQt项目">使用eric创建一个PyQt项目</a></li><li><a href="http://www.pythoner.com/13.html" title="Python中如何实现两个字典合并">Python中如何实现两个字典合并</a></li><li><a href="http://www.pythoner.com/148.html" title="【Python教程】雨痕 的《Python学习笔记》（附脑图）">【Python教程】雨痕 的《Python学习笔记》（附脑图）</a></li><li><a href="http://www.pythoner.com/238.html" title="《机器学习实战》读书笔记">《机器学习实战》读书笔记</a></li><li><a href="http://www.pythoner.com/111.html" title="使用Py2exe将PyQt程序打包为exe文件">使用Py2exe将PyQt程序打包为exe文件</a></li><li><a href="http://www.pythoner.com/183.html" title="《集体智慧编程》读书笔记">《集体智慧编程》读书笔记</a></li></ul>
+</div>
+		<div class="side_box widget_recent_entries" id="recent-posts-2">
+		<h3 class="side_title">最新文章</h3>
+		<ul>
+											<li>
+					<a href="http://www.pythoner.com/495.html">《用Python写网络爬虫》读书笔记</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/492.html">《用Python写网络爬虫》勘误</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/474.html">《Python核心编程（第3版）》勘误</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/416.html">【漏洞预警】Tornado某缺陷可能造成文件读取漏洞 （updated @ 2015-03-04）</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/414.html">使用Python下载邮件（pop/imap）</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/386.html">《Web之困》读书笔记</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/364.html">Tornado 4.0发布</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/357.html">Python设置终端显示颜色、粗体、下划线等效果</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/356.html">Python天坑系列（一）：while 1比while True更快？</a>
+									</li>
+											<li>
+					<a href="http://www.pythoner.com/345.html">Python socket模拟TCP通讯</a>
+									</li>
+					</ul>
+		</div>
+<div class="side_box widget_recent_comments" id="recent-comments-2">
+<h3 class="side_title">最新评论</h3>
+<ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href="https://www.luoruifeng.com/technology/tutorial/zbench.html" rel="external nofollow" class="url">ZBench: 服务器一键测试脚本 / 自带结果导出 | 若木成林-罗瑞峰博客</a></span>发表在《<a href="http://www.pythoner.com/357.html#comment-70997">Python设置终端显示颜色、粗体、下划线等效果</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href="http://91youh.com/386.html" rel="external nofollow" class="url">ZBench: 服务器一键测试脚本 / 自带结果导出-91优惠</a></span>发表在《<a href="http://www.pythoner.com/357.html#comment-70722">Python设置终端显示颜色、粗体、下划线等效果</a>》</li><li class="recentcomments"><span class="comment-author-link">wdxp119</span>发表在《<a href="http://www.pythoner.com/65.html#comment-70695">[Python代码]人人网登录脚本（含登录失败及验证码处理）</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href="https://liyuans.com/2018/08/zbench.html" rel="external nofollow" class="url">ZBench: 服务器一键测试脚本 / 自带结果导出 | Leonn 的博客</a></span>发表在《<a href="http://www.pythoner.com/357.html#comment-70583">Python设置终端显示颜色、粗体、下划线等效果</a>》</li><li class="recentcomments"><span class="comment-author-link">111</span>发表在《<a href="http://www.pythoner.com/83.html#comment-70424">Windows下PyQt4的安装</a>》</li></ul></div>
+<div class="side_box widget_tag_cloud" id="tag_cloud-2">
+<h3 class="side_title">标签云</h3>
+<div class="tagcloud"><a href="http://www.pythoner.com/tag/dict" class="tag-cloud-link tag-link-6 tag-link-position-1" style="font-size: 8pt;" aria-label="dict (2个项目)">dict</a>
+<a href="http://www.pythoner.com/tag/discuz" class="tag-cloud-link tag-link-49 tag-link-position-2" style="font-size: 8pt;" aria-label="discuz (2个项目)">discuz</a>
+<a href="http://www.pythoner.com/tag/editplus" class="tag-cloud-link tag-link-73 tag-link-position-3" style="font-size: 8pt;" aria-label="EditPlus (2个项目)">EditPlus</a>
+<a href="http://www.pythoner.com/tag/eric" class="tag-cloud-link tag-link-59 tag-link-position-4" style="font-size: 8pt;" aria-label="eric (2个项目)">eric</a>
+<a href="http://www.pythoner.com/tag/git" class="tag-cloud-link tag-link-53 tag-link-position-5" style="font-size: 8pt;" aria-label="git (2个项目)">git</a>
+<a href="http://www.pythoner.com/tag/github" class="tag-cloud-link tag-link-105 tag-link-position-6" style="font-size: 13.8709677419pt;" aria-label="GitHub (9个项目)">GitHub</a>
+<a href="http://www.pythoner.com/tag/ide" class="tag-cloud-link tag-link-60 tag-link-position-7" style="font-size: 8pt;" aria-label="ide (2个项目)">ide</a>
+<a href="http://www.pythoner.com/tag/linux" class="tag-cloud-link tag-link-142 tag-link-position-8" style="font-size: 10.4838709677pt;" aria-label="Linux (4个项目)">Linux</a>
+<a href="http://www.pythoner.com/tag/matplotlib" class="tag-cloud-link tag-link-87 tag-link-position-9" style="font-size: 8pt;" aria-label="matplotlib (2个项目)">matplotlib</a>
+<a href="http://www.pythoner.com/tag/mongodb" class="tag-cloud-link tag-link-147 tag-link-position-10" style="font-size: 8pt;" aria-label="MongoDB (2个项目)">MongoDB</a>
+<a href="http://www.pythoner.com/tag/mysql" class="tag-cloud-link tag-link-144 tag-link-position-11" style="font-size: 9.35483870968pt;" aria-label="MySQL (3个项目)">MySQL</a>
+<a href="http://www.pythoner.com/tag/nosql" class="tag-cloud-link tag-link-32 tag-link-position-12" style="font-size: 8pt;" aria-label="NoSQL (2个项目)">NoSQL</a>
+<a href="http://www.pythoner.com/tag/php" class="tag-cloud-link tag-link-14 tag-link-position-13" style="font-size: 8pt;" aria-label="php (2个项目)">php</a>
+<a href="http://www.pythoner.com/tag/pyqt" class="tag-cloud-link tag-link-57 tag-link-position-14" style="font-size: 11.3870967742pt;" aria-label="PyQt (5个项目)">PyQt</a>
+<a href="http://www.pythoner.com/tag/python" class="tag-cloud-link tag-link-138 tag-link-position-15" style="font-size: 22pt;" aria-label="python (51个项目)">python</a>
+<a href="http://www.pythoner.com/tag/shell" class="tag-cloud-link tag-link-65 tag-link-position-16" style="font-size: 10.4838709677pt;" aria-label="Shell (4个项目)">Shell</a>
+<a href="http://www.pythoner.com/tag/tornado" class="tag-cloud-link tag-link-146 tag-link-position-17" style="font-size: 15.1129032258pt;" aria-label="Tornado (12个项目)">Tornado</a>
+<a href="http://www.pythoner.com/tag/ubuntu" class="tag-cloud-link tag-link-83 tag-link-position-18" style="font-size: 9.35483870968pt;" aria-label="Ubuntu (3个项目)">Ubuntu</a>
+<a href="http://www.pythoner.com/tag/web" class="tag-cloud-link tag-link-104 tag-link-position-19" style="font-size: 8pt;" aria-label="Web (2个项目)">Web</a>
+<a href="http://www.pythoner.com/tag/wordpress" class="tag-cloud-link tag-link-139 tag-link-position-20" style="font-size: 10.4838709677pt;" aria-label="WordPress (4个项目)">WordPress</a>
+<a href="http://www.pythoner.com/tag/%e4%b8%ad%e6%96%87%e4%b9%b1%e7%a0%81" class="tag-cloud-link tag-link-88 tag-link-position-21" style="font-size: 8pt;" aria-label="中文乱码 (2个项目)">中文乱码</a>
+<a href="http://www.pythoner.com/tag/%e4%ba%ba%e4%ba%ba%e7%bd%91" class="tag-cloud-link tag-link-42 tag-link-position-22" style="font-size: 8pt;" aria-label="人人网 (2个项目)">人人网</a>
+<a href="http://www.pythoner.com/tag/%e4%bb%a3%e7%a0%81" class="tag-cloud-link tag-link-43 tag-link-position-23" style="font-size: 12.1774193548pt;" aria-label="代码 (6个项目)">代码</a>
+<a href="http://www.pythoner.com/tag/%e5%87%bd%e6%95%b0%e5%bc%8f%e7%bc%96%e7%a8%8b" class="tag-cloud-link tag-link-22 tag-link-position-24" style="font-size: 10.4838709677pt;" aria-label="函数式编程 (4个项目)">函数式编程</a>
+<a href="http://www.pythoner.com/tag/%e5%88%97%e8%a1%a8%e8%a7%a3%e6%9e%90" class="tag-cloud-link tag-link-27 tag-link-position-25" style="font-size: 8pt;" aria-label="列表解析 (2个项目)">列表解析</a>
+<a href="http://www.pythoner.com/tag/%e5%8b%98%e8%af%af" class="tag-cloud-link tag-link-149 tag-link-position-26" style="font-size: 8pt;" aria-label="勘误 (2个项目)">勘误</a>
+<a href="http://www.pythoner.com/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-25 tag-link-position-27" style="font-size: 9.35483870968pt;" aria-label="安全 (3个项目)">安全</a>
+<a href="http://www.pythoner.com/tag/%e5%ae%89%e8%a3%85" class="tag-cloud-link tag-link-58 tag-link-position-28" style="font-size: 8pt;" aria-label="安装 (2个项目)">安装</a>
+<a href="http://www.pythoner.com/tag/%e6%80%9d%e7%bb%b4%e5%af%bc%e5%9b%be" class="tag-cloud-link tag-link-12 tag-link-position-29" style="font-size: 18.1612903226pt;" aria-label="思维导图 (23个项目)">思维导图</a>
+<a href="http://www.pythoner.com/tag/%e6%95%8f%e6%8d%b7%e5%bc%80%e5%8f%91" class="tag-cloud-link tag-link-35 tag-link-position-30" style="font-size: 10.4838709677pt;" aria-label="敏捷开发 (4个项目)">敏捷开发</a>
+<a href="http://www.pythoner.com/tag/%e6%95%b0%e6%8d%ae%e5%8f%af%e8%a7%86%e5%8c%96" class="tag-cloud-link tag-link-46 tag-link-position-31" style="font-size: 8pt;" aria-label="数据可视化 (2个项目)">数据可视化</a>
+<a href="http://www.pythoner.com/tag/%e6%95%b0%e6%8d%ae%e5%ba%93" class="tag-cloud-link tag-link-140 tag-link-position-32" style="font-size: 9.35483870968pt;" aria-label="数据库 (3个项目)">数据库</a>
+<a href="http://www.pythoner.com/tag/%e6%96%87%e4%bb%b6%e5%af%b9%e6%af%94" class="tag-cloud-link tag-link-71 tag-link-position-33" style="font-size: 8pt;" aria-label="文件对比 (2个项目)">文件对比</a>
+<a href="http://www.pythoner.com/tag/%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0" class="tag-cloud-link tag-link-77 tag-link-position-34" style="font-size: 8pt;" aria-label="机器学习 (2个项目)">机器学习</a>
+<a href="http://www.pythoner.com/tag/%e7%99%bb%e5%bd%95" class="tag-cloud-link tag-link-50 tag-link-position-35" style="font-size: 8pt;" aria-label="登录 (2个项目)">登录</a>
+<a href="http://www.pythoner.com/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-143 tag-link-position-36" style="font-size: 9.35483870968pt;" aria-label="算法 (3个项目)">算法</a>
+<a href="http://www.pythoner.com/tag/%e7%bf%bb%e8%af%91" class="tag-cloud-link tag-link-106 tag-link-position-37" style="font-size: 13.8709677419pt;" aria-label="翻译 (9个项目)">翻译</a>
+<a href="http://www.pythoner.com/tag/%e8%84%9a%e6%9c%ac" class="tag-cloud-link tag-link-66 tag-link-position-38" style="font-size: 8pt;" aria-label="脚本 (2个项目)">脚本</a>
+<a href="http://www.pythoner.com/tag/%e8%87%aa%e5%8a%a8%e8%a1%a5%e5%85%a8" class="tag-cloud-link tag-link-74 tag-link-position-39" style="font-size: 8pt;" aria-label="自动补全 (2个项目)">自动补全</a>
+<a href="http://www.pythoner.com/tag/%e8%ae%ba%e5%9d%9b" class="tag-cloud-link tag-link-51 tag-link-position-40" style="font-size: 8pt;" aria-label="论坛 (2个项目)">论坛</a>
+<a href="http://www.pythoner.com/tag/%e8%ae%be%e8%ae%a1" class="tag-cloud-link tag-link-114 tag-link-position-41" style="font-size: 9.35483870968pt;" aria-label="设计 (3个项目)">设计</a>
+<a href="http://www.pythoner.com/tag/%e8%af%ad%e6%b3%95%e9%ab%98%e4%ba%ae" class="tag-cloud-link tag-link-75 tag-link-position-42" style="font-size: 8pt;" aria-label="语法高亮 (2个项目)">语法高亮</a>
+<a href="http://www.pythoner.com/tag/%e8%af%bb%e4%b9%a6%e7%ac%94%e8%ae%b0" class="tag-cloud-link tag-link-11 tag-link-position-43" style="font-size: 19.2903225806pt;" aria-label="读书笔记 (29个项目)">读书笔记</a>
+<a href="http://www.pythoner.com/tag/%e8%bd%af%e4%bb%b6%e5%b7%a5%e7%a8%8b" class="tag-cloud-link tag-link-36 tag-link-position-44" style="font-size: 8pt;" aria-label="软件工程 (2个项目)">软件工程</a>
+<a href="http://www.pythoner.com/tag/%e9%85%8d%e7%bd%ae%e7%ae%a1%e7%90%86" class="tag-cloud-link tag-link-54 tag-link-position-45" style="font-size: 8pt;" aria-label="配置管理 (2个项目)">配置管理</a></div>
+</div>
+<div class="side_box widget_archive" id="archives-2">
+<h3 class="side_title">文章归档</h3>
+		<ul>
+			<li><a href="http://www.pythoner.com/date/2016/11">2016年十一月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2016/10">2016年十月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2016/06">2016年六月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2015/03">2015年三月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2015/02">2015年二月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2014/12">2014年十二月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2014/07">2014年七月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2014/06">2014年六月</a>&nbsp;(2)</li>
+	<li><a href="http://www.pythoner.com/date/2014/03">2014年三月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2014/01">2014年一月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2013/12">2013年十二月</a>&nbsp;(6)</li>
+	<li><a href="http://www.pythoner.com/date/2013/11">2013年十一月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2013/10">2013年十月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2013/09">2013年九月</a>&nbsp;(1)</li>
+	<li><a href="http://www.pythoner.com/date/2013/08">2013年八月</a>&nbsp;(5)</li>
+	<li><a href="http://www.pythoner.com/date/2013/07">2013年七月</a>&nbsp;(12)</li>
+	<li><a href="http://www.pythoner.com/date/2013/06">2013年六月</a>&nbsp;(3)</li>
+	<li><a href="http://www.pythoner.com/date/2013/05">2013年五月</a>&nbsp;(8)</li>
+	<li><a href="http://www.pythoner.com/date/2013/04">2013年四月</a>&nbsp;(3)</li>
+	<li><a href="http://www.pythoner.com/date/2013/03">2013年三月</a>&nbsp;(5)</li>
+	<li><a href="http://www.pythoner.com/date/2013/02">2013年二月</a>&nbsp;(13)</li>
+	<li><a href="http://www.pythoner.com/date/2013/01">2013年一月</a>&nbsp;(15)</li>
+	<li><a href="http://www.pythoner.com/date/2012/12">2012年十二月</a>&nbsp;(1)</li>
+		</ul>
+		</div>
+<div class="side_box widget_categories" id="categories-2">
+<h3 class="side_title">分类目录</h3>
+		<ul>
+	<li class="cat-item cat-item-13"><a href="http://www.pythoner.com/category/wordpress">WordPress</a> (4)
+</li>
+	<li class="cat-item cat-item-79"><a href="http://www.pythoner.com/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f">操作系统</a> (5)
+<ul class="children">
+	<li class="cat-item cat-item-64"><a href="http://www.pythoner.com/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/linux">Linux</a> (5)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-33"><a href="http://www.pythoner.com/category/%e6%95%b0%e6%8d%ae%e5%ba%93">数据库</a> (2)
+<ul class="children">
+	<li class="cat-item cat-item-102"><a href="http://www.pythoner.com/category/%e6%95%b0%e6%8d%ae%e5%ba%93/mongodb">MongoDB</a> (1)
+</li>
+	<li class="cat-item cat-item-84"><a href="http://www.pythoner.com/category/%e6%95%b0%e6%8d%ae%e5%ba%93/mysql">MySQL</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-107"><a href="http://www.pythoner.com/category/%e7%94%a8%e6%88%b7%e4%bd%93%e9%aa%8c">用户体验</a> (1)
+</li>
+	<li class="cat-item cat-item-78"><a href="http://www.pythoner.com/category/%e7%ae%97%e6%b3%95">算法</a> (1)
+</li>
+	<li class="cat-item cat-item-2"><a href="http://www.pythoner.com/category/programming-language">编程语言</a> (45)
+<ul class="children">
+	<li class="cat-item cat-item-56"><a href="http://www.pythoner.com/category/programming-language/android">Android</a> (1)
+</li>
+	<li class="cat-item cat-item-90"><a href="http://www.pythoner.com/category/programming-language/latex">LaTeX</a> (1)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.pythoner.com/category/programming-language/python">python</a> (42)
+	<ul class="children">
+	<li class="cat-item cat-item-101"><a href="http://www.pythoner.com/category/programming-language/python/tornado">Tornado</a> (11)
+</li>
+	</ul>
+</li>
+	<li class="cat-item cat-item-72"><a href="http://www.pythoner.com/category/programming-language/shell-programming-language">shell</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://www.pythoner.com/category/note">读书笔记</a> (29)
+</li>
+		</ul>
+</div>
+<div class="side_box widget_links" id="linkcat-0">
+<h3 class="side_title">书签</h3>
+
+	<ul class="xoxo blogroll">
+<li><a href="http://blog.coocla.org/" target="_blank">Coocla</a></li>
+<li><a href="http://www.findspace.name/">FindSpace</a></li>
+
+	</ul>
+</div>
+
+</div>
+<div id="side_middle" class="clearfix">
+ <div id="side_left">
+   </div>
+ <div id="side_right">
+   </div>
+</div>
+<div id="side_bottom">
+ <div class="side_box widget_meta" id="meta-2">
+<h3 class="side_title">功能</h3>
+			<ul>
+						<li><a href="http://www.pythoner.com/wp-login.php">登录</a></li>
+			<li><a href="http://www.pythoner.com/feed">文章<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://www.pythoner.com/comments/feed">评论<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://cn.wordpress.org/" title="基于WordPress，一个优美、先进的个人信息发布平台。">WordPress.org</a></li>			</ul>
+			</div>
+</div>
+
+  </div>
+  
+  <div id="footer">
+   <ul id="copyright">
+    <li>版权所有 ©&nbsp; <a href="http://www.pythoner.com/">Pythoner</a></li>
+    <li>主题由 <a class="target_blank" href="http://www.mono-lab.net/" target="_blank">mono-lab</a> 设计 <a class="target_blank" href="http://pythoner.com/" target="_blank">你像从前一样</a> 修改</li>
+    <li>由 <a class="target_blank" href="http://wordpress.org/" target="_blank">WordPress</a> 强力驱动</li>
+    <li class="last"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253420103'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s6.cnzz.com/z_stat.php%3Fid%3D1253420103' type='text/javascript'%3E%3C/script%3E"));</script><span id="cnzz_stat_icon_1253420103"><a href="http://www.cnzz.com/stat/website.php?web_id=1253420103" target="_blank" title="站长统计">站长统计</a></span><script src="./Python标准库——collections模块的Counter类 _ Pythoner_files/z_stat.php" type="text/javascript"></script><script src="./Python标准库——collections模块的Counter类 _ Pythoner_files/core.php" charset="utf-8" type="text/javascript"></script></li>
+   </ul>
+  </div>
+
+ </div><!-- END #main_content -->
+
+
+  <p id="return_top" style="display: block;"><a href="http://www.pythoner.com/205.html#header">return top</a></p>
+ 
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/comment-reply.min.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"http:\/\/www.pythoner.com\/wp-admin\/admin-ajax.php","post_id":"205"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/postviews-cache.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/jquery.sonar.min.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/lazy-load.js.下载"></script>
+<script type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/wp-embed.min.js.下载"></script>
+<script async="async" type="text/javascript" src="./Python标准库——collections模块的Counter类 _ Pythoner_files/form.js.下载"></script>
+
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=2&amp;pos=right&amp;uid=1482744"></script>
+
+<script type="text/javascript">
+var bds_config={"bdTop":200};
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+</script>
+<!-- Baidu Button END -->
+
+
+
+<!-- Dynamic page generated in 0.702 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2018-10-18 11:55:59 -->
+
+<!-- super cache --></body></html>

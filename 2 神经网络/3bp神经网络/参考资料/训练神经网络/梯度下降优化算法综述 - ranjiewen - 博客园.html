@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/ranjiewen/p/5938944.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>梯度下降优化算法综述 - ranjiewen - 博客园</title>
+<meta property="og:description" content="1. An overview of gradient descent optimization algorithms http://ruder.io/optimizing-gradient-desce">
+<link type="text/css" rel="stylesheet" href="./梯度下降优化算法综述 - ranjiewen - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./梯度下降优化算法综述 - ranjiewen - 博客园_files/bundle-coffee.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./梯度下降优化算法综述 - ranjiewen - 博客园_files/bundle-coffee-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/ranjiewen/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/ranjiewen/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/ranjiewen/wlwmanifest.xml">
+<script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/f.txt"></script><script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/pubads_impl_rendering_265.js.下载"></script><script async="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/encoder.js.下载"></script><script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'ranjiewen', cb_enable_mathjax=true;var isLogined=false;</script>
+<script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'blogpost-body', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] },
+            'HTML-CSS': { linebreaks: { automatic: true } },
+            SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/MathJax.js.下载"></script>
+<script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./梯度下降优化算法综述 - ranjiewen - 博客园_files/f(1).txt" as="script"><script type="text/javascript" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/f(1).txt"></script><script src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/pubads_impl_265.js.下载" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-30/html/container.html"><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<a href="https://github.com/ranjiewwen"><img style="position: absolute; top: 0; left: 500; border: 0;" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+<!--PageBeginHtml Block End-->
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/ranjiewen/"><img id="blogLogo" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/ranjiewen/">小河沟大河沟</a></h1>
+<h2>----------- 梦想还是要有的，万一实现了呢！纸上得来终觉浅 绝知此事要躬行！</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="navigator">
+			
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+	<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/ranjiewen/">首页</a></li>
+	<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+	<li><a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/ranjiewen">联系</a></li>
+	<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+	<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/ranjiewen/rss">订阅</a>
+	<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/ranjiewen/rss"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/xml.gif" alt="订阅"></a></li>
+</ul>
+
+
+			<div class="blogStats">
+				
+				<div id="blog_stats">
+<!--done-->
+随笔- 783&nbsp;
+文章- 51&nbsp;
+评论- 42&nbsp;
+</div>
+				
+			</div><!--end: blogStats -->
+		</div><!--end: navigator 博客导航栏 -->
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/ranjiewen/p/5938944.html">梯度下降优化算法综述</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p style="text-indent: 0em; white-space: normal; max-width: 100%; min-height: 1em; box-sizing: border-box !important; word-wrap: break-word !important;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; word-wrap: break-word !important;">1. An overview of gradient descent optimization algorithms</span></p>
+<p style="text-indent: 0em; white-space: normal; max-width: 100%; min-height: 1em; box-sizing: border-box !important; word-wrap: break-word !important;"><strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">&nbsp; &nbsp; http://ruder.io/optimizing-gradient-descent/index.html</span></strong></p>
+<p style="text-indent: 0em; white-space: normal; max-width: 100%; min-height: 1em; box-sizing: border-box !important; word-wrap: break-word !important;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; word-wrap: break-word !important;">&nbsp; &nbsp; https://arxiv.org/abs/1609.04747</span></p>
+<p style="white-space: normal;"><span style="font-size: 15px;">2. 中文翻译《梯度下降优化算法综述》 :&nbsp; http://blog.csdn.net/heyongluoyao8/article/details/52478715</span></p>
+<h3 class="csdn_top"><a href="http://blog.csdn.net/u014595019/article/details/52989301" target="_blank">3.深度学习笔记：优化方法总结(BGD,SGD,Momentum,AdaGrad,RMSProp,Adam)</a></h3>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #800080;">2</span><span style="color: #000000;">. 随机梯度下降加速
+
+如果把要优化的目标函数看成山谷的话，可以把要优化的参数看成滚下山的石头，参数随机化为一个随机数可以看做在山谷的某个位置以0速度开始往下滚。目标函数的梯度可以看做给石头施加的力，由力学定律知：F</span>=<span style="color: #000000;">m∗a，所以梯度与石头下滚的加速度成正比。因而，梯度直接影响速度，速度的累加得到石头的位置，对这个物理过程进行建模，可以得到参数更新过程为：
+
+# Momentum update
+v </span>= momentum * v - learning_rate *<span style="color: #000000;"> dx # integrate velocity
+x </span>+=<span style="color: #000000;"> v # integrate position
+
+代码中v指代速度，其计算过程中有一个超参数momentum，称为动量（momentum）。虽然名字为动量，其物理意义更接近于摩擦，其可以降低速度值，降低了系统的动能，防止石头在山谷的最底部不能停止情况的发生。动量的取值范围通常为[</span><span style="color: #800080;">0.5</span>, <span style="color: #800080;">0.9</span>, <span style="color: #800080;">0.95</span>, <span style="color: #800080;">0.99</span>]，一种常见的做法是在迭代开始时将其设为0.<span style="color: #800080;">5</span>，在一定的迭代次数（epoch）后，将其值更新为0.<span style="color: #800080;">99</span><span style="color: #000000;">。
+
+在实践中，一般采用SGD</span>+<span style="color: #000000;">momentum的配置，相比普通的SGD方法，这种配置通常能极大地加快收敛速度。
+</span><span style="color: #800080;">3</span><span style="color: #000000;">. 学习率的更新
+
+在算法迭代过程中逐步降低学习率（step_size）通常可以加快算法的收敛速度。常用的用来更新学习率的方法有三种：
+
+    逐步降低（Step decay），即经过一定迭代次数后将学习率乘以一个小的衰减因子。典型的做法包括经过5次迭代（epoch）后学习率乘以0.</span><span style="color: #800080;">5</span>，或者20次迭代后乘以0.<span style="color: #800080;">1</span><span style="color: #000000;">。
+    指数衰减（Exponential decay），其数学表达式可以表示为：α</span>=<span style="color: #000000;">α0e−kt，其中，α0和k是需要设置的超参数，t是迭代次数。
+    倒数衰减（</span><span style="color: #800080;">1</span>/t decay），其数学表达式可以表示为：α=α0/(<span style="color: #800080;">1</span>+<span style="color: #000000;">kt)，其中，α0和k是需要设置的超参数，t是迭代次数。
+
+实践中发现逐步衰减的效果优于另外两种方法，一方面在于其需要设置的超参数数量少，另一方面其可解释性也强于另两种方法。
+</span><span style="color: #800080;">4</span><span style="color: #000000;">. 二阶更新方法
+
+提升梯度下降法收敛速度的方法还包括将其由一阶提升为二阶，也就是牛顿法或者拟牛顿法，比如常用的 L</span>-BFGS。然而，牛顿法和L-<span style="color: #000000;">BFGS不适用于解决大规模训练数据集和大规模问题。
+
+比如，常用的深度网络包括数百万个参数，每次迭代都要计算大小为 [</span><span style="color: #800080;">1</span>,<span style="color: #800080;">000</span>,<span style="color: #800080;">000</span> x <span style="color: #800080;">1</span>,<span style="color: #800080;">000</span>,<span style="color: #800080;">000</span><span style="color: #000000;">] 的Hessian矩阵，需要占用3G多的内存，严重影响了计算效率。
+
+L</span>-BFGS法不需要计算完全的Hessian矩阵，虽然没有了内存的担忧，但这种方法通常类似于批量梯度下降法，需要在计算整个训练集（通常为几百万个样本）的梯度后才能更新一次参数，严重影响了收敛速度。因而在深度神经网络领域很少使用L-BFGS来优化目标函数。<br><br></pre>
+<p>参考的SGD+momentum的代码是<a href="http://ufldl.stanford.edu/tutorial/" target="_blank">Andrew Ng的深度学习教程</a>给出的matlab代码。</p>
+<pre class="prettyprint"><code class="language-matlab hljs  has-numbering"><span class="hljs-function"><span class="hljs-keyword">function <span class="hljs-params">[opttheta] = <span class="hljs-title">minFuncSGD<span class="hljs-params">(funObj,theta,data,labels,options)
+<span class="hljs-comment">% Runs stochastic gradient descent with momentum to optimize the
+<span class="hljs-comment">% parameters for the given objective.
+<span class="hljs-comment">%
+<span class="hljs-comment">% Parameters:
+<span class="hljs-comment">%  funObj     -  function handle which accepts as input theta,
+<span class="hljs-comment">%                data, labels and returns cost and gradient w.r.t
+<span class="hljs-comment">%                to theta.
+<span class="hljs-comment">%  theta      -  unrolled parameter vector
+<span class="hljs-comment">%  data       -  stores data in m x n x numExamples tensor
+<span class="hljs-comment">%  labels     -  corresponding labels in numExamples x 1 vector
+<span class="hljs-comment">%  options    -  struct to store specific options for optimization
+<span class="hljs-comment">%
+<span class="hljs-comment">% Returns:
+<span class="hljs-comment">%  opttheta   -  optimized parameter vector
+<span class="hljs-comment">%
+<span class="hljs-comment">% Options (* required)
+<span class="hljs-comment">%  epochs*     - number of epochs through data
+<span class="hljs-comment">%  alpha*      - initial learning rate
+<span class="hljs-comment">%  minibatch*  - size of minibatch
+<span class="hljs-comment">%  momentum    - momentum constant, defualts to 0.9
+
+<span class="hljs-comment">%%======================================================================
+<span class="hljs-comment">%% Setup
+assert(all(isfield(options,<span class="hljs-cell">{<span class="hljs-string">'epochs',<span class="hljs-string">'alpha',<span class="hljs-string">'minibatch'})),<span class="hljs-string">'Some options not defined');
+<span class="hljs-keyword">if ~isfield(options,<span class="hljs-string">'momentum')
+    <span class="hljs-transposed_variable">options.momentum = <span class="hljs-number">0.9;
+<span class="hljs-keyword">end;
+epochs = <span class="hljs-transposed_variable">options.epochs;
+alpha = <span class="hljs-transposed_variable">options.alpha;
+minibatch = <span class="hljs-transposed_variable">options.minibatch;
+m = <span class="hljs-built_in">length(labels); <span class="hljs-comment">% training set size
+<span class="hljs-comment">% Setup for momentum
+mom = <span class="hljs-number">0.5;
+momIncrease = <span class="hljs-number">20;
+velocity = <span class="hljs-built_in">zeros(<span class="hljs-built_in">size(theta));
+
+<span class="hljs-comment">%%======================================================================
+<span class="hljs-comment">%% SGD loop
+it = <span class="hljs-number">0;
+<span class="hljs-keyword">for e = <span class="hljs-number">1:epochs
+    <span class="hljs-comment">% randomly permute indices of data for quick minibatch sampling
+    rp = randperm(m);
+    <span class="hljs-keyword">for s=<span class="hljs-number">1:minibatch:(m-minibatch+<span class="hljs-number">1)
+        it = it + <span class="hljs-number">1;
+        <span class="hljs-comment">% increase momentum after momIncrease iterations
+        <span class="hljs-keyword">if it == momIncrease
+            mom = <span class="hljs-transposed_variable">options.momentum;
+        <span class="hljs-keyword">end;
+        <span class="hljs-comment">% get next randomly selected minibatch
+        mb_data = data(:,:,rp(s:s+minibatch-<span class="hljs-number">1));
+        mb_labels = labels(rp(s:s+minibatch-<span class="hljs-number">1));
+        <span class="hljs-comment">% evaluate the objective function on the next minibatch
+        <span class="hljs-matrix">[cost grad] = funObj(theta,mb_data,mb_labels);
+        <span class="hljs-comment">% update the current weights theta 
+        velocity = mom*velocity+alpha*grad; 
+        theta = theta-velocity;
+        fprintf(<span class="hljs-string">'Epoch %d: Cost on iteration %d is %f\n',e,it,cost);
+    <span class="hljs-keyword">end;
+    <span class="hljs-comment">% aneal learning rate by factor of two after each epoch
+    alpha = alpha/<span class="hljs-number">2.0;
+<span class="hljs-keyword">end;
+opttheta = theta;
+<span class="hljs-keyword">end</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></code></pre>
+<p>动量mom在迭代开始时将其设为0.5，在20次迭代（epoch）后，其值更新为0.99。 <br>
+学习率的更新采用逐步降低（Step decay）法，即每次迭代（epoch）后将学习率乘以0.5。</p>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2 id="梯度下降优化算法综述">梯度下降优化算法综述 &nbsp;</h2>
+<p>   该文翻译自<a href="http://sebastianruder.com/optimizing-gradient-descent/index.html">An overview of gradient descent optimization algorithms</a>。</p>
+<p>   总所周知，梯度下降<a class="replace_word" title="算法与数据结构知识库" href="http://lib.csdn.net/base/datastructure" target="_blank">算法</a>是<a class="replace_word" title="机器学习知识库" href="http://lib.csdn.net/base/machinelearning" target="_blank">机器学习</a>中使用非常广泛的优化算法，也是众多机器学习算法中最常用的优化方法。几乎当前每一个先进的(state-of-the-art)机器学习库或者<a class="replace_word" title="深度学习知识库" href="http://lib.csdn.net/base/deeplearning" target="_blank">深度学习</a>库都会包括梯度下降算法的不同变种实现。但是，它们就像一个黑盒优化器，很难得到它们优缺点的实际解释。&nbsp;<br>   这篇文章旨在提供梯度下降算法中的不同变种的介绍，帮助使用者根据具体需要进行使用。&nbsp;<br>   这篇文章首先介绍梯度下降算法的三种框架，然后介绍它们所存在的问题与挑战，接着介绍一些如何进行改进来解决这些问题，随后，介绍如何在并行环境中或者分布式环境中使用梯度下降算法。最后，指出一些有利于梯度下降的策略。&nbsp;<br>   梯度下降算法是通过沿着目标函数<span class="MathJax_Preview"><span id="MathJax-Element-66-Frame" class="MathJax"><span id="MathJax-Span-1" class="math"><span id="MathJax-Span-2" class="mrow"><span id="MathJax-Span-3" class="mi">J<span id="MathJax-Span-4" class="mo">(<span id="MathJax-Span-5" class="mi">θ<span id="MathJax-Span-6" class="mo">)</span></span></span></span></span></span>参数<span class="MathJax_Preview"><span id="MathJax-Element-67-Frame" class="MathJax"><span id="MathJax-Span-7" class="math"><span id="MathJax-Span-8" class="mrow"><span id="MathJax-Span-9" class="mi">θ<span id="MathJax-Span-10" class="mo">∈<span id="MathJax-Span-11" class="mi">R</span></span></span></span></span>的梯度(一阶导数)相反方向<span class="MathJax_Preview"><span id="MathJax-Element-68-Frame" class="MathJax"><span id="MathJax-Span-12" class="math"><span id="MathJax-Span-13" class="mrow"><span id="MathJax-Span-14" class="mo">−<span id="MathJax-Span-15" class="msubsup"><span id="MathJax-Span-16" class="mi">∇<span id="MathJax-Span-17" class="texatom"><span id="MathJax-Span-18" class="mrow"><span id="MathJax-Span-19" class="mi">θ<span id="MathJax-Span-20" class="mi">J<span id="MathJax-Span-21" class="mo">(<span id="MathJax-Span-22" class="mi">θ<span id="MathJax-Span-23" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span>来不断更新模型参数来到达目标函数的极小值点（收敛），更新步长为<span class="MathJax_Preview"><span id="MathJax-Element-69-Frame" class="MathJax"><span id="MathJax-Span-24" class="math"><span id="MathJax-Span-25" class="mrow"><span id="MathJax-Span-26" class="mi">η</span></span></span>。详细的介绍参见：<a href="http://sebastianruder.com/optimizing-gradient-descent/">梯度下降</a>。</span></span></span></span></span></span></span></span></p>
+<h3 id="三种梯度下降优化框架">三种梯度下降优化框架</h3>
+<p>   有三种梯度下降算法框架，它们不同之处在于每次学习(更新模型参数)使用的样本个数，每次更新使用不同的样本会导致每次学习的准确性和学习时间不同。</p>
+<ul>
+<li>全量梯度下降(Batch gradient descent)&nbsp;<br>   每次使用全量的训练集样本来更新模型参数，即：&nbsp;<br>
+<div class="MathJax_Display"><span id="MathJax-Element-65-Frame" class="MathJax"><span id="MathJax-Span-27" class="math"><span id="MathJax-Span-28" class="mrow"><span id="MathJax-Span-29" class="mi">θ<span id="MathJax-Span-30" class="mo">=<span id="MathJax-Span-31" class="mi">θ<span id="MathJax-Span-32" class="mo">−<span id="MathJax-Span-33" class="mi">η<span id="MathJax-Span-34" class="mo">⋅<span id="MathJax-Span-35" class="msubsup"><span id="MathJax-Span-36" class="mi">∇<span id="MathJax-Span-37" class="texatom"><span id="MathJax-Span-38" class="mrow"><span id="MathJax-Span-39" class="mi">θ<span id="MathJax-Span-40" class="mi">J<span id="MathJax-Span-41" class="mo">(<span id="MathJax-Span-42" class="mi">θ<span id="MathJax-Span-43" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+
+
+
+</li>
+
+
+
+
+
+
+
+</ul>
+<p>   其代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">for</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> range(epochs):
+    params_grad </span>=<span style="color: #000000;"> evaluate_gradient(loss_function,data,params)
+    params </span>= params - learning_rate * params_grad&nbsp;</pre>
+</div>
+<p>   epochs 是用户输入的最大迭代次数。通过上诉代码可以看出，每次使用全部训练集样本计算损失函数loss_function的梯度params_grad，然后使用学习速率learning_rate朝着梯度相反方向去更新模型的每个参数params。一般各现有的一些机器学习库都提供了梯度计算api。如果想自己亲手写代码计算，那么需要在程序调试过程中验证梯度计算是否正确，具体验证方法可以参见：<a href="http://cs231n.github.io/neural-networks-3/">这里</a>。&nbsp;<br>   全量梯度下降每次学习都使用整个训练集，因此其优点在于每次更新都会朝着正确的方向进行，最后能够保证收敛于极值点(凸函数收敛于全局极值点，非凸函数可能会收敛于局部极值点)，但是其缺点在于每次学习时间过长，并且如果训练集很大以至于需要消耗大量的内存，并且全量梯度下降不能进行在线模型参数更新。</p>
+<ul>
+<li>随机梯度下降(Stochastic gradient descent)</li>
+
+
+
+
+
+
+
+</ul>
+<p>   随机梯度下降算法每次从训练集中随机选择一个样本来进行学习，即：&nbsp;<span id="MathJax-Element-70-Frame" class="MathJax"><span id="MathJax-Span-44" class="math"><span id="MathJax-Span-45" class="mrow"><span id="MathJax-Span-46" class="mi">θ<span id="MathJax-Span-47" class="mo">=<span id="MathJax-Span-48" class="mi">θ<span id="MathJax-Span-49" class="mo">−<span id="MathJax-Span-50" class="mi">η<span id="MathJax-Span-51" class="mo">⋅<span id="MathJax-Span-52" class="msubsup"><span id="MathJax-Span-53" class="mi">∇<span id="MathJax-Span-54" class="texatom"><span id="MathJax-Span-55" class="mrow"><span id="MathJax-Span-56" class="mi">θ<span id="MathJax-Span-57" class="mi">J<span id="MathJax-Span-58" class="mo">(<span id="MathJax-Span-59" class="mi">θ<span id="MathJax-Span-60" class="mo">;<span id="MathJax-Span-61" class="msubsup"><span id="MathJax-Span-62" class="mi">x<span id="MathJax-Span-63" class="mi">i<span id="MathJax-Span-64" class="mo">;<span id="MathJax-Span-65" class="msubsup"><span id="MathJax-Span-66" class="mi">y<span id="MathJax-Span-67" class="mi">i<span id="MathJax-Span-68" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>   批量梯度下降算法每次都会使用全部训练样本，因此这些计算是冗余的，因为每次都使用完全相同的样本集。而随机梯度下降算法每次只随机选择一个样本来更新模型参数，因此每次的学习是非常快速的，并且可以进行在线更新。&nbsp;<br>   其代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">for</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> range(epochs):
+    np.random.shuffle(data)
+    </span><span style="color: #0000ff;">for</span> example <span style="color: #0000ff;">in</span><span style="color: #000000;"> data:
+        params_grad </span>=<span style="color: #000000;"> evaluate_gradient(loss_function,example,params)
+        params </span>= params - learning_rate * params_grad</pre>
+</div>
+<p>   随机梯度下降最大的缺点在于每次更新可能并不会按照正确的方向进行，因此可以带来优化波动(扰动)，如下图：</p>
+<p style="text-align: center;"><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001021029" alt="sgd_fluctuation">&nbsp;<br>图1 SGD扰动<a href="https://upload.wikimedia.org/wikipedia/en/f/f3/Stogra.png">来源</a></p>
+<p>   不过从另一个方面来看，随机梯度下降所带来的波动有个好处就是，对于类似盆地区域（即很多局部极小值点）那么这个波动的特点可能会使得优化的方向从当前的局部极小值点跳到另一个更好的局部极小值点，这样便可能对于非凸函数，最终收敛于一个较好的局部极值点，甚至全局极值点。&nbsp;<br>   由于波动，因此会使得迭代次数（学习次数）增多，即收敛速度变慢。不过最终其会和全量梯度下降算法一样，具有相同的收敛性，即凸函数收敛于全局极值点，非凸损失函数收敛于局部极值点。</p>
+<ul>
+<li>小批量梯度下降(Mini-batch gradient descent)</li>
+
+
+
+
+
+
+
+</ul>
+<p>   Mini-batch梯度下降综合了batch梯度下降与stochastic梯度下降，在每次更新速度与更新次数中间取得一个平衡，其每次更新从训练集中随机选择<span class="MathJax_Preview"><span id="MathJax-Element-150-Frame" class="MathJax"><span id="MathJax-Span-69" class="math"><span id="MathJax-Span-70" class="mrow"><span id="MathJax-Span-71" class="mi">m<span id="MathJax-Span-72" class="mo">,<span id="MathJax-Span-73" class="mi">m<span id="MathJax-Span-74" class="mo">&lt;<span id="MathJax-Span-75" class="mi">n</span></span></span></span></span></span></span>个样本进行学习，即：&nbsp;<br></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-151-Frame" class="MathJax"><span id="MathJax-Span-76" class="math"><span id="MathJax-Span-77" class="mrow"><span id="MathJax-Span-78" class="mi">θ<span id="MathJax-Span-79" class="mo">=<span id="MathJax-Span-80" class="mi">θ<span id="MathJax-Span-81" class="mo">−<span id="MathJax-Span-82" class="mi">η<span id="MathJax-Span-83" class="mo">⋅<span id="MathJax-Span-84" class="msubsup"><span id="MathJax-Span-85" class="mi">∇<span id="MathJax-Span-86" class="texatom"><span id="MathJax-Span-87" class="mrow"><span id="MathJax-Span-88" class="mi">θ<span id="MathJax-Span-89" class="mi">J<span id="MathJax-Span-90" class="mo">(<span id="MathJax-Span-91" class="mi">θ<span id="MathJax-Span-92" class="mo">;<span id="MathJax-Span-93" class="msubsup"><span id="MathJax-Span-94" class="mi">x<span id="MathJax-Span-95" class="texatom"><span id="MathJax-Span-96" class="mrow"><span id="MathJax-Span-97" class="mi">i<span id="MathJax-Span-98" class="mo">:<span id="MathJax-Span-99" class="mi">i<span id="MathJax-Span-100" class="mo">+<span id="MathJax-Span-101" class="mi">m<span id="MathJax-Span-102" class="mo">;<span id="MathJax-Span-103" class="msubsup"><span id="MathJax-Span-104" class="mi">y<span id="MathJax-Span-105" class="texatom"><span id="MathJax-Span-106" class="mrow"><span id="MathJax-Span-107" class="mi">i<span id="MathJax-Span-108" class="mo">:<span id="MathJax-Span-109" class="mi">i<span id="MathJax-Span-110" class="mo">+<span id="MathJax-Span-111" class="mi">m<span id="MathJax-Span-112" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>   其代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">for</span> i <span style="color: #0000ff;">in</span><span style="color: #000000;"> range(epochs):
+    np.random.shuffle(data)
+    </span><span style="color: #0000ff;">for</span> batch <span style="color: #0000ff;">in</span> get_batches(data, batch_size=50<span style="color: #000000;">):
+        params_grad </span>=<span style="color: #000000;"> evaluate_gradient(loss_function,batch,params)
+        params </span>= params - learning_rate * params_grad</pre>
+</div>
+<p>   相对于随机梯度下降，Mini-batch梯度下降降低了收敛波动性，即降低了参数更新的方差，使得更新更加稳定。相对于全量梯度下降，其提高了每次学习的速度。并且其不用担心内存瓶颈从而可以利用矩阵运算进行高效计算。一般而言每次更新随机选择[50,256]个样本进行学习，但是也要根据具体问题而选择，实践中可以进行多次试验，选择一个更新速度与更次次数都较适合的样本数。</p>
+<p>   mini-batch梯度下降虽然可以保证收敛性。mini-batch梯度下降常用于神经网络中。</p>
+<h3 id="问题与挑战">问题与挑战</h3>
+<p>   虽然梯度下降算法效果很好，并且广泛使用，但同时其也存在一些挑战与问题需要解决：</p>
+<ul>
+<li>
+<p>选择一个合理的学习速率很难。如果学习速率过小，则会导致收敛速度很慢。如果学习速率过大，那么其会阻碍收敛，即在极值点附近会振荡。</p>
+</li>
+<li>
+<p>学习速率调整(又称学习速率调度，Learning rate schedules)<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_11">[11]</a>试图在每次更新过程中，改变学习速率，如退火。一般使用某种事先设定的策略或者在每次迭代中衰减一个较小的阈值。无论哪种调整方法，都需要事先进行固定设置，这边便无法自适应每次学习的数据集特点<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_10">[10]</a>。</p>
+</li>
+<li>
+<p>模型所有的参数每次更新都是使用相同的学习速率。如果数据特征是稀疏的或者每个特征有着不同的取值统计特征与空间，那么便不能在每次更新中每个参数使用相同的学习速率，那些很少出现的特征应该使用一个相对较大的学习速率。</p>
+</li>
+<li>
+<p>对于非凸目标函数，容易陷入那些次优的局部极值点中，如在神经网路中。那么如何避免呢。<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_19">Dauphin[19]</a>指出更严重的问题不是局部极值点，而是鞍点(These saddle points are usually surrounded by a plateau of the same error, which makes it notoriously hard for SGD to escape, as the gradient is close to zero in all dimensions.)。</p>
+</li>
+</ul>
+<h3 id="梯度下降优化算法">梯度下降优化算法</h3>
+<p>   下面将讨论一些在深度学习社区中经常使用用来解决上诉问题的一些梯度优化方法，不过并不包括在高维数据中不可行的算法，如<a href="https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization">牛顿法</a>。</p>
+<h3 id="momentum">Momentum</h3>
+<p>   如果在峡谷地区(某些方向较另一些方向上陡峭得多，常见于局部极值点)<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_1">[1]</a>，SGD会在这些地方附近振荡，从而导致收敛速度慢。这种情况下，动量(Momentum)便可以解决<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_2">[2]</a>。动量在参数更新项中加上一次更新量(即动量项),即：&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-197-Frame" class="MathJax"><span id="MathJax-Span-113" class="math"><span id="MathJax-Span-114" class="mrow"><span id="MathJax-Span-115" class="msubsup"><span id="MathJax-Span-116" class="mi">ν<span id="MathJax-Span-117" class="mi">t<span id="MathJax-Span-118" class="mo">=<span id="MathJax-Span-119" class="mi">γ<span id="MathJax-Span-120" class="msubsup"><span id="MathJax-Span-121" class="mi">ν<span id="MathJax-Span-122" class="texatom"><span id="MathJax-Span-123" class="mrow"><span id="MathJax-Span-124" class="mi">t<span id="MathJax-Span-125" class="mo">−<span id="MathJax-Span-126" class="mn">1<span id="MathJax-Span-127" class="mo">+<span id="MathJax-Span-128" class="mi">η<span id="MathJax-Span-129" class="mtext">&nbsp;<span id="MathJax-Span-130" class="msubsup"><span id="MathJax-Span-131" class="mi">∇<span id="MathJax-Span-132" class="texatom"><span id="MathJax-Span-133" class="mrow"><span id="MathJax-Span-134" class="mi">θ<span id="MathJax-Span-135" class="mi">J<span id="MathJax-Span-136" class="mo">(<span id="MathJax-Span-137" class="mi">θ<span id="MathJax-Span-138" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<div class="MathJax_Display"><span id="MathJax-Element-198-Frame" class="MathJax"><span id="MathJax-Span-139" class="math"><span id="MathJax-Span-140" class="mrow"><span id="MathJax-Span-141" class="mi">θ<span id="MathJax-Span-142" class="mo">=<span id="MathJax-Span-143" class="mi">θ<span id="MathJax-Span-144" class="mo">−<span id="MathJax-Span-145" class="msubsup"><span id="MathJax-Span-146" class="mi">ν<span id="MathJax-Span-147" class="mi">t</span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview">其中动量项超参数<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-148" class="math"><span id="MathJax-Span-149" class="mrow"><span id="MathJax-Span-150" class="mi">γ<span id="MathJax-Span-151" class="mo">&lt;<span id="MathJax-Span-152" class="mn">1</span></span></span></span></span>一般是小于等于0.9。</span></span></span></span></p>
+<p>&nbsp;</p>
+<p style="text-align: center;">其作用如下图所示：&nbsp;<br><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001233782" alt="without_momentum">&nbsp;<br>图2 没有动量&nbsp;<br><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001347909" alt="with_momentum">&nbsp;<br>图3 加上动量</p>
+<p>   加上动量项就像从山顶滚下一个球，求往下滚的时候累积了前面的动量(动量不断增加)，因此速度变得越来越快，直到到达终点。同理，在更新模型参数时，对于那些当前的梯度方向与上一次梯度方向相同的参数，那么进行加强，即这些方向上更快了；对于那些当前的梯度方向与上一次梯度方向不同的参数，那么进行削减，即这些方向上减慢了。因此可以获得更快的收敛速度与减少振荡。</p>
+<h3 id="nag7">NAG<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_7">[7]</a></h3>
+<p>   从山顶往下滚的球会盲目地选择斜坡。更好的方式应该是在遇到倾斜向上之前应该减慢速度。&nbsp;<br>   Nesterov accelerated gradient(<a href="http://cs231n.github.io/neural-networks-3/">NAG,涅斯捷罗夫梯度加速</a>)不仅增加了动量项，并且在计算参数的梯度时，在损失函数中减去了动量项，即计算<span class="MathJax_Preview"><span id="MathJax-Element-220-Frame" class="MathJax"><span id="MathJax-Span-153" class="math"><span id="MathJax-Span-154" class="mrow"><span id="MathJax-Span-155" class="msubsup"><span id="MathJax-Span-156" class="mi">∇<span id="MathJax-Span-157" class="texatom"><span id="MathJax-Span-158" class="mrow"><span id="MathJax-Span-159" class="mi">θ<span id="MathJax-Span-160" class="mi">J<span id="MathJax-Span-161" class="mo">(<span id="MathJax-Span-162" class="mi">θ<span id="MathJax-Span-163" class="mo">−<span id="MathJax-Span-164" class="mi">γ<span id="MathJax-Span-165" class="msubsup"><span id="MathJax-Span-166" class="mi">ν<span id="MathJax-Span-167" class="texatom"><span id="MathJax-Span-168" class="mrow"><span id="MathJax-Span-169" class="mi">t<span id="MathJax-Span-170" class="mo">−<span id="MathJax-Span-171" class="mn">1<span id="MathJax-Span-172" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>，这种方式预估了下一次参数所在的位置。即：&nbsp;<br></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-221-Frame" class="MathJax"><span id="MathJax-Span-173" class="math"><span id="MathJax-Span-174" class="mrow"><span id="MathJax-Span-175" class="msubsup"><span id="MathJax-Span-176" class="mi">ν<span id="MathJax-Span-177" class="mi">t<span id="MathJax-Span-178" class="mo">=<span id="MathJax-Span-179" class="mi">γ<span id="MathJax-Span-180" class="msubsup"><span id="MathJax-Span-181" class="mi">ν<span id="MathJax-Span-182" class="texatom"><span id="MathJax-Span-183" class="mrow"><span id="MathJax-Span-184" class="mi">t<span id="MathJax-Span-185" class="mo">−<span id="MathJax-Span-186" class="mn">1<span id="MathJax-Span-187" class="mo">+<span id="MathJax-Span-188" class="mi">η<span id="MathJax-Span-189" class="mo">⋅<span id="MathJax-Span-190" class="msubsup"><span id="MathJax-Span-191" class="mi">∇<span id="MathJax-Span-192" class="texatom"><span id="MathJax-Span-193" class="mrow"><span id="MathJax-Span-194" class="mi">θ<span id="MathJax-Span-195" class="mi">J<span id="MathJax-Span-196" class="mo">(<span id="MathJax-Span-197" class="mi">θ<span id="MathJax-Span-198" class="mo">−<span id="MathJax-Span-199" class="mi">γ<span id="MathJax-Span-200" class="msubsup"><span id="MathJax-Span-201" class="mi">ν<span id="MathJax-Span-202" class="texatom"><span id="MathJax-Span-203" class="mrow"><span id="MathJax-Span-204" class="mi">t<span id="MathJax-Span-205" class="mo">−<span id="MathJax-Span-206" class="mn">1<span id="MathJax-Span-207" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<div class="MathJax_Display"><span id="MathJax-Element-222-Frame" class="MathJax"><span id="MathJax-Span-208" class="math"><span id="MathJax-Span-209" class="mrow"><span id="MathJax-Span-210" class="mi">θ<span id="MathJax-Span-211" class="mo">=<span id="MathJax-Span-212" class="mi">θ<span id="MathJax-Span-213" class="mo">−<span id="MathJax-Span-214" class="msubsup"><span id="MathJax-Span-215" class="mi">ν<span id="MathJax-Span-216" class="mi">t</span></span></span></span></span></span></span></span></span></span></div>
+<p style="text-align: center;">
+<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><br>如下图所示：&nbsp;<br><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001532912" alt="nesterov_update_vector" width="677" height="195"><br>图4 NAG更新</span></span></span></span></span></p>
+<p>&nbsp;</p>
+<p>   详细介绍可以参见Ilya Sutskever的PhD论文<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_9">[9]</a>。假设动量因子参数<span class="MathJax_Preview"><span id="MathJax-Element-223-Frame" class="MathJax"><span id="MathJax-Span-217" class="math"><span id="MathJax-Span-218" class="mrow"><span id="MathJax-Span-219" class="mi">γ<span id="MathJax-Span-220" class="mo">=<span id="MathJax-Span-221" class="mn">0.9</span></span></span></span></span>，首先计算当前梯度项，如上图小蓝色向量，然后加上动量项，这样便得到了大的跳跃，如上图大蓝色的向量。这便是只包含动量项的更新。而NAG首先来一个大的跳跃（动量项)，然后加上一个小的使用了动量计算的当前梯度（上图红色向量）进行修正得到上图绿色的向量。这样可以阻止过快更新来提高响应性，如在RNNs中<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_8">[8]</a>。&nbsp;<br>   通过上面的两种方法，可以做到每次学习过程中能够根据损失函数的斜率做到自适应更新来加速SGD的收敛。下一步便需要对每个参数根据参数的重要性进行各自自适应更新。</span></span><a name="t6"></a></p>
+<h3 id="adagrad">Adagrad</h3>
+<p>   Adagrad<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_3">[3]</a>也是一种基于梯度的优化算法，它能够对每个参数自适应不同的学习速率，对稀疏特征，得到大的学习更新，对非稀疏特征，得到较小的学习更新，因此该优化算法适合处理稀疏特征数据。<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_4">Dean等[4]</a>发现Adagrad能够很好的提高SGD的鲁棒性，google便用起来训练大规模神经网络(<a href="http://www.wired.com/2012/06/google-x-neural-network/">看片识猫:recognize cats in Youtube videos</a>)。<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_5">Pennington等[5]</a>在GloVe中便使用Adagrad来训练得到词向量(Word Embeddings), 频繁出现的单词赋予较小的更新，不经常出现的单词则赋予较大的更新。&nbsp;<br>   在前述中，每个模型参数<span class="MathJax_Preview"><span id="MathJax-Element-224-Frame" class="MathJax"><span id="MathJax-Span-222" class="math"><span id="MathJax-Span-223" class="mrow"><span id="MathJax-Span-224" class="msubsup"><span id="MathJax-Span-225" class="mi">θ<span id="MathJax-Span-226" class="mi">i</span></span></span></span></span>使用相同的学习速率<span class="MathJax_Preview"><span id="MathJax-Element-225-Frame" class="MathJax"><span id="MathJax-Span-227" class="math"><span id="MathJax-Span-228" class="mrow"><span id="MathJax-Span-229" class="mi">η</span></span></span>，而Adagrad在每一个更新步骤中对于每一个模型参数<span class="MathJax_Preview"><span id="MathJax-Element-226-Frame" class="MathJax"><span id="MathJax-Span-230" class="math"><span id="MathJax-Span-231" class="mrow"><span id="MathJax-Span-232" class="msubsup"><span id="MathJax-Span-233" class="mi">θ<span id="MathJax-Span-234" class="mi">i</span></span></span></span></span>使用不同的学习速率<span class="MathJax_Preview"><span id="MathJax-Element-227-Frame" class="MathJax"><span id="MathJax-Span-235" class="math"><span id="MathJax-Span-236" class="mrow"><span id="MathJax-Span-237" class="msubsup"><span id="MathJax-Span-238" class="mi">η<span id="MathJax-Span-239" class="mi">i</span></span></span></span></span>，设第<span class="MathJax_Preview"><span id="MathJax-Element-228-Frame" class="MathJax"><span id="MathJax-Span-240" class="math"><span id="MathJax-Span-241" class="mrow"><span id="MathJax-Span-242" class="mi">t</span></span></span>次更新步骤中，目标函数的参数<span class="MathJax_Preview"><span id="MathJax-Element-229-Frame" class="MathJax"><span id="MathJax-Span-243" class="math"><span id="MathJax-Span-244" class="mrow"><span id="MathJax-Span-245" class="msubsup"><span id="MathJax-Span-246" class="mi">θ<span id="MathJax-Span-247" class="mi">i</span></span></span></span></span>梯度为<span class="MathJax_Preview"><span id="MathJax-Element-230-Frame" class="MathJax"><span id="MathJax-Span-248" class="math"><span id="MathJax-Span-249" class="mrow"><span id="MathJax-Span-250" class="msubsup"><span id="MathJax-Span-251" class="mi">g<span id="MathJax-Span-252" class="texatom"><span id="MathJax-Span-253" class="mrow"><span id="MathJax-Span-254" class="mi">t<span id="MathJax-Span-255" class="mo">,<span id="MathJax-Span-256" class="mi">i</span></span></span></span></span></span></span></span></span>，即：&nbsp;<br></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-231-Frame" class="MathJax"><span id="MathJax-Span-257" class="math"><span id="MathJax-Span-258" class="mrow"><span id="MathJax-Span-259" class="msubsup"><span id="MathJax-Span-260" class="mi">g<span id="MathJax-Span-261" class="texatom"><span id="MathJax-Span-262" class="mrow"><span id="MathJax-Span-263" class="mi">t<span id="MathJax-Span-264" class="mo">,<span id="MathJax-Span-265" class="mi">i<span id="MathJax-Span-266" class="mo">=<span id="MathJax-Span-267" class="msubsup"><span id="MathJax-Span-268" class="mi">∇<span id="MathJax-Span-269" class="texatom"><span id="MathJax-Span-270" class="mrow"><span id="MathJax-Span-271" class="mi">θ<span id="MathJax-Span-272" class="mi">J<span id="MathJax-Span-273" class="mo">(<span id="MathJax-Span-274" class="msubsup"><span id="MathJax-Span-275" class="mi">θ<span id="MathJax-Span-276" class="texatom"><span id="MathJax-Span-277" class="mrow"><span id="MathJax-Span-278" class="mi">i<span id="MathJax-Span-279" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">   那么SGD更新方程为：&nbsp;<br></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-232-Frame" class="MathJax"><span id="MathJax-Span-280" class="math"><span id="MathJax-Span-281" class="mrow"><span id="MathJax-Span-282" class="msubsup"><span id="MathJax-Span-283" class="mi">θ<span id="MathJax-Span-284" class="texatom"><span id="MathJax-Span-285" class="mrow"><span id="MathJax-Span-286" class="mi">t<span id="MathJax-Span-287" class="mo">+<span id="MathJax-Span-288" class="mn">1<span id="MathJax-Span-289" class="mo">,<span id="MathJax-Span-290" class="mi">i<span id="MathJax-Span-291" class="mo">=<span id="MathJax-Span-292" class="msubsup"><span id="MathJax-Span-293" class="mi">θ<span id="MathJax-Span-294" class="texatom"><span id="MathJax-Span-295" class="mrow"><span id="MathJax-Span-296" class="mi">t<span id="MathJax-Span-297" class="mo">,<span id="MathJax-Span-298" class="mi">i<span id="MathJax-Span-299" class="mo">−<span id="MathJax-Span-300" class="mi">η<span id="MathJax-Span-301" class="mo">⋅<span id="MathJax-Span-302" class="msubsup"><span id="MathJax-Span-303" class="mi">g<span id="MathJax-Span-304" class="texatom"><span id="MathJax-Span-305" class="mrow"><span id="MathJax-Span-306" class="mi">t<span id="MathJax-Span-307" class="mo">,<span id="MathJax-Span-308" class="mi">i</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview">   而Adagrad对每一个参数使用不同的学习速率，其更新方程为：&nbsp;<br></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-233-Frame" class="MathJax"><span id="MathJax-Span-309" class="math"><span id="MathJax-Span-310" class="mrow"><span id="MathJax-Span-311" class="msubsup"><span id="MathJax-Span-312" class="mi">θ<span id="MathJax-Span-313" class="texatom"><span id="MathJax-Span-314" class="mrow"><span id="MathJax-Span-315" class="mi">t<span id="MathJax-Span-316" class="mo">+<span id="MathJax-Span-317" class="mn">1<span id="MathJax-Span-318" class="mo">,<span id="MathJax-Span-319" class="mi">i<span id="MathJax-Span-320" class="mo">=<span id="MathJax-Span-321" class="msubsup"><span id="MathJax-Span-322" class="mi">θ<span id="MathJax-Span-323" class="texatom"><span id="MathJax-Span-324" class="mrow"><span id="MathJax-Span-325" class="mi">t<span id="MathJax-Span-326" class="mo">,<span id="MathJax-Span-327" class="mi">i<span id="MathJax-Span-328" class="mo">−<span id="MathJax-Span-329" class="mfrac"><span id="MathJax-Span-330" class="mi">η<span id="MathJax-Span-331" class="msqrt"><span id="MathJax-Span-332" class="mrow"><span id="MathJax-Span-333" class="msubsup"><span id="MathJax-Span-334" class="mi">G<span id="MathJax-Span-335" class="texatom"><span id="MathJax-Span-336" class="mrow"><span id="MathJax-Span-337" class="mi">t<span id="MathJax-Span-338" class="mo">,<span id="MathJax-Span-339" class="mi">i<span id="MathJax-Span-340" class="mi">i<span id="MathJax-Span-341" class="mo">+<span id="MathJax-Span-342" class="mi">ϵ−−−−−−−√<span id="MathJax-Span-343" class="mo">⋅<span id="MathJax-Span-344" class="msubsup"><span id="MathJax-Span-345" class="mi">g<span id="MathJax-Span-346" class="texatom"><span id="MathJax-Span-347" class="mrow"><span id="MathJax-Span-348" class="mi">t<span id="MathJax-Span-349" class="mo">,<span id="MathJax-Span-350" class="mi">i</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview">其中，<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-351" class="math"><span id="MathJax-Span-352" class="mrow"><span id="MathJax-Span-353" class="msubsup"><span id="MathJax-Span-354" class="mi">G<span id="MathJax-Span-355" class="mi">t<span id="MathJax-Span-356" class="mo">∈<span id="MathJax-Span-357" class="msubsup"><span id="MathJax-Span-358" class="mi">R<span id="MathJax-Span-359" class="texatom"><span id="MathJax-Span-360" class="mrow"><span id="MathJax-Span-361" class="mi">d<span id="MathJax-Span-362" class="mo">×<span id="MathJax-Span-363" class="mi">d</span></span></span></span></span></span></span></span></span></span></span></span></span>是一个对角矩阵，其中第<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-364" class="math"><span id="MathJax-Span-365" class="mrow"><span id="MathJax-Span-366" class="mi">i</span></span></span>行的对角元素<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-367" class="math"><span id="MathJax-Span-368" class="mrow"><span id="MathJax-Span-369" class="msubsup"><span id="MathJax-Span-370" class="mi">e<span id="MathJax-Span-371" class="texatom"><span id="MathJax-Span-372" class="mrow"><span id="MathJax-Span-373" class="mi">i<span id="MathJax-Span-374" class="mi">i</span></span></span></span></span></span></span></span>为过去到当前第<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-375" class="math"><span id="MathJax-Span-376" class="mrow"><span id="MathJax-Span-377" class="mi">i</span></span></span>个参数<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-378" class="math"><span id="MathJax-Span-379" class="mrow"><span id="MathJax-Span-380" class="msubsup"><span id="MathJax-Span-381" class="mi">θ<span id="MathJax-Span-382" class="mi">i</span></span></span></span></span>的梯度的平方和，<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-383" class="math"><span id="MathJax-Span-384" class="mrow"><span id="MathJax-Span-385" class="mi">e<span id="MathJax-Span-386" class="mi">p<span id="MathJax-Span-387" class="mi">s<span id="MathJax-Span-388" class="mi">i<span id="MathJax-Span-389" class="mi">l<span id="MathJax-Span-390" class="mi">o<span id="MathJax-Span-391" class="mi">n</span></span></span></span></span></span></span></span></span>是一个平滑参数，为了使得分母不为0(通常<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-392" class="math"><span id="MathJax-Span-393" class="mrow"><span id="MathJax-Span-394" class="mi">ϵ<span id="MathJax-Span-395" class="mo">=<span id="MathJax-Span-396" class="mn">1<span id="MathJax-Span-397" class="mi">e<span id="MathJax-Span-398" class="mo">−<span id="MathJax-Span-399" class="mn">8</span></span></span></span></span></span></span></span>)，另外如果分母不开根号，算法性能会很糟糕。&nbsp;<br>   进一步，将所有<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-400" class="math"><span id="MathJax-Span-401" class="mrow"><span id="MathJax-Span-402" class="msubsup"><span id="MathJax-Span-403" class="mi">G<span id="MathJax-Span-404" class="texatom"><span id="MathJax-Span-405" class="mrow"><span id="MathJax-Span-406" class="mi">t<span id="MathJax-Span-407" class="mo">,<span id="MathJax-Span-408" class="mi">i<span id="MathJax-Span-409" class="mi">i<span id="MathJax-Span-410" class="mo">,<span id="MathJax-Span-411" class="msubsup"><span id="MathJax-Span-412" class="mi">g<span id="MathJax-Span-413" class="texatom"><span id="MathJax-Span-414" class="mrow"><span id="MathJax-Span-415" class="mi">t<span id="MathJax-Span-416" class="mo">,<span id="MathJax-Span-417" class="mi">i</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>&nbsp;的元素写成向量<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-418" class="math"><span id="MathJax-Span-419" class="mrow"><span id="MathJax-Span-420" class="msubsup"><span id="MathJax-Span-421" class="mi">G<span id="MathJax-Span-422" class="mi">t<span id="MathJax-Span-423" class="mo">,<span id="MathJax-Span-424" class="msubsup"><span id="MathJax-Span-425" class="mi">g<span id="MathJax-Span-426" class="mi">t</span></span></span></span></span></span></span></span></span>，这样便可以使用向量点乘操作：&nbsp;<br></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-243-Frame" class="MathJax"><span id="MathJax-Span-427" class="math"><span id="MathJax-Span-428" class="mrow"><span id="MathJax-Span-429" class="msubsup"><span id="MathJax-Span-430" class="mi">θ<span id="MathJax-Span-431" class="texatom"><span id="MathJax-Span-432" class="mrow"><span id="MathJax-Span-433" class="mi">t<span id="MathJax-Span-434" class="mo">+<span id="MathJax-Span-435" class="mn">1<span id="MathJax-Span-436" class="mo">=<span id="MathJax-Span-437" class="msubsup"><span id="MathJax-Span-438" class="mi">θ<span id="MathJax-Span-439" class="texatom"><span id="MathJax-Span-440" class="mrow"><span id="MathJax-Span-441" class="mi">t<span id="MathJax-Span-442" class="mo">−<span id="MathJax-Span-443" class="mfrac"><span id="MathJax-Span-444" class="mi">η<span id="MathJax-Span-445" class="msqrt"><span id="MathJax-Span-446" class="mrow"><span id="MathJax-Span-447" class="msubsup"><span id="MathJax-Span-448" class="mi">G<span id="MathJax-Span-449" class="mi">t<span id="MathJax-Span-450" class="mo">+<span id="MathJax-Span-451" class="mi">ϵ−−−−−√<span id="MathJax-Span-452" class="mo">⊙<span id="MathJax-Span-453" class="msubsup"><span id="MathJax-Span-454" class="mi">g<span id="MathJax-Span-455" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">   Adagrad主要优势在于它能够为每个参数自适应不同的学习速率，而一般的人工都是设定为0.01。同时其缺点在于需要计算参数梯度序列平方和，并且学习速率趋势是不断衰减最终达到一个非常小的值。下文中的Adadelta便是用来解决该问题的。</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>&nbsp;<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">### Adadelta    Adadelta[[6]](#reference_6)是Adagrad的一种扩展，为了降低Adagrad中学习速率衰减过快问题，其改进了三处，一是使用了窗口<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-456" class="math"><span id="MathJax-Span-457" class="mrow"><span id="MathJax-Span-458" class="mi">w</span></span></span>；二是对于参数梯度历史窗口序列(不包括当前)不再使用平方和，而是使用均值代替；三是最终的均值是历史窗口序列均值与当前梯度的时间衰减加权平均。即：</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-37-Frame" class="MathJax"><span id="MathJax-Span-459" class="math"><span id="MathJax-Span-460" class="mrow"><span id="MathJax-Span-461" class="mi">E<span id="MathJax-Span-462" class="mo">[<span id="MathJax-Span-463" class="msubsup"><span id="MathJax-Span-464" class="mi">g<span id="MathJax-Span-465" class="mn">2<span id="MathJax-Span-466" class="msubsup"><span id="MathJax-Span-467" class="mo">]<span id="MathJax-Span-468" class="mi">t<span id="MathJax-Span-469" class="mo">=<span id="MathJax-Span-470" class="mi">γ<span id="MathJax-Span-471" class="mi">E<span id="MathJax-Span-472" class="mo">[<span id="MathJax-Span-473" class="msubsup"><span id="MathJax-Span-474" class="mi">g<span id="MathJax-Span-475" class="mn">2<span id="MathJax-Span-476" class="msubsup"><span id="MathJax-Span-477" class="mo">]<span id="MathJax-Span-478" class="texatom"><span id="MathJax-Span-479" class="mrow"><span id="MathJax-Span-480" class="mi">t<span id="MathJax-Span-481" class="mo">−<span id="MathJax-Span-482" class="mn">1<span id="MathJax-Span-483" class="mo">+<span id="MathJax-Span-484" class="mo">(<span id="MathJax-Span-485" class="mn">1<span id="MathJax-Span-486" class="mo">−<span id="MathJax-Span-487" class="mi">γ<span id="MathJax-Span-488" class="mo">)<span id="MathJax-Span-489" class="msubsup"><span id="MathJax-Span-490" class="mi">g<span id="MathJax-Span-491" class="mn">2<span id="MathJax-Span-492" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>
+<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">其中<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-493" class="math"><span id="MathJax-Span-494" class="mrow"><span id="MathJax-Span-495" class="mi">γ</span></span></span>与动量项中的一样，都是</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<h3 id="rmsprop">RMSprop</h3>
+<p>   其实<a href="http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf">RMSprop</a>是Adadelta的中间形式，也是为了降低Adagrad中学习速率衰减过快问题，即：&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-244-Frame" class="MathJax"><span id="MathJax-Span-496" class="math"><span id="MathJax-Span-497" class="mrow"><span id="MathJax-Span-498" class="mi">E<span id="MathJax-Span-499" class="mo">[<span id="MathJax-Span-500" class="msubsup"><span id="MathJax-Span-501" class="mi">g<span id="MathJax-Span-502" class="mn">2<span id="MathJax-Span-503" class="msubsup"><span id="MathJax-Span-504" class="mo">]<span id="MathJax-Span-505" class="mi">t<span id="MathJax-Span-506" class="mo">=<span id="MathJax-Span-507" class="mi">γ<span id="MathJax-Span-508" class="mi">E<span id="MathJax-Span-509" class="mo">[<span id="MathJax-Span-510" class="msubsup"><span id="MathJax-Span-511" class="mi">g<span id="MathJax-Span-512" class="mn">2<span id="MathJax-Span-513" class="msubsup"><span id="MathJax-Span-514" class="mo">]<span id="MathJax-Span-515" class="texatom"><span id="MathJax-Span-516" class="mrow"><span id="MathJax-Span-517" class="mi">t<span id="MathJax-Span-518" class="mo">−<span id="MathJax-Span-519" class="mn">1<span id="MathJax-Span-520" class="mo">+<span id="MathJax-Span-521" class="mo">(<span id="MathJax-Span-522" class="mn">1<span id="MathJax-Span-523" class="mo">−<span id="MathJax-Span-524" class="mi">γ<span id="MathJax-Span-525" class="mo">)<span id="MathJax-Span-526" class="msubsup"><span id="MathJax-Span-527" class="mi">g<span id="MathJax-Span-528" class="mn">2<span id="MathJax-Span-529" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span id="MathJax-Element-245-Frame" class="MathJax"><span id="MathJax-Span-530" class="math"><span id="MathJax-Span-531" class="mrow"><span id="MathJax-Span-532" class="msubsup"><span id="MathJax-Span-533" class="mi">θ<span id="MathJax-Span-534" class="texatom"><span id="MathJax-Span-535" class="mrow"><span id="MathJax-Span-536" class="mi">t<span id="MathJax-Span-537" class="mo">+<span id="MathJax-Span-538" class="mn">1<span id="MathJax-Span-539" class="mo">=<span id="MathJax-Span-540" class="msubsup"><span id="MathJax-Span-541" class="mi">θ<span id="MathJax-Span-542" class="mi">t<span id="MathJax-Span-543" class="mo">−<span id="MathJax-Span-544" class="mfrac"><span id="MathJax-Span-545" class="mi">η<span id="MathJax-Span-546" class="msqrt"><span id="MathJax-Span-547" class="mrow"><span id="MathJax-Span-548" class="mi">E<span id="MathJax-Span-549" class="mo">[<span id="MathJax-Span-550" class="msubsup"><span id="MathJax-Span-551" class="mi">g<span id="MathJax-Span-552" class="mn">2<span id="MathJax-Span-553" class="msubsup"><span id="MathJax-Span-554" class="mo">]<span id="MathJax-Span-555" class="mi">t<span id="MathJax-Span-556" class="mo">+<span id="MathJax-Span-557" class="mi">ϵ−−−−−−−−√<span id="MathJax-Span-558" class="mo">⊙<span id="MathJax-Span-559" class="msubsup"><span id="MathJax-Span-560" class="mi">g<span id="MathJax-Span-561" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">Hinton建议<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-562" class="math"><span id="MathJax-Span-563" class="mrow"><span id="MathJax-Span-564" class="mi">γ<span id="MathJax-Span-565" class="mo">=<span id="MathJax-Span-566" class="mn">0.9<span id="MathJax-Span-567" class="mo">,<span id="MathJax-Span-568" class="mi">η<span id="MathJax-Span-569" class="mo">=<span id="MathJax-Span-570" class="mn">0.001</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<h3>&nbsp;Adam</h3>
+<p>   Adaptive Moment Estimation(Adam) 也是一种不同参数自适应不同学习速率方法，与Adadelta与RMSprop区别在于，它计算历史梯度衰减方式不同，不使用历史平方衰减，其衰减方式类似动量，如下：&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-247-Frame" class="MathJax"><span id="MathJax-Span-571" class="math"><span id="MathJax-Span-572" class="mrow"><span id="MathJax-Span-573" class="msubsup"><span id="MathJax-Span-574" class="mi">m<span id="MathJax-Span-575" class="mi">t<span id="MathJax-Span-576" class="mo">=<span id="MathJax-Span-577" class="msubsup"><span id="MathJax-Span-578" class="mi">β<span id="MathJax-Span-579" class="mn">1<span id="MathJax-Span-580" class="msubsup"><span id="MathJax-Span-581" class="mi">m<span id="MathJax-Span-582" class="texatom"><span id="MathJax-Span-583" class="mrow"><span id="MathJax-Span-584" class="mi">t<span id="MathJax-Span-585" class="mo">−<span id="MathJax-Span-586" class="mn">1<span id="MathJax-Span-587" class="mo">+<span id="MathJax-Span-588" class="mo">(<span id="MathJax-Span-589" class="mn">1<span id="MathJax-Span-590" class="mo">−<span id="MathJax-Span-591" class="msubsup"><span id="MathJax-Span-592" class="mi">β<span id="MathJax-Span-593" class="mn">1<span id="MathJax-Span-594" class="mo">)<span id="MathJax-Span-595" class="msubsup"><span id="MathJax-Span-596" class="mi">g<span id="MathJax-Span-597" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span id="MathJax-Element-248-Frame" class="MathJax"><span id="MathJax-Span-598" class="math"><span id="MathJax-Span-599" class="mrow"><span id="MathJax-Span-600" class="msubsup"><span id="MathJax-Span-601" class="mi">v<span id="MathJax-Span-602" class="mi">t<span id="MathJax-Span-603" class="mo">=<span id="MathJax-Span-604" class="msubsup"><span id="MathJax-Span-605" class="mi">β<span id="MathJax-Span-606" class="mn">2<span id="MathJax-Span-607" class="msubsup"><span id="MathJax-Span-608" class="mi">v<span id="MathJax-Span-609" class="texatom"><span id="MathJax-Span-610" class="mrow"><span id="MathJax-Span-611" class="mi">t<span id="MathJax-Span-612" class="mo">−<span id="MathJax-Span-613" class="mn">1<span id="MathJax-Span-614" class="mo">+<span id="MathJax-Span-615" class="mo">(<span id="MathJax-Span-616" class="mn">1<span id="MathJax-Span-617" class="mo">−<span id="MathJax-Span-618" class="mi">b<span id="MathJax-Span-619" class="mi">e<span id="MathJax-Span-620" class="mi">t<span id="MathJax-Span-621" class="msubsup"><span id="MathJax-Span-622" class="mi">a<span id="MathJax-Span-623" class="mn">2<span id="MathJax-Span-624" class="mo">)<span id="MathJax-Span-625" class="msubsup"><span id="MathJax-Span-626" class="mi">g<span id="MathJax-Span-627" class="mn">2<span id="MathJax-Span-628" class="mi">t</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">  &nbsp;<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-629" class="math"><span id="MathJax-Span-630" class="mrow"><span id="MathJax-Span-631" class="msubsup"><span id="MathJax-Span-632" class="mi">m<span id="MathJax-Span-633" class="mi">t</span></span></span></span></span>与<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-634" class="math"><span id="MathJax-Span-635" class="mrow"><span id="MathJax-Span-636" class="msubsup"><span id="MathJax-Span-637" class="mi">v<span id="MathJax-Span-638" class="mi">t</span></span></span></span></span>分别是梯度的带权平均和带权有偏方差，初始为0向量，Adam的作者发现他们倾向于0向量(接近于0向量)，特别是在衰减因子(衰减率)<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-639" class="math"><span id="MathJax-Span-640" class="mrow"><span id="MathJax-Span-641" class="msubsup"><span id="MathJax-Span-642" class="mi">β<span id="MathJax-Span-643" class="mn">1</span></span></span></span></span>,<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-644" class="math"><span id="MathJax-Span-645" class="mrow"><span id="MathJax-Span-646" class="msubsup"><span id="MathJax-Span-647" class="mi">β<span id="MathJax-Span-648" class="mn">2</span></span></span></span></span>接近于1时。为了改进这个问题，对<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-649" class="math"><span id="MathJax-Span-650" class="mrow"><span id="MathJax-Span-651" class="msubsup"><span id="MathJax-Span-652" class="mi">m<span id="MathJax-Span-653" class="mi">t</span></span></span></span></span>与<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-654" class="math"><span id="MathJax-Span-655" class="mrow"><span id="MathJax-Span-656" class="msubsup"><span id="MathJax-Span-657" class="mi">v<span id="MathJax-Span-658" class="mi">t</span></span></span></span></span>进行偏差修正(bias-corrected)：&nbsp;<br></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-255-Frame" class="MathJax"><span id="MathJax-Span-659" class="math"><span id="MathJax-Span-660" class="mrow"><span id="MathJax-Span-661" class="texatom"><span id="MathJax-Span-662" class="mrow"><span id="MathJax-Span-663" class="munderover"><span id="MathJax-Span-664" class="msubsup"><span id="MathJax-Span-665" class="mi">m<span id="MathJax-Span-666" class="mi">t<span id="MathJax-Span-667" class="mo">^<span id="MathJax-Span-668" class="mo">=<span id="MathJax-Span-669" class="mfrac"><span id="MathJax-Span-670" class="msubsup"><span id="MathJax-Span-671" class="mi">m<span id="MathJax-Span-672" class="mi">t<span id="MathJax-Span-673" class="mrow"><span id="MathJax-Span-674" class="mn">1<span id="MathJax-Span-675" class="mo">−<span id="MathJax-Span-676" class="mi">b<span id="MathJax-Span-677" class="mi">e<span id="MathJax-Span-678" class="mi">t<span id="MathJax-Span-679" class="msubsup"><span id="MathJax-Span-680" class="mi">a<span id="MathJax-Span-681" class="mi">t<span id="MathJax-Span-682" class="mn">1</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span id="MathJax-Element-256-Frame" class="MathJax"><span id="MathJax-Span-683" class="math"><span id="MathJax-Span-684" class="mrow"><span id="MathJax-Span-685" class="texatom"><span id="MathJax-Span-686" class="mrow"><span id="MathJax-Span-687" class="munderover"><span id="MathJax-Span-688" class="msubsup"><span id="MathJax-Span-689" class="mi">v<span id="MathJax-Span-690" class="mi">t<span id="MathJax-Span-691" class="mo">^<span id="MathJax-Span-692" class="mo">=<span id="MathJax-Span-693" class="mfrac"><span id="MathJax-Span-694" class="msubsup"><span id="MathJax-Span-695" class="mi">v<span id="MathJax-Span-696" class="mi">t<span id="MathJax-Span-697" class="mrow"><span id="MathJax-Span-698" class="mn">1<span id="MathJax-Span-699" class="mo">−<span id="MathJax-Span-700" class="mi">b<span id="MathJax-Span-701" class="mi">e<span id="MathJax-Span-702" class="mi">t<span id="MathJax-Span-703" class="msubsup"><span id="MathJax-Span-704" class="mi">a<span id="MathJax-Span-705" class="mi">t<span id="MathJax-Span-706" class="mn">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview">&nbsp;最终，Adam的更新方程为：&nbsp;<br></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-257-Frame" class="MathJax"><span id="MathJax-Span-707" class="math"><span id="MathJax-Span-708" class="mrow"><span id="MathJax-Span-709" class="msubsup"><span id="MathJax-Span-710" class="mi">θ<span id="MathJax-Span-711" class="texatom"><span id="MathJax-Span-712" class="mrow"><span id="MathJax-Span-713" class="mi">t<span id="MathJax-Span-714" class="mo">+<span id="MathJax-Span-715" class="mn">1<span id="MathJax-Span-716" class="mo">=<span id="MathJax-Span-717" class="msubsup"><span id="MathJax-Span-718" class="mi">θ<span id="MathJax-Span-719" class="texatom"><span id="MathJax-Span-720" class="mrow"><span id="MathJax-Span-721" class="mi">t<span id="MathJax-Span-722" class="mo">−<span id="MathJax-Span-723" class="mfrac"><span id="MathJax-Span-724" class="mi">η<span id="MathJax-Span-725" class="mrow"><span id="MathJax-Span-726" class="msqrt"><span id="MathJax-Span-727" class="mrow"><span id="MathJax-Span-728" class="texatom"><span id="MathJax-Span-729" class="mrow"><span id="MathJax-Span-730" class="munderover"><span id="MathJax-Span-731" class="msubsup"><span id="MathJax-Span-732" class="mi">v<span id="MathJax-Span-733" class="mi">t<span id="MathJax-Span-734" class="mo">^−−√<span id="MathJax-Span-735" class="mo">+<span id="MathJax-Span-736" class="mi">ϵ<span id="MathJax-Span-737" class="texatom"><span id="MathJax-Span-738" class="mrow"><span id="MathJax-Span-739" class="munderover"><span id="MathJax-Span-740" class="msubsup"><span id="MathJax-Span-741" class="mi">m<span id="MathJax-Span-742" class="mi">t<span id="MathJax-Span-743" class="mo">^</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax_Preview">论文中建议默认值：<span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-744" class="math"><span id="MathJax-Span-745" class="mrow"><span id="MathJax-Span-746" class="msubsup"><span id="MathJax-Span-747" class="mi">β<span id="MathJax-Span-748" class="mn">1<span id="MathJax-Span-749" class="mo">=<span id="MathJax-Span-750" class="mn">0.9<span id="MathJax-Span-751" class="texatom"><span id="MathJax-Span-752" class="mrow"><span id="MathJax-Span-753" class="mo">，<span id="MathJax-Span-754" class="msubsup"><span id="MathJax-Span-755" class="mi">β<span id="MathJax-Span-756" class="mn">2<span id="MathJax-Span-757" class="mo">=<span id="MathJax-Span-758" class="mn">0.999<span id="MathJax-Span-759" class="texatom"><span id="MathJax-Span-760" class="mrow"><span id="MathJax-Span-761" class="mo">，<span id="MathJax-Span-762" class="mi">ϵ<span id="MathJax-Span-763" class="mo">=<span id="MathJax-Span-764" class="msubsup"><span id="MathJax-Span-765" class="mn">10<span id="MathJax-Span-766" class="texatom"><span id="MathJax-Span-767" class="mrow"><span id="MathJax-Span-768" class="mo">−<span id="MathJax-Span-769" class="mn">8</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>。论文中将Adam与其它的几个自适应学习速率进行了比较，效果均要好。</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<h3>&nbsp;各优化方法比较</h3>
+<p style="text-align: center;">   下面两幅图可视化形象地比较上述各优化方法，详细参见<a href="http://cs231n.github.io/neural-networks-3/">这里</a>，如图：&nbsp;<br><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001731629" alt="contours_evaluation_optimizers">&nbsp;<br>图5 SGD各优化方法在损失曲面上的表现</p>
+<p style="text-align: center;">   从上图可以看出， Adagrad、Adadelta与RMSprop在损失曲面上能够立即转移到正确的移动方向上达到快速的收敛。而Momentum 与NAG会导致偏离(off-track)。同时NAG能够在偏离之后快速修正其路线，因为其根据梯度修正来提高响应性。&nbsp;<br><img title="" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20160909001936276" alt="saddle_point_evaluation_optimizers">&nbsp;<br>图6 SGD各优化方法在损失曲面鞍点处上的表现</p>
+<p>   从上图可以看出，在鞍点（saddle points）处(即某些维度上梯度为零，某些维度上梯度不为零)，SGD、Momentum与NAG一直在鞍点梯度为零的方向上振荡，很难打破鞍点位置的对称性；Adagrad、RMSprop与Adadelta能够很快地向梯度不为零的方向上转移。&nbsp;<br>   从上面两幅图可以看出，自适应学习速率方法(Adagrad、Adadelta、RMSprop与Adam)在这些场景下具有更好的收敛速度与收敛性。</p>
+<h3 id="如何选择sgd优化器">如何选择SGD优化器</h3>
+<p>   如果你的数据特征是稀疏的，那么你最好使用自适应学习速率SGD优化方法(Adagrad、Adadelta、RMSprop与Adam)，因为你不需要在迭代过程中对学习速率进行人工调整。&nbsp;<br>   RMSprop是Adagrad的一种扩展，与Adadelta类似，但是改进版的Adadelta使用RMS去自动更新学习速率，并且不需要设置初始学习速率。而Adam是在RMSprop基础上使用动量与偏差修正。RMSprop、Adadelta与Adam在类似的情形下的表现差不多。<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_15">Kingma[15]</a>指出收益于偏差修正，Adam略优于RMSprop，因为其在接近收敛时梯度变得更加稀疏。因此，Adam可能是目前最好的SGD优化方法。&nbsp;<br>   有趣的是，最近很多论文都是使用原始的SGD梯度下降算法，并且使用简单的学习速率退火调整（无动量项）。现有的已经表明：SGD能够收敛于最小值点，但是相对于其他的SGD，它可能花费的时间更长，并且依赖于鲁棒的初始值以及学习速率退火调整策略，并且容易陷入局部极小值点，甚至鞍点。因此，如果你在意收敛速度或者训练一个深度或者复杂的网络，你应该选择一个自适应学习速率的SGD优化方法。</p>
+<h3 id="并行与分布式sgd">并行与分布式SGD</h3>
+<p>   如果你处理的数据集非常大，并且有机器集群可以利用，那么并行或分布式SGD是一个非常好的选择，因为可以大大地提高速度。SGD算法的本质决定其是串行的(step-by-step)。因此如何进行异步处理便是一个问题。虽然串行能够保证收敛，但是如果训练集大，速度便是一个瓶颈。如果进行异步更新，那么可能会导致不收敛。下面将讨论如何进行并行或分布式SGD，并行一般是指在同一机器上进行多核并行，分布式是指集群处理。</p>
+<ul>
+<li>
+<p>Hogwild&nbsp;<br>  &nbsp;<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_23">Niu[23]</a>提出了被称为Hogwild的并行SGD方法。该方法在多个CPU时间进行并行。处理器通过共享内存来访问参数，并且这些参数不进行加锁。它为每一个cpu分配不重叠的一部分参数（分配互斥），每个cpu只更新其负责的参数。该方法只适合处理数据特征是稀疏的。该方法几乎可以达到一个最优的收敛速度，因为cpu之间不会进行相同信息重写。</p>
+
+
+
+
+
+
+
+</li>
+<li>
+<p>Downpour SGD&nbsp;<br>   Downpour SGD是<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_4">Dean[4]</a>提出的在DistBelief(Google TensorFlow的前身)使用的SGD的一个异步变种。它在训练子集上训练同时多个模型副本。这些副本将各自的更新发送到参数服务器(PS,parameter server)，每个参数服务器只更新互斥的一部分参数，副本之间不会进行通信。因此可能会导致参数发散而不利于收敛。</p>
+
+
+
+
+
+
+
+</li>
+<li>
+<p>Delay-tolerant Algorithms for SGD&nbsp;<br>  &nbsp;<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_12">McMahan与Streeter[12]</a>扩展AdaGrad，通过开发延迟容忍算法(delay-tolerant algorithms)，该算法不仅自适应过去梯度，并且会更新延迟。该方法已经在实践中表明是有效的。</p>
+
+
+
+
+
+
+
+</li>
+<li>
+<p>TensorFlow&nbsp;<br>  &nbsp;<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_13">TensorFlow[13]</a>是Google开源的一个大规模机器学习库，它的前身是DistBelief。它已经在大量移动设备上或者大规模分布式集群中使用了，已经经过了实践检验。其分布式实现是基于图计算，它将图分割成多个子图，每个计算实体作为图中的一个计算节点，他们通过Rend/Receive来进行通信。具体参见<a href="http://googleresearch.blogspot.ie/2016/04/announcing-tensorflow-08-now-with.html">这里</a>。</p>
+
+
+
+
+
+
+
+</li>
+<li>
+<p>Elastic Averaging SGD&nbsp;<br>  &nbsp;<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_14">Zhang等[14]</a>提出Elastic Averaging SGD(EASGD)，它通过一个elastic force(存储参数的参数服务器中心）来连接每个work来进行参数异步更新。This allows the local variables to fluctuate further from the center variable, which in theory allows for more exploration of the parameter space. They show empirically that this increased capacity for exploration leads to improved performance by finding new local optima. 这句话不太懂，需要去看论文。</p>
+
+
+
+
+
+
+
+</li>
+
+
+
+
+
+
+
+</ul>
+<h3 id="更多的sgd优化策略">更多的SGD优化策略</h3>
+<p>   接下来介绍更多的SGD优化策略来进一步提高SGD的性能。另外还有众多其它的优化策略，可以参见<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_22">[22]</a>。</p>
+<ul>
+<li>
+<p>Shuffling and Curriculum Learning&nbsp;<br>   为了使得学习过程更加无偏，应该在每次迭代中随机打乱训练集中的样本。&nbsp;<br>   另一方面，在很多情况下，我们是逐步解决问题的，而将训练集按照某个有意义的顺序排列会提高模型的性能和SGD的收敛性，如何将训练集建立一个有意义的排列被称为<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_16">Curriculum Learning[16]</a>。&nbsp;<br><a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_17">Zaremba与Sutskever[17]</a>在使用Curriculum Learning来训练LSTMs以解决一些简单的问题中，表明一个相结合的策略或者混合策略比对训练集按照按照训练难度进行递增排序要好。（表示不懂，衰）</p>
+
+
+
+
+</li>
+<li>
+<p>Batch normalization&nbsp;<br>   为了方便训练，我们通常会对参数按照0均值1方差进行初始化，随着不断训练，参数得到不同程度的更新，这样这些参数会失去0均值1方差的分布属性，这样会降低训练速度和放大参数变化随着网络结构的加深。&nbsp;<br>   Batch normalization<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_18">[18]</a>在每次mini-batch反向传播之后重新对参数进行0均值1方差标准化。这样可以使用更大的学习速率，以及花费更少的精力在参数初始化点上。Batch normalization充当着正则化、减少甚至消除掉Dropout的必要性。</p>
+
+
+
+
+</li>
+<li>
+<p>Early stopping&nbsp;<br>   在验证集上如果连续的多次迭代过程中损失函数不再显著地降低，那么应该提前结束训练，详细参见<a href="http://www.iro.umontreal.ca/~bengioy/talks/DL-Tutorial-NIPS2015.pdf">NIPS 2015 Tutorial slides</a>，或者参见<a href="http://blog.csdn.net/heyongluoyao8/article/details/49429629">防止过拟合的一些方法</a>。</p>
+
+
+
+
+</li>
+<li>
+<p>Gradient noise&nbsp;<br>   Gradient noise<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715#reference_21">[21]</a>即在每次迭代计算梯度中加上一个高斯分布<span class="MathJax_Preview"><span id="MathJax-Element-54-Frame" class="MathJax"><span id="MathJax-Span-770" class="math"><span id="MathJax-Span-771" class="mrow"><span id="MathJax-Span-772" class="mi">N<span id="MathJax-Span-773" class="mo">(<span id="MathJax-Span-774" class="mn">0<span id="MathJax-Span-775" class="mo">,<span id="MathJax-Span-776" class="msubsup"><span id="MathJax-Span-777" class="mi">σ<span id="MathJax-Span-778" class="mn">2<span id="MathJax-Span-779" class="mi">t<span id="MathJax-Span-780" class="mo">)</span></span></span></span></span></span></span></span></span></span></span>的随机误差，即&nbsp;<br></span></span></p>
+<div class="MathJax_Display"><span id="MathJax-Element-55-Frame" class="MathJax"><span id="MathJax-Span-781" class="math"><span id="MathJax-Span-782" class="mrow"><span id="MathJax-Span-783" class="msubsup"><span id="MathJax-Span-784" class="mi">g<span id="MathJax-Span-785" class="texatom"><span id="MathJax-Span-786" class="mrow"><span id="MathJax-Span-787" class="mi">t<span id="MathJax-Span-788" class="mo">,<span id="MathJax-Span-789" class="mi">i<span id="MathJax-Span-790" class="mo">=<span id="MathJax-Span-791" class="msubsup"><span id="MathJax-Span-792" class="mi">g<span id="MathJax-Span-793" class="texatom"><span id="MathJax-Span-794" class="mrow"><span id="MathJax-Span-795" class="mi">t<span id="MathJax-Span-796" class="mo">,<span id="MathJax-Span-797" class="mi">i<span id="MathJax-Span-798" class="mo">+<span id="MathJax-Span-799" class="mi">N<span id="MathJax-Span-800" class="mo">(<span id="MathJax-Span-801" class="mn">0<span id="MathJax-Span-802" class="mo">,<span id="MathJax-Span-803" class="msubsup"><span id="MathJax-Span-804" class="mi">σ<span id="MathJax-Span-805" class="mn">2<span id="MathJax-Span-806" class="mi">t<span id="MathJax-Span-807" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+<br>   高斯误差的方差需要进行退火：&nbsp;<br>
+<div class="MathJax_Display"><span id="MathJax-Element-56-Frame" class="MathJax"><span id="MathJax-Span-808" class="math"><span id="MathJax-Span-809" class="mrow"><span id="MathJax-Span-810" class="msubsup"><span id="MathJax-Span-811" class="mi">σ<span id="MathJax-Span-812" class="mn">2<span id="MathJax-Span-813" class="mi">t<span id="MathJax-Span-814" class="mo">=<span id="MathJax-Span-815" class="mfrac"><span id="MathJax-Span-816" class="mi">η<span id="MathJax-Span-817" class="mrow"><span id="MathJax-Span-818" class="mo">(<span id="MathJax-Span-819" class="mn">1<span id="MathJax-Span-820" class="mo">+<span id="MathJax-Span-821" class="mi">t<span id="MathJax-Span-822" class="msubsup"><span id="MathJax-Span-823" class="mo">)<span id="MathJax-Span-824" class="mi">γ</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+<span class="MathJax_Preview"><span class="MathJax_Preview"><br>   对梯度增加随机误差会增加模型的鲁棒性，即使初始参数值选择地不好，并适合对特别深层次的负责的网络进行训练。其原因在于增加随机噪声会有更多的可能性跳过局部极值点并去寻找一个更好的局部极值点，这种可能性在深层次的网络中更常见。</span></span></li>
+
+
+
+
+</ul>
+<p><strong>总结</strong></p>
+<p>   在上文中，对梯度下降算法的三种框架进行了介绍，并且mini-batch梯度下降是使用最广泛的。随后，我们重点介绍了SGD的一些优化方法：Momentum、NAG、Adagrad、Adadelta、RMSprop与Adam，以及一些异步SGD方法。最后，介绍了一些提高SGD性能的其它优化建议，如：训练集随机洗牌与课程学习(shuffling and curriculum learning)、batch normalization,、early stopping与Gradient noise。&nbsp;<br>   希望这篇文章能给你提供一些关于如何使用不同的梯度优化算法方面的指导。如果还有更多的优化建议或方法还望大家提出来？或者你使用什么技巧和方法来更好地训练SGD可以一起交流？Thanks。</p>
+<h3 id="引用">引用</h3>
+<p><span id="reference_1">[1] Sutton, R. S. (1986). Two problems with backpropagation and other steepest-descent learning procedures for networks. Proc. 8th Annual Conf. Cognitive Science Society.</span></p>
+<p><span id="reference_2">[2] Qian, N. (1999). On the momentum term in gradient descent learning algorithms. Neural Networks : The Official Journal of the International Neural Network Society, 12(1), 145–151.&nbsp;<a href="http://doi.org/10.1016/S0893-6080(98)00116-6">http://doi.org/10.1016/S0893-6080(98)00116-6</a>.</span></p>
+<p><span id="reference_3">[3] Duchi, J., Hazan, E., &amp; Singer, Y. (2011). Adaptive Subgradient Methods for Online Learning and Stochastic Optimization. Journal of Machine Learning Research, 12, 2121–2159. Retrieved from&nbsp;<a href="http://jmlr.org/papers/v12/duchi11a.html">http://jmlr.org/papers/v12/duchi11a.html</a>.</span></p>
+<p><span id="reference_4">[4] Dean, J., Corrado, G. S., Monga, R., Chen, K., Devin, M., Le, Q. V, … Ng, A. Y. (2012). Large Scale Distributed Deep Networks. NIPS 2012: Neural Information Processing Systems, 1–11.&nbsp;<a href="http://doi.org/10.1109/ICDAR.2011.95">http://doi.org/10.1109/ICDAR.2011.95</a>.</span></p>
+<p><span id="reference_5">[5] Pennington, J., Socher, R., &amp; Manning, C. D. (2014). Glove: Global Vectors for Word Representation. Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing, 1532–1543.&nbsp;<a href="http://doi.org/10.3115/v1/D14-1162">http://doi.org/10.3115/v1/D14-1162</a>.</span></p>
+<p><span id="reference_6">[6] Zeiler, M. D. (2012). ADADELTA: An Adaptive Learning Rate Method. Retrieved from&nbsp;<a href="http://arxiv.org/abs/1212.5701">http://arxiv.org/abs/1212.5701</a>.</span></p>
+<p><span id="reference_7">[7] Nesterov, Y. (1983). A method for unconstrained convex minimization problem with the rate of convergence o(1/k2). Doklady ANSSSR (translated as Soviet.Math.Docl.), vol. 269, pp. 543– 547.</span></p>
+<p><span id="reference_8">[8] Bengio, Y., Boulanger-Lewandowski, N., &amp; Pascanu, R. (2012). Advances in Optimizing Recurrent Networks. Retrieved from<a href="http://arxiv.org/abs/1212.0901">http://arxiv.org/abs/1212.0901</a>.</span></p>
+<p><span id="reference_9">[9] Sutskever, I. (2013). Training Recurrent neural Networks. PhD Thesis.</span></p>
+<p><span id="reference_10">[10] Darken, C., Chang, J., &amp; Moody, J. (1992). Learning rate schedules for faster stochastic gradient search. Neural Networks for Signal Processing II Proceedings of the 1992 IEEE Workshop, (September), 1–11.&nbsp;<a href="http://doi.org/10.1109/NNSP.1992.253713">http://doi.org/10.1109/NNSP.1992.253713</a>.</span></p>
+<p><span id="reference_11">[11] H. Robinds and S. Monro, “A stochastic approximation method,” Annals of Mathematical Statistics, vol. 22, pp. 400–407, 1951.</span></p>
+<p><span id="reference_12">[12] Mcmahan, H. B., &amp; Streeter, M. (2014). Delay-Tolerant Algorithms for Asynchronous Distributed Online Learning. Advances in Neural Information Processing Systems (Proceedings of NIPS), 1–9. Retrieved from&nbsp;<a href="http://papers.nips.cc/paper/5242-delay-tolerant-algorithms-for-asynchronous-distributed-online-learning.pdf">http://papers.nips.cc/paper/5242-delay-tolerant-algorithms-for-asynchronous-distributed-online-learning.pdf</a>.</span></p>
+<p><span id="reference_13">[13] Abadi, M., Agarwal, A., Barham, P., Brevdo, E., Chen, Z., Citro, C., … Zheng, X. (2015). TensorFlow : Large-Scale Machine Learning on Heterogeneous Distributed Systems.</span></p>
+<p><span id="reference_14">[14] Zhang, S., Choromanska, A., &amp; LeCun, Y. (2015). Deep learning with Elastic Averaging SGD. Neural Information Processing Systems Conference (NIPS 2015), 1–24. Retrieved from&nbsp;<a href="http://arxiv.org/abs/1412.6651">http://arxiv.org/abs/1412.6651</a>.</span></p>
+<p><span id="reference_15">[15] Kingma, D. P., &amp; Ba, J. L. (2015). Adam: a Method for Stochastic Optimization. International Conference on Learning Representations, 1–13</span></p>
+<p><span id="reference_16">[16] Bengio, Y., Louradour, J., Collobert, R., &amp; Weston, J. (2009). Curriculum learning. Proceedings of the 26th Annual International Conference on Machine Learning, 41–48.&nbsp;<a href="http://doi.org/10.1145/1553374.1553380">http://doi.org/10.1145/1553374.1553380</a>.</span></p>
+<p><span id="reference_17">[17] Zaremba, W., &amp; Sutskever, I. (2014). Learning to Execute, 1–25. Retrieved from&nbsp;<a href="http://arxiv.org/abs/1410.4615">http://arxiv.org/abs/1410.4615</a>.</span></p>
+<p><span id="reference_18">[18] Ioffe, S., &amp; Szegedy, C. (2015). Batch Normalization : Accelerating Deep Network Training by Reducing Internal Covariate Shift. arXiv Preprint arXiv:1502.03167v3.</span></p>
+<p><span id="reference_19">[19] Dauphin, Y., Pascanu, R., Gulcehre, C., Cho, K., Ganguli, S., &amp; Bengio, Y. (2014). Identifying and attacking the saddle point problem in high-dimensional non-convex optimization. arXiv, 1–14. Retrieved from&nbsp;<a href="http://arxiv.org/abs/1406.2572">http://arxiv.org/abs/1406.2572</a>.</span></p>
+<p><span id="reference_20">[20] Sutskever, I., &amp; Martens, J. (2013). On the importance of initialization and momentum in deep learning.<a href="http://doi.org/10.1109/ICASSP.2013.6639346">http://doi.org/10.1109/ICASSP.2013.6639346</a>.</span></p>
+<p><span id="reference_21">[21] Neelakantan, A., Vilnis, L., Le, Q. V., Sutskever, I., Kaiser, L., Kurach, K., &amp; Martens, J. (2015). Adding Gradient Noise Improves Learning for Very Deep Networks, 1–11. Retrieved from&nbsp;<a href="http://arxiv.org/abs/1511.06807">http://arxiv.org/abs/1511.06807</a>.</span></p>
+<p><span id="reference_22">[22] LeCun, Y., Bottou, L., Orr, G. B., &amp; Müller, K. R. (1998). Efficient BackProp. Neural Networks: Tricks of the Trade, 1524, 9–50.<a href="http://doi.org/10.1007/3-540-49430-8_2">http://doi.org/10.1007/3-540-49430-8_2</a>.</span></p>
+<p><span id="reference_23">[23] Niu, F., Recht, B., Christopher, R., &amp; Wright, S. J. (2011). Hogwild ! : A Lock-Free Approach to Parallelizing Stochastic Gradient Descent, 1–22.</span></p>
+<p><span id="reference_24">[24] Duchi et al. [3] give this matrix as an alternative to the full matrix containing the outer products of all previous gradients, as the computation of the matrix square root is infeasible even for a moderate number of parameters dd.</span></p>
+<h4 class="postTitle"><a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/ooon/p/4947688.html">深入梯度下降(Gradient Descent)算法</a></h4>
+<h4 class="postTitle">参考：<a href="http://blog.csdn.net/heyongluoyao8/article/details/52478715" target="_blank">http://blog.csdn.net/heyongluoyao8/article/details/52478715</a></h4>
+<h4>&nbsp;</h4></div><div id="MySignature" style="display: block;">C/C++基本语法学习
+STL
+C++ primer</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/ranjiewen/category/887625.html" target="_blank">机器学习 Machine learning</a>,<a href="https://www.cnblogs.com/ranjiewen/category/911861.html" target="_blank">总结概述</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5938944,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;3a8db1c9-61a9-e511-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/ranjiewen/" target="_blank"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/20170109112843.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/ranjiewen/">ranjiewen</a><br>
+            <a href="http://home.cnblogs.com/u/ranjiewen/followees">关注 - 107</a><br>
+            <a href="http://home.cnblogs.com/u/ranjiewen/followers">粉丝 - 113</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;3a8db1c9-61a9-e511-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5938944,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">3</span>
+    </div>
+    <div class="buryit" onclick="votePost(5938944,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/ranjiewen/p/5938877.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/ranjiewen/p/5938877.html" title="发布于2016-10-08 15:20">机器学习中的范数规则化之 L0、L1与L2范数</a><br><a href="https://www.cnblogs.com/ranjiewen/p/5939053.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/ranjiewen/p/5939053.html" title="发布于2016-10-08 16:01">损失函数(loss function)</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-10-08 15:36</span> <a href="https://www.cnblogs.com/ranjiewen/">ranjiewen</a> 阅读(<span id="post_view_count">9178</span>) 评论(<span id="post_comment_count">2</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5938944" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/ranjiewen/p/5938944.html#" onclick="AddToWz(5938944);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=260149,cb_entryId=5938944,cb_blogApp=currentBlogApp,cb_blogUserGuid='3a8db1c9-61a9-e511-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/10/8 15:36:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<!--done-->
+<br>
+<div class="feedback_area_title">评论</div>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/ranjiewen/p/5938944.html#3743988" class="layer">#1楼</a><a name="3743988" id="comment_anchor_3743988"></a> <span class="comment_date">2017-07-26 16:56</span> | <a id="a_comment_author_3743988" href="https://www.cnblogs.com/TensorSense/" target="_blank">TensorSense</a> <a href="http://msg.cnblogs.com/send/TensorSense" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3743988" class="blog_comment_body">总结得非常好！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3743988,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3743988,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/ranjiewen/p/5938944.html#3952420" class="layer">#2楼</a><a name="3952420" id="comment_anchor_3952420"></a><span id="comment-maxId" style="display:none;">3952420</span><span id="comment-maxDate" style="display:none;">2018/4/16 0:05:34</span> <span class="comment_date">2018-04-16 00:05</span> | <a id="a_comment_author_3952420" href="http://home.cnblogs.com/u/536835/" target="_blank">逐浪大白鲨</a> <a href="http://msg.cnblogs.com/send/%E9%80%90%E6%B5%AA%E5%A4%A7%E7%99%BD%E9%B2%A8" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3952420" class="blog_comment_body">非常牛逼的样子，链接也不错，图文并茂，谢谢博主</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3952420,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3952420,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/ranjiewen/p/5938944.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/ranjiewen/p/5938944.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云&#39;)">【推荐】华为云11.11普惠季 血拼风暴 一促即发</a><br><a href="https://group.cnblogs.com/topic/80253.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-拼团&#39;)">【拼团】腾讯云服务器拼团活动又双叒叕来了！</a><br><a href="https://cloud.tencent.com/act/domainsales?fromSource=gwzcw.1351351.1351351.1351351" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-域名&#39;)">【推荐】腾讯云新注册用户域名抢购1元起</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1351353.1351353.1351353" target="_blank"><img width="300" height="250" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/24442-20181008121639348-1607410764.jpg" alt="腾讯云1008" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/609729/" target="_blank">IBM营收规模再度下滑 股价跟着继续缩水</a><br> ·  <a href="https://news.cnblogs.com/n/609727/" target="_blank">续航最长，华为手表却变得更薄了</a><br> ·  <a href="https://news.cnblogs.com/n/609726/" target="_blank">法官批准马斯克与SEC和解 特斯拉市值损失120亿美元找谁哭</a><br> ·  <a href="https://news.cnblogs.com/n/609723/" target="_blank">腾讯上线音乐短视频应用音兔</a><br> ·  <a href="https://news.cnblogs.com/n/609722/" target="_blank">亚马逊更新Kindle Paperwhite，带来IPX8级防水和最高32GB空间</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<script async="async" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CJP5l8K5jN4CFcmWvQodPPoMRQ">
+    <script>
+    if (new Date() >= new Date(2018, 9, 13)) {
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    }
+    </script>
+    <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-load-complete="true" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="https://kb.cnblogs.com/page/606682/" target="_blank">为什么说 Java 程序员必须掌握 Spring Boot ？</a><br> ·  <a href="https://kb.cnblogs.com/page/606645/" target="_blank">在学习中，有一个比掌握知识更重要的能力</a><br> ·  <a href="https://kb.cnblogs.com/page/603663/" target="_blank">如何招到一个靠谱的程序员</a><br> ·  <a href="https://kb.cnblogs.com/page/573614/" target="_blank">一个故事看懂“区块链”</a><br> ·  <a href="https://kb.cnblogs.com/page/603697/" target="_blank">被踢出去的用户</a><br></div>» <a href="https://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><embed src="http://www.xiami.com/widget/42036317_1773648047,3599309,1775755418,3381901,3381903,2072395,1776250403,2067242,2076969,_235_346_FF8719_494949_1/multiPlayer.swf" type="application/x-shockwave-flash" width="235" height="346" wmode="opaque" autostart="true" loop="true" hidden="ture">
+
+
+<style type="text/css">
+h1 {color: red}
+
+</style>
+
+
+<p><b>关于博主：爱生活，积极学习各种技术</b></p>
+
+<p><b>IT技能：能够较熟练使用C和C++编程，熟悉常见的数据结构和算法，了解Linux和Git操作</b></p>
+
+<p><b>个人技能：熟悉常用的图像处理，机器学习，计算机视觉算法，了解常见超分辨重建，分类，检测，分割网络；能运用Python ,Matlab语言和OpenCV, Tensorflow, Pytorch等工具进行计算机视觉相关课题研究；</b></p>
+
+<p><b>努力方向：深入学习深度学习框架，积累实际工程能力，熟练刷题...</b></p>
+
+<p><b>职业目标：希望从事计算机视觉领域算法岗(image processing,machine learning, deep learning)</b></p>
+
+<h3><b><a target="_blank" href="https://github.com/ranjiewwen/">Github：https://github.com/ranjiewwen/</a></b> </h3>
+
+<h3><b><a target="_blank" href="https://ranjiewwen.github.io/">个人站：https://ranjiewwen.github.io/</a></b> </h3>
+
+<a href="https://clustrmaps.com/site/19rmf" title="Visit tracker"><img src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/map_v2.png"></a><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/ranjiewen/">ranjiewen</a><br>园龄：<a href="https://home.cnblogs.com/u/ranjiewen/" title="入园时间：2015-12-23">2年9个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/ranjiewen/followers/">113</a><br>关注：<a href="https://home.cnblogs.com/u/ranjiewen/followees/">107</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;3a8db1c9-61a9-e511-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('3a8db1c9-61a9-e511-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/09/01&#39;);return false;">&lt;</a></td><td align="center">2018年10月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/11/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">30</td><td align="center">1</td><td align="center"><a href="https://www.cnblogs.com/ranjiewen/archive/2018/10/02.html"><u>2</u></a></td><td align="center">3</td><td align="center">4</td><td align="center"><a href="https://www.cnblogs.com/ranjiewen/archive/2018/10/05.html"><u>5</u></a></td><td class="CalWeekendDay" align="center">6</td></tr><tr><td class="CalWeekendDay" align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td class="CalWeekendDay" align="center">13</td></tr><tr><td class="CalWeekendDay" align="center">14</td><td align="center">15</td><td align="center">16</td><td class="CalTodayDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td class="CalWeekendDay" align="center">20</td></tr><tr><td class="CalWeekendDay" align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalWeekendDay" align="center">27</td></tr><tr><td class="CalWeekendDay" align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td></tr><tr><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/ranjiewen/tag/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6MOOC-%E9%99%88%E8%B6%8A%E3%80%81%E4%BD%95%E9%92%A6%E9%93%AD-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-2017%E6%98%A5/">中国大学MOOC-陈越、何钦铭-数据结构-2017春</a>(42)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%AE%97%E6%B3%95/">图像处理算法</a>(28)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E6%A0%91/">树</a>(27)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E9%80%92%E5%BD%92%2BDFS%2BBFS%2B%E5%9B%9E%E6%BA%AF/">递归+DFS+BFS+回溯</a>(26)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/tensorflow/">tensorflow</a>(21)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/dp%E7%AE%97%E6%B3%95/">dp算法</a>(21)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>(21)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/">算法之美</a>(17)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>(16)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>(16)</li><li><a href="https://www.cnblogs.com/ranjiewen/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/ranjiewen/category/789804.html">C/C++(84)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/ranjiewen/category/803704.html">CrackingtheCodingInterview(20)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/ranjiewen/category/1071416.html">CV经典问题实践(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/ranjiewen/category/1206851.html">GAN(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/ranjiewen/category/850263.html">Git(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/ranjiewen/category/789811.html">Java(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/ranjiewen/category/1209036.html">Kaggle(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/ranjiewen/category/1001299.html">leetcode(168)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/ranjiewen/category/789859.html">Linux(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/ranjiewen/category/850262.html">Matlab(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/ranjiewen/category/821656.html">MFC(24)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/ranjiewen/category/994908.html">Oj(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/ranjiewen/category/905240.html">OpenCV(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/ranjiewen/category/897940.html">Python(32)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/ranjiewen/category/789810.html">Qt(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/ranjiewen/category/1206774.html">RNN(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/ranjiewen/category/799058.html">STL(26)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/ranjiewen/category/806613.html">笔试，面试题(50)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/ranjiewen/category/789808.html">操作系统 operating system(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/ranjiewen/category/917374.html">常见易错点&amp;&amp;函数实现(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/ranjiewen/category/801099.html">多线程与并发(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/ranjiewen/category/789858.html">环境搭建(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/ranjiewen/category/887625.html">机器学习 Machine learning(50)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/ranjiewen/category/789807.html">计算机网络 computer networks(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/ranjiewen/category/794758.html">剑指offer(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/ranjiewen/category/809694.html">牛客网--课程学习(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/ranjiewen/category/945721.html">其他技术(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/ranjiewen/category/805158.html">设计模式(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="https://www.cnblogs.com/ranjiewen/category/988625.html">深度学习DeepLearning(34)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="https://www.cnblogs.com/ranjiewen/category/789862.html">生活和学习计划(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_30" href="https://www.cnblogs.com/ranjiewen/category/801098.html">数据库系统 database system(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_31" href="https://www.cnblogs.com/ranjiewen/category/894534.html">数学(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_32" href="https://www.cnblogs.com/ranjiewen/category/931678.html">数字信号处理(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_33" href="https://www.cnblogs.com/ranjiewen/category/1006124.html">算法分析与设计(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_34" href="https://www.cnblogs.com/ranjiewen/category/789809.html">算法与数据结构(48)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_35" href="https://www.cnblogs.com/ranjiewen/category/915194.html">算法之美-22个经典问题 +45个算法(17)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_36" href="https://www.cnblogs.com/ranjiewen/category/789812.html">图像处理 image processing(37)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_37" href="https://www.cnblogs.com/ranjiewen/category/911861.html">总结概述(13)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListArticleCategory">
+<h3 class="catListTitle">文章分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/ranjiewen/category/936387.html">C/C++(3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/ranjiewen/category/1131423.html">paper-分类，检测，分割，GAN...(20)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/ranjiewen/category/1005945.html">典型算法题目(2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/ranjiewen/category/936386.html">机器学习(13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/ranjiewen/category/987704.html">深度学习(14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/ranjiewen/category/936385.html">图像处理(9)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">机器学习达人</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="http://blog.csdn.net/han_xiaoyang" rel="nofollow"> 寒小阳</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_1" href="http://blog.csdn.net/u014380165" rel="nofollow">AI之路</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_2" href="http://hellodfan.com/archives/" rel="nofollow">DFan的NoteBook(细致paper阅读)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_3" href="http://blog.csdn.net/happyer88/article/category/6053210/2">July's Pensieve</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_4" href="https://www.cnblogs.com/maybe2030/" rel="nofollow">Poll的笔记</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_5" href="http://blog.csdn.net/abcjennifer" rel="nofollow">Rachel Zhang的专栏</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_6" href="http://m.blog.csdn.net/blog/index?username=Real_Myth" rel="nofollow">Real_Myth--CV</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_7" href="http://blog.csdn.net/zouxy09" rel="nofollow">zouxy09的专栏</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_8" href="http://blog.csdn.net/baimafujinji" rel="nofollow">白马负金羁</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_9" href="http://blog.csdn.net/red_stone1" rel="nofollow">红色石头的专栏</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_10" href="http://blog.csdn.net/dream_angel_z" rel="nofollow">拾毅者</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_11" href="http://blog.csdn.net/App_12062011/article/category/6673389">系统学习深度学习</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">刷题达人</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_3_Link_0" href="https://blog.csdn.net/linhuanmars" rel="nofollow"> Code Ganker-leetcode</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_1" href="https://www.cnblogs.com/grandyang/p/4606334.html" rel="nofollow">Grandyang-LeetCode</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_2" href="https://www.cnblogs.com/zhuli19901106/" rel="nofollow">Zhu Li</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList我的常用资源">
+<h3 class="catListTitle">我的链接</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_4_Link_0" href="http://blog.csdn.net/ranjiewen" rel="nofollow" target="_blank">CSDN</a> </li>
+
+<li><a id="CatList_LinkList_4_Link_1" href="https://github.com/ranjiewwen" rel="nofollow" target="_blank">Github</a> </li>
+
+<li><a id="CatList_LinkList_4_Link_2" href="https://www.zhihu.com/people/ranjiewen/activities" rel="nofollow">ranjiewen-知乎</a> </li>
+
+<li><a id="CatList_LinkList_4_Link_3" href="https://ranjiewwen.github.io/" rel="nofollow">个人主页</a> </li>
+
+<li><a id="CatList_LinkList_4_Link_4" href="http://www.nowcoder.com/773262" rel="nofollow" target="_blank">牛课网</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/ranjiewen/p/6084052.html">1. 模拟退火算法(20100)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5770639.html">2. MultiByteToWideChar和WideCharToMultiByte用法详解(17725)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5971801.html">3. matlab 重命名文件和文件夹(12599)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/6305684.html">4. Python in/not in --- if not/if  + for...[if]...构建List+ python的else子句(12132)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/6263393.html">5. Python 实现二维码生成和识别(11756)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/6385564.html">6. 大津法---OTSU算法(10716)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5960976.html">7. C++用 _findfirst 和 _findnext 查找文件(10193)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5938944.html">8. 梯度下降优化算法综述(9178)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5939053.html">9. 损失函数(loss function)(8109)</a></li><li><a href="https://www.cnblogs.com/ranjiewen/p/5704627.html">10. C++实现ping功能(7612)</a></li></ul></div>
+</div>
+</div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 ranjiewen
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+<!--PageEndHtml Block Begin-->
+<!--    
+
+<h1><b><a target="_blank" href="https://github.com/ranjiewwen/">我的Github</a></b> </h1>
+<h1><b><a target="_blank" href="https://home.cnblogs.com/followees//">我的cnblog关注</a></b> </h1>
+<h1><b><a target="_blank" href="http://stackoverflow.com//">StackOverFlow</a></b> </h1>
+<h1><b><a target="_blank" href="http://my.csdn.net//">我的CSDN</a></b> </h1>
+
+     -->
+<!--PageEndHtml Block End-->
+
+
+<iframe id="google_osd_static_frame_4493835894070" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./梯度下降优化算法综述 - ranjiewen - 博客园_files/saved_resource(1).html"></iframe></body></html>
