@@ -1,0 +1,30 @@
+84524 Enabled live erase for the MX25L3233F flash device
+84352 Added support for the MX25L3233F flash device
+79189 Added support for the GD25Q16B and GD25Q32B flash devices
+77511 Added support for the GD25Q80B flash device
+75734 Fix S25FL132K support, add S25FL116K
+75512 Switch to the octal word read command for the Winbond devices
+74644 Added support for the Winbond W25Q80BW flash. Does not support suspend / resume because of the note written in the datasheet for the suspend / resume commands: "Please contact Winbond for detailed information if this feature is required for a specific design".
+74480 Added support for the Spansion S25FL132K flash
+73171 Refactoring of the fis
+72774 Check suspend bit(s) on initialization and do a resume if necessary
+72502 Implemented support for the MX25L1633E flash device
+72246 Added revision field to the FIS, output in MON-VER
+71692 Added support for MX25L3239E
+67054 Add support for Fidelix SQI devices
+67048 Check the capabilities before sending suspend command for macronix
+67014 Remove unused function from fis for the gigadevice flash
+66851 Added support for MX25U1635E and enabled live erase for MX25U0835E
+66817 Added support for some EON SQI devices
+65776 Added support for the EN25S80A 1.8V flash device
+65277 Added support for EON flash devices to the fis
+65162 Implemented FIS for the SST26VF064B device
+64944 Full winbond family
+64341 Added MX25L1635E sqi device
+63285 Added fis driver for W25Q16DW 1.8V flash device
+63278 Renamed SPANSION section to WINBOND in the fis file
+63086 Implemented deep sleep support in the sqi driver
+62858 Implemented support for Micron N25Q032A SQI device.
+62437 Removed suspend support for the GD25Q40 flash
+61580 Added support for 1.8V Macronix flash device.
+59932 first version of flash.xml
