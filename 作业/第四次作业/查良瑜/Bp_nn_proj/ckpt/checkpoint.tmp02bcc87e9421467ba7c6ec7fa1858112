@@ -1,0 +1,2 @@
+model_checkpoint_path: "task2.ckpt-431"
+all_model_checkpoint_paths: "task2.ckpt-431"

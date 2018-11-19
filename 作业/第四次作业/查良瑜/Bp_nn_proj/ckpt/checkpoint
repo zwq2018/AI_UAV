@@ -1,0 +1,2 @@
+model_checkpoint_path: "task2.ckpt-2858"
+all_model_checkpoint_paths: "task2.ckpt-2858"

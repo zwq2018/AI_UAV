@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)https://keras.io/optimizers/ -->
+<html class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths translated-ltr" lang="zh-CN" style=""><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>优化器 -  Keras文档</title>
+  
+
+  <link rel="shortcut icon" href="https://keras.io/img/favicon.ico">
+
+  
+  <link href="./优化器 - Keras文档_files/css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="./优化器 - Keras文档_files/theme.css" type="text/css">
+  <link rel="stylesheet" href="./优化器 - Keras文档_files/theme_extra.css" type="text/css">
+  <link rel="stylesheet" href="./优化器 - Keras文档_files/highlight.css">
+
+  
+  <script async="" src="./优化器 - Keras文档_files/analytics.js.下载"></script><script>
+    // Current page data
+    var mkdocs_page_name = "Optimizers";
+  </script>
+  
+  <script src="./优化器 - Keras文档_files/jquery-2.1.1.min.js.下载"></script>
+  <script src="./优化器 - Keras文档_files/modernizr-2.8.3.min.js.下载"></script>
+  <script type="text/javascript" src="./优化器 - Keras文档_files/highlight.pack.js.下载"></script>
+  <script src="./优化器 - Keras文档_files/theme.js.下载"></script> 
+
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-61785484-1', 'keras.io');
+      ga('send', 'pageview');
+  </script>
+  
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="./优化器 - Keras文档_files/translateelement.css"></head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <a href="https://keras.io/"><div class="keras-logo">
+        <img src="./优化器 - Keras文档_files/keras-logo-small-wb.png" class="keras-logo-img"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+        Keras文档
+      </font></font></div></a>
+      <div class="wy-side-nav-search">
+        <div role="search">
+  <form id="rtd-search-form" class="wy-form" action="https://keras.io/search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs">
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">家</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/why-use-keras/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为何使用Keras</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    <ul class="subnav">
+    <li><span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入门</font></font></span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/getting-started/sequential-model-guide/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顺序模型指南</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/getting-started/functional-api-guide/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">功能API指南</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/getting-started/faq/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">常问问题</font></font></a>
+        
+    </li>
+
+        
+    </ul>
+</li><li>
+          
+            </li><li>
+    <ul class="subnav">
+    <li><span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">楷模</font></font></span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/models/about-keras-models/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关于Keras型号</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/models/sequential/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顺序</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/models/model/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">型号（功能API）</font></font></a>
+        
+    </li>
+
+        
+    </ul>
+</li><li>
+          
+            </li><li>
+    <ul class="subnav">
+    <li><span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">图层</font></font></span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/about-keras-layers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关于Keras图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/core/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">核心层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/convolutional/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">卷积层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/pooling/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">汇集图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/local/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本地连接的图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/recurrent/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">周期性图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/embeddings/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">嵌入图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/merge/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">合并图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/advanced-activations/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">高级激活图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/normalization/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">规范化图层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/noise/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">噪音层</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/wrappers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">图层包装器</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/layers/writing-your-own-keras-layers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">编写自己的Keras图层</font></font></a>
+        
+    </li>
+
+        
+    </ul>
+</li><li>
+          
+            </li><li>
+    <ul class="subnav">
+    <li><span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">预处理</font></font></span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/preprocessing/sequence/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">序列预处理</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/preprocessing/text/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文本预处理</font></font></a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="https://keras.io/preprocessing/image/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">图像预处理</font></font></a>
+        
+    </li>
+
+        
+    </ul>
+</li><li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/losses/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">损失</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/metrics/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">度量</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 current">
+        <a class="current" href="https://keras.io/optimizers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">优化器</font></font></a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="https://keras.io/optimizers/#usage-of-optimizers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用优化器</font></font></a></li>
+                
+            
+                <li class="toctree-l3"><a href="https://keras.io/optimizers/#parameters-common-to-all-keras-optimizers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所有Keras优化器通用的参数</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#sgd"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SGD</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#rmsprop"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RMSprop</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#adagrad"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adagrad</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#adadelta"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adadelta</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#adam"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">亚当</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#adamax"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adamax</font></font></a></li>
+                
+                    <li><a class="toctree-l4" href="https://keras.io/optimizers/#nadam"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">那达慕</font></font></a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/activations/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">激活</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/callbacks/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">回调</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/datasets/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据集</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/applications/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">应用</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/backend/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">后端</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/initializers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">初始化器</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/regularizers/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Regularizers</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/constraints/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">约束</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/visualization/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/scikit-learn-api/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Scikit-learn API</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/utils/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">utils的</font></font></a>
+        
+    </li>
+<li>
+          
+            </li><li>
+    </li><li class="toctree-l1 ">
+        <a class="" href="https://keras.io/contributing/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">特约</font></font></a>
+        
+    </li>
+<li>
+          
+        </li></ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="https://keras.io/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Keras文档</font></font></a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="https://keras.io/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> »</font></font></li>
+    
+      
+    
+    <li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">优化器</font></font></li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="http://github.com/keras-team/keras" class="icon icon-github"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 在GitHub上编辑</font></font></a>
+        
+      
+    </li>
+  </ul>
+  <hr>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="usage-of-optimizers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用优化器</font></font></h2>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">优化器是编译Keras模型所需的两个参数之一：</font></font></p>
+<pre><code class="python hljs"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> optimizers<font></font>
+<font></font>
+model = Sequential()<font></font>
+model.add(Dense(<span class="hljs-number">64</span>, kernel_initializer=<span class="hljs-string">'uniform'</span>, input_shape=(<span class="hljs-number">10</span>,)))<font></font>
+model.add(Activation(<span class="hljs-string">'softmax'</span>))<font></font>
+<font></font>
+sgd = optimizers.SGD(lr=<span class="hljs-number">0.01</span>, decay=<span class="hljs-number">1e-6</span>, momentum=<span class="hljs-number">0.9</span>, nesterov=<span class="hljs-keyword">True</span>)<font></font>
+model.compile(loss=<span class="hljs-string">'mean_squared_error'</span>, optimizer=sgd)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以在传递优化器之前将其实例化</font></font><code>model.compile()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，如上例所示，或者您可以通过其名称来调用它。</font><font style="vertical-align: inherit;">在后一种情况下，将使用优化程序的默认参数。</font></font></p>
+<pre><code class="python hljs"><span class="hljs-comment"># pass optimizer by name: default parameters will be used</span>
+model.compile(loss=<span class="hljs-string">'mean_squared_error'</span>, optimizer=<span class="hljs-string">'sgd'</span>)
+</code></pre>
+
+<hr>
+<h2 id="parameters-common-to-all-keras-optimizers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所有Keras优化器通用的参数</font></font></h2>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">的参数</font></font><code>clipnorm</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和</font></font><code>clipvalue</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可以与所有优化可以用来控制限幅梯度：</font></font></p>
+<pre><code class="python hljs"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> optimizers<font></font>
+<font></font>
+<span class="hljs-comment"># All parameter gradients will be clipped to</span>
+<span class="hljs-comment"># a maximum norm of 1.</span>
+sgd = optimizers.SGD(lr=<span class="hljs-number">0.01</span>, clipnorm=<span class="hljs-number">1.</span>)
+</code></pre>
+
+<pre><code class="python hljs"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> optimizers<font></font>
+<font></font>
+<span class="hljs-comment"># All parameter gradients will be clipped to</span>
+<span class="hljs-comment"># a maximum value of 0.5 and</span>
+<span class="hljs-comment"># a minimum value of -0.5.</span>
+sgd = optimizers.SGD(lr=<span class="hljs-number">0.01</span>, clipvalue=<span class="hljs-number">0.5</span>)
+</code></pre>
+
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L157"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="sgd"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SGD</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.SGD(lr=<span class="hljs-number">0.01</span>, momentum=<span class="hljs-number">0.0</span>, decay=<span class="hljs-number">0.0</span>, nesterov=<span class="hljs-keyword">False</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">随机梯度下降优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">包括对动量，学习率衰减和Nesterov势头的支持。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">动量</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.参数可以在相关方向上加速SGD并抑制振荡。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰减</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.每次更新时学习率下降。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">nesterov</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：布尔值。</font><font style="vertical-align: inherit;">是否适用Nesterov势头。</font></font></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L220"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="rmsprop"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RMSprop</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.RMSprop(lr=<span class="hljs-number">0.001</span>, rho=<span class="hljs-number">0.9</span>, epsilon=<span class="hljs-keyword">None</span>, decay=<span class="hljs-number">0.0</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RMSProp优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建议将此优化器的参数保留为默认值（学习速率除外，可以自由调整）。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这种优化器通常是递归神经网络的不错选择。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">rho</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.模糊因子。</font><font style="vertical-align: inherit;">如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰减</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.每次更新时学习率下降。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[rmsprop：将梯度除以最近幅度的平均值]（http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf）</font></font></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L288"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="adagrad"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adagrad</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.Adagrad(lr=<span class="hljs-number">0.01</span>, epsilon=<span class="hljs-keyword">None</span>, decay=<span class="hljs-number">0.0</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adagrad优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adagrad是一种具有参数特定学习率的优化器，它根据参数在训练期间的更新频率进行调整。</font><font style="vertical-align: inherit;">参数接收的更新越多，更新越小。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建议将此优化程序的参数保留为默认值。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.初始学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰减</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.每次更新时学习率下降。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><a href="http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在线学习和随机优化的自适应子梯度方法</font></font></a></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L353"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="adadelta"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adadelta</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.Adadelta(lr=<span class="hljs-number">1.0</span>, rho=<span class="hljs-number">0.95</span>, epsilon=<span class="hljs-keyword">None</span>, decay=<span class="hljs-number">0.0</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adadelta优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adadelta是Adagrad的一个更强大的扩展，它根据渐变更新的移动窗口调整学习速率，而不是累积所有过去的渐变。</font><font style="vertical-align: inherit;">这样，即使进行了许多更新，Adadelta仍在继续学习。</font><font style="vertical-align: inherit;">与Adagrad相比，在Adadelta的原始版本中，您无需设置初始学习率。</font><font style="vertical-align: inherit;">在此版本中，可以设置初始学习速率和衰减因子，与大多数其他Keras优化器一样。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建议将此优化程序的参数保留为默认值。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.初始学习率，默认为1.建议将其保留为默认值。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">rho</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0. Adadelta衰减因子，对应于每个时间步长保持的梯度分数。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.模糊因子。</font><font style="vertical-align: inherit;">如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰变</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.初始学习率衰减。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[Adadelta  - 一种自适应学习率方法]（https://arxiv.org/abs/1212.5701）</font></font></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L436"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="adam"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">亚当</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.Adam(lr=<span class="hljs-number">0.001</span>, beta_1=<span class="hljs-number">0.9</span>, beta_2=<span class="hljs-number">0.999</span>, epsilon=<span class="hljs-keyword">None</span>, decay=<span class="hljs-number">0.0</span>, amsgrad=<span class="hljs-keyword">False</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">亚当优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">默认参数遵循原始论文中提供的参数。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">beta_1</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float，0 &lt;beta &lt;1。一般接近1。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">beta_2</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float，0 &lt;beta &lt;1。一般接近1。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.模糊因子。</font><font style="vertical-align: inherit;">如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰减</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.每次更新时学习率下降。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">amsgrad</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：布尔值。</font><font style="vertical-align: inherit;">是否应用“论亚当与超越的融合”一文来应用该算法的AMSGrad变体。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[亚当 - 随机优化的方法]（https://arxiv.org/abs/1412.6980v8）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[关于亚当及其他人的融合]（https://openreview.net/forum?id=ryQu7f-RZ）</font></font></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L527"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="adamax"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Adamax</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.Adamax(lr=<span class="hljs-number">0.002</span>, beta_1=<span class="hljs-number">0.9</span>, beta_2=<span class="hljs-number">0.999</span>, epsilon=<span class="hljs-keyword">None</span>, decay=<span class="hljs-number">0.0</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">来自Adam paper第7节的Adamax优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">它是基于无限规范的亚当的变体。</font><font style="vertical-align: inherit;">默认参数遵循论文中提供的参数。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">beta_1 / beta_2</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮点数，0 &lt;beta &lt;1。一般接近1。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.模糊因子。</font><font style="vertical-align: inherit;">如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衰减</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮动&gt; = 0.每次更新时学习率下降。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[亚当 - 随机优化的方法]（https://arxiv.org/abs/1412.6980v8）</font></font></li>
+</ul>
+<hr>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/blob/master/keras/optimizers.py#L605"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[资源]</font></font></a></span></p>
+<h3 id="nadam"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">那达慕</font></font></h3>
+<pre><code class="python hljs">keras.optimizers.Nadam(lr=<span class="hljs-number">0.002</span>, beta_1=<span class="hljs-number">0.9</span>, beta_2=<span class="hljs-number">0.999</span>, epsilon=<span class="hljs-keyword">None</span>, schedule_decay=<span class="hljs-number">0.004</span>)
+</code></pre>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nesterov Adam优化器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">就像亚当基本上是具有动力的RMSprop一样，Nadam是具有Nesterov势头的Adam RMSprop。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">默认参数遵循论文中提供的参数。</font><font style="vertical-align: inherit;">建议将此优化程序的参数保留为默认值。</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参数</font></font></strong></p>
+<ul>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">lr</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.学习率。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">beta_1 / beta_2</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：浮点数，0 &lt;beta &lt;1。一般接近1。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">epsilon</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：float&gt; = 0.模糊因子。</font><font style="vertical-align: inherit;">如果</font></font><code>None</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，默认为</font></font><code>K.epsilon()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+</ul>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参考</font></font></strong></p>
+<ul>
+<li><a href="http://cs229.stanford.edu/proj2015/054_report.pdf"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">纳达姆报道</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[关于初始化和深度学习动力的重要性]（http://www.cs.toronto.edu/~fritz/absps/momentum.pdf）</font></font></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="https://keras.io/activations/" class="btn btn-neutral float-right" title="激活"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">下一个 </font></font><span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="https://keras.io/metrics/" class="btn btn-neutral" title="度量"><span class="icon icon-circle-arrow-left"></span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 以前</font></font></a>
+      
+    </div>
+  
+
+  <hr>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用</font><a href="https://readthedocs.org/"><font style="vertical-align: inherit;">阅读文档</font></a><font style="vertical-align: inherit;">提供</font><font style="vertical-align: inherit;">的</font><a href="https://github.com/snide/sphinx_rtd_theme"><font style="vertical-align: inherit;">主题</font></a><font style="vertical-align: inherit;"> 
+
+  使用</font></font><a href="http://www.mkdocs.org/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MkDocs</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建</font><font style="vertical-align: inherit;">。
+</font></font><a href="https://github.com/snide/sphinx_rtd_theme"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font><a href="https://readthedocs.org/"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font></footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">GitHub </font></font></a>
+      
+      
+        <span><a href="https://keras.io/metrics/" style="color: #fcfcfc;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">«上一页</font></font></a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="https://keras.io/activations/" style="color: #fcfcfc"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">下一页»</font></font></a></span>
+      
+    </span>
+</div><div id="goog-gt-tt" class="skiptranslate" dir="ltr"><div style="padding: 8px;"><div><div class="logo"><img src="./优化器 - Keras文档_files/translate_24dp.png" width="20" height="20" alt="Google 翻译"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">原文</h1></div><div class="middle" style="padding: 8px;"><div class="original-text"></div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">提供更好的翻译建议</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none;"></div></div>
+
+
+
+<div class="goog-te-spinner-pos"><div class="goog-te-spinner-animation"><svg xmlns="http://www.w3.org/2000/svg" class="goog-te-spinner" width="96px" height="96px" viewBox="0 0 66 66"><circle class="goog-te-spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div></body></html>
