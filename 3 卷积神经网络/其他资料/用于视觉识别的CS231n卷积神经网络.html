@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://cs231n.github.io/understanding-cnn/ -->
+<html class="translated-ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用于视觉识别的CS231n卷积神经网络</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Course materials and notes for Stanford class CS231n: Convolutional Neural Networks for Visual Recognition.">
+    <link rel="canonical" href="http://cs231n.github.io/understanding-cnn/">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./用于视觉识别的CS231n卷积神经网络_files/main.css">
+
+    <!-- Google fonts -->
+    <link href="./用于视觉识别的CS231n卷积神经网络_files/css" rel="stylesheet" type="text/css">
+
+    <!-- Google tracking -->
+    <script async="" src="./用于视觉识别的CS231n卷积神经网络_files/analytics.js.下载"></script><script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-46895817-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><link type="text/css" rel="stylesheet" charset="UTF-8" href="./用于视觉识别的CS231n卷积神经网络_files/translateelement.css"></head>
+
+
+    <body><div id="MathJax_Message" style="display: none;"></div>
+
+    <header class="site-header">
+
+  <div class="wrap title-wrap">
+    <a class="site-title" href="http://cs231n.github.io/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于视觉识别的CS231n卷积神经网络</font></font></a>
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1></h1>
+  </header>
+
+  <article class="post-content">
+  <p><a name="vis"></a></p>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（此页面目前处于草稿形式）</font></font></p>
+
+<h2 id="visualizing-what-convnets-learn"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化ConvNets学习的内容</font></font></h2>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在文献中已经开发了几种理解和可视化卷积网络的方法，部分是作为对神经网络中的学习特征不可解释的共同批评的回应。</font><font style="vertical-align: inherit;">在本节中，我们将简要介绍其中一些方法和相关工作。</font></font></p>
+
+<h3 id="visualizing-the-activations-and-first-layer-weights"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化激活和第一层权重</font></font></h3>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">图层激活</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">最直接的可视化技术是在前向传递期间显示网络的激活。</font><font style="vertical-align: inherit;">对于ReLU网络而言，激活通常开始时看起来相对较大且密集，但随着训练的进行，激活通常变得更加稀疏和局部化。</font><font style="vertical-align: inherit;">这种可视化可以很容易地注意到的一个危险陷阱是，对于许多不同的输入，一些激活图可能全为零，这可以指示</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">死</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">滤波器，并且可以是高学习率的症状。</font></font></p>
+
+<div class="fig figcenter fighighlight">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/act1.jpeg" width="49%">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/act2.jpeg" width="49%">
+  <div class="figcaption"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+    在训练有素的AlexNet的第一个CONV层（左）和第五个CONV层（右）上查看典型的激活，查看猫的图片。</font><font style="vertical-align: inherit;">每个框都显示与某个过滤器对应的激活映射。</font><font style="vertical-align: inherit;">请注意，激活是稀疏的（大多数值为零，在此可视化中显示为黑色），大多数是本地的。
+  </font></font></div>
+</div>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">转换/ FC过滤器。</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第二种常见策略是可视化权重。</font><font style="vertical-align: inherit;">这些通常在第一个CONV层上可以解释，它直接查看原始像素数据，但也可以在网络中更深地显示滤波器权重。</font><font style="vertical-align: inherit;">权重对于可视化是有用的，因为训练有素的网络通常显示漂亮且平滑的滤波器而没有任何噪声模式。</font><font style="vertical-align: inherit;">噪声模式可以是未经过足够长时间训练的网络的指示，或者可能是导致过度拟合的非常低的正则化强度。</font></font></p>
+
+<div class="fig figcenter fighighlight">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/filt1.jpeg" width="49%">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/filt2.jpeg" width="49%">
+  <div class="figcaption"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+    在训练有素的AlexNet的第一个CONV层（左）和第二个CONV层（右）上的典型滤波器。</font><font style="vertical-align: inherit;">请注意，第一层权重非常好且平滑，表明网络融合良好。</font><font style="vertical-align: inherit;">由于AlexNet包含两个独立的处理流，因此彩色/灰度特征是聚类的，这种架构的明显结果是一个流开发出高频灰度特征和其他低频颜色特征。</font><font style="vertical-align: inherit;">第二CONV层权重不是可解释的，但很明显它们仍然是平滑的，格式良好的，并且没有嘈杂的图案。
+  </font></font></div>
+</div>
+
+<h3 id="retrieving-images-that-maximally-activate-a-neuron"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">检索最大程度激活神经元的图像</font></font></h3>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">另一种可视化技术是获取大型图像数据集，通过网络提供它们并跟踪哪些图像最大程度地激活某些神经元。</font><font style="vertical-align: inherit;">然后，我们可以将图像可视化，以了解神经元在其感受性领域中寻找什么。</font><font style="vertical-align: inherit;">其中一个这样的可视化（以及其他）在</font></font><a href="http://arxiv.org/abs/1311.2524"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Rich</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Girshick等人的</font><a href="http://arxiv.org/abs/1311.2524"><font style="vertical-align: inherit;">Rich特征层次结构中</font></a><font style="vertical-align: inherit;">显示，</font><a href="http://arxiv.org/abs/1311.2524"><font style="vertical-align: inherit;">用于精确的对象检测和语义分割</font></a><font style="vertical-align: inherit;">。</font></font></p>
+
+<div class="fig figcenter fighighlight">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/pool5max.jpeg" width="100%">
+  <div class="figcaption"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+    最大化激活AlexNet的某些POOL5（第5池层）神经元的图像。</font><font style="vertical-align: inherit;">特定神经元的激活值和感受野以白色显示。</font><font style="vertical-align: inherit;">（特别要注意的是，POOL5神经元是输入图像相对较大部分的函数！）可以看出，一些神经元对上半身，文本或镜面高光有反应。
+  </font></font></div>
+</div>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这种方法的一个问题是ReLU神经元本身不一定具有任何语义含义。</font><font style="vertical-align: inherit;">相反，将多个ReLU神经元视为图像块中表示的某些空间的基础向量更为合适。</font><font style="vertical-align: inherit;">换句话说，可视化在沿着与滤波器权重对应的（任意）轴的表示云的边缘处示出补丁。</font><font style="vertical-align: inherit;">这也可以通过ConvNet中的神经元在输入空间上线性操作这一事实来看出，因此该空间的任意旋转都是无操作。</font><font style="vertical-align: inherit;">Szegedy等人</font></font><a href="http://arxiv.org/abs/1312.6199"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在神经网络</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">的迷人</font><a href="http://arxiv.org/abs/1312.6199"><font style="vertical-align: inherit;">属性中</font></a><font style="vertical-align: inherit;">进一步论证了这一点</font><font style="vertical-align: inherit;">，他们在表示空间中沿任意方向执行类似的可视化。</font></font></p>
+
+<h3 id="embedding-the-codes-with-t-sne"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用t-SNE嵌入代码</font></font></h3>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ConvNets可以被解释为逐渐将图像转换为表示，其中类可以通过线性分类器分离。</font><font style="vertical-align: inherit;">通过将图像嵌入到二维中，我们可以粗略地了解该空间的拓扑结构，使得它们的低维表示具有与其高维表示大致相等的距离。</font><font style="vertical-align: inherit;">已经开发了许多嵌入方法，其具有在低维空间中嵌入高维向量同时保持点的成对距离的直觉。</font><font style="vertical-align: inherit;">其中，</font></font><a href="http://lvdmaaten.github.io/tsne/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">t-SNE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是最着名的方法之一，始终如一地产生视觉上令人愉悦的结果。</font></font></p>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为了产生嵌入，我们可以采用一组图像并使用ConvNet来提取CNN代码（例如，在分类器之前的AlexNet 4096维向量中，并且至关重要的是，包括ReLU非线性）。</font><font style="vertical-align: inherit;">然后我们可以将它们插入t-SNE并获得每个图像的二维矢量。</font><font style="vertical-align: inherit;">相应的图像可以在网格中可视化：</font></font></p>
+
+<div class="fig figcenter fighighlight">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/tsne.jpeg" width="100%">
+  <div class="figcaption"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+    t-SNE基于其CNN代码嵌入一组图像。</font><font style="vertical-align: inherit;">彼此相邻的图像在CNN表示空间中也很接近，这意味着CNN“看到”它们非常相似。</font><font style="vertical-align: inherit;">请注意，相似性通常是基于类和语义的，而不是基于像素和颜色的。</font><font style="vertical-align: inherit;">有关如何生成此可视化的更多详细信息，相关代码以及不同比例下的更多相关可视化指的</font></font><a href="http://cs.stanford.edu/people/karpathy/cnnembed/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是CNN代码的t-SNE可视化</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。
+  </font></font></div>
+</div>
+
+<h3 id="occluding-parts-of-the-image"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">遮挡部分图像</font></font></h3>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">假设ConvNet将图像分类为狗。</font><font style="vertical-align: inherit;">我们怎样才能确定它实际上是在图像中捕捉到了狗，而不是来自背景或其他一些杂项对象的某些情境线索呢？</font><font style="vertical-align: inherit;">研究某些分类预测来自图像的哪一部分的一种方式是通过将感兴趣类别（例如，狗类）的概率绘制为封堵器对象的位置的函数。</font><font style="vertical-align: inherit;">也就是说，我们迭代图像的区域，将图像的补丁设置为全零，并查看类的概率。</font><font style="vertical-align: inherit;">我们可以将概率可视化为二维热图。</font><font style="vertical-align: inherit;">这种方法已被用于Matthew Zeiler的</font></font><a href="http://arxiv.org/abs/1311.2901"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化和理解卷积网络</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：</font></font></p>
+
+<div class="fig figcenter fighighlight">
+  <img src="./用于视觉识别的CS231n卷积神经网络_files/occlude.jpeg" width="100%">
+  <div class="figcaption"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+    三个输入图像（顶部）。</font><font style="vertical-align: inherit;">请注意，遮挡区域显示为灰色。</font><font style="vertical-align: inherit;">当我们在图像上滑动遮挡物时，我们记录正确类别的概率，然后将其可视化为热图（在每个图像下方显示）。</font><font style="vertical-align: inherit;">例如，在最左边的图像中，我们看到当封堵器覆盖狗的脸部时，波美拉尼亚的概率急剧下降，这给了我们一定程度的信心，即狗的脸部是高分类得分的主要原因。</font><font style="vertical-align: inherit;">相反，将图像的其他部分归零可以看出具有相对可忽略的影响。
+  </font></font></div>
+</div>
+
+<h3 id="visualizing-the-data-gradient-and-friends"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化数据梯度和朋友</font></font></h3>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据梯度</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+
+<p><a href="http://arxiv.org/abs/1312.6034"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">深层卷积网络：可视化图像分类模型和显着性图</font></font></a></p>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">DeconvNet</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+
+<p><a href="http://arxiv.org/abs/1311.2901"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可视化和理解卷积网络</font></font></a></p>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">引导反向传播</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+
+<p><a href="http://arxiv.org/abs/1412.6806"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">追求简单：全面的卷积网</font></font></a></p>
+
+<h3 id="reconstructing-original-images-based-on-cnn-codes"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基于CNN码重建原始图像</font></font></h3>
+
+<p><a href="http://arxiv.org/abs/1412.0035"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过反转来理解深度图像表示</font></font></a></p>
+
+<h3 id="how-much-spatial-information-is-preserved"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保留多少空间信息？</font></font></h3>
+
+<p><a href="http://papers.nips.cc/paper/5420-do-convnets-learn-correspondence.pdf"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ConvNets学习通信吗？</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（tldr：是的）</font></font></p>
+
+<h3 id="plotting-performance-as-a-function-of-image-attributes"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将性能绘制为图像属性的函数</font></font></h3>
+
+<p><a href="http://arxiv.org/abs/1409.0575"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ImageNet大规模视觉识别挑战</font></font></a></p>
+
+<h2 id="fooling-convnets"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">愚弄ConvNets</font></font></h2>
+
+<p><a href="http://arxiv.org/abs/1412.6572"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">解释和利用对抗性的例子</font></font></a></p>
+
+<h2 id="comparing-convnets-to-human-labelers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将ConvNets与人类贴标者进行比较</font></font></h2>
+
+<p><a href="http://karpathy.github.io/2014/09/02/what-i-learned-from-competing-against-a-convnet-on-imagenet/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我从与ImageNet上的ConvNet竞争中学到的东西</font></font></a></p>
+
+  </article>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <div class="footer-col-1 column">
+      <ul>
+        
+        <li>
+          <a href="https://github.com/cs231n">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+              </svg>
+            </span>
+            <span class="username"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cs231n</font></font></span>
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/cs231n">
+            <span class="icon twitter">
+              <svg version="1.1" class="twitter-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill="#C2C2C2" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27
+                c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767
+                c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206
+                C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271
+                c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469
+                c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+              </svg>
+            </span>
+            <span class="username"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cs231n</font></font></span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:karpathy@cs.stanford.edu"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">karpathy@cs.stanford.edu</font></font></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+        
+    </div>
+
+    <div class="footer-col-3 column">
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+    <!-- mathjax -->
+    <script type="text/javascript" src="./用于视觉识别的CS231n卷积神经网络_files/MathJax.js.下载"></script><div id="goog-gt-tt" class="skiptranslate" dir="ltr"><div style="padding: 8px;"><div><div class="logo"><img src="./用于视觉识别的CS231n卷积神经网络_files/translate_24dp.png" width="20" height="20" alt="Google 翻译"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">原文</h1></div><div class="middle" style="padding: 8px;"><div class="original-text"></div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">提供更好的翻译建议</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none;"></div></div>
+    
+
+<div class="goog-te-spinner-pos"><div class="goog-te-spinner-animation"><svg xmlns="http://www.w3.org/2000/svg" class="goog-te-spinner" width="96px" height="96px" viewBox="0 0 66 66"><circle class="goog-te-spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div></body></html>
