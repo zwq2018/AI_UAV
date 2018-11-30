@@ -1,0 +1,34 @@
+/* 转盘浅白皮肤 */
+
+/* 转盘底座图 */
+.wheel{
+    background-image: url(//p1.ssl.qhimg.com/t01899c24e489f625dd.png);
+}
+/* 边灯默认图 */
+.wheel .turnplateborder.default {
+    background-image: url(//p1.ssl.qhimg.com/t0136b42f6390277a68.png);
+}
+/* 边灯变换图 */
+.wheel .turnplateborder.change{
+    background-image: url(//p4.ssl.qhimg.com/t01cc397b36cfaa20d2.png);
+}
+/* 奖品格子底图 */
+.core{
+    background-image: url(//p4.ssl.qhimg.com/t014d132ee0184b89f4.png);
+}
+/* 剩余次数背景图 */
+.needtime{
+    background-image: url(//p5.ssl.qhimg.com/t01c9b7c9b7bbd87445.png);
+}
+/* 开始抽奖按钮图 */
+.start{
+    background-image: url(//p0.ssl.qhimg.com/t017336a164d8c142ba.png);
+}
+/* 奖品描述文字颜色 */
+.prize-dialog>p{
+    color: #63a0ab;
+}
+.needtime i{
+    color: #fff;
+    font-weight: 700;
+}

@@ -1,0 +1,1 @@
+div#editpage-specialchars{display:block;border:1px solid #c0c0c0;padding:.5em 1em}#editpage-specialchars a{background-color:#f9f9f9;border:1px solid #ddd;padding:1px 4px}textarea#wpTextbox1 + #editpage-specialchars,.wikiEditor-ui-clear + #editpage-specialchars{border-top:none}

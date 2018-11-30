@@ -1,0 +1,83 @@
+<svg id="text" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="984" height="121.27" viewBox="0 0 984 121.27">
+  <defs>
+    <linearGradient id="linear-gradient" x1="771.78" y1="23.71" x2="813.74" y2="98.76" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="navy" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="navy" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="navy" stop-opacity="0.44"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="749.07" y1="20.3" x2="749.07" y2="99.72" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="navy" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="navy" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="navy" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="706.22" y1="23.83" x2="748.09" y2="98.74" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-4" x1="683.94" y1="20.3" x2="683.94" y2="99.6" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-5" x1="641.39" y1="24" x2="683.26" y2="98.9" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-6" x1="619.11" y1="20.47" x2="619.11" y2="99.76" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-7" x1="575.8" y1="23.71" x2="617.87" y2="98.96" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-8" x1="553.28" y1="20.3" x2="553.28" y2="99.6" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-9" x1="511.22" y1="24" x2="553.09" y2="98.9" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-10" x1="488.94" y1="20.47" x2="488.94" y2="99.76" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-11" x1="445.76" y1="24" x2="487.64" y2="98.9" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-12" x1="423.33" y1="20.47" x2="423.33" y2="99.76" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-13" x1="836.78" y1="23.71" x2="878.74" y2="98.76" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-14" x1="814.07" y1="20.3" x2="814.07" y2="99.72" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-15" x1="240.11" y1="23.75" x2="282.05" y2="98.76" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-16" x1="217.31" y1="20.3" x2="217.31" y2="99.6" xlink:href="#linear-gradient-2"/>
+  </defs>
+  <title>upsample</title>
+  <rect x="423.53" y="3.24" width="32.47" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="455.99" y="3.24" width="32.47" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="553.57" y="3.24" width="32.65" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="374.97" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="407.44" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="439.9" y="100.24" width="32.47" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="472.37" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="488.64" y="3.24" width="32.47" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="521.11" y="3.24" width="32.47" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="586.13" y="3.24" width="32.55" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="618.68" y="3.24" width="32.55" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="651.23" y="3.24" width="32.55" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="683.78" y="3.24" width="32.55" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="716.33" y="3.24" width="32.55" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="749.06" y="3.24" width="32.55" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="505.02" y="100.24" width="32.47" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="537.48" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="569.95" y="100.24" width="32.65" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="602.84" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="635.31" y="100.24" width="32.47" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="667.77" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="700.24" y="100.24" width="32.47" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="732.7" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="765.35" y="100.24" width="32.47" height="16.92" fill="#9e9e9e" stroke="#231f20" stroke-miterlimit="10"/>
+  <polyline points="773.5 20.13 797.89 99.92 830.84 99.83 781.94 20.43" fill="url(#linear-gradient)"/>
+  <polyline points="749.19 20.13 700.25 100.05 797.89 99.92 773.5 20.13" fill="url(#linear-gradient-2)"/>
+  <polyline points="708.16 20.13 732.55 99.92 764.96 99.92 716.27 20.13" fill="url(#linear-gradient-3)"/>
+  <polyline points="683.86 20.13 635.33 99.92 732.55 99.92 708.16 20.13" fill="url(#linear-gradient-4)"/>
+  <polyline points="643.33 20.3 667.72 100.09 700.13 100.09 651.43 20.3" fill="url(#linear-gradient-5)"/>
+  <polyline points="619.03 20.3 570.5 100.09 667.72 100.09 643.33 20.3" fill="url(#linear-gradient-6)"/>
+  <polyline points="577.5 20.13 601.89 99.92 635 100.05 585.6 20.13" fill="url(#linear-gradient-7)"/>
+  <polyline points="553.19 20.13 504.67 99.92 601.89 99.92 577.5 20.13" fill="url(#linear-gradient-8)"/>
+  <polyline points="513.16 20.3 537.55 100.09 569.96 100.09 521.27 20.3" fill="url(#linear-gradient-9)"/>
+  <polyline points="488.86 20.3 440.33 100.09 537.55 100.09 513.16 20.3" fill="url(#linear-gradient-10)"/>
+  <polyline points="447.71 20.3 472.09 100.09 504.5 100.09 455.81 20.3" fill="url(#linear-gradient-11)"/>
+  <polyline points="423.13 20.52 374.56 99.86 472.09 100.09 447.71 20.3" fill="url(#linear-gradient-12)"/>
+  <rect x="798.04" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="781.33" y="3.24" width="32.55" height="16.92" fill="#f2f2f2" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="814.06" y="3.24" width="32.55" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="830.35" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <polyline points="838.5 20.13 862.89 99.92 895.84 99.83 846.94 20.43" fill="url(#linear-gradient-13)"/>
+  <polyline points="814.19 20.13 765.25 100.05 862.89 99.92 838.5 20.13" fill="url(#linear-gradient-14)"/>
+  <rect x="863.04" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="168.51" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <polyline points="241.91 20.13 266.3 99.92 299.06 99.88 250.44 20.44" fill="url(#linear-gradient-15)"/>
+  <polyline points="217.37 20.25 168.31 99.82 266.3 99.92 241.91 20.13" fill="url(#linear-gradient-16)"/>
+  <rect x="217.56" y="3.24" width="32.55" height="16.92" fill="#727273" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="201.2" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="266.2" y="100.24" width="32.47" height="16.92" fill="#5b5b5b" stroke="#231f20" stroke-miterlimit="10"/>
+  <rect x="233.85" y="100.24" width="32.47" height="16.92" fill="silver" stroke="#231f20" stroke-miterlimit="10"/>
+  <g>
+    <line x1="316" y1="43.27" x2="348.14" y2="43.27" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="3"/>
+    <path d="M359,43.27c-5.11,1.9-11.45,5.13-15.39,8.56l3.1-8.56-3.1-8.56C347.55,38.14,353.89,41.38,359,43.27Z" fill="#231f20"/>
+  </g>
+</svg>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <title>Implementing Batch Normalization in Tensorflow - R2RT</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Teko:700" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://r2rt.com/theme/style.css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://r2rt.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="R2RT Full Atom Feed" />
+    <link href="https://r2rt.com/feeds/implementations.atom.xml" type="application/atom+xml" rel="alternate" title="R2RT Categories Atom Feed" />
+  </head>
+  <body id="index" class="archive">
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand brand-font" href="https://r2rt.com">R2RT</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+          <ul class="nav navbar-nav">
+            <!--            <li><a href="https://r2rt.com/notes">Paper Notes</a></li>
+            <li><a href="https://r2rt.com">Posts</a></li>
+-->
+            <!--
+            <li><a href="https://r2rt.com/tags.html">tags</a></li>
+            -->
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <div class="container">
+    <section id="content" class="article content">
+      <header>
+        <h2 class="entry-title">
+          Implementing Batch Normalization in Tensorflow
+        </h2>
+        
+        <div class="text-muted">Tue 29 March 2016</div>
+      </header>
+<!-- .entry-content -->
+      <div class="entry-content">
+        <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p>Batch normalization, as described in the March 2015 <a href="http://arxiv.org/pdf/1502.03167v3.pdf">paper</a> (the BN2015 paper) by Sergey Ioffe and Christian Szegedy, is a simple and effective way to improve the performance of a neural network. In the BN2015 paper, Ioffe and Szegedy show that batch normalization enables the use of higher learning rates, acts as a regularizer and can speed up training by 14 times. In this post, I show how to implement batch normalization in Tensorflow.</p>
+<p><strong>Edit 2018 (that should have been made back in 2016)</strong>: If you’re just looking for a working implementation, Tensorflow has an easy to use batch_normalization layer in the tf.layers module. Just be sure to wrap your training step in a <code>with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):</code> and it will work.</p>
+<p><strong>Edit 07/12/16</strong>: I’ve updated this post to cover the calculation of population mean and variance at test time in more detail.</p>
+<p><strong>Edit 02/08/16</strong>: In case you are looking for <strong><em>recurrent batch normalization</em></strong> (i.e., from <a href="https://arxiv.org/abs/1603.09025">Cooijmans et al. (2016)</a>), I have uploaded a working Tensorflow implementation <a href="https://gist.github.com/spitis/27ab7d2a30bbaf5ef431b4a02194ac60">here</a>. The only tricky part of the implementation, as compared to the feedforward batch normalization presented this post, is storing separate population variables for different timesteps.</p>
+<h3 id="the-problem">The problem</h3>
+<p>Batch normalization is intended to solve the following problem: Changes in model parameters during learning change the distributions of the outputs of each hidden layer. This means that later layers need to adapt to these (often noisy) changes during training.</p>
+<h3 id="batch-normalization-in-brief">Batch normalization in brief</h3>
+<p>To solve this problem, the BN2015 paper propposes the <em>batch normalization</em> of the input to the activation function of each nuron (e.g., each sigmoid or ReLU function) during training, so that the input to the activation function across each training batch has a mean of 0 and a variance of 1. For example, applying batch normalization to the activation <span class="math inline">\(\sigma(Wx + b)\)</span> would result in <span class="math inline">\(\sigma(BN(Wx + b))\)</span> where <span class="math inline">\(BN\)</span> is the <em>batch normalizing transform</em>.</p>
+<h3 id="the-batch-normalizing-transform">The batch normalizing transform</h3>
+<p>To normalize a value across a batch (i.e., to batch normalize the value), we subtract the batch mean, <span class="math inline">\(\mu_B\)</span>, and divide the result by the batch standard deviation, <span class="math inline">\(\sqrt{\sigma^2_B + \epsilon}\)</span>. Note that a small constant <span class="math inline">\(\epsilon\)</span> is added to the variance in order to avoid dividing by zero.</p>
+<p>Thus, the initial batch normalizing transform of a given value, <span class="math inline">\(x_i\)</span>, is: <span class="math display">\[BN_{initial}(x_i) = \frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}}\]</span></p>
+<p>Because the batch normalizing transform given above restricts the inputs to the activation function to a prescribed normal distribution, this can limit the representational power of the layer. Therefore, we allow the network to undo the batch normalizing transform by multiplying by a new scale parameter <span class="math inline">\(\gamma\)</span> and adding a new shift parameter <span class="math inline">\(\beta\)</span>. <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\beta\)</span> are learnable parameters.</p>
+<p>Adding in <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\beta\)</span> producing the following final batch normalizing transform: <span class="math display">\[BN(x_i) = \gamma(\frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}}) + \beta\]</span></p>
+<h3 id="implementing-batch-normalization-in-tensorflow">Implementing batch normalization in Tensorflow</h3>
+<p>We will add batch normalization to a basic fully-connected neural network that has two hidden layers of 100 neurons each and show a similar result to Figure 1 (b) and (c) of the BN2015 paper.</p>
+<p>Note that this network is not yet generally suitable for use at test time. See the section <a href="#making-predictions-with-the-model">Making predictions with the model</a> below for the reason why, as well as a fixed version.</p>
+<h4 id="imports-config">Imports, config</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> numpy <span class="im">as</span> np, tensorflow <span class="im">as</span> tf, tqdm
+<span class="im">from</span> tensorflow.examples.tutorials.mnist <span class="im">import</span> input_data
+<span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt
+<span class="op">%</span>matplotlib inline
+mnist <span class="op">=</span> input_data.read_data_sets(<span class="st">&#39;MNIST_data&#39;</span>, one_hot<span class="op">=</span><span class="va">True</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Generate predetermined random weights so the networks are similarly initialized</span>
+w1_initial <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">784</span>,<span class="dv">100</span>)).astype(np.float32)
+w2_initial <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">100</span>,<span class="dv">100</span>)).astype(np.float32)
+w3_initial <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">100</span>,<span class="dv">10</span>)).astype(np.float32)
+
+<span class="co"># Small epsilon value for the BN transform</span>
+epsilon <span class="op">=</span> <span class="fl">1e-3</span></code></pre></div>
+<h4 id="building-the-graph">Building the graph</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Placeholders</span>
+x <span class="op">=</span> tf.placeholder(tf.float32, shape<span class="op">=</span>[<span class="va">None</span>, <span class="dv">784</span>])
+y_ <span class="op">=</span> tf.placeholder(tf.float32, shape<span class="op">=</span>[<span class="va">None</span>, <span class="dv">10</span>])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Layer 1 without BN</span>
+w1 <span class="op">=</span> tf.Variable(w1_initial)
+b1 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">100</span>]))
+z1 <span class="op">=</span> tf.matmul(x,w1)<span class="op">+</span>b1
+l1 <span class="op">=</span> tf.nn.sigmoid(z1)</code></pre></div>
+<p>Here is the same layer 1 with batch normalization:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Layer 1 with BN</span>
+w1_BN <span class="op">=</span> tf.Variable(w1_initial)
+
+<span class="co"># Note that pre-batch normalization bias is ommitted. The effect of this bias would be</span>
+<span class="co"># eliminated when subtracting the batch mean. Instead, the role of the bias is performed</span>
+<span class="co"># by the new beta variable. See Section 3.2 of the BN2015 paper.</span>
+z1_BN <span class="op">=</span> tf.matmul(x,w1_BN)
+
+<span class="co"># Calculate batch mean and variance</span>
+batch_mean1, batch_var1 <span class="op">=</span> tf.nn.moments(z1_BN,[<span class="dv">0</span>])
+
+<span class="co"># Apply the initial batch normalizing transform</span>
+z1_hat <span class="op">=</span> (z1_BN <span class="op">-</span> batch_mean1) <span class="op">/</span> tf.sqrt(batch_var1 <span class="op">+</span> epsilon)
+
+<span class="co"># Create two new parameters, scale and beta (shift)</span>
+scale1 <span class="op">=</span> tf.Variable(tf.ones([<span class="dv">100</span>]))
+beta1 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">100</span>]))
+
+<span class="co"># Scale and shift to obtain the final output of the batch normalization</span>
+<span class="co"># this value is fed into the activation function (here a sigmoid)</span>
+BN1 <span class="op">=</span> scale1 <span class="op">*</span> z1_hat <span class="op">+</span> beta1
+l1_BN <span class="op">=</span> tf.nn.sigmoid(BN1)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Layer 2 without BN</span>
+w2 <span class="op">=</span> tf.Variable(w2_initial)
+b2 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">100</span>]))
+z2 <span class="op">=</span> tf.matmul(l1,w2)<span class="op">+</span>b2
+l2 <span class="op">=</span> tf.nn.sigmoid(z2)</code></pre></div>
+<p>Note that tensorflow provides a <code>tf.nn.batch_normalization</code>, which I apply to layer 2 below. This code does the same thing as the code for layer 1 above. See the documentation <a href="https://www.tensorflow.org/versions/master/api_docs/python/nn/normalization#batch_normalization">here</a> and the code <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/ops/nn_impl.py#L702">here</a>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Layer 2 with BN, using Tensorflows built-in BN function</span>
+w2_BN <span class="op">=</span> tf.Variable(w2_initial)
+z2_BN <span class="op">=</span> tf.matmul(l1_BN,w2_BN)
+batch_mean2, batch_var2 <span class="op">=</span> tf.nn.moments(z2_BN,[<span class="dv">0</span>])
+scale2 <span class="op">=</span> tf.Variable(tf.ones([<span class="dv">100</span>]))
+beta2 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">100</span>]))
+BN2 <span class="op">=</span> tf.nn.batch_normalization(z2_BN,batch_mean2,batch_var2,beta2,scale2,epsilon)
+l2_BN <span class="op">=</span> tf.nn.sigmoid(BN2)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Softmax</span>
+w3 <span class="op">=</span> tf.Variable(w3_initial)
+b3 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">10</span>]))
+y  <span class="op">=</span> tf.nn.softmax(tf.matmul(l2,w3)<span class="op">+</span>b3)
+
+w3_BN <span class="op">=</span> tf.Variable(w3_initial)
+b3_BN <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">10</span>]))
+y_BN  <span class="op">=</span> tf.nn.softmax(tf.matmul(l2_BN,w3_BN)<span class="op">+</span>b3_BN)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Loss, optimizer and predictions</span>
+cross_entropy <span class="op">=</span> <span class="op">-</span>tf.reduce_sum(y_<span class="op">*</span>tf.log(y))
+cross_entropy_BN <span class="op">=</span> <span class="op">-</span>tf.reduce_sum(y_<span class="op">*</span>tf.log(y_BN))
+
+train_step <span class="op">=</span> tf.train.GradientDescentOptimizer(<span class="fl">0.01</span>).minimize(cross_entropy)
+train_step_BN <span class="op">=</span> tf.train.GradientDescentOptimizer(<span class="fl">0.01</span>).minimize(cross_entropy_BN)
+
+correct_prediction <span class="op">=</span> tf.equal(tf.arg_max(y,<span class="dv">1</span>),tf.arg_max(y_,<span class="dv">1</span>))
+accuracy <span class="op">=</span> tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+correct_prediction_BN <span class="op">=</span> tf.equal(tf.arg_max(y_BN,<span class="dv">1</span>),tf.arg_max(y_,<span class="dv">1</span>))
+accuracy_BN <span class="op">=</span> tf.reduce_mean(tf.cast(correct_prediction_BN,tf.float32))</code></pre></div>
+<h4 id="training-the-network">Training the network</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">zs, BNs, acc, acc_BN <span class="op">=</span> [], [], [], []
+
+sess <span class="op">=</span> tf.InteractiveSession()
+sess.run(tf.global_variables_initializer())
+<span class="cf">for</span> i <span class="kw">in</span> tqdm.tqdm(<span class="bu">range</span>(<span class="dv">40000</span>)):
+    batch <span class="op">=</span> mnist.train.next_batch(<span class="dv">60</span>)
+    train_step.run(feed_dict<span class="op">=</span>{x: batch[<span class="dv">0</span>], y_: batch[<span class="dv">1</span>]})
+    train_step_BN.run(feed_dict<span class="op">=</span>{x: batch[<span class="dv">0</span>], y_: batch[<span class="dv">1</span>]})
+    <span class="cf">if</span> i <span class="op">%</span> <span class="dv">50</span> <span class="kw">is</span> <span class="dv">0</span>:
+        res <span class="op">=</span> sess.run([accuracy,accuracy_BN,z2,BN2],feed_dict<span class="op">=</span>{x: mnist.test.images, y_: mnist.test.labels})
+        acc.append(res[<span class="dv">0</span>])
+        acc_BN.append(res[<span class="dv">1</span>])
+        zs.append(np.mean(res[<span class="dv">2</span>],axis<span class="op">=</span><span class="dv">0</span>)) <span class="co"># record the mean value of z2 over the entire test set</span>
+        BNs.append(np.mean(res[<span class="dv">3</span>],axis<span class="op">=</span><span class="dv">0</span>)) <span class="co"># record the mean value of BN2 over the entire test set</span>
+
+zs, BNs, acc, acc_BN <span class="op">=</span> np.array(zs), np.array(BNs), np.array(acc), np.array(acc_BN)</code></pre></div>
+<h3 id="improvements-in-speed-and-accuracy">Improvements in speed and accuracy</h3>
+<p>As seen below, there is a noticeable improvement in the accuracy and speed of training. As shown in figure 2 of the BN2015 paper, this difference can be very significant for other network architectures.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fig, ax <span class="op">=</span> plt.subplots()
+
+ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(acc)<span class="op">*</span><span class="dv">50</span>,<span class="dv">50</span>),acc, label<span class="op">=</span><span class="st">&#39;Without BN&#39;</span>)
+ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(acc)<span class="op">*</span><span class="dv">50</span>,<span class="dv">50</span>),acc_BN, label<span class="op">=</span><span class="st">&#39;With BN&#39;</span>)
+ax.set_xlabel(<span class="st">&#39;Training steps&#39;</span>)
+ax.set_ylabel(<span class="st">&#39;Accuracy&#39;</span>)
+ax.set_ylim([<span class="fl">0.8</span>,<span class="dv">1</span>])
+ax.set_title(<span class="st">&#39;Batch Normalization Accuracy&#39;</span>)
+ax.legend(loc<span class="op">=</span><span class="dv">4</span>)
+plt.show()</code></pre></div>
+<figure>
+<img src="https://r2rt.com/static/images/BN_output_23_0.png" alt="Effect of batch normalization on training" /><figcaption>Effect of batch normalization on training</figcaption>
+</figure>
+<h5 id="illustration-of-input-to-activation-functions-over-time">Illustration of input to activation functions over time</h5>
+<p>Below is the distribution over time of the inputs to the sigmoid activation function of the first five neurons in the network’s second layer. Batch normalization has a visible and significant effect of removing variance/noise in these inputs. As described by Ioffe and Szegedy, this allows the third layer to learn faster and is responsible for the increase in accuracy and learning speed. See Figure 1 and Section 4.1 of the BN2015 paper.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fig, axes <span class="op">=</span> plt.subplots(<span class="dv">5</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">12</span>))
+fig.tight_layout()
+
+<span class="cf">for</span> i, ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):
+    ax[<span class="dv">0</span>].set_title(<span class="st">&quot;Without BN&quot;</span>)
+    ax[<span class="dv">1</span>].set_title(<span class="st">&quot;With BN&quot;</span>)
+    ax[<span class="dv">0</span>].plot(zs[:,i])
+    ax[<span class="dv">1</span>].plot(BNs[:,i])</code></pre></div>
+<figure>
+<img src="https://r2rt.com/static/images/BN_output_25_0.png" alt="Effect of batch normalization on inputs to activation functions" /><figcaption>Effect of batch normalization on inputs to activation functions</figcaption>
+</figure>
+<h3 id="making-predictions-with-the-model">Making predictions with the model</h3>
+<p>When using a batch normalized model at test time to make predictions, using the batch mean and batch variance can be counter-productive. To see this, consider what happens if we feed a single example into the trained model above: the inputs to our activation functions will always be 0 (since we are normalizing them to have a mean of 0), and we will always get the same prediction, regardless of the input!</p>
+<p>To demonstrate:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predictions <span class="op">=</span> []
+correct <span class="op">=</span> <span class="dv">0</span>
+<span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):
+    pred, corr <span class="op">=</span> sess.run([tf.arg_max(y_BN,<span class="dv">1</span>), accuracy_BN],
+                         feed_dict<span class="op">=</span>{x: [mnist.test.images[i]], y_: [mnist.test.labels[i]]})
+    correct <span class="op">+=</span> corr
+    predictions.append(pred[<span class="dv">0</span>])
+<span class="bu">print</span>(<span class="st">&quot;PREDICTIONS:&quot;</span>, predictions)
+<span class="bu">print</span>(<span class="st">&quot;ACCURACY:&quot;</span>, correct<span class="op">/</span><span class="dv">100</span>)</code></pre></div>
+<pre><code>PREDICTIONS: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+ACCURACY: 0.02</code></pre>
+<p>Our model always predicts 8, and there appear to be only two 8s in the first 100 MNIST test samples, for an accuracy of 2%.</p>
+<h3 id="fixing-the-model-for-test-time">Fixing the model for test time</h3>
+<p>To fix this, we need to replace the batch mean and batch variance in each batch normalization step with estimates of the population mean and population variance, respectively. See Section 3.1 of the BN2015 paper. Testing the model above only worked because the entire test set was predicted at once, so the “batch mean” and “batch variance” of the test set provided good estimates for the population mean and population variance.</p>
+<p>To make a batch normalized model generally suitable for testing, we want to obtain estimates for the population mean and population variance at each batch normalization step before test time (i.e., during training), and use these values when making predictions. Note that for the same reason that we need batch normalization (i.e. the mean and variance of the activation inputs changes during training), it would be best to estimate the population mean and variance <em>after</em> the weights they depend on are trained, although doing these simultaneously is not the worst offense, since the weights are expected to converge near the end of training.</p>
+<p>And now, to actually implement this in Tensorflow, we will write a <code>batch_norm_wrapper</code> function, which we will use to wrap the inputs to our activation functions. The function will store the population mean and variance as tf.Variables, and decide whether to use the batch statistics or the population statistics for normalization. To do this, it makes use of an <code>is_training</code> flag. Because we need to learn the population mean and variance during training, we do this when <code>is_training == True</code>. Here is an outline of the code:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> batch_norm_wrapper(inputs, is_training):
+    ...
+    pop_mean <span class="op">=</span> tf.Variable(tf.zeros([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]), trainable<span class="op">=</span><span class="va">False</span>)
+    pop_var <span class="op">=</span> tf.Variable(tf.ones([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]), trainable<span class="op">=</span><span class="va">False</span>)
+
+    <span class="cf">if</span> is_training:
+        mean, var <span class="op">=</span> tf.nn.moments(inputs,[<span class="dv">0</span>])
+        ...
+        <span class="co"># learn pop_mean and pop_var here</span>
+        ...
+        <span class="cf">return</span> tf.nn.batch_normalization(inputs, batch_mean, batch_var, beta, scale, epsilon)
+    <span class="cf">else</span>:
+        <span class="cf">return</span> tf.nn.batch_normalization(inputs, pop_mean, pop_var, beta, scale, epsilon)</code></pre></div>
+<p>Note that the variables have been declared with a <code>trainable = False</code> argument, since we will be updating these ourselves rather than having the optimizer do it.</p>
+<p>One approach to estimating the population mean and variance during training is to use an exponential moving average, though strictly speaking, a simple average over the sample would be (marginally) better. The exponential moving average is simple and lets us avoid extra work, so we use that:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decay <span class="op">=</span> <span class="fl">0.999</span> <span class="co"># use numbers closer to 1 if you have more data</span>
+train_mean <span class="op">=</span> tf.assign(pop_mean, pop_mean <span class="op">*</span> decay <span class="op">+</span> batch_mean <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> decay))
+train_var <span class="op">=</span> tf.assign(pop_var, pop_var <span class="op">*</span> decay <span class="op">+</span> batch_var <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> decay))</code></pre></div>
+<p>Finally, we will need a way to call these training ops. For full control, you can add them to a graph collection (see the link to Tensorflow’s code below), but for simplicity, we will call them every time we calculate the batch_mean and batch_var. To do this, we add them as dependencies to the return value of batch_norm_wrapper when is_training is true. Here is the final batch_norm_wrapper function:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># this is a simpler version of Tensorflow&#39;s &#39;official&#39; version. See:</span>
+<span class="co"># https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/layers/python/layers/layers.py#L102</span>
+<span class="kw">def</span> batch_norm_wrapper(inputs, is_training, decay <span class="op">=</span> <span class="fl">0.999</span>):
+
+    scale <span class="op">=</span> tf.Variable(tf.ones([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]))
+    beta <span class="op">=</span> tf.Variable(tf.zeros([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]))
+    pop_mean <span class="op">=</span> tf.Variable(tf.zeros([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]), trainable<span class="op">=</span><span class="va">False</span>)
+    pop_var <span class="op">=</span> tf.Variable(tf.ones([inputs.get_shape()[<span class="op">-</span><span class="dv">1</span>]]), trainable<span class="op">=</span><span class="va">False</span>)
+
+    <span class="cf">if</span> is_training:
+        batch_mean, batch_var <span class="op">=</span> tf.nn.moments(inputs,[<span class="dv">0</span>])
+        train_mean <span class="op">=</span> tf.assign(pop_mean,
+                               pop_mean <span class="op">*</span> decay <span class="op">+</span> batch_mean <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> decay))
+        train_var <span class="op">=</span> tf.assign(pop_var,
+                              pop_var <span class="op">*</span> decay <span class="op">+</span> batch_var <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> decay))
+        <span class="cf">with</span> tf.control_dependencies([train_mean, train_var]):
+            <span class="cf">return</span> tf.nn.batch_normalization(inputs,
+                batch_mean, batch_var, beta, scale, epsilon)
+    <span class="cf">else</span>:
+        <span class="cf">return</span> tf.nn.batch_normalization(inputs,
+            pop_mean, pop_var, beta, scale, epsilon)</code></pre></div>
+<h3 id="an-implementation-that-works-at-test-time">An implementation that works at test time</h3>
+<p>And now to demonstrate that this works, we rebuild/retrain the model with our batch_norm_wrapper function. Note that we need to build the graph once for training, and then again at test time, so we write a build_graph function (in practice, this would usually be encapsulated in a model object):</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> build_graph(is_training):
+    <span class="co"># Placeholders</span>
+    x <span class="op">=</span> tf.placeholder(tf.float32, shape<span class="op">=</span>[<span class="va">None</span>, <span class="dv">784</span>])
+    y_ <span class="op">=</span> tf.placeholder(tf.float32, shape<span class="op">=</span>[<span class="va">None</span>, <span class="dv">10</span>])
+
+    <span class="co"># Layer 1</span>
+    w1 <span class="op">=</span> tf.Variable(w1_initial)
+    z1 <span class="op">=</span> tf.matmul(x,w1)
+    bn1 <span class="op">=</span> batch_norm_wrapper(z1, is_training)
+    l1 <span class="op">=</span> tf.nn.sigmoid(bn1)
+
+    <span class="co">#Layer 2</span>
+    w2 <span class="op">=</span> tf.Variable(w2_initial)
+    z2 <span class="op">=</span> tf.matmul(l1,w2)
+    bn2 <span class="op">=</span> batch_norm_wrapper(z2, is_training)
+    l2 <span class="op">=</span> tf.nn.sigmoid(bn2)
+
+    <span class="co"># Softmax</span>
+    w3 <span class="op">=</span> tf.Variable(w3_initial)
+    b3 <span class="op">=</span> tf.Variable(tf.zeros([<span class="dv">10</span>]))
+    y  <span class="op">=</span> tf.nn.softmax(tf.matmul(l2, w3))
+
+    <span class="co"># Loss, Optimizer and Predictions</span>
+    cross_entropy <span class="op">=</span> <span class="op">-</span>tf.reduce_sum(y_<span class="op">*</span>tf.log(y))
+
+    train_step <span class="op">=</span> tf.train.GradientDescentOptimizer(<span class="fl">0.01</span>).minimize(cross_entropy)
+
+    correct_prediction <span class="op">=</span> tf.equal(tf.arg_max(y,<span class="dv">1</span>),tf.arg_max(y_,<span class="dv">1</span>))
+    accuracy <span class="op">=</span> tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+    <span class="cf">return</span> (x, y_), train_step, accuracy, y, tf.train.Saver()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#Build training graph, train and save the trained model</span>
+
+sess.close()
+tf.reset_default_graph()
+(x, y_), train_step, accuracy, _, saver <span class="op">=</span> build_graph(is_training<span class="op">=</span><span class="va">True</span>)
+
+acc <span class="op">=</span> []
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    sess.run(tf.global_variables_initializer())
+    <span class="cf">for</span> i <span class="kw">in</span> tqdm.tqdm(<span class="bu">range</span>(<span class="dv">10000</span>)):
+        batch <span class="op">=</span> mnist.train.next_batch(<span class="dv">60</span>)
+        train_step.run(feed_dict<span class="op">=</span>{x: batch[<span class="dv">0</span>], y_: batch[<span class="dv">1</span>]})
+        <span class="cf">if</span> i <span class="op">%</span> <span class="dv">50</span> <span class="kw">is</span> <span class="dv">0</span>:
+            res <span class="op">=</span> sess.run([accuracy],feed_dict<span class="op">=</span>{x: mnist.test.images, y_: mnist.test.labels})
+            acc.append(res[<span class="dv">0</span>])
+    saved_model <span class="op">=</span> saver.save(sess, <span class="st">&#39;./temp-bn-save&#39;</span>)
+
+<span class="bu">print</span>(<span class="st">&quot;Final accuracy:&quot;</span>, acc[<span class="op">-</span><span class="dv">1</span>])</code></pre></div>
+<pre><code>Final accuracy: 0.9721</code></pre>
+<p>And now to show that this worked, we repeat our experiment of predicting examples one by one:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.reset_default_graph()
+(x, y_), _, accuracy, y, saver <span class="op">=</span> build_graph(is_training<span class="op">=</span><span class="va">False</span>)
+
+predictions <span class="op">=</span> []
+correct <span class="op">=</span> <span class="dv">0</span>
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    sess.run(tf.global_variables_initializer())
+    saver.restore(sess, <span class="st">&#39;./temp-bn-save&#39;</span>)
+    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):
+        pred, corr <span class="op">=</span> sess.run([tf.arg_max(y,<span class="dv">1</span>), accuracy],
+                             feed_dict<span class="op">=</span>{x: [mnist.test.images[i]], y_: [mnist.test.labels[i]]})
+        correct <span class="op">+=</span> corr
+        predictions.append(pred[<span class="dv">0</span>])
+<span class="bu">print</span>(<span class="st">&quot;PREDICTIONS:&quot;</span>, predictions)
+<span class="bu">print</span>(<span class="st">&quot;ACCURACY:&quot;</span>, correct<span class="op">/</span><span class="dv">100</span>)</code></pre></div>
+<pre><code>PREDICTIONS: [7, 2, 1, 0, 4, 1, 4, 9, 6, 9, 0, 6, 9, 0, 1, 5, 9, 7, 3, 4, 9, 6, 6, 5, 4, 0, 7, 4, 0, 1, 3, 1, 3, 4, 7, 2, 7, 1, 2, 1, 1, 7, 4, 2, 3, 5, 1, 2, 4, 4, 6, 3, 5, 5, 6, 0, 4, 1, 9, 5, 7, 8, 9, 3, 7, 4, 6, 4, 3, 0, 7, 0, 2, 9, 1, 7, 3, 2, 9, 7, 7, 6, 2, 7, 8, 4, 7, 3, 6, 1, 3, 6, 9, 3, 1, 4, 1, 7, 6, 9]
+ACCURACY: 0.99</code></pre>
+</body>
+</html>
+
+      </div>
+<!-- /.entry-content -->
+      <footer class="post-info text-muted">
+        <button type="button" class="btn btn-default">          
+          <a href="https://r2rt.com/category/implementations.html"><div class="fa fa-lg fa-folder-open"></div> Implementations</a>
+        </button>
+      </footer>
+      <!-- /.post-info -->
+    <!-- Comment BEGIN -->
+    <div id="disqus_thread"></div>
+    <script>
+        (function() {  // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+
+            s.src = '//R2RT.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    <!-- Comment END -->
+    </section>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://r2rt.com/theme/r2rt.js"></script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+     extensions: ["AMSmath.js"] }
+    });
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-79741545-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>
