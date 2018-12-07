@@ -1,0 +1,15 @@
+.cnblogs_code pre {
+font-family: Courier New!important;
+font-size: 15px!important;
+word-wrap: break-word;
+white-space: pre-wrap;
+}
+
+.cnblogs_code span {
+font-family: Courier New!important;
+font-size: 15px!important;
+line-height: 1.5!important;
+}
+.postBody p{
+font-size: 15px;
+}

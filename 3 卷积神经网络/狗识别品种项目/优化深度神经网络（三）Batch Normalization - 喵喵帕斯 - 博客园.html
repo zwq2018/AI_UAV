@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://www.cnblogs.com/34fj/p/8805979.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="never">
+<title>优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园</title>
+<meta property="og:description" content="Coursera吴恩达《优化深度神经网络》课程笔记（3）-- 超参数调试、Batch正则化和编程框架 1. Tuning Process 深度神经网络需要调试的超参数（Hyperparameters）">
+<link type="text/css" rel="stylesheet" href="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/bundle-coffee.css">
+<link type="text/css" rel="stylesheet" href="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/324382.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/bundle-coffee-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/34fj/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/34fj/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/34fj/wlwmanifest.xml">
+<script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/f.txt"></script><script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/pubads_impl_rendering_274.js.下载"></script><script async="" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/analytics.js.下载"></script><script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = '34fj', cb_enable_mathjax=true;var isLogined=false;</script>
+<script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] 
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/MathJax.js.下载"></script>
+<script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/f(1).txt" as="script"><script type="text/javascript" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/f(1).txt"></script><script src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/pubads_impl_274.js.下载" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-31/html/container.html"><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/34fj/"><img id="blogLogo" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/34fj/">喵喵帕斯</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="navigator">
+			
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+	<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/34fj/">首页</a></li>
+	<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+	<li><a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E5%96%B5%E5%96%B5%E5%B8%95%E6%96%AF">联系</a></li>
+	<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+	<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/34fj/rss">订阅</a>
+	<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/34fj/rss"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/xml.gif" alt="订阅"></a></li>
+</ul>
+
+
+			<div class="blogStats">
+				
+				<div id="blog_stats">
+<!--done-->
+随笔- 56&nbsp;
+文章- 0&nbsp;
+评论- 2&nbsp;
+</div>
+				
+			</div><!--end: blogStats -->
+		</div><!--end: navigator 博客导航栏 -->
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/34fj/p/8805979.html">优化深度神经网络（三）Batch Normalization</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><style><!--
+p {font-size: 15px;}
+--></style>
+<h1 class="Post-Title" data-reactid="33"><a href="https://zhuanlan.zhihu.com/p/30922689" target="_blank"><span style="font-size: 15px;">Coursera吴恩达《优化深度神经网络》课程笔记（3）-- 超参数调试、Batch正则化和编程框架</span></a></h1>
+<h2>1. Tuning Process</h2>
+<p>深度神经网络需要调试的超参数（Hyperparameters）较多，包括：</p>
+<ul>
+<li><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation" alt="\alpha"> ：学习因子</li>
+<li><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> ：动量梯度下降因子</li>
+<li><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(2)" alt="\beta_1,\beta_2,\varepsilon"> ：Adam算法参数</li>
+<li>#layers：神经网络层数</li>
+<li>#hidden units：各隐藏层神经元个数</li>
+<li>learning rate decay：学习因子下降参数</li>
+<li>mini-batch size：批量训练样本包含的样本个数</li>
+</ul>
+<p>超参数之间也有重要性差异。</p>
+<p>1.通常来说，学习因子 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation" alt="\alpha"> 是最重要的超参数，也是需要重点调试的超参数。</p>
+<p>2.动量梯度下降因子 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 、各隐藏层神经元个数#hidden units和mini-batch size的重要性仅次于 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation" alt="\alpha"> 。</p>
+<p>3.神经网络层数#layers和学习因子下降参数learning rate decay。</p>
+<p>4.Adam算法的三个参数 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(2)" alt="\beta_1,\beta_2,\varepsilon"> 一般常设置为0.9，0.999和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(3)" alt="10^{-8}"> ，不需要反复调试。</p>
+<p>当然，这里超参数重要性的排名并不是绝对的，具体情况，具体分析。</p>
+<h2>4.&nbsp;Batch Normalization</h2>
+<p>&nbsp;在训练神经网络时，标准化输入可以提高训练的速度。方法是对训练数据集进行归一化的操作，即将原始数据减去其均值 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(4)" alt="\mu"> 后，再除以其方差 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(5)" alt="\sigma^2"> 。</p>
+<p>但是<span style="background-color: #ffff00;">标准化输入只是对输入</span>进行了处理，那么对于神经网络，又该如何对各<span style="background-color: #ffff00;">隐藏层的输入</span>进行标准化处理呢？</p>
+<p>其实在神经网络中，第 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(6)" alt="l"> 层隐藏层的输入就是第 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(7)" alt="l-1"> 层隐藏层的输出 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(8)" alt="A^{[l-1]}"> 。对 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(8)" alt="A^{[l-1]}"> 进行标准化处理，从原理上来说可以提高 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(9)" alt="W^{[l]}"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(10)" alt="b^{[l]}"> 的训练速度和准确度。这种对各隐藏层的标准化处理就是Batch Normalization。值得注意的是，实际应用中，一般是对 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(11)" alt="Z^{[l-1]}"> 进行标准化处理而不是 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(8)" alt="A^{[l-1]}"> ，其实差别不是很大。</p>
+<p>Batch Normalization对第 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(6)" alt="l"> 层隐藏层的输入 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(11)" alt="Z^{[l-1]}"> 做如下标准化处理，忽略上标 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(12)" alt="[l-1]"> ：<span style="color: #ff0000;">单层</span></p>
+<p>&nbsp;</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(13)" alt="\mu=\frac1m\sum_iz^{(i)}"></p>
+<p>&nbsp;</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(14)" alt="\sigma^2=\frac1m\sum_i(z_i-\mu)^2"></p>
+<p>&nbsp;</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(15)" alt="z^{(i)}_{norm}=\frac{z^{(i)}-\mu}{\sqrt{\sigma^2+\varepsilon}}"></p>
+<p>&nbsp;</p>
+<p>其中，m是单个mini-batch包含样本个数， <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(16)" alt="\varepsilon"> 是为了防止分母为零，可取值 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(3)" alt="10^{-8}"> 。这样，使得该隐藏层的所有输入 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(17)" alt="z^{(i)}"> 均值为0，方差为1。</p>
+<p>但是，大部分情况下并不希望所有的 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(17)" alt="z^{(i)}"> 均值都为0，方差都为1，也不太合理。通常需要对 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(17)" alt="z^{(i)}"> 进行进一步处理：</p>
+<p>&nbsp;</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(18)" alt="\tilde z^{(i)}=\gamma\cdot z^{(i)}_{norm}+\beta"></p>
+<p>&nbsp;</p>
+<p><span style="background-color: #ffff00;">上式中， <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 是可学习参数，类似于W和b一样，可以通过梯度下降等算法求得。这里， <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 的作用是让 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(20)" alt="\tilde z^{(i)}"> 的均值和方差为任意值，只需调整其值就可以了。</span></p>
+<p>&nbsp;</p>
+<p>例如，令：</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(21)" alt="\gamma=\sqrt{\sigma^2+\varepsilon},\ \ \beta=u">&nbsp;， 则 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(22)" alt="\tilde z^{(i)}=z^{(i)}"> ，即他们两恒等。</p>
+<p>可见，设置 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 为不同的值，可以得到任意的均值和方差。</p>
+<p>这样，通过Batch Normalization，对隐藏层的各个 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(23)" alt="z^{[l](i)}"> 进行标准化处理，得到 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(24)" alt="\tilde z^{[l](i)}"> ，替代 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(23)" alt="z^{[l](i)}"> 。</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: 16px;">输入的标准化处理Normalizing inputs和隐藏层的标准化处理Batch Normalization是有区别的：</span></strong></p>
+<p>Normalizing inputs使所有输入的均值为0，方差为1。而Batch Normalization可使各隐藏层输入的均值和方差为任意值。实际上，从激活函数的角度来说，<span style="background-color: #ffff00;">如果各隐藏层的输入均值在靠近0的区域即处于激活函数的线性区域，这样不利于训练好的非线性神经网络，</span>得到的模型效果也不会太好。这也解释了为什么需要用 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 来对 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(23)" alt="z^{[l](i)}"> 作进一步处理。</p>
+<p>&nbsp;</p>
+<p>Batch Norm经常使用在mini-batch上，这也是其名称的由来。</p>
+<p>值得注意的是，因为Batch Norm对各隐藏层 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(25)" alt="Z^{[l]}=W^{[l]}A^{[l-1]}+b^{[l]}"> 有去均值的操作，所以这<span style="background-color: #ffff00;">里的常数项 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(10)" alt="b^{[l]}"> 可以消去</span>，其数值效果完全可以由 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(26)" alt="\tilde Z^{[l]}"> 中的 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta"> 来实现。因此，我们在使用Batch Norm的时候，可以忽略各隐藏层的常数项 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(10)" alt="b^{[l]}"> 。在使用梯度下降算法时，分别对 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(9)" alt="W^{[l]}"> ， <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(27)" alt="\beta^{[l]}"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(28)" alt="\gamma^{[l]}"> 进行迭代更新。</p>
+<p>除了传统的梯度下降算法之外，还可以使用我们之前介绍过的动量梯度下降、RMSprop或者Adam等优化算法。</p>
+<p><strong><strong>BN算法&nbsp;</strong>在训练中对于一个mini-batch&nbsp;&nbsp;<span style="color: #ff0000;"><br></span></strong></p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180412173741958-245242223.png" alt="" height="400"></p>
+<p>Algorithm 1: Batch Normalizing Transform, applied to activation x over a mini-batch.</p>
+<p>&nbsp;</p>
+<p>在训练过程中，我们还需要计算反向传播损失函数l的梯度，并且计算每个参数（注意：<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta">）。&nbsp;我们使用链式法则，如下所示：</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180412173608017-2056687326.png" alt="" height="300"></p>
+<p>推导过程：</p>
+<h1 class="Post-Title" data-reactid="33"><span style="font-size: 15px;"><a href="https://zhuanlan.zhihu.com/p/26138673" target="_blank">Batch Normalization学习笔记及其实现</a></span></h1>
+<p>&nbsp;</p>
+<h3 id="21-bn算法在训练和测试时的应用">BN算法在训练和测试时的应用</h3>
+<p>BN算法在训练时的操作就如我们上面所说，首先提取每次迭代时的每个mini-batch的平均值和方差进行归一化，再通过两个可学习的变量恢复要学习的特征。&nbsp;<br>但是在实际应用时就没有mini-batch了，那么BN算法怎样进行归一化呢？实际上在测试的过程中，BN算法的参数就已经固定好了，首先进行归一化时的平均值和方差分别为：</p>
+<p style="text-align: center;"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180413213818458-556890796.png" alt="" width="217" height="96"></p>
+<p>方法1：即平均值为所有mini-batch的平均值的平均值，而方差为每个batch的方差的无偏估计</p>
+<p>方法2：估计的方法有很多，理论上我们可以将所有训练集放入最终的神经网络模型中，然后将每个隐藏层计算得到的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(29)" alt="\mu^{[l]}">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(30)" alt="\sigma^{2[l]}">&nbsp;直接作为测试过程的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(4)" alt="\mu">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(5)" alt="\sigma^2">&nbsp;来使用。但是，实际应用中一般不使用这种方法，而是使用我们之前介绍过的指数加权平均（exponentially weighted average）的方法来预测测试过程单个样本的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(4)" alt="\mu">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(5)" alt="\sigma^2">&nbsp;。</p>
+<p>指数加权平均的做法很简单，对于第&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(6)" alt="l">&nbsp;层隐藏层，考虑所有mini-batch在该隐藏层下的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(29)" alt="\mu^{[l]}">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(30)" alt="\sigma^{2[l]}">&nbsp;，然后用指数加权平均的方式来预测得到当前单个样本的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(29)" alt="\mu^{[l]}">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(30)" alt="\sigma^{2[l]}">&nbsp;。这样就实现了对测试过程单个样本的均值和方差估计。最后，再利用训练过程得到的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(19)" alt="\gamma">&nbsp;和&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(1)" alt="\beta">&nbsp;值计算出各层的&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(20)" alt="\tilde z^{(i)}">&nbsp;值。</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 15px;">最终BN算法的<span style="background-color: #ffff00;">训练和测试</span>的流程如下图所示：&nbsp;</span></p>
+<p>&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180413212748859-2122627742.png" alt="" height="800"></p>
+<p>第11步就是将<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180413214858719-1345262865.png" alt="" height="70">代入<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180413214941819-1435801961.png" alt="" height="30">&nbsp;&nbsp;μ和σ要换成算法中的Ex和Varx</p>
+<p>&nbsp;</p>
+<p><strong>Batch Norm让模型更加健壮</strong></p>
+<p>如果实际应用的样本与训练样本分布不同，即发生了covariate shift，则一般是要对模型重新进行训练的。在神经网络，尤其是深度神经网络中，covariate shift会导致模型预测效果变差，重新训练的模型各隐藏层的 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(9)" alt="W^{[l]}"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(31)" alt="B^{[l]}"> 均产生偏移、变化。</p>
+<p>而<span style="background-color: #ffff00;">Batch Norm的作用恰恰是减小covariate shift的影响</span>，让模型变得更加健壮，鲁棒性更强。</p>
+<p>Batch Norm<span style="background-color: #ffff00;">减少了各层 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(9)" alt="W^{[l]}"> 、 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(31)" alt="B^{[l]}"> 之间的耦合性</span>，让各层更加独立，实现自我训练学习的效果。</p>
+<p>也就是说，如果输入发生covariate shift，那么因为Batch Norm的作用，对个隐藏层输出 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(32)" alt="Z^{[l]}"> 进行均值和方差的归一化处理， <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(9)" alt="W^{[l]}"> 和 <img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(31)" alt="B^{[l]}"> 更加稳定，使得原来的模型也有不错的表现。</p>
+<h1 class="csdn_top"><a href="https://blog.csdn.net/u012816943/article/details/51691868" target="_blank"><span style="font-size: 15px;">论文笔记-Batch Normalization</span></a></h1>
+<p><strong>BN优点</strong></p>
+<p>&nbsp;（1）神经网络本质是学习数据分布，如果寻来你数据与测试数据分布不同，网络的泛化能力将降低，batchnorm就是通过对每一层的计算做scale和shift的方法，通过规范化手段，把每层神经网络任意神经元这个输入值的分布强行拉回到正太分布，减小其影响，让模型更加健壮。<br>（2）使用BN就可以使得不同层不同scale的权重变化整体步调更一致，可以使用更高的学习率，加快训练速度。<br>(3)&nbsp;防止过拟合。此时可以移除或使用较低的dropout，降低L2权重衰减系数等防止过拟合的手段。论文中最后的模型分别使用10%、5%和0%的dropout训练模型，与之前的40%-50%相比，可以大大提高训练速度。<br><span style="text-decoration: line-through;">　(4)&nbsp;取消Local&nbsp;Response&nbsp;Normalization层。&nbsp;对局部神经元的活动创建竞争机制，使其中响应比较大对值变得相对更大，并抑制其他反馈较小的神经元，增强了模型的泛化能力。有了dropout，bn等手段没必要用了，而且2012一篇文章说这个lrn没有用处。</span></p>
+<p>&nbsp;</p>
+<h2 id="activity-name" class="rich_media_title"><a href="https://mp.weixin.qq.com/s/4CeNg-w-ULK7ZM1HjfXHzg" target="_blank">专栏 | 深度学习中的Normalization模型</a></h2>
+<p><strong>CNN 网络中的 BN</strong></p>
+<p>我们知道，常规的 CNN 一般由卷积层、下采样层及全连接层构成。全连接层形式上与前向神经网络是一样的，所以可以采取前向神经网络中的 BatchNorm 方式，而下采样层本身不带参数所以可以忽略，所以 CNN 中主要关注卷积层如何计算 BatchNorm。</p>
+<p>CNN 中的某个卷积层由 m 个卷积核构成，每个卷积核对三维的输入（通道数*长*宽）进行计算，激活及输出值是个二维平面（长*宽），对应一个输出通道（参考图 7），由于存在 m 个卷积核，所以输出仍然是三维的，由 m 个通道及每个通道的二维平面构成。</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180912101513240-1116418853.png" alt="" width="854" height="407"></p>
+<p>那么在卷积层中，如果要对通道激活二维平面中某个激活值进行 Normalization 操作，怎么确定集合 S（BN的E和Var是通过神经元集合S中包含的 m 个神经元各自的激活值求出的，集合S指求均值方差使用的激活值的范围） 的范围呢？图 8 给出了示意图。</p>
+<p>类似于前向神经网络中的 BatchNorm 计算过程，对于 Mini-Batch 训练方法来说，反向传播更新梯度使用 Batch 中所有实例的梯度方向来进行，所以对于 CNN 某个卷积层对应的输出通道 k 来说，假设<strong>某个 Batch 包含 n 个训练实例</strong>，那么每个训练实例在这个通道 k 都会产生一个二维激活平面，也就是说 Batch 中 n 个训练实例分别通过<strong>同一个卷积核</strong>的输出通道 k 的时候产生了 n 个激活平面。假设激活平面长为 5，宽为 4，则激活平面包含<strong> 20 个激活值，n 个不同实例</strong>的激活平面共包含 20*n 个激活值。那么 BatchNorm 的集合 S 的范围就是由这 20*n 个同一个通道被 Batch 不同训练实例激发的激活平面中包含的所有激活值构成（对应图 8 中所有标为蓝色的激活值）。</p>
+<p>（对于训练集的一个batch，batch的<strong>所有训练实例</strong>（一个实例是一张图片）经过同一个卷积核的输出 求均值和方差 就是BN的E和Var）</p>
+<p>划定集合 S 的范围后，激活平面中任意一个激活值都需进行 Normalization 操作，其 Normalization 的具体计算过程与前文所述计算过程一样，采用公式 3 即可完成规范化操作。这样即完成 CNN 卷积层的 BatchNorm 转换过程。</p>
+<p>&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180912101859189-479722321.png" alt="" width="714" height="323"></p>
+<p>公式3：<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/equation(18)" alt="\tilde z^{(i)}=\gamma\cdot z^{(i)}_{norm}+\beta"></p>
+<p>&nbsp;</p>
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p>&nbsp;&nbsp;<span class="fontstyle0">The first is that instead of whitening&nbsp;</span><span class="fontstyle0">the features in layer inputs and outputs jointly, we will&nbsp;</span><span class="fontstyle0">normalize each scalar feature independently, by making it&nbsp;</span><span class="fontstyle0">have the mean of zero and the variance of 1.&nbsp;&nbsp;</span></p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613155631582-785927835.png" alt="" width="421" height="131">每一维</p>
+<p><span class="fontstyle0">we make the second simplification: since we use mini-batches in stochastic gradient training, <span class="fontstyle2">each mini-batch produces estimates&nbsp;</span></span><span class="fontstyle0"><span class="fontstyle2">of the mean and variance <span class="fontstyle0">of each activation.&nbsp;&nbsp;</span></span></span></p>
+<p>&nbsp;<img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613155857589-760176103.png" alt="" width="455" height="260">minibatch中每一维有多个x<sup>k</sup> 简写x</p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613160117455-1056080166.png" alt="" width="486" height="72"><span class="fontstyle0">γ <span class="fontstyle2">and <span class="fontstyle0">β <span class="fontstyle2">are to be learned <br></span></span></span></span></p>
+<p><span class="fontstyle0"><span class="fontstyle2"><span class="fontstyle0"><span class="fontstyle2"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613161115724-1422583892.png" alt="" width="442" height="45">测试时是固定的参数</span></span></span></span></p>
+<p><span class="fontstyle0"><span class="fontstyle2"><span class="fontstyle0"><span class="fontstyle2"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613160903283-1794811831.png" alt="" width="496" height="59"></span></span></span></span></p>
+<p><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/1053881-20180613160930253-1839284752.png" alt="" width="468" height="65">在测试时，对每一维 E和Var哪里来？</p>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/34fj/category/1192122.html" target="_blank">深度学习</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(8805979,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;9524a78f-b29e-e611-845c-ac853d9f53ac&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/34fj/" target="_blank"><img src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/20180411171715.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/34fj/">喵喵帕斯</a><br>
+            <a href="http://home.cnblogs.com/u/34fj/followees">关注 - 4</a><br>
+            <a href="http://home.cnblogs.com/u/34fj/followers">粉丝 - 3</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;9524a78f-b29e-e611-845c-ac853d9f53ac&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(8805979,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(8805979,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/34fj/p/9018329.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/34fj/p/9018329.html" title="发布于2018-05-10 10:28">随机森林</a><br><a href="https://www.cnblogs.com/34fj/p/9036369.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/34fj/p/9036369.html" title="发布于2018-05-19 17:23">cs231n神经网络 常用激活函数</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2018-05-16 10:01</span> <a href="https://www.cnblogs.com/34fj/">喵喵帕斯</a> 阅读(<span id="post_view_count">1545</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=8805979" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/34fj/p/8805979.html#" onclick="AddToWz(8805979);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=324382,cb_entryId=8805979,cb_blogApp=currentBlogApp,cb_blogUserGuid='9524a78f-b29e-e611-845c-ac853d9f53ac',cb_entryCreatedDate='2018/5/16 10:01:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/34fj/p/8805979.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/34fj/p/8805979.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云&#39;)">【推荐】华为云11.11普惠季 血拼风暴 一促即发</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-SpreadJS&#39;)">【工具】SpreadJS纯前端表格控件，可嵌入应用开发的在线Excel</a><br><a href="https://cloud.tencent.com/act/group/amd/index?fromSource=gwzcw.1608278.1608278.1608278" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【腾讯云】拼团福利，AMD云服务器8元/月</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/double11?fromSource=gwzcw.1608279.1608279.1608279" target="_blank"><img width="300" height="250" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/24442-20181105150013344-185546354.jpg" alt="腾讯云1105" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/bnuvincent/p/7570867.html" target="_blank" onclick="clickRecomItmem(7570867,&#39;a2RlvpzQQwupeu7hFqDRIQ3ctp7pzjwLZlfe9H4pTmdkdavGxCYsVx4cm5wjQbi3GPrVrq9ITD0FA30W2iu2Vbb58bv2xeULe61QXryC2gb0xxkrCZKiXJJwQiM5IiKZaKQhlniYMLBq2BliuQ==&#39;)">CNN超参数优化和可视化技巧详解</a><br>·  <a href="https://www.cnblogs.com/licheng/p/6952619.html" target="_blank" onclick="clickRecomItmem(6952619,&#39;66MhbO86OHDcmqtRA+BiUs8vjTOOOyApkO3olrLQMWr+ydczg5J1h5P3NSMViYzXgit2LJIGW1sJO5l7aJJ2bLKTMEdRi2eiO5XSmGAOiZw8pC/elRZ0GfkXdTjLJqS97BBolNCK93yiX0BSlg==&#39;)">【原创 深度学习与TensorFlow 动手实践系列 - 2】第二课：传统神经网络</a><br>·  <a href="https://www.cnblogs.com/southtonorth/p/9512559.html" target="_blank" onclick="clickRecomItmem(9512559,&#39;PS54R5tS6gg+gu+hfO4Mmmcq7GRVNH3/g6rbdWhgkXCy0mFc7OSFxzgKwBRfFbgs7In7orCYve/dtd2TS/88HjAqmgcmA7+ZPUQK6hGFhh1P+PpPEGbwjFE5NH/Jlfn7vwMVuGAYa9I0cCaL0g==&#39;)">吴恩达深度学习 反向传播（Back Propagation）公式推导技巧</a><br>·  <a href="https://www.cnblogs.com/liaohuiqiang/p/7638969.html" target="_blank" onclick="clickRecomItmem(7638969,&#39;9IkDUXSGWRPZqpO1ttKSDuywBRFJSQ+Zvp4HlRGxePx3pvaBuWhap0wAnQ9F7fn3c+WvJVUDVG6JKVjMxznKAIEK0qiXeUnK3Vwe1z9h4Y5XUJX+oGqHJveLz3i/ZEqFqX9WeHs7WjoUES7pKA==&#39;)">ng-深度学习-课程笔记-0: 概述</a><br>·  <a href="https://www.cnblogs.com/neopenx/p/4768388.html" target="_blank" onclick="clickRecomItmem(4768388,&#39;yGT1GlMhp+gs6E3L6YHxpDHyVzhAqIN7ucaajNGgqf1Y7DHhsbY3+rcQ0fqcNG8jkBWwFB6RAwb+3RpZA7bwAUZFADJEHABySQ0kX5QPViPjIK+ZMpZC4L+oB4Nd8TfZ0cqpTao1Bjb9jZTxaA==&#39;)">自适应学习率调整：AdaDelta</a><br></div></div>
+<script async="async" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CLX28afjzt4CFcFzvQod1LQPcg">
+    <script>
+    if (new Date() >= new Date(2018, 9, 13)) {
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    }
+    </script>
+    <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/611981/" target="_blank">100万亿的电商帝国 在这里读懂中国</a><br> ·  <a href="https://news.cnblogs.com/n/611979/" target="_blank">剁手结束，快递背后的黑产狂欢才刚开始</a><br> ·  <a href="https://news.cnblogs.com/n/611977/" target="_blank">双11结尾 你熟知的几家手机厂商在战报里写了啥？</a><br> ·  <a href="https://news.cnblogs.com/n/611978/" target="_blank">降价后iPhone被疯抢，这能让库克反思些什么？</a><br> ·  <a href="https://news.cnblogs.com/n/611990/" target="_blank">买买买之后，苹果的土地储备已经超过大部分中国地产商</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/34fj/">喵喵帕斯</a><br>园龄：<a href="https://home.cnblogs.com/u/34fj/" title="入园时间：2016-10-30">2年</a><br>粉丝：<a href="https://home.cnblogs.com/u/34fj/followers/">3</a><br>关注：<a href="https://home.cnblogs.com/u/34fj/followees/">4</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;9524a78f-b29e-e611-845c-ac853d9f53ac&#39;)">+加关注</a></div><script>getFollowStatus('9524a78f-b29e-e611-845c-ac853d9f53ac')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/10/01&#39;);return false;">&lt;</a></td><td align="center">2018年11月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/12/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td class="CalWeekendDay" align="center">3</td></tr><tr><td class="CalWeekendDay" align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td class="CalWeekendDay" align="center">10</td></tr><tr><td class="CalWeekendDay" align="center">11</td><td class="CalTodayDay" align="center"><a href="https://www.cnblogs.com/34fj/archive/2018/11/12.html"><u>12</u></a></td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td class="CalWeekendDay" align="center">17</td></tr><tr><td class="CalWeekendDay" align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td class="CalWeekendDay" align="center">24</td></tr><tr><td class="CalWeekendDay" align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td class="CalOtherMonthDay" align="center">1</td></tr><tr><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/34fj/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/34fj/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/34fj/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/34fj/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/34fj/tag/" title="我的博客的标签列表">我的标签</a></li>
+<li><a id="itemListLink" onclick="this.blur();WarpClass(&#39;itemListLink&#39;, &#39;itemListLin_con&#39;);return false;" href="https://www.cnblogs.com/34fj/p/8805979.html#">更多链接</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/34fj/category/1245714.html">C++(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/34fj/category/1192124.html">java(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/34fj/category/1254131.html">leetcode(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/34fj/category/1241523.html">NLP(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/34fj/category/1192123.html">postgresql(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/34fj/category/1192127.html">python(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/34fj/category/1192120.html">机器学习(19)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/34fj/category/1192121.html">面试(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/34fj/category/1192122.html">深度学习(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/34fj/category/1245713.html">数据结构(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/34fj/category/1207345.html">物联网(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/34fj/category/1288833.html">智力题(2)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListPostArchive">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/34fj/archive/2018/11.html">2018年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/34fj/archive/2018/09.html">2018年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/34fj/archive/2018/08.html">2018年8月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/34fj/archive/2018/07.html">2018年7月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/34fj/archive/2018/06.html">2018年6月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/34fj/archive/2018/05.html">2018年5月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/34fj/archive/2018/04.html">2018年4月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/34fj/archive/2018/03.html">2018年3月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/34fj/archive/2018/02.html">2018年2月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/34fj/archive/2017/11.html">2017年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/34fj/archive/2017/03.html">2017年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/34fj/archive/2017/01.html">2017年1月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/34fj/archive/2016/12.html">2016年12月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	16019
+	</li><li class="liRank">
+		排名 -	29451
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/34fj/p/8652280.html#4082118">1. Re:Maven Assembly打包提示[WARNING] transitive dependencies if any will not be available</a></li>
+        <li class="recent_comment_body">这是依赖的第三方jar包的pom.xml坏了。删除后更新一下就可以了。比如我的本地仓是D:\apache-maven-3.5.2\Maven， D:\apache-maven-3.5.2\Maven\......</li>
+        <li class="recent_comment_author">--清风拂来</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/34fj/p/6225293.html#3593581">2. Re:B+树概念学习</a></li>
+        <li class="recent_comment_body">里面符号看不懂。。。。？</li>
+        <li class="recent_comment_author">--YJ-20</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/34fj/p/6358702.html">1. Python中__new__的作用(6728)</a></li><li><a href="https://www.cnblogs.com/34fj/p/6351458.html">2. Python遍历列表删除多个列表元素(5537)</a></li><li><a href="https://www.cnblogs.com/34fj/p/7770683.html">3. linux安装xgboost(2307)</a></li><li><a href="https://www.cnblogs.com/34fj/p/8805979.html">4. 优化深度神经网络（三）Batch Normalization(1545)</a></li><li><a href="https://www.cnblogs.com/34fj/p/9139756.html">5. CNN感受野计算(1210)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/34fj/p/6225293.html">1. B+树概念学习(1)</a></li><li><a href="https://www.cnblogs.com/34fj/p/8652280.html">2. Maven Assembly打包提示[WARNING] transitive dependencies if any will not be available(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/34fj/p/8805979.html">1. 优化深度神经网络（三）Batch Normalization(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 喵喵帕斯
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+<iframe id="google_osd_static_frame_2383257561238" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./优化深度神经网络（三）Batch Normalization - 喵喵帕斯 - 博客园_files/saved_resource(1).html"></iframe></body></html>
