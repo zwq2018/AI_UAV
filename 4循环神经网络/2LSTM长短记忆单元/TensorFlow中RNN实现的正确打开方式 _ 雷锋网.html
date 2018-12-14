@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" async="" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/cmp.api"></script>
+	
+	<title>TensorFlow中RNN实现的正确打开方式 | 雷锋网</title>
+    <meta itemprop="image" content="https://www.leiphone.com/resWeb/images/common/metaLogo.jpg">
+            <link rel="dns-prefetch" href="https://www.leiphone.com/">
+        <link rel="dns-prefetch" href="https://home.leiphone.com/">
+        <link rel="dns-prefetch" href="https://m.leiphone.com/">
+        <link rel="dns-prefetch" href="https://leiphone.com/">
+        <meta name="baidu-site-verification" content="qBnDqyynv4">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2017-09-04T14:46:49+08:00">
+    <meta property="article:author" content="汪思颖">
+    <meta property="article:published_first" content="雷锋网, https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html">
+    	<meta name="google-site-verification" content="4c2S0LRoSpcyGiNmASqakMSa7yVC9C8Jnu-IRNyq5oU">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=1">
+    <meta property="qc:admins" content="10002525706451007656375">
+    <link rel="alternate" media="only screen and(max-width: 640px)" href="https://m.leiphone.com/">
+            	<meta name="keywords" content="TensorFlow,RNN">
+	<meta name="description" content="一起来练练手">
+    <meta name="sogou_site_verification" content="ilkqV8FehD">
+    <meta name="renderer" content="webkit">
+	<link rel="cannoical" href="https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html">    <link rel="stylesheet" type="text/css" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/common.css" media="all">
+    <script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/push.js.下载"></script><script async="" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/gtm.js.下载"></script><script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/hm.js.下载"></script><script type="text/javascript">
+        window.mobilecheck = function() {
+            
+            // var ua=window.navigator.userAgent;
+            // if(ua.indexOf('iPhone')>=0||ua.indexOf('iPod')>=0||ua.indexOf('ndroid')>=0){
+            //     return true;
+            // }
+
+            var check = false;
+            (function(a,b){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+            return check;
+        }
+        var check = mobilecheck();
+        if(check && (window.location.host == 'www.leiphone.com')){
+            window.location.href="//m.leiphone.com" + window.location.pathname + window.location.search;
+        }else if(!check && (window.location.host == 'm.leiphone.com')){
+            window.location.href="//www.leiphone.com" + window.location.pathname + window.location.search;
+        }
+    </script>
+    <!--  
+	<script type='text/javascript'>window.BWEUM||(BWEUM={});BWEUM.info = {"stand":true,"agentType":"browser","agent":"bi-collector.oneapm.com/static/js/bw-send-411.4.5.js","beaconUrl":"bi-collector.oneapm.com/beacon","licenseKey":"fqiyF~7R36YyFnEB","applicationID":2284957};</script><script type="text/javascript" src="//bi-collector.oneapm.com/static/js/bw-loader-411.4.5.js"></script>
+	-->
+    <script>
+                    //百度统计开始
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?0f7e8686c8fcc36f05ce11b84012d5ee";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+            //百度统计结束
+        
+        var SCRIPT_URL 	= "https://www.leiphone.com/";
+		var BASE_URL 	= "https://www.leiphone.com/";
+		var HOME_URL 	= "https://home.leiphone.com/";
+		var IS_LOGIN 	= "1";
+        var LEIPHONE_HOME_URL = USER_CENTER  = "https://home.leiphone.com/";
+        var HAITAO_URL  = "https://haitao.leiphone.com";
+        var TRYOUT_URL  = "https://tryout.igao7.com/";
+        var PRODUCT_URL = "https://product.igao7.com/";
+	</script>
+
+	<!--[if IE]>
+    <script>
+       (function(){var e="abbr, article, aside, audio, canvas, datalist, details, dialog, eventsource, figure, footer, header, hgroup, mark, menu, meter, nav, output, progress, section, time, video".split(', ');var i=e.length;while(i--){document.createElement(e[i])}})()
+    </script>
+    <![endif]-->
+
+    <!--<script src="/resWeb/js/libs/sea.js"></script>-->
+    <script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/jquery-sea.js.下载"></script>
+    <script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/tips.js.下载"></script><link rel="stylesheet" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/tips.css">
+    <script>
+        seajs.config({
+            map:[
+                ['.js','.js?20180515']
+            ]
+        });
+        seajs.use('https://www.leiphone.com/resWeb/js/common/global',function(){
+                    });
+        document.domain = "leiphone.com";
+         // 英鹏账号登录回调
+        function yingpengIslogin_callback(){
+            seajs.use('https://www.leiphone.com/resWeb/js/common/com_login',function(user) {
+              user.init();
+            });
+        }
+    </script>
+
+<script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/share.js.下载"></script><script src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/yp_login.js.下载"></script><link rel="stylesheet" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/yp_login.css"><link rel="stylesheet" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/share_style0_24.css"></head>
+<body>
+<!-- 顶栏广告位 -->
+
+<div class="explorer" id="low-explorer">
+    <div class="inner">
+        <em class="warn ico"></em>
+        <span>您正在使用IE低版浏览器，为了您的雷锋网账号安全和更好的产品体验，强烈建议使用更快更安全的浏览器</span>
+        <span class="ico exp-ico1"></span>
+        <span class="ico exp-ico2"></span>
+        <span class="ico exp-ico3"></span>
+        <span class="ico exp-ico4"></span>
+        <span class="ico exp-ico5"></span>
+    </div>
+</div>
+<!--[if lte IE 8]>
+    <script>
+       (function(){var e=['abbr', 'article', 'aside', 'audio', 'canvas', 'datalist', 'details', 'dialog', 'eventsource', 'figure', 'footer', 'header', 'hgroup', 'mark', 'menu', 'meter', 'nav', 'output', 'progress', 'section', 'time', 'video'];for(var i = e.length; i--;) document.createElement(e[i])})()
+
+       //低版本浏览器
+        document.getElementById("low-explorer").style.display = 'block';
+
+    </script>
+<![endif]-->
+
+
+
+<!-- header start-->
+<header class="yp-header">
+    <div class="yp-header-top clr">
+        <a class="yp-header-logo" href="https://www.leiphone.com/">
+            <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/lph-headerlogo.png" alt="雷锋网">
+                        <span>读懂<em>智能</em>&amp;未来</span>
+        </a>
+        <!-- navi -->
+
+        <div class="yp-header-menu">
+            <ul>
+                <li class="first">
+                    <a href="https://www.leiphone.com/" class="sub_a">首页</a>
+                </li>
+                <li>
+                    <a href="http://ai.yanxishe.com/" target="_blank" class="sub_a">AI研习社<em class="newIcon"></em></a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/AiWeights" target="_blank" class="sub_a">AI影响因子</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/events" class="sub_a">活动</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/specials" class="sub_a">专题</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/specialEdition/list" target="_blank" class="sub_a">精选</a>
+                </li>
+                <li class="borleft aiB" style="">
+                <div class="line"></div>
+                    <!-- <a href="http://www.mooc.ai/?f=leiphone"  target="_blank" class="sub_a">AI慕课学院</a> -->
+                </li>
+                <li class="ej borleft ig">
+                    <a href="http://www.igao7.com/" target="_blank" class="sub_a">爱搞机</a>
+                                    </li>
+                <!-- <li  class="ej borleft ig">
+                    <a href="https://haitao.leiphone.com" class="sub_a">极客购</a>
+                </li> -->
+            </ul>
+            <a href="javascript:;" class="contribute"><em></em>申请专栏作者</a>
+        </div>
+        <!-- 用户登录 -->
+        <div class="yp-header-user-box">
+            <div class="yp-header-user"><input type="hidden" id="is_login_tag_status" value="0"><div class="user-main"><div class="avatar"><a href="https://home.leiphone.com/login/wechatLogin"><img width="36" height="36" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/noLogin.png" alt=""></a></div></div></div>
+        </div>
+        <!-- 用户消息 -->
+        <div class="yp-header-message">
+            <a href="https://home.leiphone.com/notices" class="bell">
+                 <i class="ico"></i>
+                 <em class="count"></em>   
+            </a>
+        </div>
+        <div class="yp-header-search">
+           <form method="GET" name="allSearchForm" action="https://www.leiphone.com/search" style="height: 100%;">
+                <input type="hidden" name="site" value="">
+                <input class="text" type="text" name="s" autocomplete="off" value="">
+                <input class="submit" type="submit" value="">
+                <input class="submit2" type="submit" value="">
+            </form>
+        </div>
+        <a href="https://www.leiphone.com/search" class="miniSearch"></a>
+        
+    </div>
+</header>   
+<!-- header end-->
+<nav class="yp-secNav">
+    <div class="wrapper">
+        <a href="https://www.leiphone.com/category/sponsor" class=" ">业界</a>
+        <a href="https://www.leiphone.com/category/ai" class=" ">人工智能</a>
+        <a href="https://www.leiphone.com/category/transportation" class=" ">智能驾驶</a>
+        <a href="https://www.leiphone.com/category/aijuejinzhi" class=" ">AI+</a>
+        <a href="https://www.leiphone.com/category/fintech" class=" "> Fintech&amp;区块链</a>
+        <a href="https://www.leiphone.com/category/aihealth" class=" ">未来医疗</a>
+        <a href="https://www.leiphone.com/category/letshome" class=" ">网络安全</a>
+        <a href="https://www.leiphone.com/category/arvr" class=" ">AR/VR</a>
+        <a href="https://www.leiphone.com/category/robot" class=" ">机器人</a>
+        <a href="https://www.leiphone.com/category/yanxishe" class=" ">开发者</a>
+        <a href="https://www.leiphone.com/category/weiwu" class=" ">智能硬件</a>
+        <a href="https://www.leiphone.com/category/iot" class=" ">物联网</a>
+        <a href="https://gair.leiphone.com/?from=leifengwang2018" target="_blank" class="">GAIR</a>
+    </div>
+</nav>
+
+<link rel="stylesheet" type="text/css" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/artCont_web_admin.css">
+<link rel="stylesheet" type="text/css" href="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/main.css" media="all">
+<script type="text/javascript">
+    var ARTICLE_CATEGORY = '137';
+    var ADMIN_URL = 'https://yingpeng.leiphone.com/';
+</script>
+
+<div class="wrapper">
+    <div class="lph-Nowsite clr">
+        <a href="https://www.leiphone.com/"><em class="ico"></em></a>
+        <em class="arro"></em>
+        <a href="https://www.leiphone.com/category/yanxishe">AI开发</a>
+        <em class="arro"></em>
+        <a href="https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html#">正文</a>
+    </div>
+</div>
+
+<!-- 发送私信 -->
+<div class="sendMsg-pop">
+    <a href="javascript:;" class="closePop"><em></em></a>
+    <div class="title">发私信给<span>汪思颖</span></div>
+    <div class="main">
+        <textarea placeholder="私信内容"></textarea>
+    </div>
+    <div class="btns">
+        <a href="javascript:;" class="send-button">发送</a>
+    </div>
+</div>
+<!-- 评论数 -->
+<a href="https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html#lph-comment-168608" class="cmtNums">
+    <em></em>
+    <p>0</p>
+</a>
+<div class="lph-overlay"></div>
+<!-- 当载入markdown的时候加载 -->
+<script type="text/javascript">
+    var link = "QJAIUzp0LAgkF45J";
+</script>
+<!-- 文章详情页 -->
+<div class="lphArticle-detail" data-article_url="https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html" data-article_id="168608" data-article_unique="QJAIUzp0LAgkF45J" data-article_seo_title="TensorFlow中RNN实现的正确打开方式 | 雷锋网" data-article_seo_keywords="TensorFlow,RNN" data-article_seo_description="一起来练练手" data-comment_type="2" data-collect_type="2" data-author_id="23904" data-author_name="汪思颖" data-article_cmtnum="0">
+    <div class="article-template">
+        <div class="article-title">
+            <div class="inner">
+                <h1 class="headTit">
+                    TensorFlow中RNN实现的正确打开方式                </h1>
+                <div class="msg">
+                    <table>
+                        <tbody><tr>
+                            <td class="aut">
+                                本文作者：<a href="https://www.leiphone.com/author/siying985" target="_blank" rel="nofollow">汪思颖</a>
+                            </td>
+                                                        <td class="time">
+                                2017-09-04 14:46                            </td>
+                                                                                    <!-- <td class="tags">
+                                <em></em> -->
+                                                                                                                            <!-- </td> -->
+                                                      <!--   <td class='cmtNum'>
+                                <a href="https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html#lph-comment-168608">0条评论</a>
+                            </td> -->
+                        </tr>
+                    </tbody></table>
+                </div>
+                <div class="article-lead">
+                    <em></em>导语：一起来练练手                </div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="wrapper clr">
+                <div class="article-left">
+                     <div class="lph-article-comView">
+                                                 
+                         <!-- AI影响因子 -->
+                        <!-- xhBPeYDbNuuRZkwy -->
+                                                <!-- AI影响因子 -->
+                        <!-- 正文内容 -->
+                        <p>雷锋网<span style="color:#FD5D3C;">(公众号：雷锋网)</span> AI科技评论按：本文作者<a href="https://www.zhihu.com/people/he-zhi-yuan-16/answers" target="_blank" rel="nofollow">何之源</a>，原文载于知乎专栏<a href="https://zhuanlan.zhihu.com/ai-insight" target="_blank" rel="nofollow">AI Insight</a>，雷锋网 AI科技评论获其授权发布。</p><p>上周写的文章<a href="https://zhuanlan.zhihu.com/p/28196873" target="_blank" rel="nofollow">《完全图解RNN、RNN变体、Seq2Seq、Attention机制》</a>介绍了一下RNN的几种结构，今天就来聊一聊如何在TensorFlow中实现这些结构，这篇文章的主要内容为：</p><ul style="list-style-type: disc;" class=" list-paddingleft-2"><li><p>一个完整的、循序渐进的学习TensorFlow中RNN实现的方法。这个学习路径的曲线较为平缓，应该可以减少不少学习精力，帮助大家少走弯路。</p></li><li><p>一些可能会踩的坑</p></li><li><p>TensorFlow源码分析</p></li><li><p>一个Char RNN实现示例，可以用来写诗，生成歌词，甚至可以用来写网络小说！（项目地址：<a href="https://github.com/hzy46/Char-RNN-TensorFlow" target="_blank" rel="nofollow">https://github.com/hzy46/Char-RNN-TensorFlow</a>）</p></li></ul><h2>一、学习单步的RNN：RNNCell</h2><p>如果要学习TensorFlow中的RNN，第一站应该就是去了解“<a href="http://link.zhihu.com/?target=https%3A//www.tensorflow.org/api_docs/python/tf/contrib/rnn/RNNCell" target="_blank" rel="nofollow">RNNCell</a>”，它是TensorFlow中实现RNN的基本单元，每个RNNCell都有一个call方法，使用方式是：(output, next_state) = call(input, state)。</p><p>借助图片来说可能更容易理解。假设我们有一个初始状态h0，还有输入x1，调用call(x1, h0)后就可以得到(output1, h1)：</p><p><br style="font-size:16px;font-style:normal;font-weight:normal;color:rgb(51, 51, 51);"></p><p><noscript>&amp;amp;amp;amp;amp;lt;img src=&amp;amp;amp;amp;amp;quot;https://static.leiphone.com/uploads/new/article/pic/201709/8c9740c22176ac4b77f940a25ddecaa5.jpg&amp;amp;amp;amp;amp;quot; data-rawwidth=&amp;amp;amp;amp;amp;quot;2856&amp;amp;amp;amp;amp;quot; data-rawheight=&amp;amp;amp;amp;amp;quot;1110&amp;amp;amp;amp;amp;quot; class=&amp;amp;amp;amp;amp;quot;origin_image zh-lightbox-thumb&amp;amp;amp;amp;amp;quot; width=&amp;amp;amp;amp;amp;quot;2856&amp;amp;amp;amp;amp;quot; data-original=&amp;amp;amp;amp;amp;quot;https://pic1.zhimg.com/v2-a5f8bc30bcc2d9eba7470810cb362850_r.jpg&amp;amp;amp;amp;amp;quot; _src=&amp;amp;amp;amp;amp;quot;https://static.leiphone.com/uploads/new/article/pic/201709/8c9740c22176ac4b77f940a25ddecaa5.jpg&amp;amp;amp;amp;amp;quot;/&amp;amp;amp;amp;amp;gt;</noscript><img alt="TensorFlow中RNN实现的正确打开方式" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/8c9740c22176ac4b77f940a25ddecaa5.jpg" data-rawwidth="2856" data-rawheight="1110" width="2856" data-original="https://pic1.zhimg.com/v2-a5f8bc30bcc2d9eba7470810cb362850_r.jpg" data-actual="" style="font-size:16px;font-style:normal;font-weight:normal;color:rgb(51, 51, 51);"></p><p>再调用一次call(x2, h1)就可以得到(output2, h2)：</p><p style="text-align: center;"><img alt="TensorFlow中RNN实现的正确打开方式" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/59a9264ecd98b.jpg"></p><p><noscript>&amp;amp;amp;amp;amp;lt;img src=&amp;amp;amp;amp;amp;quot;https://static.leiphone.com/uploads/new/article/pic/201709/ded387b7b2fb9fbb097aa57e922c3516.jpg&amp;amp;amp;amp;amp;quot; data-rawwidth=&amp;amp;amp;amp;amp;quot;3320&amp;amp;amp;amp;amp;quot; data-rawheight=&amp;amp;amp;amp;amp;quot;1110&amp;amp;amp;amp;amp;quot; class=&amp;amp;amp;amp;amp;quot;origin_image zh-lightbox-thumb&amp;amp;amp;amp;amp;quot; width=&amp;amp;amp;amp;amp;quot;3320&amp;amp;amp;amp;amp;quot; data-original=&amp;amp;amp;amp;amp;quot;https://pic3.zhimg.com/v2-74d7ac80ca83165092579932920d0ffe_r.jpg&amp;amp;amp;amp;amp;quot; _src=&amp;amp;amp;amp;amp;quot;https://static.leiphone.com/uploads/new/article/pic/201709/ded387b7b2fb9fbb097aa57e922c3516.jpg&amp;amp;amp;amp;amp;quot;/&amp;amp;amp;amp;amp;gt;</noscript></p><p>也就是说，<strong>每调用一次RNNCell的call方法，就相当于在时间上“推进了一步”，这就是RNNCell的基本功能。</strong></p><p>在代码实现上，RNNCell只是一个抽象类，我们用的时候都是用的它的两个子类BasicRNNCell和BasicLSTMCell。顾名思义，前者是RNN的基础类，后者是LSTM的基础类。这里推荐大家阅读其<a href="http://link.zhihu.com/?target=https%3A//github.com/tensorflow/tensorflow/blob/r1.2/tensorflow/python/ops/rnn_cell_impl.py" target="_blank" rel="nofollow">源码实现</a>（地址：http://t.cn/RNJrfMl），一开始并不需要全部看一遍，只需要看下RNNCell、BasicRNNCell、BasicLSTMCell这三个类的注释部分，应该就可以理解它们的功能了。</p><p>除了call方法外，对于RNNCell，还有两个类属性比较重要：</p><ul style="list-style-type: disc;" class=" list-paddingleft-2"><li><p>state_size</p></li><li><p>output_size</p></li></ul><p>前者是隐层的大小，后者是输出的大小。比如我们通常是将一个batch送入模型计算，设输入数据的形状为(batch_size, input_size)，那么计算时得到的隐层状态就是(batch_size, state_size)，输出就是(batch_size, output_size)。</p><p>可以用下面的代码验证一下（注意，以下代码都基于TensorFlow最新的1.2版本）：</p><blockquote><p><span style="font-size: 14px;">import tensorflow as tf</span></p><p><span style="font-size: 14px;">import numpy as np</span></p><p><span style="font-size: 14px;"><br></span></p><p><span style="font-size: 14px;">cell = tf.nn.rnn_cell.BasicRNNCell(num_units=128) <em># state_size = 128</em></span></p><p><span style="font-size: 14px;">print(cell.state_size) <em># 128</em></span></p><p><span style="font-size: 14px;"><br></span></p><p><span style="font-size: 14px;">inputs = tf.placeholder(np.float32, shape=(32, 100)) <em># 32 是 batch_size</em></span></p><p><span style="font-size: 14px;">h0 = cell.zero_state(32, np.float32)<em> # 通过zero_state得到一个全0的初始状态，形状为(batch_size, state_size)</em></span></p><p><span style="font-size: 14px;">output, h1 = cell.call(inputs, h0) <em>#调用call函数</em></span></p><p><span style="font-size: 14px;"><br></span></p><p><span style="font-size: 14px;">print(h1.shape) <em># (32, 128)</em></span><br></p></blockquote><p>对于BasicLSTMCell，情况有些许不同，因为LSTM可以看做有两个隐状态h和c，对应的隐层就是一个Tuple，每个都是(batch_size, state_size)的形状：</p><blockquote><p><span style="font-size: 14px;">import tensorflow as tf</span></p><p><span style="font-size: 14px;">import numpy as np</span></p><p><span style="font-size: 14px;">lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=128)</span></p><p><span style="font-size: 14px;">inputs = tf.placeholder(np.float32, shape=(32, 100)) <em># 32 是 batch_size</em></span></p><p><span style="font-size: 14px;">h0 = lstm_cell.zero_state(32, np.float32) <em># 通过zero_state得到一个全0的初始状态</em></span></p><p><span style="font-size: 14px;">output, h1 = lstm_cell.call(inputs, h0)</span></p><p><span style="font-size: 14px;"><br></span></p><p><span style="font-size: 14px;">print(h1.h) <em>&nbsp;# shape=(32, 128)</em></span></p><p><span style="font-size: 14px;">print(h1.c) &nbsp;<em># shape=(32, 128)</em></span><br></p></blockquote><h2>二、学习如何一次执行多步：tf.nn.dynamic_rnn</h2><p>基础的RNNCell有一个很明显的问题：对于单个的RNNCell，我们使用它的call函数进行运算时，只是在序列时间上前进了一步。比如使用x1、h0得到h1，通过x2、h1得到h2等。<strong>这样的h话，如果我们的序列长度为10，就要调用10次call函数，比较麻烦。对此，TensorFlow提供了一个tf.nn.dynamic_rnn函数，使用该函数就相当于调用了n次call函数。</strong>即通过{h0,x1, x2, …., xn}直接得{h1,h2…,hn}。</p><p>具体来说，设我们输入数据的格式为(batch_size, time_steps, input_size)，其中time_steps表示序列本身的长度，如在Char RNN中，长度为10的句子对应的time_steps就等于10。最后的input_size就表示输入数据单个序列单个时间维度上固有的长度。另外我们已经定义好了一个RNNCell，调用该RNNCell的call函数time_steps次，对应的代码就是：</p><blockquote><p><em><span style="font-size: 14px;"># inputs: shape = (batch_size, time_steps, input_size)</span></em></p><p><em><span style="font-size: 14px;"># cell: RNNCell</span></em></p><p><em><span style="font-size: 14px;"># initial_state: shape = (batch_size, cell.state_size)。初始状态。一般可以取零矩阵</span></em></p><p><span style="font-size: 14px;">outputs, state = tf.nn.dynamic_rnn(cell, inputs, initial_state=initial_state)</span><br></p></blockquote><p>此时，得到的outputs就是time_steps步里所有的输出。它的形状为(batch_size, time_steps, cell.output_size)。state是最后一步的隐状态，它的形状为(batch_size, cell.state_size)。</p><p>此处建议大家阅读<a href="http://link.zhihu.com/?target=https%3A//www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn" target="_blank" rel="nofollow">tf.nn.dynamic_rnn的文档</a>（地址：https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn）做进一步了解。</p><h2>三、学习如何堆叠RNNCell：MultiRNNCell</h2><p>很多时候，单层RNN的能力有限，我们需要多层的RNN。将x输入第一层RNN的后得到隐层状态h，这个隐层状态就相当于第二层RNN的输入，第二层RNN的隐层状态又相当于第三层RNN的输入，以此类推。在TensorFlow中，可以使用tf.nn.rnn_cell.MultiRNNCell函数对RNNCell进行堆叠，相应的示例程序如下：</p><blockquote><p><span style="font-size: 14px;">import tensorflow as tf</span></p><p><span style="font-size: 14px;">import numpy as np</span></p><p><span style="font-size: 14px;"><br></span></p><p><em><span style="font-size: 14px;"># 每调用一次这个函数就返回一个BasicRNNCell</span></em></p><p><span style="font-size: 14px;">def get_a_cell():<br> &nbsp; &nbsp;return tf.nn.rnn_cell.BasicRNNCell(num_units=128)</span></p><p><em><span style="font-size: 14px;"># 用tf.nn.rnn_cell MultiRNNCell创建3层RNN</span></em></p><p><span style="font-size: 14px;">cell = tf.nn.rnn_cell.MultiRNNCell([get_a_cell() for _ in range(3)])<em> # 3层RNN</em></span></p><p><em><span style="font-size: 14px;"># 得到的cell实际也是RNNCell的子类</span></em></p><p><em><span style="font-size: 14px;"># 它的state_size是(128, 128, 128)</span></em></p><p><em><span style="font-size: 14px;"># (128, 128, 128)并不是128x128x128的意思</span></em></p><p><em><span style="font-size: 14px;"># 而是表示共有3个隐层状态，每个隐层状态的大小为128</span></em></p><p><span style="font-size: 14px;">print(cell.state_size) <em># (128, 128, 128)</em></span></p><p><em><span style="font-size: 14px;"># 使用对应的call函数</span></em></p><p><span style="font-size: 14px;">inputs = tf.placeholder(np.float32, shape=(32, 100)) <em># 32 是 batch_size</em></span></p><p><span style="font-size: 14px;">h0 = cell.zero_state(32, np.float32) <em># 通过zero_state得到一个全0的初始状态</em></span></p><p><span style="font-size: 14px;">output, h1 = cell.call(inputs, h0)</span></p><p><span style="font-size: 14px;">print(h1)<em> # tuple中含有3个32x128的向量</em></span><br></p></blockquote><p><strong>通过MultiRNNCell得到的cell并不是什么新鲜事物，它实际也是RNNCell的子类，因此也有call方法、state_size和output_size属性。同样可以通过tf.nn.dynamic_rnn来一次运行多步。</strong></p><p>此处建议阅读<a href="http://link.zhihu.com/?target=https%3A//github.com/tensorflow/tensorflow/blob/r1.2/tensorflow/python/ops/rnn_cell_impl.py" target="_blank" rel="nofollow">MutiRNNCell源码</a>（地址：http://t.cn/RNJrfMl）中的注释进一步了解其功能。</p><h2>四、可能遇到的坑1：Output说明</h2><p>在经典RNN结构中有这样的图：</p><p style="text-align: center;"><img alt="TensorFlow中RNN实现的正确打开方式" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/59a926522cbea.jpg"></p><p>在上面的代码中，我们好像有意忽略了调用call或dynamic_rnn函数后得到的output的介绍。将上图与TensorFlow的BasicRNNCell对照来看。h就对应了BasicRNNCell的state_size。那么，y是不是就对应了BasicRNNCell的output_size呢？<strong>答案是否定的。</strong></p><p>找到源码中BasicRNNCell的call函数实现：</p><blockquote><p><span style="font-size: 14px;">def call(self, inputs, state):<br> &nbsp; &nbsp;"""Most basic RNN: output = new_state = act(W * input + U * state + B)."""<br> &nbsp; &nbsp;output = self._activation(_linear([inputs, state], self._num_units, True))<br> &nbsp; &nbsp;return output, output</span><br></p></blockquote><p><strong>这句“return output, output”说明在BasicRNNCell中，output其实和隐状态的值是一样的。因此，我们还需要额外对输出定义新的变换，才能得到图中真正的输出y。</strong>由于output和隐状态是一回事，所以在BasicRNNCell中，state_size永远等于output_size。TensorFlow是出于尽量精简的目的来定义BasicRNNCell的，所以省略了输出参数，我们这里一定要弄清楚它和图中原始RNN定义的联系与区别。</p><p>再来看一下BasicLSTMCell的call函数定义（函数的最后几行）：</p><blockquote><p><span style="font-size: 14px;">new_c = (<br> &nbsp; &nbsp;c * sigmoid(f + self._forget_bias) + sigmoid(i) * self._activation(j))</span></p><p><span style="font-size: 14px;">new_h = self._activation(new_c) * sigmoid(o)</span></p><p><span style="font-size: 14px;"><br></span></p><p><span style="font-size: 14px;">if self._state_is_tuple:<br> &nbsp;new_state = LSTMStateTuple(new_c, new_h)</span></p><p><span style="font-size: 14px;">else:<br> &nbsp;new_state = array_ops.concat([new_c, new_h], 1)</span></p><p><span style="font-size: 14px;">return new_h, new_state</span><br></p></blockquote><p>我们只需要关注self._state_is_tuple == True的情况，因为self._state_is_tuple == False的情况将在未来被弃用。返回的隐状态是new_c和new_h的组合，而output就是单独的new_h。如果我们处理的是分类问题，那么我们还需要对new_h添加单独的Softmax层才能得到最后的分类概率输出。</p><p>还是建议大家亲自看一下<a href="http://link.zhihu.com/?target=https%3A//github.com/tensorflow/tensorflow/blob/master/tensorflow/python/ops/rnn_cell_impl.py" target="_blank" rel="nofollow">源码实现</a>（地址：http://t.cn/RNJsJoH）来搞明白其中的细节。</p><h2>五、可能遇到的坑2：因版本原因引起的错误</h2><p>在前面我们讲到堆叠RNN时，使用的代码是：</p><blockquote><p><em><span style="font-size: 14px;"># 每调用一次这个函数就返回一个BasicRNNCell</span></em></p><p><span style="font-size: 14px;">def get_a_cell():<br> &nbsp; &nbsp;return tf.nn.rnn_cell.BasicRNNCell(num_units=128)</span></p><p><em><span style="font-size: 14px;"># 用tf.nn.rnn_cell MultiRNNCell创建3层RNN</span></em></p><p><span style="font-size: 14px;">cell = tf.nn.rnn_cell.MultiRNNCell([get_a_cell() for _ in range(3)]) <em># 3层RNN</em></span><br></p></blockquote><p>这个代码在TensorFlow 1.2中是可以正确使用的。但在之前的版本中（以及网上很多相关教程），实现方式是这样的：</p><blockquote><p><span style="font-size: 14px;">one_cell = &nbsp;tf.nn.rnn_cell.BasicRNNCell(num_units=128)</span></p><p><span style="font-size: 14px;">cell = tf.nn.rnn_cell.MultiRNNCell([one_cell] * 3)<em> # 3层RNN</em></span><br></p></blockquote><p>如果在TensorFlow 1.2中还按照原来的方式定义，就会引起错误！</p><h2>六、一个练手项目：Char RNN</h2><p>上面的内容实际上就是TensorFlow中实现RNN的基本知识了。<strong>这个时候，建议大家用一个项目来练习巩固一下。此处特别推荐Char RNN项目，这个项目对应的是经典的RNN结构，实现它使用的TensorFlow函数就是上面说到的几个，项目本身又比较有趣，可以用来做文本生成，平常大家看到的用深度学习来写诗写歌词的基本用的就是它了。</strong></p><p>Char RNN的实现已经有很多了，可以自己去Github上面找，我这里也做了一个实现，供大家参考。项目地址为：<a href="http://link.zhihu.com/?target=https%3A//github.com/hzy46/Char-RNN-TensorFlow" target="_blank" rel="nofollow">hzy46/Char-RNN-TensorFlow</a>（地址：https://github.com/hzy46/Char-RNN-TensorFlow）。代码的部分实现来自于《安娜卡列尼娜文本生成——利用TensorFlow构建LSTM模型》</p><p><a href="https://zhuanlan.zhihu.com/p/27087310" target="_blank" rel="nofollow">这篇专栏</a>，在此感谢 <a href="http://www.zhihu.com/people/97d929615d936543e9a40895b35fb43c" target="_blank" rel="nofollow">@天雨粟</a> 。<br></p><p>我主要向代码中添加了embedding层，以支持中文，另外重新整理了代码结构，将API改成了最新的TensorFlow 1.2版本。</p><p>可以用这个项目来写诗（以下诗句都是自动生成的）：</p><blockquote><p><span style="font-size: 14px;">何人无不见，此地自何如。<br>一夜山边去，江山一夜归。<br>山风春草色，秋水夜声深。<br>何事同相见，应知旧子人。<br>何当不相见，何处见江边。<br>一叶生云里，春风出竹堂。<br>何时有相访，不得在君心。</span><br></p></blockquote><p>还可以生成代码：</p><blockquote><p><span style="font-size: 14px;">static int page_cpus(struct flags *str)<br>{<br> &nbsp; &nbsp; &nbsp; &nbsp;int rc;<br> &nbsp; &nbsp; &nbsp; &nbsp;struct rq *do_init;<br>};<br><br>/*<br> * Core_trace_periods the time in is is that supsed,<br> */<br>#endif<br><br>/*<br> * Intendifint to state anded.<br> */<br>int print_init(struct priority *rt)<br>{ &nbsp; &nbsp; &nbsp; /* Comment sighind if see task so and the sections */<br> &nbsp; &nbsp; &nbsp; &nbsp;console(string, &amp;can);<br>}</span><br></p></blockquote><p>此外生成英文更不是问题（使用莎士比亚的文本训练）：</p><blockquote><p><span style="font-size: 14px;">LAUNCE:<br>The formity so mistalied on his, thou hast she was<br>to her hears, what we shall be that say a soun man<br>Would the lord and all a fouls and too, the say,<br>That we destent and here with my peace.<br><br>PALINA:<br>Why, are the must thou art breath or thy saming,<br>I have sate it him with too to have me of<br>I the camples.</span><br></p></blockquote><p>最后，如果你脑洞够大，还可以来做一些更有意思的事情，比如我用了著名的网络小说《斗破苍穹》训练了一个RNN模型，可以生成下面的文本：</p><blockquote><p><span style="font-size: 14px;">闻言，萧炎一怔，旋即目光转向一旁的那名灰袍青年，然后目光在那位老者身上扫过，那里，一个巨大的石台上，有着一个巨大的巨坑，一些黑色光柱，正在从中，一道巨大的黑色巨蟒，一股极度恐怖的气息，从天空上暴射而出 ，然后在其中一些一道道目光中，闪电般的出现在了那些人影，在那种灵魂之中，却是有着许些强者的感觉，在他们面前，那一道道身影，却是如同一道黑影一般，在那一道道目光中，在这片天地间，在那巨大的空间中，弥漫而开……<br><br>“这是一位斗尊阶别，不过不管你，也不可能会出手，那些家伙，可以为了这里，这里也是能够有着一些异常，而且他，也是不能将其他人给你的灵魂，所以，这些事，我也是不可能将这一个人的强者给吞天蟒，这般一次，我们的实力，便是能够将之击杀……”<br><br>“这里的人，也是能够与魂殿强者抗衡。”<br><br>萧炎眼眸中也是掠过一抹惊骇，旋即一笑，旋即一声冷喝，身后那些魂殿殿主便是对于萧炎，一道冷喝的身体，在天空之上暴射而出，一股恐怖的劲气，便是从天空倾洒而下。<br><br>“嗤！”</span><br></p></blockquote><p>还是挺好玩的吧，另外还尝试了生成日文等等。</p><h2>七、学习完整版的LSTMCell</h2><p>上面只说了基础版的BasicRNNCell和BasicLSTMCell。TensorFlow中还有一个“完全体”的LSTM：LSTMCell。这个完整版的LSTM可以定义peephole，添加输出的投影层，以及给LSTM的遗忘单元设置bias等，可以<a href="http://link.zhihu.com/?target=https%3A//github.com/tensorflow/tensorflow/blob/master/tensorflow/python/ops/rnn_cell_impl.py%23L417" target="_blank" rel="nofollow">参考其源码</a>（地址：https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/ops/rnn_cell_impl.py#L417）了解使用方法。</p><h2>八、学习最新的Seq2Seq API</h2><p>Google在TensorFlow的1.2版本（1.3.0的rc版已经出了，貌似正式版也要出了，更新真是快）中更新了Seq2Seq API，使用这个API我们可以不用手动地去定义Seq2Seq模型中的Encoder和Decoder。此外它还和1.2版本中的新数据读入方式Datasets兼容。可以<a href="http://link.zhihu.com/?target=https%3A//www.tensorflow.org/api_docs/python/tf/contrib/seq2seq" target="_blank" rel="nofollow">阅读此处的文档</a>（地址：http://www.tensorflow.org/api_docs/python/tf/contrib/seq2seq）学习它的使用方法。</p><h2>九、总结</h2><p>最后简单地总结一下，这篇文章提供了一个学习TensorFlow RNN实现的详细路径，其中包括了学习顺序、可能会踩的坑、源码分析以及一个示例项目<a href="http://link.zhihu.com/?target=https%3A//github.com/hzy46/Char-RNN-TensorFlow" target="_blank" rel="nofollow">hzy46/Char-RNN-TensorFlow</a>（地址：https://github.com/hzy46/Char-RNN-TensorFlow），希望能对大家有所帮助。</p>
+                                                <p>雷锋网版权文章，未经授权禁止转载。详情见<a href="http://dwz.cn/4ErMxZ" rel="nofollow" target="_blank">转载须知</a>。</p>
+                                               
+                                                <!-- 正文内容结束 -->
+                    </div>
+
+                    <!-- 分享 -->
+                    <div class="pageActive clr">
+                        <div class="mark-like-btn ">
+                            <a class="collect collect-no" href="javascript:;"><i></i><span>15</span>人收藏</a>
+                        </div>
+                        <!-- Baidu Button BEGIN -->
+                        <div class="bdsharebuttonbox bdshare-button-style0-24" data-tag="share_168608" data-bd-bind="1542681068194">
+                            <span class="s-txt">分享：</span>
+                            <a href="javascript:void()" onclick="openYNote(&#39;https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html&#39;,&#39;TensorFlow中RNN实现的正确打开方式&#39;, &#39;https://static.leiphone.com/uploads/new/article/pic/201709/59acf72d122cc.jpg&#39;,&#39;leiphone&#39;,&#39;TensorFlow中RNN实现的正确打开方式&#39;)" class="youdao " title="收藏此篇文章到有道云笔记"><i></i></a>
+                            <a class="bds_tsina weibo-btn  " data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a class="weixin-btn bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a class="bds_more more-btn" data-cmd="more"></a>
+                        </div>
+                        <script type="text/javascript">
+                            //在这里定义bds_config
+                            // var bds_config = {'snsKey':{'tsina':'2475906690'}};
+                            // var qcode = {
+                            //     api : "http://qr.liantu.com/api.php?text=",
+                            //     url :  window.location.href,
+                            //     exist : false,
+                            //     create : function(){
+                            //         if(!this.exist){
+                            //             var image = document.createElement('img');
+                            //             image.src = this.api + this.url;
+                            //             image.width = 120;
+                            //             this.exist = true;
+                            //             return image;
+                            //         }
+                            //     }
+                            // };
+                        </script>
+
+                    </div>
+                    <!-- 相关文章 -->
+                    <!-- 相关文章 start -->
+<div class="realted-article clr">
+    <div class="title clr">
+        <span class="fl">相关文章</span>
+    </div>
+    <div class="related-link clr">
+                         <a href="https://www.leiphone.com/tag/TensorFlow" target="_blank" title="TensorFlow">TensorFlow</a>
+                 <a href="https://www.leiphone.com/tag/RNN" target="_blank" title="RNN">RNN</a>
+                     </div>
+    <div class="list">
+        <ul>
+                        <li class="first">
+                <a href="https://www.leiphone.com/news/201811/XWpyoLbnS8gSwL8J.html" target="_blank" class="pic">
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/5be963b75088a.png" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201811/XWpyoLbnS8gSwL8J.html" target="_blank">TensorFlow 三周岁！2.0 版本将于 2019 年发布</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201809/8wyR44kEzfaTsLPV.html" target="_blank" class="pic">
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/5b9f51d8d5fc5.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201809/8wyR44kEzfaTsLPV.html" target="_blank">图像分类任务中，Tensorflow 与 Keras 到底哪个更厉 ...</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201808/cFLniiratwYrKSTA.html" target="_blank" class="pic">
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/5b7e20155bcc9.png" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201808/cFLniiratwYrKSTA.html" target="_blank">基于 Tensorflow eager 的文本生成，注意力，图像注 ...</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201808/DgM4M5wTwZSOkCXw.html" target="_blank" class="pic">
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/5b741246af049.png" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201808/DgM4M5wTwZSOkCXw.html" target="_blank">从 Google Trends，看各大深度学习框架使用热度</a>
+                </div>
+            </li>
+                    </ul>
+    </div>
+</div>
+
+<!-- 相关文章 end -->
+
+
+                    <!-- 推荐文章 -->
+                    <div class="realted-article clr recmdArticle" data-article_id="168608">
+                        <div class="list">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 广告 -->
+                    
+                    <!-- 文章 评论  -->
+                    <!-- 评论 -->
+<div class="article-comment lp-comment" id="lph-comment-168608">
+    <div class="useComJs">
+        <!-- <input id="lp_item_id" type="hidden" name="item_id" value="168608">
+        <input id="lp_item_type" type="hidden" name="type" value="2"> -->
+
+        <div class="h2 clr">
+            <h2>文章点评：</h2>
+            <!-- <strong class="h2-tip">
+                （您需要<a class="c-log" href="javascript:openPop('#lp-login-pop');">登录</a>后才能评论 <a href="https://home.leiphone.com/main/register" class="c-reg">没有账号</a> ？）</strong>
+            -->        
+        </div>
+        <div class="submit clr commentForm" id="">
+            <div class="text">
+                <textarea name="Comment[content]" placeholder="我有话要说……"></textarea>
+            </div>
+            <div class="sub clr publishtosina">
+                <span class="emotionc emotion0" data-emotion="0">表情</span>
+                <label><input id="" type="checkbox" name="pushForWeibo"> 同步到新浪微博</label>
+                <div class="qqFace" style="position:absolute; display:none; z-index:10"></div>
+                <button type="submit" title="提交">提交</button>
+            </div>
+        </div>
+        <!-- <div class="jcWords">
+            <h3><strong>精彩评论</strong></h3>
+            <ul class="comment-say">
+                
+            </ul>
+        </div>
+        <div class="words">
+            <h3><strong>最新评论</strong><span></span>条评论<i></i></h3>
+            <ul class="comment-say">
+                
+            </ul>
+            <div id="comment-say-more" class="comment-say-more">
+
+                <span>加载更多</span>
+                <em>没有更多了</em>
+
+            </div>
+        </div> -->
+    </div>
+				<div class="article-comment-container" data-item-id="-1" data-type-id="2">														</div>		</div>
+<!-- 评论 -->
+
+
+
+                </div>
+
+                <script>
+    var codeAuthor_id   = "siying985";
+    var author_id       = "23904";
+</script>
+<div class="article-right">
+        <div class="aboutAur-main">
+        <div class="aboutAur-msg">
+            <a href="https://www.leiphone.com/author/siying985" class="avater" target="_blank" rel="nofollow">
+                <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/41_avatar_pic_100_100.jpg" alt="" width="80" height="80">
+            </a>
+            <div class="name">
+                <a href="https://www.leiphone.com/author/siying985" target="_blank" rel="nofollow"><span>汪思颖</span><em class="gold"></em></a>
+            </div>
+            <p class="profession">编辑</p>
+            <div class="saying">
+                <em class="l-quote"></em>
+                <span>关注 AI 学术动态以及各类数据挖掘比赛，加好友请备注个人信息~谢谢。微信：awanglala</span>
+                <em class="r-quote"></em>
+            </div>
+            <div class="operate-btn">
+                <table>
+                    <tbody><tr>
+                                                                        <td>
+                            <a href="mailto:wangsiying@leiphone.com" class="eml sub_a" rel="nofollow"><em></em></a>
+                        </td>
+                                                                    </tr>
+                </tbody></table>
+            </div>
+            <div class="btns">
+                <a href="javascript:;">发私信</a>
+            </div>
+        </div>
+
+
+        <!-- 作者的文章 -->
+        
+<div class="mouthHot-article">
+    <div class="title">当月热门文章</div>
+        <div class="list">
+            <ul>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/yDaEIHyDneSJbeJS.html" title="百度研究院今日升级，迎来 9 位世界级科学家" target="_blank">百度研究院今日升级，迎来 9 位世界级科学家</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/XWpyoLbnS8gSwL8J.html" title="TensorFlow 三周岁！2.0 版本将于 2019 年发布" target="_blank">TensorFlow 三周岁！2.0 版本将于 2019 年发布</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/QJ1OT9H27Fy4XhqA.html" title="ACM 杰出科学家得主达摩院李飞飞教授：数据库研究道阻且长，需持之以恒" target="_blank">ACM 杰出科学家得主达摩院李飞飞教授：数据库研究道阻且长，需持之以恒</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/T848yz0V20psv9ok.html" title="习近平：推动我国新一代人工智能健康发展" target="_blank">习近平：推动我国新一代人工智能健康发展</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201810/Lh4hNJ6SYPn8Gsvd.html" title="CNCC 2018 颁奖晚宴圆满结束，看各大奖项花落谁家 | CNCC 2018" target="_blank">CNCC 2018 颁奖晚宴圆满结束，看各大奖项花落谁家 | CNCC 2018</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+       <!-- 作者文章结束 -->
+    </div>
+
+            <div class="weekly-choice hotNew-article">
+        <div class="rComTitle">
+            最新文章
+        </div>
+        <div class="list">
+            <ul class="justTxt">
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/FZM8dsm5CcQpmnNT.html" target="_blank">
+                            <em></em>清华大学韩旭：神经关系抽取模型 | AI研习社71期大讲堂 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/zVI1pdC3oL3S6oXK.html" target="_blank">
+                            <em></em>吸引 7198 支队伍参赛，看 Kaggle 信用预估比赛冠军方案 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/6T23aH3sevzHbeJR.html" target="_blank">
+                            <em></em>百度视觉团队斩获 ECCV Google AI 目标检测竞赛冠军，获奖方案全解读 |  ECCV 2018 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/QxOKclpJ6buroqrn.html" target="_blank">
+                            <em></em>清华大学王延森：如何利用提问增强开放领域对话系统互动性 | AI研习社66期大讲堂 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/5QPgCNoBgDYfKGHW.html" target="_blank">
+                            <em></em>如何从静态图像中识别“比心”动作 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201808/CkFtca7oz5h2oCp8.html" target="_blank">
+                            <em></em>ICPR 图像识别与检测挑战赛冠军方案出炉，基于偏旁部首来识别 Duang 字 </a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+        <div class="serKesy-list">
+    <div class="rComTitle">
+        热门搜索
+    </div>
+    <div class="list clr">
+                <a href="https://www.leiphone.com/tag/iPad" target="_blank">iPad</a>
+                <a href="https://www.leiphone.com/tag/%E9%AD%85%E6%97%8F" target="_blank">魅族</a>
+                <a href="https://www.leiphone.com/tag/%E4%B8%93%E5%88%A9" target="_blank">专利</a>
+                <a href="https://www.leiphone.com/tag/%E9%BB%91%E7%A7%91%E6%8A%80" target="_blank">黑科技</a>
+                <a href="https://www.leiphone.com/tag/%E8%8B%B9%E6%9E%9C%E5%8F%91%E5%B8%83%E4%BC%9A" target="_blank">苹果发布会</a>
+                <a href="https://www.leiphone.com/tag/kinect" target="_blank">kinect</a>
+                <a href="https://www.leiphone.com/tag/%E5%BE%AE%E5%8D%9A%E7%B2%BE%E9%80%89" target="_blank">微博精选</a>
+                <a href="https://www.leiphone.com/tag/Adobe" target="_blank">Adobe</a>
+                <a href="https://www.leiphone.com/tag/Moto%20X" target="_blank">Moto X</a>
+                <a href="https://www.leiphone.com/tag/%E5%A4%84%E7%90%86%E5%99%A8" target="_blank">处理器</a>
+                <a href="https://www.leiphone.com/tag/%E8%8E%AB%E9%A1%BB%E6%9C%89" target="_blank">莫须有</a>
+            </div>
+</div>
+</div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="lineBg"></div>
+    <!-- 百度分享 -->
+    <script>
+
+        window._bd_share_config = {
+            common:{
+                bdMiniList:['tsina','weixin','more']
+            },
+            share : [
+                {
+                    bdText : 'TensorFlow中RNN实现的正确打开方式',
+                    bdDesc : 'TensorFlow中RNN实现的正确打开方式',
+                    bdUrl : 'https://www.leiphone.com/news/201709/QJAIUzp0LAgkF45J.html',
+                    bdPic : 'https://static.leiphone.com/uploads/new/article/pic/201709/59acf72d122cc.jpg',
+                    "tag" : "share_168608",
+                    "bdSize" : 24
+                },
+            ],
+        }
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://www.leiphone.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+
+    </script>
+</div>
+
+
+
+<script>
+    function openYNote(url, title, pic, vendor, summary) {
+        var target = 'http://note.youdao.com/memory/?url=' + encodeURIComponent(url) +
+            '&title=' + encodeURIComponent(title) + '&pic=' + encodeURIComponent(pic) +
+            '&product=' + encodeURIComponent('网页收藏') +
+            '&summary=' + encodeURIComponent(summary) + '&vendor=' + encodeURIComponent(vendor);
+        window.open(target);
+    }
+  seajs.use(['https://www.leiphone.com/resWeb/js/article' , 'https://www.leiphone.com/resWeb/js/load_articles']);
+
+
+
+   // document.getElementById('weixin-qt').insertBefore(qcode.create(),document.getElementById('weixin-qt-msg'));
+</script>
+
+<footer class="yp-footer">
+    <!-- 友情链接，热门关键字 -->
+    <div class="yp-footer-link">
+        <div class="wrapper">
+            <div class="tab_tit clr">
+                                <a href="javascript:;">热门关键字</a>
+            </div>
+            <div class="tab_con">
+                <ul>
+                                        
+                                        <li class="cur">
+                                        
+                                                                                            <a href="http://www.leiphone.com/tags" target="_blank">热门标签</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD" target="_blank">人工智能 </a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">机器人</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" target="_blank">机器学习</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0" target="_blank">深度学习</a>                                                                    <a href="https://www.leiphone.com/tag/%E9%87%91%E8%9E%8D%E7%A7%91%E6%8A%80" target="_blank">金融科技</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%AA%E6%9D%A5%E5%8C%BB%E7%96%97" target="_blank">未来医疗</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6" target="_blank">智能驾驶</a>                                                                    <a href="https://www.leiphone.com/tag/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6" target="_blank">自动驾驶</a>                                                                    <a href="https://www.leiphone.com/tag/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89" target="_blank">计算机视觉</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE" target="_blank">激光雷达</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB" target="_blank">图像识别</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E9%9F%B3%E7%AE%B1" target="_blank">智能音箱</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%8C%BA%E5%9D%97%E9%93%BE" target="_blank">区块链</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%8A%95%E9%A1%BE" target="_blank">智能投顾</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F" target="_blank">医学影像</a>                                                                    <a href="https://www.leiphone.com/tag/%E7%89%A9%E8%81%94%E7%BD%91" target="_blank">物联网</a>                                                                    <a href="https://www.leiphone.com/tag/IoT" target="_blank">IoT</a>                                                                    <a href="https://www.leiphone.com/tag/CV" target="_blank">CV</a>                                                                    <a href="http://www.leiphone.com/special/235/201609/57e4fe78a71ea.html" target="_blank">微信小程序平台</a>                                                                    <a href="http://www.leiphone.com/news/201701/ri7dDB7Fq0mMj1qh.html" target="_blank">微信小程序在哪</a>                                                                    <a href="http://www.leiphone.com/tag/CES%202017" target="_blank">CES 2017</a>                                                                    <a href="http://www.leiphone.com/tag/CES" target="_blank">CES</a>                                                                    <a href="http://www.leiphone.com/tag/2016%E5%B9%B4%E6%9C%80%E5%80%BC%E5%BE%97%E8%B4%AD%E4%B9%B0%E7%9A%84%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6" target="_blank">2016年最值得购买的智能硬件</a>                                                                    <a href="http://www.leiphone.com/news/201612/sI2n04bJ5aVzS5Pr.html" target="_blank">2016 互联网</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%A8%8B%E5%BA%8F" target="_blank">小程序</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E4%BF%A1%E6%9C%8B%E5%8F%8B%E5%9C%88" target="_blank">微信朋友圈</a>                                                                    <a href="http://www.leiphone.com/news/201612/J8qZLCwViDpwygen.html" target="_blank">抢票软件</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%89%8B%E6%9C%BA" target="_blank">智能手机</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E5%AE%B6%E5%B1%85" target="_blank">智能家居</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%89%8B%E7%8E%AF" target="_blank">智能手环</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">智能机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86" target="_blank">智能电视</a>                                                                    <a href="http://www.leiphone.com/tag/360%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6" target="_blank">360智能硬件</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%91%84%E5%83%8F%E6%9C%BA" target="_blank">智能摄像机</a>                                                                    <a href="http://www.leiphone.com/news/201601/mQ8TFsppN7ROxYmS.html" target="_blank">智能硬件产品</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E5%8F%91%E5%B1%95" target="_blank">智能硬件发展</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E5%88%9B%E4%B8%9A" target="_blank">智能硬件创业</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%BB%91%E5%AE%A2" target="_blank">黑客</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%99%BD%E5%B8%BD%E5%AD%90" target="_blank">白帽子</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE" target="_blank">大数据</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%91%E8%AE%A1%E7%AE%97" target="_blank">云计算</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%96%B0%E8%83%BD%E6%BA%90%E6%B1%BD%E8%BD%A6" target="_blank">新能源汽车</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%97%A0%E4%BA%BA%E9%A9%BE%E9%A9%B6" target="_blank">无人驾驶</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%97%A0%E4%BA%BA%E6%9C%BA" target="_blank">无人机</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%A4%A7%E7%96%86" target="_blank">大疆</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3%E6%97%A0%E4%BA%BA%E6%9C%BA" target="_blank">小米无人机</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%89%B9%E6%96%AF%E6%8B%89" target="_blank">特斯拉</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E6%B8%B8%E6%88%8F" target="_blank">VR游戏</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E7%94%B5%E5%BD%B1" target="_blank">VR电影</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E8%A7%86%E9%A2%91" target="_blank">VR视频</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E7%9C%BC%E9%95%9C" target="_blank">VR眼镜</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E8%B4%AD%E7%89%A9" target="_blank">VR购物</a>                                                                    <a href="http://www.leiphone.com/tag/AR" target="_blank">AR</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%9B%B4%E6%92%AD" target="_blank">直播</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%89%AB%E5%9C%B0%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">扫地机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8C%BB%E7%96%97%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">医疗机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B7%A5%E4%B8%9A%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">工业机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%B1%BB%E4%BA%BA%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">类人机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">聊天机器人</a>                                                                    <a href="http://www.leiphone.com/news/201606/kyKJpmCelZrWE7K4.html" target="_blank">微信机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F" target="_blank">微信小程序</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%A7%BB%E5%8A%A8%E6%94%AF%E4%BB%98" target="_blank">移动支付</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%94%AF%E4%BB%98%E5%AE%9D" target="_blank">支付宝</a>                                                                    <a href="http://www.leiphone.com/tag/P2P" target="_blank">P2P</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8C%BA%E5%9D%97%E9%93%BE" target="_blank">区块链</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%AF%94%E7%89%B9%E5%B8%81" target="_blank">比特币</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%A3%8E%E6%8E%A7" target="_blank">风控</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%AB%98%E7%9B%9B" target="_blank">高盛</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB" target="_blank">人脸识别</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%8C%87%E7%BA%B9%E8%AF%86%E5%88%AB" target="_blank">指纹识别</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%BB%91%E7%A7%91%E6%8A%80" target="_blank">黑科技</a>                                                                    <a href="http://www.leiphone.com/news/201502/S5yH58slS9gpBrm4.html" target="_blank">谷歌地图</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%B0%B7%E6%AD%8C" target="_blank">谷歌</a>                                                                    <a href="http://www.leiphone.com/tag/IBM" target="_blank">IBM</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E8%BD%AF" target="_blank">微软</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%B9%90%E8%A7%86" target="_blank">乐视</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%99%BE%E5%BA%A6" target="_blank">百度</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%B8%89%E6%98%9Fs8" target="_blank">三星s8</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%85%BE%E8%AE%AF" target="_blank">腾讯</a>                                                                    <a href="http://www.leiphone.com/list/%E4%B8%89%E6%98%9FNote8" target="_blank">三星Note8 </a>                                                                    <a href="http://www.leiphone.com/news/201610/oUUuMZtyi7H6xMGA.html" target="_blank">小米MIX</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3Note" target="_blank">小米Note</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8D%8E%E4%B8%BA" target="_blank">华为</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3" target="_blank">小米</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4" target="_blank">阿里巴巴</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%8B%B9%E6%9E%9C" target="_blank">苹果</a>                                                                    <a href="http://www.leiphone.com/tag/MacBook%20Pro" target="_blank">MacBook Pro</a>                                                                    <a href="http://www.leiphone.com/tag/iPhone" target="_blank">iPhone</a>                                                                    <a href="http://www.leiphone.com/tag/Facebook" target="_blank">Facebook</a>                                                                    <a href="http://www.leiphone.com/tag/GAIR" target="_blank">GAIR</a>                                                                    <a href="http://www.leiphone.com/tag/IROS" target="_blank">IROS</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8F%8C%E5%88%9B%E5%91%A8" target="_blank">双创周</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%91%E6%A0%96%E5%A4%A7%E4%BC%9A" target="_blank">云栖大会</a>                                                                    <a href="https://www.iuplus.com/" target="_blank">优葩</a>                                                                    <a href="http://www.leiphone.com/news/201610/qN5pHyh1kQUQEGtw.html" target="_blank">智能硬件公司</a>                                                                    <a href="http://www.leiphone.com/category/weiwu" target="_blank">智能硬件</a>                                                                    <a href="http://www.leiphone.com/news/201701/RnURKJ8H5PaG9g7y.html" target="_blank">QQ红包</a>                                                                    <a href="http://www.leiphone.com/news/201701/RnURKJ8H5PaG9g7y.html" target="_blank">支付宝红包</a>                                                                    <a href="http://www.leiphone.com/news/201701/cdANtd69SJLFwdXs.html" target="_blank">敬业福</a>                                                                                    
+                        <a href="https://www.leiphone.com/list/%E8%93%9D%E7%89%99%E9%81%A5%E6%8E%A7%E5%99%A8" target="_blank">蓝牙遥控器</a><a href="https://www.leiphone.com/list/%E6%AE%8B%E5%B7%AE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C" target="_blank">残差神经网络</a><a href="https://www.leiphone.com/list/mbed" target="_blank">mbed</a><a href="https://www.leiphone.com/list/jaunt" target="_blank">jaunt</a><a href="https://www.leiphone.com/list/cm10" target="_blank">cm10</a><a href="https://www.leiphone.com/list/%E4%B8%A4%E8%BD%AE%E8%BD%A6" target="_blank">两轮车</a><a href="https://www.leiphone.com/list/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" target="_blank">路由器操作系统</a><a href="https://www.leiphone.com/list/%E6%9C%80%E5%B0%8F%E7%9A%84%E8%93%9D%E7%89%99%E8%80%B3%E6%9C%BA" target="_blank">最小的蓝牙耳机</a><a href="https://www.leiphone.com/list/%E8%87%AA%E5%88%B6%E5%96%87%E5%8F%AD" target="_blank">自制喇叭</a><a href="https://www.leiphone.com/list/%E6%9A%97%E6%A0%BC" target="_blank">暗格</a><a href="https://www.leiphone.com/list/iphone7%20%E4%BA%AE%E7%99%BD" target="_blank">iphone7 亮白</a><a href="https://www.leiphone.com/list/%E5%BE%AE%E5%9E%8B%E6%97%A0%E4%BA%BA%E6%9C%BA" target="_blank">微型无人机</a><a href="https://www.leiphone.com/list/obd%E7%9B%92%E5%AD%90" target="_blank">obd盒子</a><a href="https://www.leiphone.com/list/ipad%20air" target="_blank">ipad air</a><a href="https://www.leiphone.com/list/%E8%81%94%E6%83%B3%E4%B9%90%E6%AA%AC" target="_blank">联想乐檬</a>                        <a href="https://www.leiphone.com/list/" target="_blank">更多</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="yp-footer-msg">
+        <div class="wrapper clr">
+            <!-- links -->
+            <div class="links">
+                <a rel="nofollow" href="https://www.leiphone.com/us/contact">联系我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/us/index">关于我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/news/201611/0nOqnvNoxI6vX4L9.html">加入我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/us/feedback">意见反馈</a>
+                <a rel="nofollow" href="https://www.leiphone.com/contribute/index">投稿</a>
+            </div>
+            <!-- 下载app -->
+            <div class="downLoad-app">
+                <div class="qrcode">
+                    <!-- /site/download -->
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/downCode.jpg" width="96" height="96" alt="">
+                </div>
+                <div class="txt">
+                    <p>下载雷锋网客户端</p>
+                    <a rel="nofollow" href="https://itunes.apple.com/cn/app/lei-feng-wang-yi-dong-hu-lian/id579529120?mt=8" target="_blank" class="iPhone"><em></em>iPhone</a>
+                    <a rel="nofollow" href="https://android.myapp.com/myapp/detail.htm?apkName=com.leiphone.app" target="_blank" class="Android"><em></em>Android</a>
+                </div>
+            </div>
+            <!-- 关注-->
+            <div class="contact">
+                <a rel="nofollow" href="mailto:web@leiphone.com" class="eml sub_a"><em></em></a>
+                <a rel="nofollow" href="https://www.weibo.com/p/1006062118746300" target="_blank" class="sina sub_a"><em></em></a>
+            </div>
+        </div>
+    </div>
+    <!-- copyRight -->
+    <div class="yp-copyright">
+        <div class="wrapper">
+            <p>Copyright © 2011-2018 www.leiphone.com 雷锋网-移动互联网智能终端第一媒体 All Rights Reserved <a target="_blank" style="color:#9baab6;" href="https://www.miitbeian.gov.cn/">粤ICP备11095991号-1</a>
+<!--                 <a  key ="54914497efbfb06e545f711c"  logo_size="83x30"  logo_type="realname"  href="https://www.anquan.org" ><script src="https://static.anquan.org/static/outer/js/aq_auth.js"></script></a> -->
+                &nbsp;&nbsp;
+                <a href="http://szcert.ebs.org.cn/0ee69ac3-f114-4bd9-9ea1-a5a04f7cd44b" rel="nofollow" target="_blank"><img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/govIcon.gif" width="29" height="40"></a>
+<!--                <script id="ebsgovicon" src="https://szcert.ebs.org.cn/govicon.js?id=0ee69ac3-f114-4bd9-9ea1-a5a04f7cd44b&width=29&height=40&type=1" type="text/javascript" charset="utf-8"></script>                &nbsp;&nbsp;-->
+                <a rel="nofollow" href="https://www.leiphone.com/resWeb/images/ICP.jpg" target="_blank" style="color:#9baab6">ICP证粤B2-20150332</a>
+                <a rel="nofollow" href="http://www.qiniu.com/" target="_blank" style="float:right">
+                    <img src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/hzs4.png">
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+<div id="lph-footer-gotoBar">
+    <div class="gotoTop">   
+        <a href="javascript:;" class="top" data-goto="0" data-start="100" style="display: block;"><em></em></a>
+    </div>
+</div>
+
+<!-- 遮罩层 -->
+<div class="lph-overlay"></div>
+    <!-- 右上角持续提示，邮箱未绑定的时候输出 -->
+    <div class="yzEmail_tip yzEmail_tip1" id="bandEmailTip">
+        <em></em>
+        <span>为了您的账户安全，请<a class="bbtn" href="javascript:;">验证邮箱</a></span>
+        <i class="close"></i>
+    </div>
+
+    <!-- 右上角持续提示，邮箱发送但未验证的时候输出 -->
+    <div class="yzEmail_tip yzEmail_tip2" id="sendEmailTip">
+        <span style="text-align: center;">您的邮箱还未验证,完成可获20积分哟！</span>
+        <p class="links"><a class="rbtn" href="javascript:;">重发邮箱</a><a class="sbtn" href="javascript:;">修改邮箱</a></p>
+        <i class="close"></i>
+    </div>
+
+    <!-- 记cookie弹窗，邮箱未绑定的时候弹出 -->
+    <div class="yzEmail_box yzEmail_box1 lph-pops" id="sendEmailBox">
+        <div class="head">请验证您的邮箱</div>
+        <div class="box">
+            <span class="tipp"><!-- *邮箱 --></span>
+            <input class="inp" id="sendEmail_input" placeholder="输入您的邮箱" value="">
+            <!-- <strong>验证邮件已发送，请您查收</strong> -->
+            <a class="btn" href="javascript:;" target="_blank" id="sendEmail_btn"><i></i><em>立即验证</em></a>
+            <div class="error"></div>
+        </div>
+        <!-- <div class="boxOk">
+            <strong>验证邮件已发送，请您查收</strong>
+        </div> -->
+        <i class="close"></i>
+    </div>
+
+    <!-- 记cookie弹窗，已发送邮件但未验证 -->
+    <div class="yzEmail_box yzEmail_box2 lph-pops" id="setPwBox">
+        <div class="head">完善账号信息</div>
+        <div class="top">
+            <span>您的账号已经绑定，现在您可以<a href="javascript:;">设置密码</a>以方便用邮箱登录</span>
+        </div>
+        <div class="btm">
+            <input class="inp" type="password" id="" placeholder="输入您的密码" value="">
+            <a class="btn" href="javascript:;" target="_blank" id=""><i></i><em>立即设置</em></a>
+            <a class="clo" href="javascript:;">以后再说</a>
+            <div class="error"></div>
+        </div>
+        <i class="close"></i>
+    </div>
+
+<!-- 申请专栏作者 -->
+<form id="applyAutor" onsubmit="return false">
+    <div class="applyAutor-pop">   
+        <i class="close"></i> 
+        <div class="title">请填写申请人资料</div>
+        <div class="main">
+            <div class="rows clr">
+               <span class="name">姓名</span>
+               <input type="text" id="name" name="MemberAuthorType[name]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">电话</span>
+               <input type="text" id="phone" name="MemberAuthorType[phone]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">邮箱</span>
+               <input type="text" id="eml" name="MemberAuthorType[email]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">微信号</span>
+               <input type="text" id="weixin" name="MemberAuthorType[wechat]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">作品链接</span>
+               <input type="text" id="job" name="MemberAuthorType[link]" value="">
+            </div>
+            <div class="rows clr">
+               <span class="name">个人简介</span>
+               <textarea id="description" name="MemberAuthorType[description]"></textarea>
+            </div>
+            <div class="rows clr rows-last">
+                <input type="submit" value="提 交" id="subBtn">
+                <input type="button" value="取 消" id="clsBtn">
+            </div>
+        </div>
+    </div>  
+</form>
+<!--<!-- 公告 -->
+<!--<div class="server-mask"></div>-->
+<!--<div class="server-pop">-->
+<!--    <em id='serCls'></em>-->
+<!--    <div class="tit">关于网站服务器维护的公告</div>-->
+<!--    <div class="main">-->
+<!--        <p>尊敬的雷锋网用户：</p>-->
+<!--        <p>&nbsp;&nbsp;&nbsp;&nbsp;由于网站服务器维护升级，雷锋网将在7月14日22:00-24:00 暂时关闭网站。由此给您带来的不便，我们深表歉意。特此公告!</p>-->
+<!--        <p class="txtR mt10">雷锋网</p>-->
+<!--        <p class="txtR">2017年7月13日</p>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script>
+    // 四站登录
+    with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src=BASE_URL+'/resWeb/home/js/login/yp_login.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<!-- 优路跟踪代码 -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5HDG4H');</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https'){
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else{
+            bp.src = 'https://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+             
+    })();
+</script>
+
+
+<iframe id="YP_LOGIN_WINDOW" class="YP-LOGIN" scrolling="no" src="./TensorFlow中RNN实现的正确打开方式 _ 雷锋网_files/saved_resource.html"></iframe><div id="YP_LOGIN_WINDOW_OVERLAY" class="YP-OVERLAY"><div class="close" title="关闭" style="background-image: url(&quot;https://home.leiphone.com/resWeb/home/images/login/close_03.png&quot;);"></div></div>
+<script type="text/javascript" id="">(function(){var g="https://www.qipus.cn/cmp",h=5021,e=function(){function e(a,b){b&&(a.addEventListener?a.onload=b:a.onreadystatechange=function(){a.readyState in{loaded:1,complete:1}&&(a.onreadystatechange=null,b())})}function k(a,b,f){var d=c.createElement("script");d.type="text/javascript";d.async=!0;d.src=a;e(d,b);f&&(d.onerror=f);a=d;b=c.getElementsByTagName("script")[0]||c.body||c.head;b.parentNode.insertBefore(a,b)}var c=document;k(g+"/cmp.api?r\x3d"+encodeURIComponent(c.referrer||"")+"\x26s\x3d"+
+h+"\x26u\x3d"+encodeURIComponent(c.location.href));window._ycnt_cb=function(a,b){}};e()})();</script>
+</body></html>

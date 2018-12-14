@@ -1,0 +1,62 @@
+@charset "gb2312";
+/* CSS Document */
+*{ padding:0; margin:0;}
+body{ padding:0; margin:0;}
+
+.guanggao_300_90{ width:300px; height:90px; position:relative;background:url(//icon.zhiding.cn/server/special/zd_share/images/ad300-90.jpg) no-repeat 0 0; }
+.guanggao_300_90 i{ width:45px; height:23px; padding:0 0 0 8px; position:absolute; background:url(//icon.zhiding.cn/server/special/zd_share/images/i9_01.png) no-repeat 0 0; left:0; z-index:100; top:0; font:12px/23px microsoft yahei,arial; color:#fff;text-align:left;}
+.guanggao_300_90 h2 a{ font:bold 20px/1.4 microsoft yahei,arial; color:#fff; display:block; text-align:center; padding:1.1em 1em 0 1em; margin:0; text-decoration:none;word-break:normal; }
+.guanggao_300_90 h2 a:hover{ text-decoration:none;}
+
+#default90_0{background:url(//icon.zhiding.cn/server/special/zd_share/images/ad300-90.jpg) no-repeat 0 0;  }
+#default90_1{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_01.jpg) no-repeat 0 0; }
+#default90_2{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_02.jpg) no-repeat 0 0; }
+#default90_3{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_03.jpg) no-repeat 0 0; }
+#default90_4{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_04.jpg) no-repeat 0 0; }
+#default90_5{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_05.jpg) no-repeat 0 0; }
+#default90_6{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_06.jpg) no-repeat 0 0; }
+#default90_7{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_07.jpg) no-repeat 0 0; }
+#default90_8{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_08.jpg) no-repeat 0 0; }
+#default90_9{background:url(//icon.zhiding.cn/server/special/zd_share/images/default90_09.jpg) no-repeat 0 0; }
+
+.guanggao_870_90{ width:870px; height:90px; position:relative;background:url(//icon.zhiding.cn/server/special/zd_share/images/ad870-90.jpg) no-repeat 0 0; }
+.guanggao_870_90 i{ width:71px; height:27px; padding:0 0 0 .4em; position:absolute; background:url(//icon.zhiding.cn/server/special/zd_share/images/i9_02.png) no-repeat 0 0; left:0; z-index:100; top:0; font:12px/23px microsoft yahei,arial; color:#fff;text-align:left;}
+.guanggao_870_90 h2 a{ font:bold 26px/1 microsoft yahei,arial; color:#fff; display:block; text-align:center; padding:1em 0 0 0; margin:0; text-decoration:none;}
+.guanggao_870_90 h2 a:hover{ text-decoration:none;}
+.guanggao_870_90 a.more{ display:block; width:57px; height:90px; position:absolute; right:0; top:0;  background:url(//icon.zhiding.cn/server/special/zd_share/images/more.png) no-repeat 0 0; text-indent:-999em;  text-align:center;  text-decoration:none; }
+.guanggao_870_90 a.more:hover{ }
+
+#default870_0{background:url(//icon.zhiding.cn/server/special/zd_share/images/ad870-90.jpg) no-repeat 0 0; }
+#default870_1{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_01.jpg) no-repeat 0 0; }
+#default870_2{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_02.jpg) no-repeat 0 0; }
+#default870_3{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_03.jpg) no-repeat 0 0; }
+#default870_4{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_04.jpg) no-repeat 0 0; }
+#default870_5{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_05.jpg) no-repeat 0 0; }
+#default870_6{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_06.jpg) no-repeat 0 0; }
+#default870_7{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_07.jpg) no-repeat 0 0; }
+#default870_8{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_08.jpg) no-repeat 0 0; }
+#default870_9{background:url(//icon.zhiding.cn/server/special/zd_share/images/default870_09.jpg) no-repeat 0 0; }
+
+.guanggao_300_250{ width:300px; height:250px;  position:relative;background:url(//icon.zhiding.cn/server/special/zd_share/images/ad300-250.jpg) no-repeat 0 0; }
+.guanggao_300_250 i{ width:71px; height:27px; padding:0 0 0 .4em; position:absolute; background:url(//icon.zhiding.cn/server/special/zd_share/images/i9_02.png) no-repeat 0 0; left:0; z-index:100; top:0; font:12px/23px microsoft yahei,arial; color:#fff; text-align:left;}
+.guanggao_300_250 h2{ padding:0 1em;}
+.guanggao_300_250 h2 a{ font:bold 22px/1.4 microsoft yahei,arial; color:#fff; display:block; word-break:normal; text-align:center; padding:3.8em 0 0 0; margin:0; text-decoration:none;}
+.guanggao_300_250 h2 a:hover{ text-decoration:none;}
+.guanggao_300_250 a.more{ display:block; width:40%; margin:1.6em auto 0 auto; background:#ffde00; border-radius:2em; text-align:center; color:#000; text-decoration:none; padding:.3em 0;}
+.guanggao_300_250 a.more:hover{background:#ffff00; }
+
+#default250_0{background:url(//icon.zhiding.cn/server/special/zd_share/images/ad300-250.jpg) no-repeat 0 0; }
+#default250_1{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_01.jpg) no-repeat 0 0; }
+#default250_2{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_02.jpg) no-repeat 0 0; }
+#default250_3{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_03.jpg) no-repeat 0 0; }
+#default250_4{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_04.jpg) no-repeat 0 0; }
+#default250_5{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_05.jpg) no-repeat 0 0; }
+#default250_6{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_06.jpg) no-repeat 0 0; }
+#default250_7{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_07.jpg) no-repeat 0 0; }
+#default250_8{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_08.jpg) no-repeat 0 0; }
+#default250_9{background:url(//icon.zhiding.cn/server/special/zd_share/images/default250_09.jpg) no-repeat 0 0; }
+
+
+
+
+

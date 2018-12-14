@@ -1,0 +1,497 @@
+/*
+Theme Name: Thushan Research
+Theme URI: http://wordpress.org/themes/twentythirteen
+Author: Thushan Ganegedara
+Author URI: http://thushv.com
+Description: This is a theme for blogging research work
+Version: 1.0
+*/
+
+/*color scheme
+light to dark
+#92D3FF, #52BAFF, #2F6A92, #295D7F & #eeeeee(Screen) #888888 (Shadow)(Old)
+
+#C5C1C0 : Brownish color
+#1A2930 : Dark Blue color
+*/
+
+body{
+	min-height:100%;
+	background-image:url("/images/background.jpg") no-repeat;
+	background-attachment:fixed;
+}
+
+.container-fluid {
+	min-height:90%;
+	display:block;
+}
+
+#content{
+	/*width:98%;*/
+	background-color:#C5C1C0 !important ; 
+	/*box-shadow: 2px 2px 3px #888888;*/
+}
+
+#container-header{
+	height:10%;			
+	display:block;	
+}
+
+/* ========================
+Side Bar Styling (md,lg,xl)
+======================== */
+
+#container-sidebar-inner #profile-pic{
+	width:150px;
+	height:auto;
+	display:block;
+	margin-top:-80px;	
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#container-sidebar-inner{		
+	
+	background:#1A2930;		
+	display:block;
+	overflow:hidden;		
+	box-shadow: 2px 2px 3px #888888;
+}
+
+#container-sidebar-inner #header-overflow{
+	width:120%;
+	/*margin-bottom:-50px;	*/
+	margin-left:-30px;
+	margin-right:-30px;
+}
+
+#container-sidebar-inner p, #container-sidebar-small-inner p{
+	font-family:'Lato', serif;
+	color:#eeeeee;
+}
+
+#container-sidebar-inner .sidebar-text{	
+	font-size:1.2em;	
+}
+
+#container-sidebar-inner .sidebar-title{
+	font-size:1.5em;
+	font-weight:bold;
+}
+
+.sidebar-content-div{
+	border-bottom: 1px solid #273d47;
+}
+#container-sidebar-inner #sidebar-content-text{
+	padding:10px;
+}
+
+/* ========================
+Side Bar Styling (xs sm)
+======================== */
+#container-sidebar-small-inner{
+	width:100%;
+	background:#1A2930;		
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left:auto;
+	margin-right:auto;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#container-sidebar-small-inner #sidebar-pic-div{	
+	display:inline-block;	
+	line-height:250px;
+	
+}
+#container-sidebar-small-inner #sidebar-content-text{
+	display:inline-block;
+}
+#container-sidebar-small-inner #profile-pic{
+	width:inherit;		
+	max-width:150px;
+	height:auto;
+	vertical-align:middle;	
+}
+
+#container-sidebar-small-inner .sidebar-title{
+	font-size:1.0em;
+	font-weight:bold;
+}
+
+#container-sidebar-small-inner .sidebar-text{	
+	font-size:0.8em;	
+}
+
+#container-sidebar-small-inner .sidebar-content-div{
+	padding-top:10px;
+}
+
+/* ============================
+Styling for the category title bars
+==============================*/
+.category-title{
+	font-size:0.8em !important;	
+}
+
+
+/* =========================
+Post Display (Loop)
+===========================*/
+.display-4{
+	font-size:2.5em !important;
+}
+.lead{
+	font-size:1em !important;
+}
+.post-div{
+	width:95%;
+	margin-left:17px;
+	border-bottom: 1px solid #ccc;
+	display:block;
+	white-space:pre-wrap;
+}
+
+.post-title{
+	font-family:Vollkorn, sans-serif;	
+	font-size:1.5em;
+}
+
+.post-div a{
+	color:#49274A !important;
+}
+.post-div a:hover{
+	color:#DF744A !important;
+	text-decoration:none !important;
+	transition: color 0.5s ease;
+}
+
+.post-cat{
+	font-family:Vollkorn, sans-serif;	
+	font-size:0.8em;	
+	margin-top:-40px;
+	margin-bottom:-40px;
+}
+
+.post-excerpt{
+	font-size:1.0em;
+	font-family:Vollkorn, sans-serif;
+}
+
+/* ==========================
+Main Navigation Menu
+===========================*/
+#container-header  li[id^=menu-item]{
+	font-family:Lato, serif;
+	font-size:1.2em;
+	padding-left:30px;			
+}
+#container-header li[id^=menu-item] a{
+	color:#eeeeee;
+	padding:5px 10px 5px 10px;	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+#container-header li[id^=menu-item] a:hover{
+	background:#DF744A;
+	color:#192231;	
+	text-decoration:none;
+	transition: background 1s ease;
+	transition: color 1s ease;
+}
+#container-header .navbar{
+	background:#192231;	
+	box-shadow: 4px 4px 6px #888888;
+	z-index:1500;
+}
+
+.navbar-toggler{
+	
+}
+/* ==========================
+Search Form Style
+===========================*/ 
+.search-box{
+  /*width:100%;*/
+  height:80px;
+  /*margin: 10px;    
+  margin-top:50px;*/
+}
+
+.search-container{  
+  vertical-align: top;  
+  /*position: relative;  */
+  white-space:nowrap;
+  /*width:100%;*/
+  height:60px;
+}
+
+/* This is the text in placeholder */
+.search-container input.search-input{
+  width: 95%;  
+  height:60px;
+  background-color:#eeeeee; /*#92D3FF;*/  
+  font-size: 1.5em;
+  float: left;
+  
+  padding-left: 70px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 2px solid #C5C1C0;  
+  
+  background-image: url('images/search_icon.png');
+  background-position: 3px 3px; 
+  background-repeat: no-repeat;
+}
+
+.search-container .search-icon{
+  position: absolute;  
+  top: 50%;
+  margin-left: -94%;
+  margin-top: -18px;
+  z-index: 1;
+  color: #4f5b66;
+}
+
+/*=============================
+Styling for single.php 
+==============================*/
+/*.container-post{
+	width:95%;
+	margin:auto;
+	border: 2px solid #eeeeee;
+	box-shadow: 4px 4px 6px #888888;
+}*/
+
+
+.single-container-content p, .single-container-content li{
+	font-family:Open Sans;	
+	font-size:1.0em;
+	/*line-height:1.5em;*/
+}
+
+.single-container-title h5,.single-container-title h4,.single-container-title h3, .single-container-title h2, .single-container-title h1{
+	font-family:Vollkorn, sans-serif;	
+	font-size:2em;
+}
+
+.single-container-main-inner{
+	background-color:white;
+	box-shadow: 4px 4px 6px #888888;
+}
+.single-container-content p{
+	padding-left:20px;
+}
+
+/*ql-img-inline-formula  is the latext notation automatically generated by the 
+wordpress plugin*/
+
+.single-container-content img:not(.ql-img-inline-formula){
+	display:block;
+	max-width:100%;
+	width: auto;
+	height: auto;
+}
+.single-container-content h4, .single-container-content h5{
+	padding-left:10px;
+}
+
+.single-container-content h2, .single-container-content h3, .single-container-content h4, .single-container-content h5{
+	font-family:Vollkorn, sans-serif;	
+	line-height:2;
+}
+
+
+.single-container-main{
+	border-left:1px solid #dddddd;
+}
+
+.single-container-tags a{
+	background-color: #1A2930;
+	color: #eeeeee;
+	padding-left:5px;
+	padding-right:5px;
+	padding-bottom:5px;
+}
+
+.related-posts-outer h3{
+	font-size:1.2em;
+	font-family:Open Sans;	
+}
+
+
+
+/*=============================
+Post Content Navigation
+=============================*/
+
+.single-container-sidebar .nav-item-group{
+	/*where scrolling logic goes */
+	height:400px;
+	overflow-y:scroll;
+}
+
+.nav-item-group ul{
+	position:relative;
+}
+
+.single-container-sidebar nav{
+	top:40px;
+}
+
+.single-container-sidebar h5{
+	padding-left:10px;
+	font-size:1em;
+	color:#eeeeee;
+	font-weight:bold;
+	background-color:#76323F; /*oxblood*/
+}
+
+.single-container-sidebar .nav-item{
+	margin-bottom:0px;
+}
+
+.single-container-sidebar li{
+	font-size: 0.8em;
+	line-height: 1.5;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.single-container-sidebar .nav-h3{
+	padding-left:5px;
+}
+
+.single-container-sidebar .nav-h4{
+	padding-left:10px;
+}
+
+.single-container-sidebar a{
+	background-color: #1A2930;
+	color: #eeeeee;	
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.single-container-sidebar .card{	
+	margin-left:-20px;
+	margin-right:-20px;
+}
+
+.single-container-sidebar .card-block{
+	margin-left:0px;
+	margin-right:0px;
+	background-color:#fafafa;	
+}
+
+
+/*====================================
+Social Item Styling
+====================================*/
+.social-widget{
+	display:block;
+	margin-top: 20px;
+	margin-bottom:20px;	
+	
+}
+.social-widget .card-header{
+	color:#eeeeee;
+	font-weight:bold;
+	background-color:#76323F; /*oxblood*/
+}
+
+.social-item-group{
+	display:block;	
+}
+
+.social-item{
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+.social-item img{
+	margin:auto;
+	display: block
+}
+
+/* ===============================
+Comments section
+=============================== */
+.container-comments{
+	width:90%;
+	margin:auto;
+	/*border: 2px solid #eeeeee;
+	box-shadow: 4px 4px 6px #888888;*/
+}
+
+.container-comments-inner{
+	width:90%;
+	margin:auto;
+}
+
+.container-comments ul{
+	list-style:none;
+}
+
+.comment-div{
+	font-family:Vollkorn, sans-serif;
+	display:block;	
+	overflow:auto;
+	padding-top:5px;
+	padding-bottom:10px;
+	border-bottom: 1px solid #dddddd;
+	word-wrap: break-word;
+}
+.author-vcard{
+	display:block;
+	float:right;
+}
+
+.comment-text{
+	display:block;
+}
+
+.container-comments-topic{	
+	color:#eeeeee;
+	height:60px;
+	background-color:#76323F;	
+	margin-bottom:20px;
+
+}
+.container-comments-topic h4{
+	padding-top:20px;
+	padding-left:100px;
+	font-weight:bold;
+}
+
+/*===================================
+Search Results Page
+===================================*/
+
+.container-search-content{
+	font-family:Vollkorn, sans-serif;
+}
+
+.container-search-content a{
+	color:#49274A !important;
+}
+.container-search-content a:hover{
+	color:#DF744A !important;
+	text-decoration:none !important;
+	transition: color 0.5s ease;
+}
+
+/* ====================================
+Pagination on index.php
+==================================== */
+ul.pagination {
+	margin-top:20px;
+}
+
+ul.pagination  .page-item a:hover{
+	text-decoration:none;
+}

@@ -1,0 +1,16 @@
+if (document.location.href != 'http://www.zhiding.cn/') {
+    //document.write('<script type="text/javascript" src="http://stat.zdnet.com.cn/cgrs/sub_zdnet/tag_vpv.php?'+Math.random()+'"></scr'+'ipt>');
+    //document.write('<script type="text/javascript" src="http://stat.zdnet.com.cn/cgrs/sub_zdnet/bms_tag.php?'+Math.random()+'"></scr'+'ipt>');
+    //document.write('<script type="text/javascript" src="http://stat.zdnet.com.cn/cgrs/sub_zdnet/bms_tag_direct.php?'+Math.random()+'"></scr'+'ipt>');
+    
+    //new
+    document.write('<sc'+'ript type="text/javascript" id="adstat_js" src="//stat.zhiding.cn/adrs/ol.js"></scr'+'ipt>');
+}
+//log real click
+document.write('<img id="log_click_link" width="0" height="0" style="display:none;" />');
+function log_click(barid) {
+    var url = '//stat.zhiding.cn/cgrs/log_real_click.php?from=zdnet&barid='+barid+'&r='+Math.random();
+    try{
+        document.getElementById('log_click_link').src = url;
+    }catch(e){}
+}

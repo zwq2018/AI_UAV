@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/wuxiangli/p/7096392.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="never">
+<title>LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园</title>
+<meta property="og:description" content="本宝宝又转了一篇博文，但是真的很好懂啊： 写在前面：知乎上关于lstm能够解决梯度消失的问题的原因： 上面说到，LSTM 是为了解决 RNN 的 Gradient Vanish 的问题所提出的。关于 ">
+<link type="text/css" rel="stylesheet" href="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/bundle-BlueSky.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/bundle-BlueSky-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/wuxiangli/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/wuxiangli/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/wuxiangli/wlwmanifest.xml">
+<script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/f.txt"></script><script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/pubads_impl_rendering_275.js.下载"></script><script async="" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/analytics.js.下载"></script><script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'wuxiangli', cb_enable_mathjax=true;var isLogined=false;</script>
+<script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] 
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/MathJax.js.下载"></script>
+<script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/f(1).txt" as="script"><script type="text/javascript" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/f(1).txt"></script><script src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/pubads_impl_275.js.下载" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-31/html/container.html"><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+<div id="page_begin_html"></div><script>load_page_begin_html();</script>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/wuxiangli/"><img id="blogLogo" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/wuxiangli/">simple_wxl</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/wuxiangli/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/simple_wxl">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/wuxiangli/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/wuxiangli/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 164&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 8</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/wuxiangli/p/7096392.html">LSTM及其变种及其克服梯度消失</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><div class="show-content">
+<h1>本宝宝又转了一篇博文，但是真的很好懂啊：</h1>
+<p>写在前面：知乎上关于lstm能够解决梯度消失的问题的原因：</p>
+<p><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/975503-20180515113812480-2054504682.png" alt=""></p>
+<p>&nbsp;</p>
+<div>
+<p>上面说到，LSTM 是为了解决 RNN 的 Gradient Vanish 的问题所提出的。关于 RNN 为什么会出现 Gradient Vanish，上面已经介绍的比较清楚了，本质原因就是因为矩阵高次幂导致的。下面简要解释一下为什么 LSTM 能有效避免 Gradient Vanish。</p>
+<p>对于 LSTM，有如下公式</p>
+<img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/equation" alt="c^t = f^t \odot c^{t-1} + i^t \odot g^t">
+<p>模仿 RNN，我们来计算 <img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/equation(1)" alt="\delta^{k-1} = {\partial C^t}/{\partial c^{k-1}}"> ，有</p>
+<noscript>&amp;amp;lt;img src="https://pic4.zhimg.com/v2-8eb676e7c1bac3eb131d8e0bf2f7db5b_b.png" data-rawwidth="147" data-rawheight="149" class="content_image" width="147"&amp;amp;gt;</noscript><img class="content_image lazy" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/v2-8eb676e7c1bac3eb131d8e0bf2f7db5b_b.png" alt="" width="147" data-rawwidth="147" data-rawheight="149" data-actualsrc="https://pic4.zhimg.com/v2-8eb676e7c1bac3eb131d8e0bf2f7db5b_b.png">
+<p>公式里其余的项不重要，这里就用省略号代替了。可以看出当 <img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/equation(2)" alt="f^t = 1"> 时，就算其余项很小，梯度仍然可以很好导到上一个时刻，此时即使层数较深也不会发生 Gradient Vanish 的问题；当 <img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/equation(3)" alt="f^t = 0"> 时，即上一时刻的信号不影响到当前时刻，则梯度也不会回传回去； <img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/equation(4)" alt="f^t"> 在这里也控制着梯度传导的衰减程度，与它 Forget Gate 的功能一致。</p>
+<p>&nbsp;</p>
+<p>传统RNN，BPTT(BACK&nbsp;propagation through time）梯度回传时候会有连成，tanh【0，1】 sigmoid(0,1/4),导致梯度消失，虽然可以替换激活函数，RELU，但是LSTM可以解决呀</p>
+</div>
+<div>
+<div id="article_content" class="article_content tracking-ad" data-mod="popu_307" data-dsm="post">
+<div class="markdown_views">
+<p>　　通常，数据的存在形式有语音、文本、图像、视频等。因为我的研究方向主要是图像识别，所以很少用有“记忆性”的深度网络。怀着对循环神经网络的兴趣，在看懂了有关它的理论后，我又看了Github上提供的tensorflow实现，觉得收获很大，故在这里把我的理解记录下来，也希望对大家能有所帮助。本文将主要介绍RNN相关的理论，并引出LSTM网络结构（关于对tensorflow实现细节的理解，有时间的话，在下一篇博文中做介绍）。</p>
+<h2 id="循环神经网络"><a name="t0" target="_blank"></a>循环神经网络</h2>
+<p>　　RNN，也称作循环神经网络（还有一种深度网络，称作递归神经网络，读者要区别对待）。因为这种网络有“记忆性”，所以主要是应用在<a class="replace_word" title="自然语言理解和处理知识库" href="http://lib.csdn.net/base/nlp" target="_blank">自然语言</a>处理（NLP）和语音领域。与传统的Neural network不同，RNN能利用上”序列信息”。从理论上讲，它可以利用任意长序列的信息，但由于该网络结构存在“消失梯度”问题，所以在实际应用中，它只能回溯利用与它接近的time steps上的信息。</p>
+<h3 id="1-网络结构"><a name="t1" target="_blank"></a>1. 网络结构</h3>
+<p>　　常见的神经网络结构有卷积网络、循环网络和递归网络，栈式自编码器和玻尔兹曼机也可以看做是特殊的卷积网络，区别是它们的损失函数定义成均方误差函数。递归网络类似于<a class="replace_word" title="算法与数据结构知识库" href="http://lib.csdn.net/base/datastructure" target="_blank">数据结构</a>中的树形结构，且其每层之间会有共享参数。而最为常用的循环神经网络，它的每层的结构相同，且每层之间参数完全共享。RNN的缩略图和展开图如下，</p>
+<p>&nbsp;</p>
+<center><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/1480211086_6591.jpg" alt=""></center>
+<p>&nbsp;</p>
+<p>　　尽管RNN的网络结构看上去与常见的前馈网络不同，但是它的展开图中信息流向也是确定的，没有环流，所以也属于forward network，故也可以使用反向传播（back propagation）<a class="replace_word" title="算法与数据结构知识库" href="http://lib.csdn.net/base/datastructure" target="_blank">算法</a>来求解参数的梯度。另外，在RNN网络中，可以有单输入、多输入、单输出、多输出，视具体任务而定。</p>
+<h3 id="2-损失函数"><a name="t2" target="_blank"></a>2. 损失函数</h3>
+<p>　　在输出层为二分类或者softmax多分类的深度网络中，代价函数通常选择交叉熵（cross entropy）损失函数，前面的博文中证明过，在分类问题中，交叉熵函数的本质就是似然损失函数。尽管RNN的网络结构与分类网络不同，但是损失函数也是有相似之处的。&nbsp;<br>　　假设我们采用RNN网络构建“语言模型”，“语言模型”其实就是看“一句话说出来是不是顺口”，可以应用在<a class="replace_word" title="机器翻译知识库" href="http://lib.csdn.net/base/machinetranslation" target="_blank">机器翻译</a>、<a class="replace_word" title="语音识别与合成知识库" href="http://lib.csdn.net/base/vras" target="_blank">语音识别</a>领域，从若干候选结果中挑一个更加靠谱的结果。通常每个sentence长度不一样，每一个word作为一个训练样例，一个sentence作为一个Minibatch，记sentence的长度为T。为了更好地理解语言模型中损失函数的定义形式，这里做一些推导，根据全概率公式，则一句话是“自然化的语句”的概率为</p>
+<div class="MathJax_Display"><span id="MathJax-Element-1-Frame" class="MathJax"><span id="MathJax-Span-1" class="math"><span id="MathJax-Span-2" class="mrow"><span id="MathJax-Span-3" class="mi">p<span id="MathJax-Span-4" class="mo">(<span id="MathJax-Span-5" class="msubsup"><span id="MathJax-Span-6" class="mi">w<span id="MathJax-Span-7" class="texatom"><span id="MathJax-Span-8" class="mrow"><span id="MathJax-Span-9" class="mn">1<span id="MathJax-Span-10" class="mo">,<span id="MathJax-Span-11" class="msubsup"><span id="MathJax-Span-12" class="mi">w<span id="MathJax-Span-13" class="texatom"><span id="MathJax-Span-14" class="mrow"><span id="MathJax-Span-15" class="mn">2<span id="MathJax-Span-16" class="mo">,<span id="MathJax-Span-17" class="mo">.<span id="MathJax-Span-18" class="mo">.<span id="MathJax-Span-19" class="mo">.<span id="MathJax-Span-20" class="mo">,<span id="MathJax-Span-21" class="msubsup"><span id="MathJax-Span-22" class="mi">w<span id="MathJax-Span-23" class="texatom"><span id="MathJax-Span-24" class="mrow"><span id="MathJax-Span-25" class="mi">T<span id="MathJax-Span-26" class="mo">)<span id="MathJax-Span-27" class="mo">=<span id="MathJax-Span-28" class="mi">p<span id="MathJax-Span-29" class="mo">(<span id="MathJax-Span-30" class="msubsup"><span id="MathJax-Span-31" class="mi">w<span id="MathJax-Span-32" class="texatom"><span id="MathJax-Span-33" class="mrow"><span id="MathJax-Span-34" class="mn">1<span id="MathJax-Span-35" class="mo">)<span id="MathJax-Span-36" class="mo">×<span id="MathJax-Span-37" class="mi">p<span id="MathJax-Span-38" class="mo">(<span id="MathJax-Span-39" class="msubsup"><span id="MathJax-Span-40" class="mi">w<span id="MathJax-Span-41" class="texatom"><span id="MathJax-Span-42" class="mrow"><span id="MathJax-Span-43" class="mn">2<span id="MathJax-Span-44" class="texatom"><span id="MathJax-Span-45" class="mrow"><span id="MathJax-Span-46" class="mo">|<span id="MathJax-Span-47" class="msubsup"><span id="MathJax-Span-48" class="mi">w<span id="MathJax-Span-49" class="texatom"><span id="MathJax-Span-50" class="mrow"><span id="MathJax-Span-51" class="mn">1<span id="MathJax-Span-52" class="mo">)<span id="MathJax-Span-53" class="mo">×<span id="MathJax-Span-54" class="mo">.<span id="MathJax-Span-55" class="mo">.<span id="MathJax-Span-56" class="mo">.<span id="MathJax-Span-57" class="mo">×<span id="MathJax-Span-58" class="mi">p<span id="MathJax-Span-59" class="mo">(<span id="MathJax-Span-60" class="msubsup"><span id="MathJax-Span-61" class="mi">w<span id="MathJax-Span-62" class="texatom"><span id="MathJax-Span-63" class="mrow"><span id="MathJax-Span-64" class="mi">T<span id="MathJax-Span-65" class="texatom"><span id="MathJax-Span-66" class="mrow"><span id="MathJax-Span-67" class="mo">|<span id="MathJax-Span-68" class="msubsup"><span id="MathJax-Span-69" class="mi">w<span id="MathJax-Span-70" class="texatom"><span id="MathJax-Span-71" class="mrow"><span id="MathJax-Span-72" class="mn">1<span id="MathJax-Span-73" class="mo">,<span id="MathJax-Span-74" class="msubsup"><span id="MathJax-Span-75" class="mi">w<span id="MathJax-Span-76" class="texatom"><span id="MathJax-Span-77" class="mrow"><span id="MathJax-Span-78" class="mn">2<span id="MathJax-Span-79" class="mo">,<span id="MathJax-Span-80" class="mo">.<span id="MathJax-Span-81" class="mo">.<span id="MathJax-Span-82" class="mo">.<span id="MathJax-Span-83" class="mo">,<span id="MathJax-Span-84" class="msubsup"><span id="MathJax-Span-85" class="mi">w<span id="MathJax-Span-86" class="texatom"><span id="MathJax-Span-87" class="mrow"><span id="MathJax-Span-88" class="mi">T<span id="MathJax-Span-89" class="mo">−<span id="MathJax-Span-90" class="mn">1<span id="MathJax-Span-91" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+　　所以语言模型的目标就是最大化<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span id="MathJax-Span-92" class="math"><span id="MathJax-Span-93" class="mrow"><span id="MathJax-Span-94" class="mi">P<span id="MathJax-Span-95" class="mo">(<span id="MathJax-Span-96" class="msubsup"><span id="MathJax-Span-97" class="mi">w<span id="MathJax-Span-98" class="texatom"><span id="MathJax-Span-99" class="mrow"><span id="MathJax-Span-100" class="mn">1<span id="MathJax-Span-101" class="mo">,<span id="MathJax-Span-102" class="msubsup"><span id="MathJax-Span-103" class="mi">w<span id="MathJax-Span-104" class="texatom"><span id="MathJax-Span-105" class="mrow"><span id="MathJax-Span-106" class="mn">2<span id="MathJax-Span-107" class="mo">,<span id="MathJax-Span-108" class="mo">.<span id="MathJax-Span-109" class="mo">.<span id="MathJax-Span-110" class="mo">.<span id="MathJax-Span-111" class="mo">,<span id="MathJax-Span-112" class="msubsup"><span id="MathJax-Span-113" class="mi">w<span id="MathJax-Span-114" class="texatom"><span id="MathJax-Span-115" class="mrow"><span id="MathJax-Span-116" class="mi">T<span id="MathJax-Span-117" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>。而损失函数通常为最小化问题，所以可以定义</span></span></span>
+<div class="MathJax_Display"><span id="MathJax-Element-3-Frame" class="MathJax"><span id="MathJax-Span-118" class="math"><span id="MathJax-Span-119" class="mrow"><span id="MathJax-Span-120" class="mi">L<span id="MathJax-Span-121" class="mi">o<span id="MathJax-Span-122" class="mi">s<span id="MathJax-Span-123" class="mi">s<span id="MathJax-Span-124" class="mo">(<span id="MathJax-Span-125" class="msubsup"><span id="MathJax-Span-126" class="mi">w<span id="MathJax-Span-127" class="texatom"><span id="MathJax-Span-128" class="mrow"><span id="MathJax-Span-129" class="mn">1<span id="MathJax-Span-130" class="mo">,<span id="MathJax-Span-131" class="msubsup"><span id="MathJax-Span-132" class="mi">w<span id="MathJax-Span-133" class="texatom"><span id="MathJax-Span-134" class="mrow"><span id="MathJax-Span-135" class="mn">2<span id="MathJax-Span-136" class="mo">,<span id="MathJax-Span-137" class="mo">.<span id="MathJax-Span-138" class="mo">.<span id="MathJax-Span-139" class="mo">.<span id="MathJax-Span-140" class="mo">,<span id="MathJax-Span-141" class="msubsup"><span id="MathJax-Span-142" class="mi">w<span id="MathJax-Span-143" class="texatom"><span id="MathJax-Span-144" class="mrow"><span id="MathJax-Span-145" class="mi">T<span id="MathJax-Span-146" class="texatom"><span id="MathJax-Span-147" class="mrow"><span id="MathJax-Span-148" class="mo">|<span id="MathJax-Span-149" class="mi">θ<span id="MathJax-Span-150" class="mo">)<span id="MathJax-Span-151" class="mo">=<span id="MathJax-Span-152" class="mo">−<span id="MathJax-Span-153" class="mi">l<span id="MathJax-Span-154" class="mi">o<span id="MathJax-Span-155" class="mi">g<span id="MathJax-Span-156" class="mi">P<span id="MathJax-Span-157" class="mo">(<span id="MathJax-Span-158" class="msubsup"><span id="MathJax-Span-159" class="mi">w<span id="MathJax-Span-160" class="texatom"><span id="MathJax-Span-161" class="mrow"><span id="MathJax-Span-162" class="mn">1<span id="MathJax-Span-163" class="mo">,<span id="MathJax-Span-164" class="msubsup"><span id="MathJax-Span-165" class="mi">w<span id="MathJax-Span-166" class="texatom"><span id="MathJax-Span-167" class="mrow"><span id="MathJax-Span-168" class="mn">2<span id="MathJax-Span-169" class="mo">,<span id="MathJax-Span-170" class="mo">.<span id="MathJax-Span-171" class="mo">.<span id="MathJax-Span-172" class="mo">.<span id="MathJax-Span-173" class="mo">,<span id="MathJax-Span-174" class="msubsup"><span id="MathJax-Span-175" class="mi">w<span id="MathJax-Span-176" class="texatom"><span id="MathJax-Span-177" class="mrow"><span id="MathJax-Span-178" class="mi">T<span id="MathJax-Span-179" class="texatom"><span id="MathJax-Span-180" class="mrow"><span id="MathJax-Span-181" class="mo">|<span id="MathJax-Span-182" class="mi">θ<span id="MathJax-Span-183" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview">　　那么公式展开可得</span></span></span></span>
+<div class="MathJax_Display"><span id="MathJax-Element-4-Frame" class="MathJax"><span id="MathJax-Span-184" class="math"><span id="MathJax-Span-185" class="mrow"><span id="MathJax-Span-186" class="mi">L<span id="MathJax-Span-187" class="mi">o<span id="MathJax-Span-188" class="mi">s<span id="MathJax-Span-189" class="mi">s<span id="MathJax-Span-190" class="mo">(<span id="MathJax-Span-191" class="msubsup"><span id="MathJax-Span-192" class="mi">w<span id="MathJax-Span-193" class="texatom"><span id="MathJax-Span-194" class="mrow"><span id="MathJax-Span-195" class="mn">1<span id="MathJax-Span-196" class="mo">,<span id="MathJax-Span-197" class="msubsup"><span id="MathJax-Span-198" class="mi">w<span id="MathJax-Span-199" class="texatom"><span id="MathJax-Span-200" class="mrow"><span id="MathJax-Span-201" class="mn">2<span id="MathJax-Span-202" class="mo">,<span id="MathJax-Span-203" class="mo">.<span id="MathJax-Span-204" class="mo">.<span id="MathJax-Span-205" class="mo">.<span id="MathJax-Span-206" class="mo">,<span id="MathJax-Span-207" class="msubsup"><span id="MathJax-Span-208" class="mi">w<span id="MathJax-Span-209" class="texatom"><span id="MathJax-Span-210" class="mrow"><span id="MathJax-Span-211" class="mi">T<span id="MathJax-Span-212" class="texatom"><span id="MathJax-Span-213" class="mrow"><span id="MathJax-Span-214" class="mo">|<span id="MathJax-Span-215" class="mi">θ<span id="MathJax-Span-216" class="mo">)<span id="MathJax-Span-217" class="mo">=<span id="MathJax-Span-218" class="mo">−<span id="MathJax-Span-219" class="mo">(<span id="MathJax-Span-220" class="mi">l<span id="MathJax-Span-221" class="mi">o<span id="MathJax-Span-222" class="mi">g<span id="MathJax-Span-223" class="mi">p<span id="MathJax-Span-224" class="mo">(<span id="MathJax-Span-225" class="msubsup"><span id="MathJax-Span-226" class="mi">w<span id="MathJax-Span-227" class="texatom"><span id="MathJax-Span-228" class="mrow"><span id="MathJax-Span-229" class="mn">1<span id="MathJax-Span-230" class="mo">)<span id="MathJax-Span-231" class="mo">+<span id="MathJax-Span-232" class="mi">l<span id="MathJax-Span-233" class="mi">o<span id="MathJax-Span-234" class="mi">g<span id="MathJax-Span-235" class="mi">p<span id="MathJax-Span-236" class="mo">(<span id="MathJax-Span-237" class="msubsup"><span id="MathJax-Span-238" class="mi">w<span id="MathJax-Span-239" class="texatom"><span id="MathJax-Span-240" class="mrow"><span id="MathJax-Span-241" class="mn">2<span id="MathJax-Span-242" class="texatom"><span id="MathJax-Span-243" class="mrow"><span id="MathJax-Span-244" class="mo">|<span id="MathJax-Span-245" class="msubsup"><span id="MathJax-Span-246" class="mi">w<span id="MathJax-Span-247" class="texatom"><span id="MathJax-Span-248" class="mrow"><span id="MathJax-Span-249" class="mn">1<span id="MathJax-Span-250" class="mo">)<span id="MathJax-Span-251" class="mo">+<span id="MathJax-Span-252" class="mo">.<span id="MathJax-Span-253" class="mo">.<span id="MathJax-Span-254" class="mo">.<span id="MathJax-Span-255" class="mo">+<span id="MathJax-Span-256" class="mi">l<span id="MathJax-Span-257" class="mi">o<span id="MathJax-Span-258" class="mi">g<span id="MathJax-Span-259" class="mi">p<span id="MathJax-Span-260" class="mo">(<span id="MathJax-Span-261" class="msubsup"><span id="MathJax-Span-262" class="mi">w<span id="MathJax-Span-263" class="texatom"><span id="MathJax-Span-264" class="mrow"><span id="MathJax-Span-265" class="mi">T<span id="MathJax-Span-266" class="texatom"><span id="MathJax-Span-267" class="mrow"><span id="MathJax-Span-268" class="mo">|<span id="MathJax-Span-269" class="msubsup"><span id="MathJax-Span-270" class="mi">w<span id="MathJax-Span-271" class="texatom"><span id="MathJax-Span-272" class="mrow"><span id="MathJax-Span-273" class="mn">1<span id="MathJax-Span-274" class="mo">,<span id="MathJax-Span-275" class="msubsup"><span id="MathJax-Span-276" class="mi">w<span id="MathJax-Span-277" class="texatom"><span id="MathJax-Span-278" class="mrow"><span id="MathJax-Span-279" class="mn">2<span id="MathJax-Span-280" class="mo">,<span id="MathJax-Span-281" class="mo">.<span id="MathJax-Span-282" class="mo">.<span id="MathJax-Span-283" class="mo">.<span id="MathJax-Span-284" class="mo">,<span id="MathJax-Span-285" class="msubsup"><span id="MathJax-Span-286" class="mi">w<span id="MathJax-Span-287" class="texatom"><span id="MathJax-Span-288" class="mrow"><span id="MathJax-Span-289" class="mi">T<span id="MathJax-Span-290" class="mo">−<span id="MathJax-Span-291" class="mn">1<span id="MathJax-Span-292" class="mo">)<span id="MathJax-Span-293" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+
+
+
+
+<span class="MathJax_Preview"><span class="MathJax_Preview"><span class="MathJax"><span class="MathJax_Preview"><span class="MathJax_Preview">　　展开式中的每一项为一个softmax分类模型，类别数为所采用的词库大小（vocabulary size)，相信大家此刻应该就明白了，为什么使用RNN网络解决语言模型时，输入序列和输出序列错了一个位置了。</span></span></span></span></span>
+<p>&nbsp;</p>
+<h3 id="3-梯度求解"><a name="t3" target="_blank"></a>3. 梯度求解</h3>
+<p>　　在训练任何深度网络模型时，求解损失函数关于模型参数的梯度，应该算是最为核心的一步了。在RNN模型训练时，采用的是BPTT（back propagation through time）算法，这个算法其实实质上就是朴素的BP算法，也是采用的“链式法则”求解参数梯度，唯一的不同在于每一个time step上参数共享。从数学的角度来讲，BP算法就是一个单变量求导过程，而BPTT算法就是一个复合函数求导过程。接下来以损失函数展开式中的第3项为例，推导其关于网络参数U、W、V的梯度表达式（总损失的梯度则是各项相加的过程而已）。&nbsp;<br>　　为了简化符号表示，记<span class="MathJax_Preview"><span id="MathJax-Element-5-Frame" class="MathJax"><span id="MathJax-Span-294" class="math"><span id="MathJax-Span-295" class="mrow"><span id="MathJax-Span-296" class="msubsup"><span id="MathJax-Span-297" class="mi">E<span id="MathJax-Span-298" class="texatom"><span id="MathJax-Span-299" class="mrow"><span id="MathJax-Span-300" class="mn">3<span id="MathJax-Span-301" class="mo">=<span id="MathJax-Span-302" class="mo">−<span id="MathJax-Span-303" class="mi">l<span id="MathJax-Span-304" class="mi">o<span id="MathJax-Span-305" class="mi">g<span id="MathJax-Span-306" class="mi">p<span id="MathJax-Span-307" class="mo">(<span id="MathJax-Span-308" class="msubsup"><span id="MathJax-Span-309" class="mi">w<span id="MathJax-Span-310" class="texatom"><span id="MathJax-Span-311" class="mrow"><span id="MathJax-Span-312" class="mn">3<span id="MathJax-Span-313" class="texatom"><span id="MathJax-Span-314" class="mrow"><span id="MathJax-Span-315" class="mo">|<span id="MathJax-Span-316" class="msubsup"><span id="MathJax-Span-317" class="mi">w<span id="MathJax-Span-318" class="texatom"><span id="MathJax-Span-319" class="mrow"><span id="MathJax-Span-320" class="mn">1<span id="MathJax-Span-321" class="mo">,<span id="MathJax-Span-322" class="msubsup"><span id="MathJax-Span-323" class="mi">w<span id="MathJax-Span-324" class="texatom"><span id="MathJax-Span-325" class="mrow"><span id="MathJax-Span-326" class="mn">2<span id="MathJax-Span-327" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>，则根据RNN的展开图可得，</span></span></p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-6-Frame" class="MathJax"><span id="MathJax-Span-328" class="math"><span id="MathJax-Span-329" class="mrow"><span id="MathJax-Span-330" class="mtable"><span id="MathJax-Span-334" class="mtd"><span id="MathJax-Span-335" class="mrow"><span id="MathJax-Span-336" class="msubsup"><span id="MathJax-Span-337" class="mi">s<span id="MathJax-Span-338" class="texatom"><span id="MathJax-Span-339" class="mrow"><span id="MathJax-Span-340" class="mn">3<span id="MathJax-Span-341" class="mo">=<span id="MathJax-Span-342" class="mi">t<span id="MathJax-Span-343" class="mi">a<span id="MathJax-Span-344" class="mi">n<span id="MathJax-Span-345" class="mi">h<span id="MathJax-Span-346" class="mo">(<span id="MathJax-Span-347" class="mi">U<span id="MathJax-Span-348" class="mo">×<span id="MathJax-Span-349" class="msubsup"><span id="MathJax-Span-350" class="mi">x<span id="MathJax-Span-351" class="texatom"><span id="MathJax-Span-352" class="mrow"><span id="MathJax-Span-353" class="mn">3<span id="MathJax-Span-354" class="mo">+<span id="MathJax-Span-355" class="mi">W<span id="MathJax-Span-356" class="mo">×<span id="MathJax-Span-357" class="msubsup"><span id="MathJax-Span-358" class="mi">s<span id="MathJax-Span-359" class="texatom"><span id="MathJax-Span-360" class="mrow"><span id="MathJax-Span-361" class="mn">2<span id="MathJax-Span-362" class="mo">)<span id="MathJax-Span-363" class="texatom"><span id="MathJax-Span-364" class="mrow"><span id="MathJax-Span-365" class="mo">；<span id="MathJax-Span-366" class="texatom"><span id="MathJax-Span-367" class="mrow"><span id="MathJax-Span-368" class="mo">　<span id="MathJax-Span-369" class="texatom"><span id="MathJax-Span-370" class="mrow"><span id="MathJax-Span-371" class="mo">　<span id="MathJax-Span-372" class="msubsup"><span id="MathJax-Span-373" class="mi">s<span id="MathJax-Span-374" class="texatom"><span id="MathJax-Span-375" class="mrow"><span id="MathJax-Span-376" class="mn">2<span id="MathJax-Span-377" class="mo">=<span id="MathJax-Span-378" class="mi">t<span id="MathJax-Span-379" class="mi">a<span id="MathJax-Span-380" class="mi">n<span id="MathJax-Span-381" class="mi">h<span id="MathJax-Span-382" class="mo">(<span id="MathJax-Span-383" class="mi">U<span id="MathJax-Span-384" class="mo">×<span id="MathJax-Span-385" class="msubsup"><span id="MathJax-Span-386" class="mi">x<span id="MathJax-Span-387" class="texatom"><span id="MathJax-Span-388" class="mrow"><span id="MathJax-Span-389" class="mn">2<span id="MathJax-Span-390" class="mo">+<span id="MathJax-Span-391" class="mi">W<span id="MathJax-Span-392" class="mo">×<span id="MathJax-Span-393" class="msubsup"><span id="MathJax-Span-394" class="mi">s<span id="MathJax-Span-395" class="texatom"><span id="MathJax-Span-396" class="mrow"><span id="MathJax-Span-397" class="mn">1<span id="MathJax-Span-398" class="mo">)<span id="MathJax-Span-399" class="mspace"><span id="MathJax-Span-400" class="msubsup"><span id="MathJax-Span-401" class="mi">s<span id="MathJax-Span-402" class="texatom"><span id="MathJax-Span-403" class="mrow"><span id="MathJax-Span-404" class="mn">1<span id="MathJax-Span-405" class="mo">=<span id="MathJax-Span-406" class="mi">t<span id="MathJax-Span-407" class="mi">a<span id="MathJax-Span-408" class="mi">n<span id="MathJax-Span-409" class="mi">h<span id="MathJax-Span-410" class="mo">(<span id="MathJax-Span-411" class="mi">U<span id="MathJax-Span-412" class="mo">×<span id="MathJax-Span-413" class="msubsup"><span id="MathJax-Span-414" class="mi">x<span id="MathJax-Span-415" class="texatom"><span id="MathJax-Span-416" class="mrow"><span id="MathJax-Span-417" class="mn">1<span id="MathJax-Span-418" class="mo">+<span id="MathJax-Span-419" class="mi">W<span id="MathJax-Span-420" class="mo">×<span id="MathJax-Span-421" class="msubsup"><span id="MathJax-Span-422" class="mi">s<span id="MathJax-Span-423" class="texatom"><span id="MathJax-Span-424" class="mrow"><span id="MathJax-Span-425" class="mn">0<span id="MathJax-Span-426" class="mo">)<span id="MathJax-Span-427" class="texatom"><span id="MathJax-Span-428" class="mrow"><span id="MathJax-Span-429" class="mo">；<span id="MathJax-Span-430" class="texatom"><span id="MathJax-Span-431" class="mrow"><span id="MathJax-Span-432" class="mo">　<span id="MathJax-Span-433" class="texatom"><span id="MathJax-Span-434" class="mrow"><span id="MathJax-Span-435" class="mo">　<span id="MathJax-Span-436" class="msubsup"><span id="MathJax-Span-437" class="mi">s<span id="MathJax-Span-438" class="texatom"><span id="MathJax-Span-439" class="mrow"><span id="MathJax-Span-440" class="mn">0<span id="MathJax-Span-441" class="mo">=<span id="MathJax-Span-442" class="mi">t<span id="MathJax-Span-443" class="mi">a<span id="MathJax-Span-444" class="mi">n<span id="MathJax-Span-445" class="mi">h<span id="MathJax-Span-446" class="mo">(<span id="MathJax-Span-447" class="mi">U<span id="MathJax-Span-448" class="mo">×<span id="MathJax-Span-449" class="msubsup"><span id="MathJax-Span-450" class="mi">x<span id="MathJax-Span-451" class="texatom"><span id="MathJax-Span-452" class="mrow"><span id="MathJax-Span-453" class="mn">0<span id="MathJax-Span-454" class="mo">+<span id="MathJax-Span-455" class="mi">W<span id="MathJax-Span-456" class="mo">×<span id="MathJax-Span-457" class="msubsup"><span id="MathJax-Span-458" class="mi">s<span id="MathJax-Span-459" class="texatom"><span id="MathJax-Span-460" class="mrow"><span id="MathJax-Span-461" class="mo">−<span id="MathJax-Span-462" class="mn">1<span id="MathJax-Span-463" class="mo">)<span id="MathJax-Span-464" class="mspace"><span id="mjx-eqn-1_1" class="mtd"><span id="MathJax-Span-332" class="mrow"><span id="MathJax-Span-333" class="mtext">(1)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　所以，</p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-7-Frame" class="MathJax"><span id="MathJax-Span-465" class="math"><span id="MathJax-Span-466" class="mrow"><span id="MathJax-Span-467" class="mtable"><span id="MathJax-Span-471" class="mtd"><span id="MathJax-Span-472" class="mrow"><span id="MathJax-Span-473" class="mfrac"><span id="MathJax-Span-474" class="mrow"><span id="MathJax-Span-475" class="mi">∂<span id="MathJax-Span-476" class="msubsup"><span id="MathJax-Span-477" class="mi">s<span id="MathJax-Span-478" class="texatom"><span id="MathJax-Span-479" class="mrow"><span id="MathJax-Span-480" class="mn">3<span id="MathJax-Span-481" class="mi">W<span id="MathJax-Span-482" class="mo">=<span id="MathJax-Span-483" class="mfrac"><span id="MathJax-Span-484" class="mrow"><span id="MathJax-Span-485" class="mi">∂<span id="MathJax-Span-486" class="msubsup"><span id="MathJax-Span-487" class="mi">s<span id="MathJax-Span-488" class="texatom"><span id="MathJax-Span-489" class="mrow"><span id="MathJax-Span-490" class="mn">3<span id="MathJax-Span-491" class="msubsup"><span id="MathJax-Span-492" class="mi">W<span id="MathJax-Span-493" class="texatom"><span id="MathJax-Span-494" class="mrow"><span id="MathJax-Span-495" class="mn">1<span id="MathJax-Span-496" class="mo">+<span id="MathJax-Span-497" class="mfrac"><span id="MathJax-Span-498" class="mrow"><span id="MathJax-Span-499" class="mi">∂<span id="MathJax-Span-500" class="msubsup"><span id="MathJax-Span-501" class="mi">s<span id="MathJax-Span-502" class="texatom"><span id="MathJax-Span-503" class="mrow"><span id="MathJax-Span-504" class="mn">3<span id="MathJax-Span-505" class="mrow"><span id="MathJax-Span-506" class="mi">∂<span id="MathJax-Span-507" class="msubsup"><span id="MathJax-Span-508" class="mi">s<span id="MathJax-Span-509" class="texatom"><span id="MathJax-Span-510" class="mrow"><span id="MathJax-Span-511" class="mn">2<span id="MathJax-Span-512" class="mo">×<span id="MathJax-Span-513" class="mfrac"><span id="MathJax-Span-514" class="mrow"><span id="MathJax-Span-515" class="mi">∂<span id="MathJax-Span-516" class="msubsup"><span id="MathJax-Span-517" class="mi">s<span id="MathJax-Span-518" class="texatom"><span id="MathJax-Span-519" class="mrow"><span id="MathJax-Span-520" class="mn">2<span id="MathJax-Span-521" class="mi">W<span id="MathJax-Span-522" class="mspace"><span id="MathJax-Span-523" class="mfrac"><span id="MathJax-Span-524" class="mrow"><span id="MathJax-Span-525" class="mi">∂<span id="MathJax-Span-526" class="msubsup"><span id="MathJax-Span-527" class="mi">s<span id="MathJax-Span-528" class="texatom"><span id="MathJax-Span-529" class="mrow"><span id="MathJax-Span-530" class="mn">2<span id="MathJax-Span-531" class="mi">W<span id="MathJax-Span-532" class="mo">=<span id="MathJax-Span-533" class="mfrac"><span id="MathJax-Span-534" class="mrow"><span id="MathJax-Span-535" class="mi">∂<span id="MathJax-Span-536" class="msubsup"><span id="MathJax-Span-537" class="mi">s<span id="MathJax-Span-538" class="texatom"><span id="MathJax-Span-539" class="mrow"><span id="MathJax-Span-540" class="mn">2<span id="MathJax-Span-541" class="msubsup"><span id="MathJax-Span-542" class="mi">W<span id="MathJax-Span-543" class="texatom"><span id="MathJax-Span-544" class="mrow"><span id="MathJax-Span-545" class="mn">1<span id="MathJax-Span-546" class="mo">+<span id="MathJax-Span-547" class="mfrac"><span id="MathJax-Span-548" class="mrow"><span id="MathJax-Span-549" class="mi">∂<span id="MathJax-Span-550" class="msubsup"><span id="MathJax-Span-551" class="mi">s<span id="MathJax-Span-552" class="texatom"><span id="MathJax-Span-553" class="mrow"><span id="MathJax-Span-554" class="mn">2<span id="MathJax-Span-555" class="mrow"><span id="MathJax-Span-556" class="mi">∂<span id="MathJax-Span-557" class="msubsup"><span id="MathJax-Span-558" class="mi">s<span id="MathJax-Span-559" class="texatom"><span id="MathJax-Span-560" class="mrow"><span id="MathJax-Span-561" class="mn">1<span id="MathJax-Span-562" class="mo">×<span id="MathJax-Span-563" class="mfrac"><span id="MathJax-Span-564" class="mrow"><span id="MathJax-Span-565" class="mi">∂<span id="MathJax-Span-566" class="msubsup"><span id="MathJax-Span-567" class="mi">s<span id="MathJax-Span-568" class="texatom"><span id="MathJax-Span-569" class="mrow"><span id="MathJax-Span-570" class="mn">1<span id="MathJax-Span-571" class="mi">W<span id="MathJax-Span-572" class="mspace"><span id="MathJax-Span-573" class="mfrac"><span id="MathJax-Span-574" class="mrow"><span id="MathJax-Span-575" class="mi">∂<span id="MathJax-Span-576" class="msubsup"><span id="MathJax-Span-577" class="mi">s<span id="MathJax-Span-578" class="texatom"><span id="MathJax-Span-579" class="mrow"><span id="MathJax-Span-580" class="mn">1<span id="MathJax-Span-581" class="mi">W<span id="MathJax-Span-582" class="mo">=<span id="MathJax-Span-583" class="mfrac"><span id="MathJax-Span-584" class="mrow"><span id="MathJax-Span-585" class="mi">∂<span id="MathJax-Span-586" class="msubsup"><span id="MathJax-Span-587" class="mi">s<span id="MathJax-Span-588" class="texatom"><span id="MathJax-Span-589" class="mrow"><span id="MathJax-Span-590" class="mn">1<span id="MathJax-Span-591" class="msubsup"><span id="MathJax-Span-592" class="mi">W<span id="MathJax-Span-593" class="texatom"><span id="MathJax-Span-594" class="mrow"><span id="MathJax-Span-595" class="mn">0<span id="MathJax-Span-596" class="mo">+<span id="MathJax-Span-597" class="mfrac"><span id="MathJax-Span-598" class="mrow"><span id="MathJax-Span-599" class="mi">∂<span id="MathJax-Span-600" class="msubsup"><span id="MathJax-Span-601" class="mi">s<span id="MathJax-Span-602" class="texatom"><span id="MathJax-Span-603" class="mrow"><span id="MathJax-Span-604" class="mn">1<span id="MathJax-Span-605" class="mrow"><span id="MathJax-Span-606" class="mi">∂<span id="MathJax-Span-607" class="msubsup"><span id="MathJax-Span-608" class="mi">s<span id="MathJax-Span-609" class="texatom"><span id="MathJax-Span-610" class="mrow"><span id="MathJax-Span-611" class="mn">0<span id="MathJax-Span-612" class="mo">×<span id="MathJax-Span-613" class="mfrac"><span id="MathJax-Span-614" class="mrow"><span id="MathJax-Span-615" class="mi">∂<span id="MathJax-Span-616" class="msubsup"><span id="MathJax-Span-617" class="mi">s<span id="MathJax-Span-618" class="texatom"><span id="MathJax-Span-619" class="mrow"><span id="MathJax-Span-620" class="mn">0<span id="MathJax-Span-621" class="mi">W<span id="MathJax-Span-622" class="mspace"><span id="MathJax-Span-623" class="mfrac"><span id="MathJax-Span-624" class="mrow"><span id="MathJax-Span-625" class="mi">∂<span id="MathJax-Span-626" class="msubsup"><span id="MathJax-Span-627" class="mi">s<span id="MathJax-Span-628" class="texatom"><span id="MathJax-Span-629" class="mrow"><span id="MathJax-Span-630" class="mn">0<span id="MathJax-Span-631" class="mi">W<span id="MathJax-Span-632" class="mo">=<span id="MathJax-Span-633" class="mfrac"><span id="MathJax-Span-634" class="mrow"><span id="MathJax-Span-635" class="mi">∂<span id="MathJax-Span-636" class="msubsup"><span id="MathJax-Span-637" class="mi">s<span id="MathJax-Span-638" class="texatom"><span id="MathJax-Span-639" class="mrow"><span id="MathJax-Span-640" class="mn">0<span id="MathJax-Span-641" class="msubsup"><span id="MathJax-Span-642" class="mi">W<span id="MathJax-Span-643" class="texatom"><span id="MathJax-Span-644" class="mrow"><span id="MathJax-Span-645" class="mn">1<span id="mjx-eqn-2_1" class="mtd"><span id="MathJax-Span-469" class="mrow"><span id="MathJax-Span-470" class="mtext">(2)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　说明一下，为了更好地体现复合函数求导的思想，公式（2）中引入了变量<span class="MathJax_Preview"><span id="MathJax-Element-8-Frame" class="MathJax"><span id="MathJax-Span-646" class="math"><span id="MathJax-Span-647" class="mrow"><span id="MathJax-Span-648" class="msubsup"><span id="MathJax-Span-649" class="mi">W<span id="MathJax-Span-650" class="texatom"><span id="MathJax-Span-651" class="mrow"><span id="MathJax-Span-652" class="mn">1</span></span></span></span></span></span></span>，可以把<span class="MathJax_Preview"><span id="MathJax-Element-9-Frame" class="MathJax"><span id="MathJax-Span-653" class="math"><span id="MathJax-Span-654" class="mrow"><span id="MathJax-Span-655" class="msubsup"><span id="MathJax-Span-656" class="mi">W<span id="MathJax-Span-657" class="texatom"><span id="MathJax-Span-658" class="mrow"><span id="MathJax-Span-659" class="mn">1</span></span></span></span></span></span></span>看作关于W的函数，即<span class="MathJax_Preview"><span id="MathJax-Element-10-Frame" class="MathJax"><span id="MathJax-Span-660" class="math"><span id="MathJax-Span-661" class="mrow"><span id="MathJax-Span-662" class="msubsup"><span id="MathJax-Span-663" class="mi">W<span id="MathJax-Span-664" class="texatom"><span id="MathJax-Span-665" class="mrow"><span id="MathJax-Span-666" class="mn">1<span id="MathJax-Span-667" class="mo">=<span id="MathJax-Span-668" class="mi">W</span></span></span></span></span></span></span></span></span>。另外，因为<span class="MathJax_Preview"><span id="MathJax-Element-11-Frame" class="MathJax"><span id="MathJax-Span-669" class="math"><span id="MathJax-Span-670" class="mrow"><span id="MathJax-Span-671" class="msubsup"><span id="MathJax-Span-672" class="mi">s<span id="MathJax-Span-673" class="texatom"><span id="MathJax-Span-674" class="mrow"><span id="MathJax-Span-675" class="mo">−<span id="MathJax-Span-676" class="mn">1</span></span></span></span></span></span></span></span>表示RNN网络的初始状态，为一个常数向量，所以公式（2）中第4个表达式展开后只有一项。所以由公式（2）可得，</span></span></span></span></span></span></span></span></p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-12-Frame" class="MathJax"><span id="MathJax-Span-677" class="math"><span id="MathJax-Span-678" class="mrow"><span id="MathJax-Span-679" class="mtable"><span id="MathJax-Span-683" class="mtd"><span id="MathJax-Span-684" class="mrow"><span id="MathJax-Span-685" class="mfrac"><span id="MathJax-Span-686" class="mrow"><span id="MathJax-Span-687" class="mi">∂<span id="MathJax-Span-688" class="msubsup"><span id="MathJax-Span-689" class="mi">s<span id="MathJax-Span-690" class="texatom"><span id="MathJax-Span-691" class="mrow"><span id="MathJax-Span-692" class="mn">3<span id="MathJax-Span-693" class="mi">W<span id="MathJax-Span-694" class="mo">=<span id="MathJax-Span-695" class="mfrac"><span id="MathJax-Span-696" class="mrow"><span id="MathJax-Span-697" class="mi">∂<span id="MathJax-Span-698" class="msubsup"><span id="MathJax-Span-699" class="mi">s<span id="MathJax-Span-700" class="texatom"><span id="MathJax-Span-701" class="mrow"><span id="MathJax-Span-702" class="mn">3<span id="MathJax-Span-703" class="msubsup"><span id="MathJax-Span-704" class="mi">W<span id="MathJax-Span-705" class="texatom"><span id="MathJax-Span-706" class="mrow"><span id="MathJax-Span-707" class="mn">1<span id="MathJax-Span-708" class="mo">+<span id="MathJax-Span-709" class="mfrac"><span id="MathJax-Span-710" class="mrow"><span id="MathJax-Span-711" class="mi">∂<span id="MathJax-Span-712" class="msubsup"><span id="MathJax-Span-713" class="mi">s<span id="MathJax-Span-714" class="texatom"><span id="MathJax-Span-715" class="mrow"><span id="MathJax-Span-716" class="mn">3<span id="MathJax-Span-717" class="mrow"><span id="MathJax-Span-718" class="mi">∂<span id="MathJax-Span-719" class="msubsup"><span id="MathJax-Span-720" class="mi">s<span id="MathJax-Span-721" class="texatom"><span id="MathJax-Span-722" class="mrow"><span id="MathJax-Span-723" class="mn">2<span id="MathJax-Span-724" class="mo">×<span id="MathJax-Span-725" class="mfrac"><span id="MathJax-Span-726" class="mrow"><span id="MathJax-Span-727" class="mi">∂<span id="MathJax-Span-728" class="msubsup"><span id="MathJax-Span-729" class="mi">s<span id="MathJax-Span-730" class="texatom"><span id="MathJax-Span-731" class="mrow"><span id="MathJax-Span-732" class="mn">2<span id="MathJax-Span-733" class="msubsup"><span id="MathJax-Span-734" class="mi">W<span id="MathJax-Span-735" class="texatom"><span id="MathJax-Span-736" class="mrow"><span id="MathJax-Span-737" class="mn">1<span id="MathJax-Span-738" class="mo">+<span id="MathJax-Span-739" class="mfrac"><span id="MathJax-Span-740" class="mrow"><span id="MathJax-Span-741" class="mi">∂<span id="MathJax-Span-742" class="msubsup"><span id="MathJax-Span-743" class="mi">s<span id="MathJax-Span-744" class="texatom"><span id="MathJax-Span-745" class="mrow"><span id="MathJax-Span-746" class="mn">3<span id="MathJax-Span-747" class="mrow"><span id="MathJax-Span-748" class="mi">∂<span id="MathJax-Span-749" class="msubsup"><span id="MathJax-Span-750" class="mi">s<span id="MathJax-Span-751" class="texatom"><span id="MathJax-Span-752" class="mrow"><span id="MathJax-Span-753" class="mn">2<span id="MathJax-Span-754" class="mo">×<span id="MathJax-Span-755" class="mfrac"><span id="MathJax-Span-756" class="mrow"><span id="MathJax-Span-757" class="mi">∂<span id="MathJax-Span-758" class="msubsup"><span id="MathJax-Span-759" class="mi">s<span id="MathJax-Span-760" class="texatom"><span id="MathJax-Span-761" class="mrow"><span id="MathJax-Span-762" class="mn">2<span id="MathJax-Span-763" class="mrow"><span id="MathJax-Span-764" class="mi">∂<span id="MathJax-Span-765" class="msubsup"><span id="MathJax-Span-766" class="mi">s<span id="MathJax-Span-767" class="texatom"><span id="MathJax-Span-768" class="mrow"><span id="MathJax-Span-769" class="mn">1<span id="MathJax-Span-770" class="mo">×<span id="MathJax-Span-771" class="mfrac"><span id="MathJax-Span-772" class="mrow"><span id="MathJax-Span-773" class="mi">∂<span id="MathJax-Span-774" class="msubsup"><span id="MathJax-Span-775" class="mi">s<span id="MathJax-Span-776" class="texatom"><span id="MathJax-Span-777" class="mrow"><span id="MathJax-Span-778" class="mn">1<span id="MathJax-Span-779" class="msubsup"><span id="MathJax-Span-780" class="mi">W<span id="MathJax-Span-781" class="texatom"><span id="MathJax-Span-782" class="mrow"><span id="MathJax-Span-783" class="mn">1<span id="MathJax-Span-784" class="mo">+<span id="MathJax-Span-785" class="mfrac"><span id="MathJax-Span-786" class="mrow"><span id="MathJax-Span-787" class="mi">∂<span id="MathJax-Span-788" class="msubsup"><span id="MathJax-Span-789" class="mi">s<span id="MathJax-Span-790" class="texatom"><span id="MathJax-Span-791" class="mrow"><span id="MathJax-Span-792" class="mn">3<span id="MathJax-Span-793" class="mrow"><span id="MathJax-Span-794" class="mi">∂<span id="MathJax-Span-795" class="msubsup"><span id="MathJax-Span-796" class="mi">s<span id="MathJax-Span-797" class="texatom"><span id="MathJax-Span-798" class="mrow"><span id="MathJax-Span-799" class="mn">2<span id="MathJax-Span-800" class="mo">×<span id="MathJax-Span-801" class="mfrac"><span id="MathJax-Span-802" class="mrow"><span id="MathJax-Span-803" class="mi">∂<span id="MathJax-Span-804" class="msubsup"><span id="MathJax-Span-805" class="mi">s<span id="MathJax-Span-806" class="texatom"><span id="MathJax-Span-807" class="mrow"><span id="MathJax-Span-808" class="mn">2<span id="MathJax-Span-809" class="mrow"><span id="MathJax-Span-810" class="mi">∂<span id="MathJax-Span-811" class="msubsup"><span id="MathJax-Span-812" class="mi">s<span id="MathJax-Span-813" class="texatom"><span id="MathJax-Span-814" class="mrow"><span id="MathJax-Span-815" class="mn">1<span id="MathJax-Span-816" class="mo">×<span id="MathJax-Span-817" class="mfrac"><span id="MathJax-Span-818" class="mrow"><span id="MathJax-Span-819" class="mi">∂<span id="MathJax-Span-820" class="msubsup"><span id="MathJax-Span-821" class="mi">s<span id="MathJax-Span-822" class="texatom"><span id="MathJax-Span-823" class="mrow"><span id="MathJax-Span-824" class="mn">1<span id="MathJax-Span-825" class="mrow"><span id="MathJax-Span-826" class="mi">∂<span id="MathJax-Span-827" class="msubsup"><span id="MathJax-Span-828" class="mi">s<span id="MathJax-Span-829" class="texatom"><span id="MathJax-Span-830" class="mrow"><span id="MathJax-Span-831" class="mn">0<span id="MathJax-Span-832" class="mo">×<span id="MathJax-Span-833" class="mfrac"><span id="MathJax-Span-834" class="mrow"><span id="MathJax-Span-835" class="mi">∂<span id="MathJax-Span-836" class="msubsup"><span id="MathJax-Span-837" class="mi">s<span id="MathJax-Span-838" class="texatom"><span id="MathJax-Span-839" class="mrow"><span id="MathJax-Span-840" class="mn">0<span id="MathJax-Span-841" class="msubsup"><span id="MathJax-Span-842" class="mi">W<span id="MathJax-Span-843" class="texatom"><span id="MathJax-Span-844" class="mrow"><span id="MathJax-Span-845" class="mn">1<span id="mjx-eqn-3_1" class="mtd"><span id="MathJax-Span-681" class="mrow"><span id="MathJax-Span-682" class="mtext">(3)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　简化得下式，</p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-13-Frame" class="MathJax"><span id="MathJax-Span-846" class="math"><span id="MathJax-Span-847" class="mrow"><span id="MathJax-Span-848" class="mtable"><span id="MathJax-Span-852" class="mtd"><span id="MathJax-Span-853" class="mrow"><span id="MathJax-Span-854" class="mfrac"><span id="MathJax-Span-855" class="mrow"><span id="MathJax-Span-856" class="mi">∂<span id="MathJax-Span-857" class="msubsup"><span id="MathJax-Span-858" class="mi">s<span id="MathJax-Span-859" class="texatom"><span id="MathJax-Span-860" class="mrow"><span id="MathJax-Span-861" class="mn">3<span id="MathJax-Span-862" class="mi">W<span id="MathJax-Span-863" class="mo">=<span id="MathJax-Span-864" class="mfrac"><span id="MathJax-Span-865" class="mrow"><span id="MathJax-Span-866" class="mi">∂<span id="MathJax-Span-867" class="msubsup"><span id="MathJax-Span-868" class="mi">s<span id="MathJax-Span-869" class="texatom"><span id="MathJax-Span-870" class="mrow"><span id="MathJax-Span-871" class="mn">3<span id="MathJax-Span-872" class="msubsup"><span id="MathJax-Span-873" class="mi">W<span id="MathJax-Span-874" class="texatom"><span id="MathJax-Span-875" class="mrow"><span id="MathJax-Span-876" class="mn">1<span id="MathJax-Span-877" class="mo">+<span id="MathJax-Span-878" class="mfrac"><span id="MathJax-Span-879" class="mrow"><span id="MathJax-Span-880" class="mi">∂<span id="MathJax-Span-881" class="msubsup"><span id="MathJax-Span-882" class="mi">s<span id="MathJax-Span-883" class="texatom"><span id="MathJax-Span-884" class="mrow"><span id="MathJax-Span-885" class="mn">3<span id="MathJax-Span-886" class="mrow"><span id="MathJax-Span-887" class="mi">∂<span id="MathJax-Span-888" class="msubsup"><span id="MathJax-Span-889" class="mi">s<span id="MathJax-Span-890" class="texatom"><span id="MathJax-Span-891" class="mrow"><span id="MathJax-Span-892" class="mn">2<span id="MathJax-Span-893" class="mo">×<span id="MathJax-Span-894" class="mfrac"><span id="MathJax-Span-895" class="mrow"><span id="MathJax-Span-896" class="mi">∂<span id="MathJax-Span-897" class="msubsup"><span id="MathJax-Span-898" class="mi">s<span id="MathJax-Span-899" class="texatom"><span id="MathJax-Span-900" class="mrow"><span id="MathJax-Span-901" class="mn">2<span id="MathJax-Span-902" class="msubsup"><span id="MathJax-Span-903" class="mi">W<span id="MathJax-Span-904" class="texatom"><span id="MathJax-Span-905" class="mrow"><span id="MathJax-Span-906" class="mn">1<span id="MathJax-Span-907" class="mo">+<span id="MathJax-Span-908" class="mfrac"><span id="MathJax-Span-909" class="mrow"><span id="MathJax-Span-910" class="mi">∂<span id="MathJax-Span-911" class="msubsup"><span id="MathJax-Span-912" class="mi">s<span id="MathJax-Span-913" class="texatom"><span id="MathJax-Span-914" class="mrow"><span id="MathJax-Span-915" class="mn">3<span id="MathJax-Span-916" class="mrow"><span id="MathJax-Span-917" class="mi">∂<span id="MathJax-Span-918" class="msubsup"><span id="MathJax-Span-919" class="mi">S<span id="MathJax-Span-920" class="texatom"><span id="MathJax-Span-921" class="mrow"><span id="MathJax-Span-922" class="mn">1<span id="MathJax-Span-923" class="mo">×<span id="MathJax-Span-924" class="mfrac"><span id="MathJax-Span-925" class="mrow"><span id="MathJax-Span-926" class="mi">∂<span id="MathJax-Span-927" class="msubsup"><span id="MathJax-Span-928" class="mi">s<span id="MathJax-Span-929" class="texatom"><span id="MathJax-Span-930" class="mrow"><span id="MathJax-Span-931" class="mn">1<span id="MathJax-Span-932" class="msubsup"><span id="MathJax-Span-933" class="mi">W<span id="MathJax-Span-934" class="texatom"><span id="MathJax-Span-935" class="mrow"><span id="MathJax-Span-936" class="mn">1<span id="MathJax-Span-937" class="mo">+<span id="MathJax-Span-938" class="mfrac"><span id="MathJax-Span-939" class="mrow"><span id="MathJax-Span-940" class="mi">∂<span id="MathJax-Span-941" class="msubsup"><span id="MathJax-Span-942" class="mi">s<span id="MathJax-Span-943" class="texatom"><span id="MathJax-Span-944" class="mrow"><span id="MathJax-Span-945" class="mn">3<span id="MathJax-Span-946" class="mrow"><span id="MathJax-Span-947" class="mi">∂<span id="MathJax-Span-948" class="msubsup"><span id="MathJax-Span-949" class="mi">s<span id="MathJax-Span-950" class="texatom"><span id="MathJax-Span-951" class="mrow"><span id="MathJax-Span-952" class="mn">0<span id="MathJax-Span-953" class="mo">×<span id="MathJax-Span-954" class="mfrac"><span id="MathJax-Span-955" class="mrow"><span id="MathJax-Span-956" class="mi">∂<span id="MathJax-Span-957" class="msubsup"><span id="MathJax-Span-958" class="mi">s<span id="MathJax-Span-959" class="texatom"><span id="MathJax-Span-960" class="mrow"><span id="MathJax-Span-961" class="mn">0<span id="MathJax-Span-962" class="msubsup"><span id="MathJax-Span-963" class="mi">W<span id="MathJax-Span-964" class="texatom"><span id="MathJax-Span-965" class="mrow"><span id="MathJax-Span-966" class="mn">1<span id="mjx-eqn-4_1" class="mtd"><span id="MathJax-Span-850" class="mrow"><span id="MathJax-Span-851" class="mtext">(4)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　继续简化得下式，</p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-14-Frame" class="MathJax"><span id="MathJax-Span-967" class="math"><span id="MathJax-Span-968" class="mrow"><span id="MathJax-Span-969" class="mtable"><span id="MathJax-Span-973" class="mtd"><span id="MathJax-Span-974" class="mrow"><span id="MathJax-Span-975" class="mfrac"><span id="MathJax-Span-976" class="mrow"><span id="MathJax-Span-977" class="mi">∂<span id="MathJax-Span-978" class="msubsup"><span id="MathJax-Span-979" class="mi">s<span id="MathJax-Span-980" class="texatom"><span id="MathJax-Span-981" class="mrow"><span id="MathJax-Span-982" class="mn">3<span id="MathJax-Span-983" class="mi">W<span id="MathJax-Span-984" class="mo">=<span id="MathJax-Span-985" class="munderover"><span id="MathJax-Span-986" class="mo">∑<span id="MathJax-Span-987" class="texatom"><span id="MathJax-Span-988" class="mrow"><span id="MathJax-Span-989" class="mi">i<span id="MathJax-Span-990" class="mo">=<span id="MathJax-Span-991" class="mn">0<span id="MathJax-Span-992" class="texatom"><span id="MathJax-Span-993" class="mrow"><span id="MathJax-Span-994" class="mn">3<span id="MathJax-Span-995" class="mfrac"><span id="MathJax-Span-996" class="mrow"><span id="MathJax-Span-997" class="mi">∂<span id="MathJax-Span-998" class="msubsup"><span id="MathJax-Span-999" class="mi">s<span id="MathJax-Span-1000" class="texatom"><span id="MathJax-Span-1001" class="mrow"><span id="MathJax-Span-1002" class="mn">3<span id="MathJax-Span-1003" class="mrow"><span id="MathJax-Span-1004" class="mi">∂<span id="MathJax-Span-1005" class="msubsup"><span id="MathJax-Span-1006" class="mi">s<span id="MathJax-Span-1007" class="texatom"><span id="MathJax-Span-1008" class="mrow"><span id="MathJax-Span-1009" class="mi">i<span id="MathJax-Span-1010" class="mo">×<span id="MathJax-Span-1011" class="mfrac"><span id="MathJax-Span-1012" class="mrow"><span id="MathJax-Span-1013" class="mi">∂<span id="MathJax-Span-1014" class="msubsup"><span id="MathJax-Span-1015" class="mi">s<span id="MathJax-Span-1016" class="texatom"><span id="MathJax-Span-1017" class="mrow"><span id="MathJax-Span-1018" class="mi">i<span id="MathJax-Span-1019" class="msubsup"><span id="MathJax-Span-1020" class="mi">W<span id="MathJax-Span-1021" class="texatom"><span id="MathJax-Span-1022" class="mrow"><span id="MathJax-Span-1023" class="mn">1<span id="mjx-eqn-5_1" class="mtd"><span id="MathJax-Span-971" class="mrow"><span id="MathJax-Span-972" class="mtext">(5)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<h4 id="31-e3关于参数v的偏导数"><a name="t4" target="_blank"></a>3.1&nbsp;<span class="MathJax_Preview"><span id="MathJax-Element-15-Frame" class="MathJax"><span id="MathJax-Span-1024" class="math"><span id="MathJax-Span-1025" class="mrow"><span id="MathJax-Span-1026" class="msubsup"><span id="MathJax-Span-1027" class="mi">E<span id="MathJax-Span-1028" class="texatom"><span id="MathJax-Span-1029" class="mrow"><span id="MathJax-Span-1030" class="mn">3</span></span></span></span></span></span></span>关于参数V的偏导数</span></span></h4>
+<p>　　记t=3时刻的softmax神经元的输入为<span class="MathJax_Preview"><span id="MathJax-Element-16-Frame" class="MathJax"><span id="MathJax-Span-1031" class="math"><span id="MathJax-Span-1032" class="mrow"><span id="MathJax-Span-1033" class="msubsup"><span id="MathJax-Span-1034" class="mi">a<span id="MathJax-Span-1035" class="texatom"><span id="MathJax-Span-1036" class="mrow"><span id="MathJax-Span-1037" class="mn">3</span></span></span></span></span></span></span>，输出为<span class="MathJax_Preview"><span id="MathJax-Element-17-Frame" class="MathJax"><span id="MathJax-Span-1038" class="math"><span id="MathJax-Span-1039" class="mrow"><span id="MathJax-Span-1040" class="msubsup"><span id="MathJax-Span-1041" class="mi">y<span id="MathJax-Span-1042" class="texatom"><span id="MathJax-Span-1043" class="mrow"><span id="MathJax-Span-1044" class="mn">3</span></span></span></span></span></span></span>，网络的真实标签为<span class="MathJax_Preview"><span id="MathJax-Element-18-Frame" class="MathJax"><span id="MathJax-Span-1045" class="math"><span id="MathJax-Span-1046" class="mrow"><span id="MathJax-Span-1047" class="msubsup"><span id="MathJax-Span-1048" class="mi">y<span id="MathJax-Span-1049" class="texatom"><span id="MathJax-Span-1050" class="mrow"><span id="MathJax-Span-1051" class="mo">(<span id="MathJax-Span-1052" class="mn">1<span id="MathJax-Span-1053" class="mo">)<span id="MathJax-Span-1054" class="texatom"><span id="MathJax-Span-1055" class="mrow"><span id="MathJax-Span-1056" class="mn">3</span></span></span></span></span></span></span></span></span></span></span></span>。根据函数求导的“链式法则”，所以有下式成立，</span></span></span></span></span></span></p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-19-Frame" class="MathJax"><span id="MathJax-Span-1057" class="math"><span id="MathJax-Span-1058" class="mrow"><span id="MathJax-Span-1059" class="mtable"><span id="MathJax-Span-1063" class="mtd"><span id="MathJax-Span-1064" class="mrow"><span id="MathJax-Span-1065" class="mfrac"><span id="MathJax-Span-1066" class="mrow"><span id="MathJax-Span-1067" class="mi">∂<span id="MathJax-Span-1068" class="msubsup"><span id="MathJax-Span-1069" class="mi">E<span id="MathJax-Span-1070" class="texatom"><span id="MathJax-Span-1071" class="mrow"><span id="MathJax-Span-1072" class="mn">3<span id="MathJax-Span-1073" class="mi">V<span id="MathJax-Span-1074" class="mo">=<span id="MathJax-Span-1075" class="mfrac"><span id="MathJax-Span-1076" class="mrow"><span id="MathJax-Span-1077" class="mi">∂<span id="MathJax-Span-1078" class="msubsup"><span id="MathJax-Span-1079" class="mi">E<span id="MathJax-Span-1080" class="texatom"><span id="MathJax-Span-1081" class="mrow"><span id="MathJax-Span-1082" class="mn">3<span id="MathJax-Span-1083" class="mrow"><span id="MathJax-Span-1084" class="mi">∂<span id="MathJax-Span-1085" class="msubsup"><span id="MathJax-Span-1086" class="mi">a<span id="MathJax-Span-1087" class="texatom"><span id="MathJax-Span-1088" class="mrow"><span id="MathJax-Span-1089" class="mn">3<span id="MathJax-Span-1090" class="mo">×<span id="MathJax-Span-1091" class="mfrac"><span id="MathJax-Span-1092" class="mrow"><span id="MathJax-Span-1093" class="mi">∂<span id="MathJax-Span-1094" class="msubsup"><span id="MathJax-Span-1095" class="mi">a<span id="MathJax-Span-1096" class="texatom"><span id="MathJax-Span-1097" class="mrow"><span id="MathJax-Span-1098" class="mn">3<span id="MathJax-Span-1099" class="mrow"><span id="MathJax-Span-1100" class="mi">∂<span id="MathJax-Span-1101" class="mi">V<span id="MathJax-Span-1102" class="mo">=<span id="MathJax-Span-1103" class="mo">(<span id="MathJax-Span-1104" class="msubsup"><span id="MathJax-Span-1105" class="mi">y<span id="MathJax-Span-1106" class="texatom"><span id="MathJax-Span-1107" class="mrow"><span id="MathJax-Span-1108" class="mo">(<span id="MathJax-Span-1109" class="mn">1<span id="MathJax-Span-1110" class="mo">)<span id="MathJax-Span-1111" class="texatom"><span id="MathJax-Span-1112" class="mrow"><span id="MathJax-Span-1113" class="mn">3<span id="MathJax-Span-1114" class="mo">−<span id="MathJax-Span-1115" class="msubsup"><span id="MathJax-Span-1116" class="mi">y<span id="MathJax-Span-1117" class="texatom"><span id="MathJax-Span-1118" class="mrow"><span id="MathJax-Span-1119" class="mn">3<span id="MathJax-Span-1120" class="mo">)<span id="MathJax-Span-1121" class="mo">⨂<span id="MathJax-Span-1122" class="msubsup"><span id="MathJax-Span-1123" class="mi">s<span id="MathJax-Span-1124" class="texatom"><span id="MathJax-Span-1125" class="mrow"><span id="MathJax-Span-1126" class="mn">3<span id="mjx-eqn-6_1" class="mtd"><span id="MathJax-Span-1061" class="mrow"><span id="MathJax-Span-1062" class="mtext">(6)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<h4 id="32-e3关于参数w的偏导数"><a name="t5" target="_blank"></a>3.2&nbsp;<span class="MathJax_Preview"><span id="MathJax-Element-20-Frame" class="MathJax"><span id="MathJax-Span-1127" class="math"><span id="MathJax-Span-1128" class="mrow"><span id="MathJax-Span-1129" class="msubsup"><span id="MathJax-Span-1130" class="mi">E<span id="MathJax-Span-1131" class="texatom"><span id="MathJax-Span-1132" class="mrow"><span id="MathJax-Span-1133" class="mn">3</span></span></span></span></span></span></span>关于参数W的偏导数</span></span></h4>
+<p>　　关于参数W的偏导数，就要使用到上面关于复合函数的推导过程了，记<span class="MathJax_Preview"><span id="MathJax-Element-21-Frame" class="MathJax"><span id="MathJax-Span-1134" class="math"><span id="MathJax-Span-1135" class="mrow"><span id="MathJax-Span-1136" class="msubsup"><span id="MathJax-Span-1137" class="mi">z<span id="MathJax-Span-1138" class="texatom"><span id="MathJax-Span-1139" class="mrow"><span id="MathJax-Span-1140" class="mi">i</span></span></span></span></span></span></span>为t=i时刻隐藏层神经元的输入，则具体的表达式简化过程如下，</span></span></p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-66-Frame" class="MathJax"><span id="MathJax-Span-1141" class="math"><span id="MathJax-Span-1142" class="mrow"><span id="MathJax-Span-1143" class="mtable"><span id="MathJax-Span-1147" class="mtd"><span id="MathJax-Span-1148" class="mrow"><span id="MathJax-Span-1149" class="mfrac"><span id="MathJax-Span-1150" class="mrow"><span id="MathJax-Span-1151" class="mi">∂<span id="MathJax-Span-1152" class="msubsup"><span id="MathJax-Span-1153" class="mi">E<span id="MathJax-Span-1154" class="texatom"><span id="MathJax-Span-1155" class="mrow"><span id="MathJax-Span-1156" class="mn">3<span id="MathJax-Span-1157" class="mi">W<span id="MathJax-Span-1158" class="mo">=<span id="MathJax-Span-1159" class="mfrac"><span id="MathJax-Span-1160" class="mrow"><span id="MathJax-Span-1161" class="mi">∂<span id="MathJax-Span-1162" class="msubsup"><span id="MathJax-Span-1163" class="mi">E<span id="MathJax-Span-1164" class="texatom"><span id="MathJax-Span-1165" class="mrow"><span id="MathJax-Span-1166" class="mn">3<span id="MathJax-Span-1167" class="mrow"><span id="MathJax-Span-1168" class="mi">∂<span id="MathJax-Span-1169" class="msubsup"><span id="MathJax-Span-1170" class="mi">s<span id="MathJax-Span-1171" class="texatom"><span id="MathJax-Span-1172" class="mrow"><span id="MathJax-Span-1173" class="mn">3<span id="MathJax-Span-1174" class="mo">×<span id="MathJax-Span-1175" class="mfrac"><span id="MathJax-Span-1176" class="mrow"><span id="MathJax-Span-1177" class="mi">∂<span id="MathJax-Span-1178" class="msubsup"><span id="MathJax-Span-1179" class="mi">s<span id="MathJax-Span-1180" class="texatom"><span id="MathJax-Span-1181" class="mrow"><span id="MathJax-Span-1182" class="mn">3<span id="MathJax-Span-1183" class="mrow"><span id="MathJax-Span-1184" class="mi">∂<span id="MathJax-Span-1185" class="mi">W<span id="MathJax-Span-1186" class="mo">=<span id="MathJax-Span-1187" class="mfrac"><span id="MathJax-Span-1188" class="mrow"><span id="MathJax-Span-1189" class="mi">∂<span id="MathJax-Span-1190" class="msubsup"><span id="MathJax-Span-1191" class="mi">E<span id="MathJax-Span-1192" class="texatom"><span id="MathJax-Span-1193" class="mrow"><span id="MathJax-Span-1194" class="mn">3<span id="MathJax-Span-1195" class="mrow"><span id="MathJax-Span-1196" class="mi">∂<span id="MathJax-Span-1197" class="msubsup"><span id="MathJax-Span-1198" class="mi">a<span id="MathJax-Span-1199" class="texatom"><span id="MathJax-Span-1200" class="mrow"><span id="MathJax-Span-1201" class="mn">3<span id="MathJax-Span-1202" class="mo">×<span id="MathJax-Span-1203" class="mfrac"><span id="MathJax-Span-1204" class="mrow"><span id="MathJax-Span-1205" class="mi">∂<span id="MathJax-Span-1206" class="msubsup"><span id="MathJax-Span-1207" class="mi">a<span id="MathJax-Span-1208" class="texatom"><span id="MathJax-Span-1209" class="mrow"><span id="MathJax-Span-1210" class="mn">3<span id="MathJax-Span-1211" class="mrow"><span id="MathJax-Span-1212" class="mi">∂<span id="MathJax-Span-1213" class="msubsup"><span id="MathJax-Span-1214" class="mi">s<span id="MathJax-Span-1215" class="texatom"><span id="MathJax-Span-1216" class="mrow"><span id="MathJax-Span-1217" class="mn">3<span id="MathJax-Span-1218" class="mo">×<span id="MathJax-Span-1219" class="mfrac"><span id="MathJax-Span-1220" class="mrow"><span id="MathJax-Span-1221" class="mi">∂<span id="MathJax-Span-1222" class="msubsup"><span id="MathJax-Span-1223" class="mi">s<span id="MathJax-Span-1224" class="texatom"><span id="MathJax-Span-1225" class="mrow"><span id="MathJax-Span-1226" class="mn">3<span id="MathJax-Span-1227" class="mrow"><span id="MathJax-Span-1228" class="mi">∂<span id="MathJax-Span-1229" class="mi">W<span id="MathJax-Span-1230" class="mspace"><span id="MathJax-Span-1231" class="mo">=<span id="MathJax-Span-1232" class="munderover"><span id="MathJax-Span-1233" class="mo">∑<span id="MathJax-Span-1234" class="texatom"><span id="MathJax-Span-1235" class="mrow"><span id="MathJax-Span-1236" class="mi">k<span id="MathJax-Span-1237" class="mo">=<span id="MathJax-Span-1238" class="mn">0<span id="MathJax-Span-1239" class="texatom"><span id="MathJax-Span-1240" class="mrow"><span id="MathJax-Span-1241" class="mn">3<span id="MathJax-Span-1242" class="mfrac"><span id="MathJax-Span-1243" class="mrow"><span id="MathJax-Span-1244" class="mi">∂<span id="MathJax-Span-1245" class="msubsup"><span id="MathJax-Span-1246" class="mi">E<span id="MathJax-Span-1247" class="texatom"><span id="MathJax-Span-1248" class="mrow"><span id="MathJax-Span-1249" class="mn">3<span id="MathJax-Span-1250" class="mrow"><span id="MathJax-Span-1251" class="mi">∂<span id="MathJax-Span-1252" class="msubsup"><span id="MathJax-Span-1253" class="mi">a<span id="MathJax-Span-1254" class="texatom"><span id="MathJax-Span-1255" class="mrow"><span id="MathJax-Span-1256" class="mn">3<span id="MathJax-Span-1257" class="mo">×<span id="MathJax-Span-1258" class="mfrac"><span id="MathJax-Span-1259" class="mrow"><span id="MathJax-Span-1260" class="mi">∂<span id="MathJax-Span-1261" class="msubsup"><span id="MathJax-Span-1262" class="mi">a<span id="MathJax-Span-1263" class="texatom"><span id="MathJax-Span-1264" class="mrow"><span id="MathJax-Span-1265" class="mn">3<span id="MathJax-Span-1266" class="mrow"><span id="MathJax-Span-1267" class="mi">∂<span id="MathJax-Span-1268" class="msubsup"><span id="MathJax-Span-1269" class="mi">s<span id="MathJax-Span-1270" class="texatom"><span id="MathJax-Span-1271" class="mrow"><span id="MathJax-Span-1272" class="mn">3<span id="MathJax-Span-1273" class="mo">×<span id="MathJax-Span-1274" class="mfrac"><span id="MathJax-Span-1275" class="mrow"><span id="MathJax-Span-1276" class="mi">∂<span id="MathJax-Span-1277" class="msubsup"><span id="MathJax-Span-1278" class="mi">s<span id="MathJax-Span-1279" class="texatom"><span id="MathJax-Span-1280" class="mrow"><span id="MathJax-Span-1281" class="mn">3<span id="MathJax-Span-1282" class="mrow"><span id="MathJax-Span-1283" class="mi">∂<span id="MathJax-Span-1284" class="msubsup"><span id="MathJax-Span-1285" class="mi">s<span id="MathJax-Span-1286" class="texatom"><span id="MathJax-Span-1287" class="mrow"><span id="MathJax-Span-1288" class="mi">k<span id="MathJax-Span-1289" class="mo">×<span id="MathJax-Span-1290" class="mfrac"><span id="MathJax-Span-1291" class="mrow"><span id="MathJax-Span-1292" class="mi">∂<span id="MathJax-Span-1293" class="msubsup"><span id="MathJax-Span-1294" class="mi">s<span id="MathJax-Span-1295" class="texatom"><span id="MathJax-Span-1296" class="mrow"><span id="MathJax-Span-1297" class="mi">k<span id="MathJax-Span-1298" class="mrow"><span id="MathJax-Span-1299" class="mi">∂<span id="MathJax-Span-1300" class="msubsup"><span id="MathJax-Span-1301" class="mi">W<span id="MathJax-Span-1302" class="texatom"><span id="MathJax-Span-1303" class="mrow"><span id="MathJax-Span-1304" class="mn">1<span id="MathJax-Span-1305" class="mspace"><span id="MathJax-Span-1306" class="mo">=<span id="MathJax-Span-1307" class="munderover"><span id="MathJax-Span-1308" class="mo">∑<span id="MathJax-Span-1309" class="texatom"><span id="MathJax-Span-1310" class="mrow"><span id="MathJax-Span-1311" class="mi">k<span id="MathJax-Span-1312" class="mo">=<span id="MathJax-Span-1313" class="mn">0<span id="MathJax-Span-1314" class="texatom"><span id="MathJax-Span-1315" class="mrow"><span id="MathJax-Span-1316" class="mn">3<span id="MathJax-Span-1317" class="mfrac"><span id="MathJax-Span-1318" class="mrow"><span id="MathJax-Span-1319" class="mi">∂<span id="MathJax-Span-1320" class="msubsup"><span id="MathJax-Span-1321" class="mi">E<span id="MathJax-Span-1322" class="texatom"><span id="MathJax-Span-1323" class="mrow"><span id="MathJax-Span-1324" class="mn">3<span id="MathJax-Span-1325" class="mrow"><span id="MathJax-Span-1326" class="mi">∂<span id="MathJax-Span-1327" class="msubsup"><span id="MathJax-Span-1328" class="mi">a<span id="MathJax-Span-1329" class="texatom"><span id="MathJax-Span-1330" class="mrow"><span id="MathJax-Span-1331" class="mn">3<span id="MathJax-Span-1332" class="mo">×<span id="MathJax-Span-1333" class="mfrac"><span id="MathJax-Span-1334" class="mrow"><span id="MathJax-Span-1335" class="mi">∂<span id="MathJax-Span-1336" class="msubsup"><span id="MathJax-Span-1337" class="mi">a<span id="MathJax-Span-1338" class="texatom"><span id="MathJax-Span-1339" class="mrow"><span id="MathJax-Span-1340" class="mn">3<span id="MathJax-Span-1341" class="mrow"><span id="MathJax-Span-1342" class="mi">∂<span id="MathJax-Span-1343" class="msubsup"><span id="MathJax-Span-1344" class="mi">s<span id="MathJax-Span-1345" class="texatom"><span id="MathJax-Span-1346" class="mrow"><span id="MathJax-Span-1347" class="mn">3<span id="MathJax-Span-1348" class="mo">×<span id="MathJax-Span-1349" class="mfrac"><span id="MathJax-Span-1350" class="mrow"><span id="MathJax-Span-1351" class="mi">∂<span id="MathJax-Span-1352" class="msubsup"><span id="MathJax-Span-1353" class="mi">s<span id="MathJax-Span-1354" class="texatom"><span id="MathJax-Span-1355" class="mrow"><span id="MathJax-Span-1356" class="mn">3<span id="MathJax-Span-1357" class="mrow"><span id="MathJax-Span-1358" class="mi">∂<span id="MathJax-Span-1359" class="msubsup"><span id="MathJax-Span-1360" class="mi">s<span id="MathJax-Span-1361" class="texatom"><span id="MathJax-Span-1362" class="mrow"><span id="MathJax-Span-1363" class="mi">k<span id="MathJax-Span-1364" class="mo">×<span id="MathJax-Span-1365" class="mfrac"><span id="MathJax-Span-1366" class="mrow"><span id="MathJax-Span-1367" class="mi">∂<span id="MathJax-Span-1368" class="msubsup"><span id="MathJax-Span-1369" class="mi">s<span id="MathJax-Span-1370" class="texatom"><span id="MathJax-Span-1371" class="mrow"><span id="MathJax-Span-1372" class="mi">k<span id="MathJax-Span-1373" class="mrow"><span id="MathJax-Span-1374" class="mi">∂<span id="MathJax-Span-1375" class="msubsup"><span id="MathJax-Span-1376" class="mi">z<span id="MathJax-Span-1377" class="texatom"><span id="MathJax-Span-1378" class="mrow"><span id="MathJax-Span-1379" class="mi">k<span id="MathJax-Span-1380" class="mo">×<span id="MathJax-Span-1381" class="mfrac"><span id="MathJax-Span-1382" class="mrow"><span id="MathJax-Span-1383" class="mi">∂<span id="MathJax-Span-1384" class="msubsup"><span id="MathJax-Span-1385" class="mi">z<span id="MathJax-Span-1386" class="texatom"><span id="MathJax-Span-1387" class="mrow"><span id="MathJax-Span-1388" class="mi">k<span id="MathJax-Span-1389" class="mrow"><span id="MathJax-Span-1390" class="mi">∂<span id="MathJax-Span-1391" class="msubsup"><span id="MathJax-Span-1392" class="mi">W<span id="MathJax-Span-1393" class="texatom"><span id="MathJax-Span-1394" class="mrow"><span id="MathJax-Span-1395" class="mn">1<span id="MathJax-Span-1396" class="mspace"><span id="MathJax-Span-1397" class="mo">=<span id="MathJax-Span-1398" class="munderover"><span id="MathJax-Span-1399" class="mo">∑<span id="MathJax-Span-1400" class="texatom"><span id="MathJax-Span-1401" class="mrow"><span id="MathJax-Span-1402" class="mi">k<span id="MathJax-Span-1403" class="mo">=<span id="MathJax-Span-1404" class="mn">0<span id="MathJax-Span-1405" class="texatom"><span id="MathJax-Span-1406" class="mrow"><span id="MathJax-Span-1407" class="mn">3<span id="MathJax-Span-1408" class="mfrac"><span id="MathJax-Span-1409" class="mrow"><span id="MathJax-Span-1410" class="mi">∂<span id="MathJax-Span-1411" class="msubsup"><span id="MathJax-Span-1412" class="mi">E<span id="MathJax-Span-1413" class="texatom"><span id="MathJax-Span-1414" class="mrow"><span id="MathJax-Span-1415" class="mn">3<span id="MathJax-Span-1416" class="mrow"><span id="MathJax-Span-1417" class="mi">∂<span id="MathJax-Span-1418" class="msubsup"><span id="MathJax-Span-1419" class="mi">z<span id="MathJax-Span-1420" class="texatom"><span id="MathJax-Span-1421" class="mrow"><span id="MathJax-Span-1422" class="mi">k<span id="MathJax-Span-1423" class="mo">×<span id="MathJax-Span-1424" class="mfrac"><span id="MathJax-Span-1425" class="mrow"><span id="MathJax-Span-1426" class="mi">∂<span id="MathJax-Span-1427" class="msubsup"><span id="MathJax-Span-1428" class="mi">z<span id="MathJax-Span-1429" class="texatom"><span id="MathJax-Span-1430" class="mrow"><span id="MathJax-Span-1431" class="mi">k<span id="MathJax-Span-1432" class="mrow"><span id="MathJax-Span-1433" class="mi">∂<span id="MathJax-Span-1434" class="msubsup"><span id="MathJax-Span-1435" class="mi">w<span id="MathJax-Span-1436" class="texatom"><span id="MathJax-Span-1437" class="mrow"><span id="MathJax-Span-1438" class="mn">1<span id="mjx-eqn-7" class="mtd"><span id="MathJax-Span-1145" class="mrow"><span id="MathJax-Span-1146" class="mtext">(7)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　类似于标准的BP算法中的表示，定义<span class="MathJax_Preview"><span id="MathJax-Element-67-Frame" class="MathJax"><span id="MathJax-Span-1439" class="math"><span id="MathJax-Span-1440" class="mrow"><span id="MathJax-Span-1441" class="msubsup"><span id="MathJax-Span-1442" class="mi">δ<span id="MathJax-Span-1443" class="texatom"><span id="MathJax-Span-1444" class="mrow"><span id="MathJax-Span-1445" class="mi">m<span id="MathJax-Span-1446" class="texatom"><span id="MathJax-Span-1447" class="mrow"><span id="MathJax-Span-1448" class="mi">n<span id="MathJax-Span-1449" class="mo">=<span id="MathJax-Span-1450" class="mfrac"><span id="MathJax-Span-1451" class="mrow"><span id="MathJax-Span-1452" class="mi">∂<span id="MathJax-Span-1453" class="msubsup"><span id="MathJax-Span-1454" class="mi">E<span id="MathJax-Span-1455" class="texatom"><span id="MathJax-Span-1456" class="mrow"><span id="MathJax-Span-1457" class="mi">m<span id="MathJax-Span-1458" class="mrow"><span id="MathJax-Span-1459" class="mi">∂<span id="MathJax-Span-1460" class="msubsup"><span id="MathJax-Span-1461" class="mi">z<span id="MathJax-Span-1462" class="texatom"><span id="MathJax-Span-1463" class="mrow"><span id="MathJax-Span-1464" class="mi">n</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>，那么可以得到如下递推公式，</span></span></p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-24-Frame" class="MathJax"><span id="MathJax-Span-1465" class="math"><span id="MathJax-Span-1466" class="mrow"><span id="MathJax-Span-1467" class="mtable"><span id="MathJax-Span-1471" class="mtd"><span id="MathJax-Span-1472" class="mrow"><span id="MathJax-Span-1473" class="msubsup"><span id="MathJax-Span-1474" class="mi">δ<span id="MathJax-Span-1475" class="texatom"><span id="MathJax-Span-1476" class="mrow"><span id="MathJax-Span-1477" class="mn">3<span id="MathJax-Span-1478" class="texatom"><span id="MathJax-Span-1479" class="mrow"><span id="MathJax-Span-1480" class="mn">2<span id="MathJax-Span-1481" class="mo">=<span id="MathJax-Span-1482" class="mfrac"><span id="MathJax-Span-1483" class="mrow"><span id="MathJax-Span-1484" class="mi">∂<span id="MathJax-Span-1485" class="msubsup"><span id="MathJax-Span-1486" class="mi">E<span id="MathJax-Span-1487" class="texatom"><span id="MathJax-Span-1488" class="mrow"><span id="MathJax-Span-1489" class="mn">3<span id="MathJax-Span-1490" class="mrow"><span id="MathJax-Span-1491" class="mi">∂<span id="MathJax-Span-1492" class="msubsup"><span id="MathJax-Span-1493" class="mi">z<span id="MathJax-Span-1494" class="texatom"><span id="MathJax-Span-1495" class="mrow"><span id="MathJax-Span-1496" class="mn">3<span id="MathJax-Span-1497" class="mo">×<span id="MathJax-Span-1498" class="mfrac"><span id="MathJax-Span-1499" class="mrow"><span id="MathJax-Span-1500" class="mi">∂<span id="MathJax-Span-1501" class="msubsup"><span id="MathJax-Span-1502" class="mi">z<span id="MathJax-Span-1503" class="texatom"><span id="MathJax-Span-1504" class="mrow"><span id="MathJax-Span-1505" class="mn">3<span id="MathJax-Span-1506" class="mrow"><span id="MathJax-Span-1507" class="mi">∂<span id="MathJax-Span-1508" class="msubsup"><span id="MathJax-Span-1509" class="mi">z<span id="MathJax-Span-1510" class="texatom"><span id="MathJax-Span-1511" class="mrow"><span id="MathJax-Span-1512" class="mn">2<span id="MathJax-Span-1513" class="mo">=<span id="MathJax-Span-1514" class="mfrac"><span id="MathJax-Span-1515" class="mrow"><span id="MathJax-Span-1516" class="mi">∂<span id="MathJax-Span-1517" class="msubsup"><span id="MathJax-Span-1518" class="mi">E<span id="MathJax-Span-1519" class="texatom"><span id="MathJax-Span-1520" class="mrow"><span id="MathJax-Span-1521" class="mn">3<span id="MathJax-Span-1522" class="mrow"><span id="MathJax-Span-1523" class="mi">∂<span id="MathJax-Span-1524" class="msubsup"><span id="MathJax-Span-1525" class="mi">z<span id="MathJax-Span-1526" class="texatom"><span id="MathJax-Span-1527" class="mrow"><span id="MathJax-Span-1528" class="mn">3<span id="MathJax-Span-1529" class="mo">×<span id="MathJax-Span-1530" class="mfrac"><span id="MathJax-Span-1531" class="mrow"><span id="MathJax-Span-1532" class="mi">∂<span id="MathJax-Span-1533" class="msubsup"><span id="MathJax-Span-1534" class="mi">z<span id="MathJax-Span-1535" class="texatom"><span id="MathJax-Span-1536" class="mrow"><span id="MathJax-Span-1537" class="mn">3<span id="MathJax-Span-1538" class="mrow"><span id="MathJax-Span-1539" class="mi">∂<span id="MathJax-Span-1540" class="msubsup"><span id="MathJax-Span-1541" class="mi">s<span id="MathJax-Span-1542" class="texatom"><span id="MathJax-Span-1543" class="mrow"><span id="MathJax-Span-1544" class="mn">2<span id="MathJax-Span-1545" class="mo">×<span id="MathJax-Span-1546" class="mfrac"><span id="MathJax-Span-1547" class="mrow"><span id="MathJax-Span-1548" class="mi">∂<span id="MathJax-Span-1549" class="msubsup"><span id="MathJax-Span-1550" class="mi">s<span id="MathJax-Span-1551" class="texatom"><span id="MathJax-Span-1552" class="mrow"><span id="MathJax-Span-1553" class="mn">2<span id="MathJax-Span-1554" class="mrow"><span id="MathJax-Span-1555" class="mi">∂<span id="MathJax-Span-1556" class="msubsup"><span id="MathJax-Span-1557" class="mi">z<span id="MathJax-Span-1558" class="texatom"><span id="MathJax-Span-1559" class="mrow"><span id="MathJax-Span-1560" class="mn">2<span id="MathJax-Span-1561" class="mo">=<span id="MathJax-Span-1562" class="mo">(<span id="MathJax-Span-1563" class="msubsup"><span id="MathJax-Span-1564" class="mi">δ<span id="MathJax-Span-1565" class="texatom"><span id="MathJax-Span-1566" class="mrow"><span id="MathJax-Span-1567" class="mn">3<span id="MathJax-Span-1568" class="texatom"><span id="MathJax-Span-1569" class="mrow"><span id="MathJax-Span-1570" class="mn">3<span id="MathJax-Span-1571" class="mo">⨂<span id="MathJax-Span-1572" class="mi">W<span id="MathJax-Span-1573" class="mo">)<span id="MathJax-Span-1574" class="mo">⨀<span id="MathJax-Span-1575" class="mo">(<span id="MathJax-Span-1576" class="mn">1<span id="MathJax-Span-1577" class="mo">−<span id="MathJax-Span-1578" class="msubsup"><span id="MathJax-Span-1579" class="mi">s<span id="MathJax-Span-1580" class="texatom"><span id="MathJax-Span-1581" class="mrow"><span id="MathJax-Span-1582" class="mn">2<span id="MathJax-Span-1583" class="texatom"><span id="MathJax-Span-1584" class="mrow"><span id="MathJax-Span-1585" class="mn">2<span id="MathJax-Span-1586" class="mo">)<span id="mjx-eqn-8_1" class="mtd"><span id="MathJax-Span-1469" class="mrow"><span id="MathJax-Span-1470" class="mtext">(8)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　那么，公式（7）可以转化为下式，</p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-25-Frame" class="MathJax"><span id="MathJax-Span-1587" class="math"><span id="MathJax-Span-1588" class="mrow"><span id="MathJax-Span-1589" class="mtable"><span id="MathJax-Span-1593" class="mtd"><span id="MathJax-Span-1594" class="mrow"><span id="MathJax-Span-1595" class="mfrac"><span id="MathJax-Span-1596" class="mrow"><span id="MathJax-Span-1597" class="mi">∂<span id="MathJax-Span-1598" class="msubsup"><span id="MathJax-Span-1599" class="mi">E<span id="MathJax-Span-1600" class="texatom"><span id="MathJax-Span-1601" class="mrow"><span id="MathJax-Span-1602" class="mn">3<span id="MathJax-Span-1603" class="mi">W<span id="MathJax-Span-1604" class="mo">=<span id="MathJax-Span-1605" class="munderover"><span id="MathJax-Span-1606" class="mo">∑<span id="MathJax-Span-1607" class="texatom"><span id="MathJax-Span-1608" class="mrow"><span id="MathJax-Span-1609" class="mi">k<span id="MathJax-Span-1610" class="mo">=<span id="MathJax-Span-1611" class="mn">0<span id="MathJax-Span-1612" class="texatom"><span id="MathJax-Span-1613" class="mrow"><span id="MathJax-Span-1614" class="mn">3<span id="MathJax-Span-1615" class="msubsup"><span id="MathJax-Span-1616" class="mi">δ<span id="MathJax-Span-1617" class="texatom"><span id="MathJax-Span-1618" class="mrow"><span id="MathJax-Span-1619" class="mn">3<span id="MathJax-Span-1620" class="texatom"><span id="MathJax-Span-1621" class="mrow"><span id="MathJax-Span-1622" class="mi">k<span id="MathJax-Span-1623" class="mo">×<span id="MathJax-Span-1624" class="mfrac"><span id="MathJax-Span-1625" class="mrow"><span id="MathJax-Span-1626" class="mi">∂<span id="MathJax-Span-1627" class="msubsup"><span id="MathJax-Span-1628" class="mi">z<span id="MathJax-Span-1629" class="texatom"><span id="MathJax-Span-1630" class="mrow"><span id="MathJax-Span-1631" class="mi">k<span id="MathJax-Span-1632" class="mrow"><span id="MathJax-Span-1633" class="mi">∂<span id="MathJax-Span-1634" class="msubsup"><span id="MathJax-Span-1635" class="mi">w<span id="MathJax-Span-1636" class="texatom"><span id="MathJax-Span-1637" class="mrow"><span id="MathJax-Span-1638" class="mn">1<span id="mjx-eqn-9_1" class="mtd"><span id="MathJax-Span-1591" class="mrow"><span id="MathJax-Span-1592" class="mtext">(9)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　显然，结合公式（8）中的递推公式，可以递推求解出公式（9）中的每一项，那么<span class="MathJax_Preview"><span id="MathJax-Element-26-Frame" class="MathJax"><span id="MathJax-Span-1639" class="math"><span id="MathJax-Span-1640" class="mrow"><span id="MathJax-Span-1641" class="msubsup"><span id="MathJax-Span-1642" class="mi">E<span id="MathJax-Span-1643" class="texatom"><span id="MathJax-Span-1644" class="mrow"><span id="MathJax-Span-1645" class="mn">3</span></span></span></span></span></span></span>关于参数W的偏导数便迎刃而解了。</span></span></p>
+<h4 id="33-e3关于参数u的偏导数"><a name="t6" target="_blank"></a>3.3&nbsp;<span class="MathJax_Preview"><span id="MathJax-Element-27-Frame" class="MathJax"><span id="MathJax-Span-1646" class="math"><span id="MathJax-Span-1647" class="mrow"><span id="MathJax-Span-1648" class="msubsup"><span id="MathJax-Span-1649" class="mi">E<span id="MathJax-Span-1650" class="texatom"><span id="MathJax-Span-1651" class="mrow"><span id="MathJax-Span-1652" class="mn">3</span></span></span></span></span></span></span>关于参数U的偏导数</span></span></h4>
+<p>　　关于参数U的偏导数求解过程，跟W的偏导数求解过程非常类似，在这里就不介绍了，感兴趣的读者可以结合3.2的思路尝试着自己推导一下。</p>
+<h3 id="4-梯度消失问题"><a name="t7" target="_blank"></a>4. 梯度消失问题</h3>
+<p>　　当网络层数增多时，在使用BP算法求解梯度时，自然而然地就会出现“vanishing gradient“问题（还有一种称作“exploding gradient”，但这种情况在训练模型过程中易于被发现，所以可以通过人为控制来解决），下面我们从数学的角度来证明RNN网络确实存在“vanishing gradient“问题，推导公式如下，</p>
+<p>&nbsp;</p>
+<div class="MathJax_Display"><span id="MathJax-Element-28-Frame" class="MathJax"><span id="MathJax-Span-1653" class="math"><span id="MathJax-Span-1654" class="mrow"><span id="MathJax-Span-1655" class="mtable"><span id="MathJax-Span-1659" class="mtd"><span id="MathJax-Span-1660" class="mrow"><span id="MathJax-Span-1661" class="mfrac"><span id="MathJax-Span-1662" class="mrow"><span id="MathJax-Span-1663" class="mi">∂<span id="MathJax-Span-1664" class="msubsup"><span id="MathJax-Span-1665" class="mi">E<span id="MathJax-Span-1666" class="texatom"><span id="MathJax-Span-1667" class="mrow"><span id="MathJax-Span-1668" class="mn">3<span id="MathJax-Span-1669" class="mi">W<span id="MathJax-Span-1670" class="mo">=<span id="MathJax-Span-1671" class="munderover"><span id="MathJax-Span-1672" class="mo">∑<span id="MathJax-Span-1673" class="texatom"><span id="MathJax-Span-1674" class="mrow"><span id="MathJax-Span-1675" class="mi">k<span id="MathJax-Span-1676" class="mo">=<span id="MathJax-Span-1677" class="mn">0<span id="MathJax-Span-1678" class="texatom"><span id="MathJax-Span-1679" class="mrow"><span id="MathJax-Span-1680" class="mn">3<span id="MathJax-Span-1681" class="mfrac"><span id="MathJax-Span-1682" class="mrow"><span id="MathJax-Span-1683" class="mi">∂<span id="MathJax-Span-1684" class="msubsup"><span id="MathJax-Span-1685" class="mi">E<span id="MathJax-Span-1686" class="texatom"><span id="MathJax-Span-1687" class="mrow"><span id="MathJax-Span-1688" class="mn">3<span id="MathJax-Span-1689" class="mrow"><span id="MathJax-Span-1690" class="mi">∂<span id="MathJax-Span-1691" class="msubsup"><span id="MathJax-Span-1692" class="mi">a<span id="MathJax-Span-1693" class="texatom"><span id="MathJax-Span-1694" class="mrow"><span id="MathJax-Span-1695" class="mn">3<span id="MathJax-Span-1696" class="mo">×<span id="MathJax-Span-1697" class="mfrac"><span id="MathJax-Span-1698" class="mrow"><span id="MathJax-Span-1699" class="mi">∂<span id="MathJax-Span-1700" class="msubsup"><span id="MathJax-Span-1701" class="mi">a<span id="MathJax-Span-1702" class="texatom"><span id="MathJax-Span-1703" class="mrow"><span id="MathJax-Span-1704" class="mn">3<span id="MathJax-Span-1705" class="mrow"><span id="MathJax-Span-1706" class="mi">∂<span id="MathJax-Span-1707" class="msubsup"><span id="MathJax-Span-1708" class="mi">s<span id="MathJax-Span-1709" class="texatom"><span id="MathJax-Span-1710" class="mrow"><span id="MathJax-Span-1711" class="mn">3<span id="MathJax-Span-1712" class="mo">×<span id="MathJax-Span-1713" class="mfrac"><span id="MathJax-Span-1714" class="mrow"><span id="MathJax-Span-1715" class="mi">∂<span id="MathJax-Span-1716" class="msubsup"><span id="MathJax-Span-1717" class="mi">s<span id="MathJax-Span-1718" class="texatom"><span id="MathJax-Span-1719" class="mrow"><span id="MathJax-Span-1720" class="mn">3<span id="MathJax-Span-1721" class="mrow"><span id="MathJax-Span-1722" class="mi">∂<span id="MathJax-Span-1723" class="msubsup"><span id="MathJax-Span-1724" class="mi">s<span id="MathJax-Span-1725" class="texatom"><span id="MathJax-Span-1726" class="mrow"><span id="MathJax-Span-1727" class="mi">k<span id="MathJax-Span-1728" class="mo">×<span id="MathJax-Span-1729" class="mfrac"><span id="MathJax-Span-1730" class="mrow"><span id="MathJax-Span-1731" class="mi">∂<span id="MathJax-Span-1732" class="msubsup"><span id="MathJax-Span-1733" class="mi">s<span id="MathJax-Span-1734" class="texatom"><span id="MathJax-Span-1735" class="mrow"><span id="MathJax-Span-1736" class="mi">k<span id="MathJax-Span-1737" class="mrow"><span id="MathJax-Span-1738" class="mi">∂<span id="MathJax-Span-1739" class="msubsup"><span id="MathJax-Span-1740" class="mi">W<span id="MathJax-Span-1741" class="texatom"><span id="MathJax-Span-1742" class="mrow"><span id="MathJax-Span-1743" class="mn">1<span id="MathJax-Span-1744" class="mo">=<span id="MathJax-Span-1745" class="munderover"><span id="MathJax-Span-1746" class="mo">∑<span id="MathJax-Span-1747" class="texatom"><span id="MathJax-Span-1748" class="mrow"><span id="MathJax-Span-1749" class="mi">k<span id="MathJax-Span-1750" class="mo">=<span id="MathJax-Span-1751" class="mn">0<span id="MathJax-Span-1752" class="texatom"><span id="MathJax-Span-1753" class="mrow"><span id="MathJax-Span-1754" class="mn">3<span id="MathJax-Span-1755" class="mfrac"><span id="MathJax-Span-1756" class="mrow"><span id="MathJax-Span-1757" class="mi">∂<span id="MathJax-Span-1758" class="msubsup"><span id="MathJax-Span-1759" class="mi">E<span id="MathJax-Span-1760" class="texatom"><span id="MathJax-Span-1761" class="mrow"><span id="MathJax-Span-1762" class="mn">3<span id="MathJax-Span-1763" class="mrow"><span id="MathJax-Span-1764" class="mi">∂<span id="MathJax-Span-1765" class="msubsup"><span id="MathJax-Span-1766" class="mi">a<span id="MathJax-Span-1767" class="texatom"><span id="MathJax-Span-1768" class="mrow"><span id="MathJax-Span-1769" class="mn">3<span id="MathJax-Span-1770" class="mo">×<span id="MathJax-Span-1771" class="mfrac"><span id="MathJax-Span-1772" class="mrow"><span id="MathJax-Span-1773" class="mi">∂<span id="MathJax-Span-1774" class="msubsup"><span id="MathJax-Span-1775" class="mi">a<span id="MathJax-Span-1776" class="texatom"><span id="MathJax-Span-1777" class="mrow"><span id="MathJax-Span-1778" class="mn">3<span id="MathJax-Span-1779" class="mrow"><span id="MathJax-Span-1780" class="mi">∂<span id="MathJax-Span-1781" class="msubsup"><span id="MathJax-Span-1782" class="mi">s<span id="MathJax-Span-1783" class="texatom"><span id="MathJax-Span-1784" class="mrow"><span id="MathJax-Span-1785" class="mn">3<span id="MathJax-Span-1786" class="mo">×<span id="MathJax-Span-1787" class="mo">(<span id="MathJax-Span-1788" class="munderover"><span id="MathJax-Span-1789" class="mo">∏<span id="MathJax-Span-1790" class="texatom"><span id="MathJax-Span-1791" class="mrow"><span id="MathJax-Span-1792" class="mi">i<span id="MathJax-Span-1793" class="mo">=<span id="MathJax-Span-1794" class="mi">k<span id="MathJax-Span-1795" class="mo">+<span id="MathJax-Span-1796" class="mn">1<span id="MathJax-Span-1797" class="texatom"><span id="MathJax-Span-1798" class="mrow"><span id="MathJax-Span-1799" class="mn">3<span id="MathJax-Span-1800" class="mfrac"><span id="MathJax-Span-1801" class="mrow"><span id="MathJax-Span-1802" class="mi">∂<span id="MathJax-Span-1803" class="msubsup"><span id="MathJax-Span-1804" class="mi">s<span id="MathJax-Span-1805" class="texatom"><span id="MathJax-Span-1806" class="mrow"><span id="MathJax-Span-1807" class="mi">i<span id="MathJax-Span-1808" class="mrow"><span id="MathJax-Span-1809" class="mi">∂<span id="MathJax-Span-1810" class="msubsup"><span id="MathJax-Span-1811" class="mi">s<span id="MathJax-Span-1812" class="texatom"><span id="MathJax-Span-1813" class="mrow"><span id="MathJax-Span-1814" class="mi">i<span id="MathJax-Span-1815" class="mo">−<span id="MathJax-Span-1816" class="mn">1<span id="MathJax-Span-1817" class="mo">)<span id="MathJax-Span-1818" class="mo">×<span id="MathJax-Span-1819" class="mfrac"><span id="MathJax-Span-1820" class="mrow"><span id="MathJax-Span-1821" class="mi">∂<span id="MathJax-Span-1822" class="msubsup"><span id="MathJax-Span-1823" class="mi">s<span id="MathJax-Span-1824" class="texatom"><span id="MathJax-Span-1825" class="mrow"><span id="MathJax-Span-1826" class="mi">k<span id="MathJax-Span-1827" class="mrow"><span id="MathJax-Span-1828" class="mi">∂<span id="MathJax-Span-1829" class="msubsup"><span id="MathJax-Span-1830" class="mi">W<span id="MathJax-Span-1831" class="texatom"><span id="MathJax-Span-1832" class="mrow"><span id="MathJax-Span-1833" class="mn">1<span id="mjx-eqn-10_1" class="mtd"><span id="MathJax-Span-1657" class="mrow"><span id="MathJax-Span-1658" class="mtext">(10)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>&nbsp;</p>
+<p>　　大家应该注意到了，上面的式子中有一个连乘式，对于其中的每一项，满足<span class="MathJax_Preview"><span id="MathJax-Element-29-Frame" class="MathJax"><span id="MathJax-Span-1834" class="math"><span id="MathJax-Span-1835" class="mrow"><span id="MathJax-Span-1836" class="msubsup"><span id="MathJax-Span-1837" class="mi">s<span id="MathJax-Span-1838" class="texatom"><span id="MathJax-Span-1839" class="mrow"><span id="MathJax-Span-1840" class="mi">i<span id="MathJax-Span-1841" class="mo">=<span id="MathJax-Span-1842" class="mi">a<span id="MathJax-Span-1843" class="mi">c<span id="MathJax-Span-1844" class="mi">t<span id="MathJax-Span-1845" class="mi">i<span id="MathJax-Span-1846" class="mi">v<span id="MathJax-Span-1847" class="mi">a<span id="MathJax-Span-1848" class="mi">t<span id="MathJax-Span-1849" class="mi">i<span id="MathJax-Span-1850" class="mi">o<span id="MathJax-Span-1851" class="mi">n<span id="MathJax-Span-1852" class="mo">(<span id="MathJax-Span-1853" class="mi">U<span id="MathJax-Span-1854" class="mo">×<span id="MathJax-Span-1855" class="msubsup"><span id="MathJax-Span-1856" class="mi">x<span id="MathJax-Span-1857" class="texatom"><span id="MathJax-Span-1858" class="mrow"><span id="MathJax-Span-1859" class="mi">i<span id="MathJax-Span-1860" class="mo">+<span id="MathJax-Span-1861" class="mi">W<span id="MathJax-Span-1862" class="mo">×<span id="MathJax-Span-1863" class="msubsup"><span id="MathJax-Span-1864" class="mi">s<span id="MathJax-Span-1865" class="texatom"><span id="MathJax-Span-1866" class="mrow"><span id="MathJax-Span-1867" class="mi">i<span id="MathJax-Span-1868" class="mo">−<span id="MathJax-Span-1869" class="mn">1<span id="MathJax-Span-1870" class="mo">)</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>，当激活函数为tanh时，<span class="MathJax_Preview"><span id="MathJax-Element-30-Frame" class="MathJax"><span id="MathJax-Span-1871" class="math"><span id="MathJax-Span-1872" class="mrow"><span id="MathJax-Span-1873" class="mfrac"><span id="MathJax-Span-1874" class="mrow"><span id="MathJax-Span-1875" class="mi">∂<span id="MathJax-Span-1876" class="msubsup"><span id="MathJax-Span-1877" class="mi">s<span id="MathJax-Span-1878" class="texatom"><span id="MathJax-Span-1879" class="mrow"><span id="MathJax-Span-1880" class="mi">i<span id="MathJax-Span-1881" class="mrow"><span id="MathJax-Span-1882" class="mi">∂<span id="MathJax-Span-1883" class="msubsup"><span id="MathJax-Span-1884" class="mi">s<span id="MathJax-Span-1885" class="texatom"><span id="MathJax-Span-1886" class="mrow"><span id="MathJax-Span-1887" class="mi">i<span id="MathJax-Span-1888" class="mo">−<span id="MathJax-Span-1889" class="mn">1</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>的取值范围为[0, 1]。当激活函数为sigmoid时，<span class="MathJax_Preview"><span id="MathJax-Element-31-Frame" class="MathJax"><span id="MathJax-Span-1890" class="math"><span id="MathJax-Span-1891" class="mrow"><span id="MathJax-Span-1892" class="mfrac"><span id="MathJax-Span-1893" class="mrow"><span id="MathJax-Span-1894" class="mi">∂<span id="MathJax-Span-1895" class="msubsup"><span id="MathJax-Span-1896" class="mi">s<span id="MathJax-Span-1897" class="texatom"><span id="MathJax-Span-1898" class="mrow"><span id="MathJax-Span-1899" class="mi">i<span id="MathJax-Span-1900" class="mrow"><span id="MathJax-Span-1901" class="mi">∂<span id="MathJax-Span-1902" class="msubsup"><span id="MathJax-Span-1903" class="mi">s<span id="MathJax-Span-1904" class="texatom"><span id="MathJax-Span-1905" class="mrow"><span id="MathJax-Span-1906" class="mi">i<span id="MathJax-Span-1907" class="mo">−<span id="MathJax-Span-1908" class="mn">1</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>的取值范围为[0, 1/4]（简单的一元函数求导，这里就不展开了）。因为这里我们选择t=3时刻的输出损失，所以连乘的式子的个数并不多。但是我们可以设想一下，对于深度的网络结构而言，若选择tanh或者sigmoid激活函数，对于公式（10）中k取值较小的那一项，一定满足<span class="MathJax_Preview"><span id="MathJax-Element-32-Frame" class="MathJax"><span id="MathJax-Span-1909" class="math"><span id="MathJax-Span-1910" class="mrow"><span id="MathJax-Span-1911" class="munderover"><span id="MathJax-Span-1912" class="mo">∏<span id="MathJax-Span-1913" class="texatom"><span id="MathJax-Span-1914" class="mrow"><span id="MathJax-Span-1915" class="mn">3<span id="MathJax-Span-1916" class="texatom"><span id="MathJax-Span-1917" class="mrow"><span id="MathJax-Span-1918" class="mi">i<span id="MathJax-Span-1919" class="mo">=<span id="MathJax-Span-1920" class="mi">k<span id="MathJax-Span-1921" class="mo">+<span id="MathJax-Span-1922" class="mn">1<span id="MathJax-Span-1923" class="mfrac"><span id="MathJax-Span-1924" class="mrow"><span id="MathJax-Span-1925" class="mi">∂<span id="MathJax-Span-1926" class="msubsup"><span id="MathJax-Span-1927" class="mi">s<span id="MathJax-Span-1928" class="texatom"><span id="MathJax-Span-1929" class="mrow"><span id="MathJax-Span-1930" class="mi">i<span id="MathJax-Span-1931" class="mrow"><span id="MathJax-Span-1932" class="mi">∂<span id="MathJax-Span-1933" class="msubsup"><span id="MathJax-Span-1934" class="mi">s<span id="MathJax-Span-1935" class="texatom"><span id="MathJax-Span-1936" class="mrow"><span id="MathJax-Span-1937" class="mi">i<span id="MathJax-Span-1938" class="mo">−<span id="MathJax-Span-1939" class="mn">1</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>趋近于0，从而导致了消失梯度问题。</span></span></span></span></span></span></span></span></p>
+<p>　　我们再从直观的角度来理解一下消失梯度问题，对于RNN时刻T的输出，其必定是时刻t=1,…,T-1的输入综合作用的结果，也就是说更新模型参数时，要充分利用当前时刻以及之前所有时刻的输入信息。但是如果发生了”消失梯度”问题，就会意味着，距离当前时刻非常远的输入数据，不能为当前模型参数的更新做贡献，所以在RNN的编程实现中，才会有“truncated gradient”这一概念，“截断梯度”就是在更新参数时，只利用较近的时刻的序列信息，把那些“历史悠久的信息”忽略掉了。</p>
+<p>　　解决“消失梯度问题”，我们可以更换激活函数，比如采用Relu（rectified linear units）激活函数，但是更好的办法是使用LSTM或者GRU<a class="replace_word" title="大型网站架构知识库" href="http://lib.csdn.net/base/architecture" target="_blank">架构</a>的网络。</p>
+<h2 id="lstm网络"><a name="t8" target="_blank"></a>LSTM网络</h2>
+<p>　　为了解决原始RNN网络结构存在的“vanishing gradient”问题，前辈们设计了LSTM这种新的网络结构。但从本质上来讲，LSTM是一种特殊的循环神经网络，其和RNN的区别在于，对于特定时刻t，隐藏层输出<span class="MathJax_Preview"><span id="MathJax-Element-33-Frame" class="MathJax"><span id="MathJax-Span-1940" class="math"><span id="MathJax-Span-1941" class="mrow"><span id="MathJax-Span-1942" class="msubsup"><span id="MathJax-Span-1943" class="mi">s<span id="MathJax-Span-1944" class="texatom"><span id="MathJax-Span-1945" class="mrow"><span id="MathJax-Span-1946" class="mi">t</span></span></span></span></span></span></span>的计算方式不同。故对LSTM网络的训练的思路与RNN类似，仅前向传播关系式不同而已。值得一提的是，在对LSTM网络进行训练时，cell state c[0]和hidden state s[0]都是随机初始化得到的。&nbsp;<br>　　GRU（Gated Recurrent Unit）是2014年提出来的新的RNN架构，它是简化版的LSTM，在超参数（hyper-parameters）均调优的前提下，这两种RNN架构的性能相当，但是GRU架构的参数少，所以需要的训练样本更少，易于训练。LSTM和GRU架构的网络图如下，</span></span></p>
+<p>&nbsp;</p>
+<center><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/1480236561_4015.png" alt=""></center>
+<p>&nbsp;</p>
+<p>　　关于LSTM网络结构相关的理论，请参见<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank">http://colah.github.io/posts/2015-08-Understanding-LSTMs/</a>，相信也只有这样的大牛能把LSTM解析的如此浅显易懂。这里还需要补充说明一下，关于LSTM网络的参数求偏微分，如果我们手动求解的话，也是跟RNN类似的思路，但由于LSTM网络结构比较复杂，手动算的话，式子会变得非常复杂，我们便可以借助<a class="replace_word" title="深度学习知识库" href="http://lib.csdn.net/base/deeplearning" target="_blank">深度学习</a>框架的自动微分功能了，现在的框架也都支持自动微分的，比如theano、tensorflow等。</p>
+<p>参考资料：<a href="http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/" target="_blank">http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/</a>&nbsp;<br>　　　　　“A tutorial on training recurrent neural networks”. H. Jaeger, 2002.</p>
+<p>&nbsp;</p>
+
+
+
+
+</div>
+
+
+
+
+</div>
+<div class="bdsharebuttonbox tracking-ad bdshare-button-style0-16" data-mod="popu_172" data-bd-bind="1499306145678">&nbsp;</div>
+
+
+
+<br><span style="font-size: 2em;">Recurrent Neural Networks</span></div>
+<p>人类并不是每时每刻都从一片空白的大脑开始他们的思考。在你阅读这篇文章时候，你都是基于自己已经拥有的对先前所见词的理解来推断当前词的真实含义。我们不会将所有的东西都全部丢弃，然后用空白的大脑进行思考。我们的思想拥有持久性。<br>传统的神经网络并不能做到这点，看起来也像是一种巨大的弊端。例如，假设你希望对电影中的每个时间点的时间类型进行分类。传统的神经网络应该很难来处理这个问题——使用电影中先前的事件推断后续的事件。<br>RNN 解决了这个问题。RNN 是包含循环的网络，允许信息的持久化。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-f16c8acc01d2d469.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-f16c8acc01d2d469.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">RNN 包含循环</div>
+
+
+
+
+
+
+
+</div>
+<p>在上面的示例图中，神经网络的模块，A，正在读取某个输入 x_i，并输出一个值 h_i。循环可以使得信息可以从当前步传递到下一步。<br>这些循环使得 RNN 看起来非常神秘。然而，如果你仔细想想，这样也不比一个正常的神经网络难于理解。RNN 可以被看做是同一神经网络的多次复制，每个神经网络模块会把消息传递给下一个。所以，如果我们将这个循环展开：</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-d6749df8fb93b0b0.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-d6749df8fb93b0b0.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">展开的 RNN</div>
+
+
+
+
+
+
+
+</div>
+<p><br>链式的特征揭示了 RNN 本质上是与序列和列表相关的。他们是对于这类数据的最自然的神经网络架构。<br>并且 RNN 也已经被人们应用了！在过去几年中，应用 RNN 在语音识别，语言建模，翻译，图片描述等问题上已经取得一定成功，并且这个列表还在增长。我建议大家参考 Andrej Karpathy 的博客文章——<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank">The Unreasonable Effectiveness of Recurrent Neural Networks</a>&nbsp;来看看更丰富有趣的 RNN 的成功应用。<br>而这些成功应用的关键之处就是 LSTM 的使用，这是一种特别的 RNN，比标准的 RNN 在很多的任务上都表现得更好。几乎所有的令人振奋的关于 RNN 的结果都是通过 LSTM 达到的。这篇博文也会就 LSTM 进行展开。</p>
+<h1>长期依赖（Long-Term Dependencies）问题</h1>
+<p>RNN 的关键点之一就是他们可以用来连接先前的信息到当前的任务上，例如使用过去的视频段来推测对当前段的理解。如果 RNN 可以做到这个，他们就变得非常有用。但是真的可以么？答案是，还有很多依赖因素。<br>有时候，我们仅仅需要知道先前的信息来执行当前的任务。例如，我们有一个语言模型用来基于先前的词来预测下一个词。如果我们试着预测 “the clouds are in the sky” 最后的词，我们并不需要任何其他的上下文 —— 因此下一个词很显然就应该是 sky。在这样的场景中，相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-feb16ca499c4b96a.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-feb16ca499c4b96a.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">不太长的相关信息和位置间隔</div>
+
+
+
+
+
+
+
+</div>
+<p>但是同样会有一些更加复杂的场景。假设我们试着去预测“I grew up in France... I speak fluent French”最后的词。当前的信息建议下一个词可能是一种语言的名字，但是如果我们需要弄清楚是什么语言，我们是需要先前提到的离当前位置很远的 France 的上下文的。这说明相关信息和当前预测位置之间的间隔就肯定变得相当的大。<br>不幸的是，在这个间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-becb05d96b1e4af7.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-becb05d96b1e4af7.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">相当长的相关信息和位置间隔</div>
+
+
+
+
+
+
+
+</div>
+<p>在理论上，RNN 绝对可以处理这样的 长期依赖 问题。人们可以仔细挑选参数来解决这类问题中的最初级形式，但在实践中，RNN 肯定不能够成功学习到这些知识。<a href="http://www-dsi.ing.unifi.it/~paolo/ps/tnn-94-gradient.pdf" target="_blank">Bengio, et al. (1994)</a>等人对该问题进行了深入的研究，他们发现一些使训练 RNN 变得非常困难的相当根本的原因。<br>然而，幸运的是，LSTM 并没有这个问题！</p>
+<h1>LSTM 网络</h1>
+<p>Long Short Term 网络—— 一般就叫做 LSTM ——是一种 RNN 特殊的类型，可以学习长期依赖信息。LSTM 由<a href="http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf" target="_blank">Hochreiter &amp; Schmidhuber (1997)</a>提出，并在近期被<a href="https://scholar.google.com/citations?user=DaFHynwAAAAJ&amp;hl=en" target="_blank">Alex Graves</a>进行了改良和推广。在很多问题，LSTM 都取得相当巨大的成功，并得到了广泛的使用。<br>LSTM 通过刻意的设计来避免长期依赖问题。记住长期的信息在实践中是 LSTM 的默认行为，而非需要付出很大代价才能获得的能力！<br>所有 RNN 都具有一种重复神经网络模块的链式的形式。在标准的 RNN 中，这个重复的模块只有一个非常简单的结构，例如一个 tanh 层。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-9ac355076444b66f.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-9ac355076444b66f.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">标准 RNN 中的重复模块包含单一的层</div>
+
+
+
+
+
+
+
+</div>
+<p><br>LSTM 同样是这样的结构，但是重复的模块拥有一个不同的结构。不同于 单一神经网络层，这里是有四个，以一种非常特殊的方式进行交互。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-b9a16a53d58ca2b9.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-b9a16a53d58ca2b9.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">LSTM 中的重复模块包含四个交互的层</div>
+
+
+
+
+
+
+
+</div>
+<p><br>不必担心这里的细节。我们会一步一步地剖析 LSTM 解析图。现在，我们先来熟悉一下图中使用的各种元素的图标。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-ea943b818b8e18d0.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-ea943b818b8e18d0.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">LSTM 中的图标</div>
+
+
+
+
+
+
+
+</div>
+<p><br>在上面的图例中，每一条黑线传输着一整个向量，从一个节点的输出到其他节点的输入。粉色的圈代表 pointwise 的操作，诸如向量的和，而黄色的矩阵就是学习到的神经网络层。合在一起的线表示向量的连接，分开的线表示内容被复制，然后分发到不同的位置。</p>
+<h1>LSTM 的核心思想</h1>
+<p>LSTM 的关键就是细胞状态，水平线在图上方贯穿运行。<br>细胞状态类似于传送带。直接在整个链上运行，只有一些少量的线性交互。信息在上面流传保持不变会很容易。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-ac1eb618f37a9dea.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-ac1eb618f37a9dea.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">Paste_Image.png</div>
+
+
+
+
+
+
+
+</div>
+<p>LSTM 有通过精心设计的称作为“门”的结构来去除或者增加信息到细胞状态的能力。门是一种让信息选择式通过的方法。他们包含一个 sigmoid 神经网络层和一个 pointwise 乘法操作。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-7169541c790efd13.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-7169541c790efd13.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">Paste_Image.png</div>
+
+
+
+
+
+
+
+</div>
+<p><br>Sigmoid 层输出 0 到 1 之间的数值，描述每个部分有多少量可以通过。0 代表“不许任何量通过”，1 就指“允许任意量通过”！</p>
+<p>LSTM 拥有三个门，来保护和控制细胞状态。</p>
+<h1>逐步理解 LSTM</h1>
+<p>在我们 LSTM 中的第一步是决定我们会从细胞状态中丢弃什么信息。这个决定通过一个称为忘记门层完成。该门会读取&nbsp;<code>h_{t-1}</code>&nbsp;和&nbsp;<code>x_t</code>，输出一个在 0 到 1 之间的数值给每个在细胞状态&nbsp;<code>C_{t-1}</code>&nbsp;中的数字。1 表示“完全保留”，0 表示“完全舍弃”。<br>让我们回到语言模型的例子中来基于已经看到的预测下一个词。在这个问题中，细胞状态可能包含当前主语的性别，因此正确的代词可以被选择出来。当我们看到新的主语，我们希望忘记旧的主语。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-96b387f711d1d12c.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-96b387f711d1d12c.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">决定丢弃信息</div>
+
+
+
+
+
+
+
+</div>
+<p><br>下一步是确定什么样的新信息被存放在细胞状态中。这里包含两个部分。第一，sigmoid 层称 “输入门层” 决定什么值我们将要更新。然后，一个 tanh 层创建一个新的候选值向量，<code>\tilde{C}_t</code>，会被加入到状态中。下一步，我们会讲这两个信息来产生对状态的更新。<br>在我们语言模型的例子中，我们希望增加新的主语的性别到细胞状态中，来替代旧的需要忘记的主语。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-7fa07e640593f930.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-7fa07e640593f930.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">确定更新的信息</div>
+
+
+
+
+
+
+
+</div>
+<p>现在是更新旧细胞状态的时间了，<code>C_{t-1}</code>&nbsp;更新为&nbsp;<code>C_t</code>。前面的步骤已经决定了将会做什么，我们现在就是实际去完成。<br>我们把旧状态与&nbsp;<code>f_t</code>&nbsp;相乘，丢弃掉我们确定需要丢弃的信息。接着加上&nbsp;<code>i_t * \tilde{C}_t</code>。这就是新的候选值，根据我们决定更新每个状态的程度进行变化。<br>在语言模型的例子中，这就是我们实际根据前面确定的目标，丢弃旧代词的性别信息并添加新的信息的地方。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-d88caa3c4faf5353.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-d88caa3c4faf5353.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">更新细胞状态</div>
+
+
+
+
+
+
+
+</div>
+<p>最终，我们需要确定输出什么值。这个输出将会基于我们的细胞状态，但是也是一个过滤后的版本。首先，我们运行一个 sigmoid 层来确定细胞状态的哪个部分将输出出去。接着，我们把细胞状态通过 tanh 进行处理（得到一个在 -1 到 1 之间的值）并将它和 sigmoid 门的输出相乘，最终我们仅仅会输出我们确定输出的那部分。<br>在语言模型的例子中，因为他就看到了一个&nbsp;代词，可能需要输出与一个&nbsp;动词&nbsp;相关的信息。例如，可能输出是否代词是单数还是负数，这样如果是动词的话，我们也知道动词需要进行的词形变化。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-4c9186bf786063d6.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-4c9186bf786063d6.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">输出信息</div>
+
+
+
+
+
+
+
+</div>
+<h1>LSTM 的变体</h1>
+<p>我们到目前为止都还在介绍正常的 LSTM。但是不是所有的 LSTM 都长成一个样子的。实际上，几乎所有包含 LSTM 的论文都采用了微小的变体。差异非常小，但是也值得拿出来讲一下。<br>其中一个流形的 LSTM 变体，就是由&nbsp;<a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank">Gers &amp; Schmidhuber (2000)</a>&nbsp;提出的，增加了 “peephole connection”。是说，我们让 门层 也会接受细胞状态的输入。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-0f80ad5540ea27f9.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-0f80ad5540ea27f9.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">peephole 连接</div>
+
+
+
+
+
+
+
+</div>
+<p>上面的图例中，我们增加了 peephole 到每个门上，但是许多论文会加入部分的 peephole 而非所有都加。</p>
+<p>另一个变体是通过使用 coupled 忘记和输入门。不同于之前是分开确定什么忘记和需要添加什么新的信息，这里是一同做出决定。我们仅仅会当我们将要输入在当前位置时忘记。我们仅仅输入新的值到那些我们已经忘记旧的信息的那些状态 。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-bd2f1feaea22630e.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-bd2f1feaea22630e.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">coupled 忘记门和输入门</div>
+
+
+
+
+
+
+
+</div>
+<p><br>另一个改动较大的变体是 Gated Recurrent Unit (GRU)，这是由&nbsp;<a href="http://arxiv.org/pdf/1406.1078v3.pdf" target="_blank">Cho, et al. (2014)</a>&nbsp;提出。它将忘记门和输入门合成了一个单一的 更新门。同样还混合了细胞状态和隐藏状态，和其他一些改动。最终的模型比标准的 LSTM 模型要简单，也是非常流行的变体。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-dd3d241fa44a71c0.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-dd3d241fa44a71c0.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">GRU</div>
+
+
+
+
+
+
+
+</div>
+<p><br>这里只是部分流行的 LSTM 变体。当然还有很多其他的，如<a href="http://arxiv.org/pdf/1508.03790v2.pdf" target="_blank">Yao, et al. (2015)</a>&nbsp;提出的 Depth Gated RNN。还有用一些完全不同的观点来解决长期依赖的问题，如<a href="http://arxiv.org/pdf/1402.3511v1.pdf" target="_blank">Koutnik, et al. (2014)</a>&nbsp;提出的 Clockwork RNN。<br>要问哪个变体是最好的？其中的差异性真的重要吗？<a href="http://arxiv.org/pdf/1503.04069.pdf" target="_blank">Greff, et al. (2015)</a>&nbsp;给出了流行变体的比较，结论是他们基本上是一样的。<a href="http://jmlr.org/proceedings/papers/v37/jozefowicz15.pdf" target="_blank">Jozefowicz, et al. (2015)</a>&nbsp;则在超过 1 万种 RNN 架构上进行了测试，发现一些架构在某些任务上也取得了比 LSTM 更好的结果。</p>
+<div class="image-package"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/42741-acd4c079d94803d8.png" alt="" data-original-src="//upload-images.jianshu.io/upload_images/42741-acd4c079d94803d8.png?imageMogr2/auto-orient/strip%7CimageView2/2"><br>
+<div class="image-caption">Jozefowicz等人论文截图</div>
+
+
+
+
+
+
+
+</div>
+<h1>结论</h1>
+<p>刚开始，我提到通过 RNN 得到重要的结果。本质上所有这些都可以使用 LSTM 完成。对于大多数任务确实展示了更好的性能！<br>由于 LSTM 一般是通过一系列的方程表示的，使得 LSTM 有一点令人费解。然而本文中一步一步地解释让这种困惑消除了不少。<br>LSTM 是我们在 RNN 中获得的重要成功。很自然地，我们也会考虑：哪里会有更加重大的突破呢？在研究人员间普遍的观点是：“Yes! 下一步已经有了——那就是注意力！” 这个想法是让 RNN 的每一步都从更加大的信息集中挑选信息。例如，如果你使用 RNN 来产生一个图片的描述，可能会选择图片的一个部分，根据这部分信息来产生输出的词。实际上，<a href="http://arxiv.org/pdf/1502.03044v2.pdf" target="_blank">Xu,&nbsp;<em>et al.</em>(2015)</a>已经这么做了——如果你希望深入探索注意力可能这就是一个有趣的起点！还有一些使用注意力的相当振奋人心的研究成果，看起来有更多的东西亟待探索……<br>注意力也不是 RNN 研究领域中唯一的发展方向。例如，<a href="http://arxiv.org/pdf/1507.01526v1.pdf" target="_blank">Kalchbrenner,&nbsp;<em>et al.</em>&nbsp;(2015)</a>&nbsp;提出的 Grid LSTM 看起来也是很有前途。使用生成模型的 RNN，诸如<a href="http://arxiv.org/pdf/1502.04623.pdf" target="_blank">Gregor,&nbsp;<em>et al.</em>(2015)</a>&nbsp;<a href="http://arxiv.org/pdf/1506.02216v3.pdf" target="_blank">Chung,&nbsp;<em>et al.</em>&nbsp;(2015)</a>&nbsp;和&nbsp;<a href="http://arxiv.org/pdf/1411.7610v3.pdf" target="_blank">Bayer &amp; Osendorfer (2015)</a>&nbsp;提出的模型同样很有趣。在过去几年中，RNN 的研究已经相当的燃，而研究成果当然也会更加丰富！</p>
+<div class="post-text">
+<p>&nbsp;</p>
+<p>LSTM里面为什么用到Sigmoid和tanh函数</p>
+<p>&nbsp;</p>
+<p>The related question, "Why are sigmoids used in LSTMs where they are?" is also answered based on the possible outputs of the function: "gating" is achieved by multiplying by a number between zero and one, and that's what sigmoids output.</p>
+<p>There aren't really meaningful differences between the derivatives of sigmoid and tanh; tanh is just a rescaled and shifted sigmoid: see Richard Socher's&nbsp;<a href="https://cs224d.stanford.edu/lectures/CS224d-Lecture6.pdf" rel="noreferrer">Neural Tips and Tricks</a>. If second derivatives are relevant, I'd like to know how.</p>
+</div>
+<div class="grid mb0 fw-wrap ai-start jc-end gs8 gsy">&nbsp;</div>
+
+
+
+
+
+
+
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(7096392,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;9279f43e-a82c-e611-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/wuxiangli/" target="_blank"><img src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/20181003225015.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/wuxiangli/">simple_wxl</a><br>
+            <a href="http://home.cnblogs.com/u/wuxiangli/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/wuxiangli/followers">粉丝 - 21</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;9279f43e-a82c-e611-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(7096392,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(7096392,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">1</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/wuxiangli/p/7078326.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/wuxiangli/p/7078326.html" title="发布于2017-06-25 22:34">SSD回归类物体检测</a><br><a href="https://www.cnblogs.com/wuxiangli/p/7103828.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/wuxiangli/p/7103828.html" title="发布于2017-07-01 23:30">word2vec原理</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-06-29 21:04</span> <a href="https://www.cnblogs.com/wuxiangli/">simple_wxl</a> 阅读(<span id="post_view_count">4405</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=7096392" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/wuxiangli/p/7096392.html#" onclick="AddToWz(7096392);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=289231,cb_entryId=7096392,cb_blogApp=currentBlogApp,cb_blogUserGuid='9279f43e-a82c-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/6/29 21:04:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/wuxiangli/p/7096392.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/wuxiangli/p/7096392.html#top">返回顶部</a></div>
+<div id="comment_form_container"><span style="color:red">评论框加载失败，请与管理员联系(contact@cnblogs.com)。</span></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云&#39;)">【活动】华为云普惠季 1折秒杀 狂欢继续</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-SpreadJS&#39;)">【工具】SpreadJS纯前端表格控件，可嵌入应用开发的在线Excel</a><br><a href="https://cloud.tencent.com/act/group/amd/index?fromSource=gwzcw.1608278.1608278.1608278" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【腾讯云】拼团福利，AMD云服务器8元/月</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/double11?fromSource=gwzcw.1608279.1608279.1608279" target="_blank"><img width="300" height="250" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/24442-20181116205423366-85420768.jpg" alt="qcloud" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/jianyingzhou/p/4365416.html" target="_blank" onclick="clickRecomItmem(4365416,&#39;qvKc3ShFwgPatQpYnbED7fVS7vYvRqiIbOcpOmX5lsSIjZ8rCtJOvrRcrsWCTYc54RZ/getanaO9PQyW42R7GRQ6x/VxlKz2AsgH3RKqKQoqsIauoiPzICdsSS7THVlzecG/PiP65o7SQxr5SA==&#39;)">cnn为什么会不存在vanishing gradient的问题</a><br>·  <a href="https://www.cnblogs.com/neopenx/p/4732774.html" target="_blank" onclick="clickRecomItmem(4732774,&#39;0G4SL+PxMFNpvPY+k0eekl7Kz/ydTOrZelAeZi8ceWHv6U87mwenjd3gz4K3jJhTPh8rzX+yQYG+nv7RBY20iSM5eVYzFZXe4EmRqGDKyfmXNQr0ezpFRnW+KqiRHdOBxdWHsK1QYya605i8Ag==&#39;)">Long-Short Memory Network(LSTM长短期记忆网络)</a><br>·  <a href="https://www.cnblogs.com/DjangoBlog/p/7699739.html" target="_blank" onclick="clickRecomItmem(7699739,&#39;UzraJRkqg15754Wn8if0f7efHJAa+tWX4d5CG6HPQfsP+AksiAbvPj3VrBU3qlIfv+Z2wAAdMnhjSnDMisOIDGem44vyrox6w82s9GlWrqOlDbgeWM9JwZMx7CqYWeQmeSAjbHYi2SVXujd1gA==&#39;)">lstm(一) 演化之路</a><br>·  <a href="https://www.cnblogs.com/mdumpling/p/8086659.html" target="_blank" onclick="clickRecomItmem(8086659,&#39;M6lm4Qsf7i/83XnFbP7GWCtuVBD6Nr93lwFKz5L9No2QGls+OGvCy+YiRWmUKHp+XL3+jZMzU0w2P5QjCEC6kATSqDo6tZ2BztiRLHK+8KlHa/WJ5Rk4QNEUPdFp9zeeqVQh2KCgVbFp8mwXAw==&#39;)">算法岗面试题积累一</a><br>·  <a href="https://www.cnblogs.com/hozhangel/p/7987144.html" target="_blank" onclick="clickRecomItmem(7987144,&#39;7IJeCCQWNpBU/gqHRdBaWY53wj9JYGvCHcjAjSwoCgxAsf3RiUeizsRNWnbv4dJtOSOQDRRCpxilYnRUP/dGT+GJzieaN/f1KW5fBH/+8gsIY0hxK/9tlGF0yWZf6oMQkeRB1f0AZkfB2vx0Kg==&#39;)">LSTM、GRU、 BRNN、Hierarchical RNN</a><br></div></div>
+<script async="async" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CPDOw6Hx394CFcViYAodc8UObQ">
+    <script>
+    if (new Date() >= new Date(2018, 9, 13)) {
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    }
+    </script>
+    <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/612606/" target="_blank">星巴克在中国会改姓吗？</a><br> ·  <a href="https://news.cnblogs.com/n/612605/" target="_blank">中国游戏出海简史：从金山到网易，走了四步只剩一步</a><br> ·  <a href="https://news.cnblogs.com/n/612603/" target="_blank">股价腰斩，携程颓了？</a><br> ·  <a href="https://news.cnblogs.com/n/612602/" target="_blank">作弊玩游戏，AI也学坏了？</a><br> ·  <a href="https://news.cnblogs.com/n/612601/" target="_blank">今日头条的小程序，很大</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/wuxiangli/">simple_wxl</a><br>园龄：<a href="https://home.cnblogs.com/u/wuxiangli/" title="入园时间：2016-06-07">2年5个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/wuxiangli/followers/">21</a><br>关注：<a href="https://home.cnblogs.com/u/wuxiangli/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;9279f43e-a82c-e611-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('9279f43e-a82c-e611-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/wuxiangli/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/wuxiangli/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/wuxiangli/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/wuxiangli/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/wuxiangli/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/wuxiangli/category/839465.html">ACM专题练习(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/wuxiangli/category/839469.html">hadoop(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/wuxiangli/category/839471.html">java(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/wuxiangli/category/839467.html">LeetCode题目(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/wuxiangli/category/840175.html">More Effective C++(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/wuxiangli/category/839468.html">mysql(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/wuxiangli/category/1020612.html">NLP(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/wuxiangli/category/838988.html">paper阅读(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/wuxiangli/category/1141544.html">编程基础知识</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/wuxiangli/category/1156526.html">环境配置(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/wuxiangli/category/838987.html">机器学习(41)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/wuxiangli/category/839470.html">设计模式(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/wuxiangli/category/899885.html">深度学习&amp;&amp;实验室项目(21)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/wuxiangli/category/839472.html">随笔(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/wuxiangli/category/845616.html">找工作面试(53)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/wuxiangli/archive/2018/11.html">2018年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/wuxiangli/archive/2018/09.html">2018年9月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/wuxiangli/archive/2018/08.html">2018年8月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/wuxiangli/archive/2018/07.html">2018年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/wuxiangli/archive/2018/06.html">2018年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/wuxiangli/archive/2018/04.html">2018年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/wuxiangli/archive/2018/01.html">2018年1月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/wuxiangli/archive/2017/12.html">2017年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/wuxiangli/archive/2017/11.html">2017年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/wuxiangli/archive/2017/09.html">2017年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/wuxiangli/archive/2017/08.html">2017年8月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/wuxiangli/archive/2017/07.html">2017年7月 (22)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/wuxiangli/archive/2017/06.html">2017年6月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/wuxiangli/archive/2017/05.html">2017年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/wuxiangli/archive/2017/04.html">2017年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/wuxiangli/archive/2017/03.html">2017年3月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/wuxiangli/archive/2017/02.html">2017年2月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/wuxiangli/archive/2017/01.html">2017年1月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/wuxiangli/archive/2016/12.html">2016年12月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/wuxiangli/archive/2016/11.html">2016年11月 (21)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/wuxiangli/archive/2016/10.html">2016年10月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/wuxiangli/archive/2016/09.html">2016年9月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/wuxiangli/archive/2016/08.html">2016年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/wuxiangli/archive/2016/07.html">2016年7月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/wuxiangli/archive/2016/06.html">2016年6月 (13)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"></div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 simple_wxl
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+<iframe id="google_osd_static_frame_3772598881634" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./LSTM及其变种及其克服梯度消失 - simple_wxl - 博客园_files/saved_resource(1).html"></iframe></body></html>

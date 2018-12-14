@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick
+    
+  </title>
+
+  <link rel="stylesheet" href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://mccormickml.com/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="http://mccormickml.com/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="Chris McCormick" href="http://mccormickml.com/atom.xml">
+
+  <!-- Adding support for MathJax -->
+  <script src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/f(4).txt"></script><script src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/ca-pub-9176681289361741.js.下载"></script><script async="" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/analytics.js(1).下载"></script><script src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/MathJax.js.下载" id=""></script>
+
+<script src="http://mccormickml.disqus.com/embed.js" data-timestamp="1542796023247"></script><link rel="preload" href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/f(5).txt" as="script"><script type="text/javascript" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/f(5).txt"></script><link rel="preload" href="http://pagead2.googlesyndication.com/pagead/js/r20181107/r20180604/show_ads_impl.js" as="script"><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+
+  <body><div id="MathJax_Message" style="display: none;"></div>
+
+    <div class="container content">
+      <header class="masthead">
+        <h3 class="masthead-title">
+          <a href="http://mccormickml.com/" title="Home">Chris McCormick</a>
+
+          <!--- Display the About, Archive, etc. pages in the header --->
+          
+              &nbsp;&nbsp;&nbsp;<small><a href="http://mccormickml.com/about/">About</a></small>
+          
+              &nbsp;&nbsp;&nbsp;<small><a href="http://mccormickml.com/tutorials/">Tutorials</a></small>
+          
+              &nbsp;&nbsp;&nbsp;<small><a href="http://mccormickml.com/archive/">Archive</a></small>
+          
+
+        </h3>
+        <!---- I could use this to include the tag line, but it looks cluttered...
+        <h3 class="masthead-title">
+             <small>Machine Learning Tutorials and Insights</small>
+        </h3>
+        ----->
+
+      </header>
+
+      <main>
+        <article class="post">
+  <h1 class="post-title">Word2Vec Tutorial - The Skip-Gram Model</h1>
+  <time datetime="2016-04-19T23:00:00-07:00" class="post-date">19 Apr 2016</time>
+  <p>This tutorial covers the skip gram neural network architecture for Word2Vec. My intention with this tutorial was to skip over the usual introductory and abstract insights about Word2Vec, and get into more of the details. Specifically here I’m diving into the skip gram neural network model.</p>
+
+<h1 id="the-model">The Model</h1>
+<p>The skip-gram neural network model is actually surprisingly simple in its most basic form; I think it’s the all the little tweaks and enhancements that start to clutter the explanation.</p>
+
+<p>Let’s start with a high-level insight about where we’re going. Word2Vec uses a trick you may have seen elsewhere in machine learning. We’re going to train a simple neural network with a single hidden layer to perform a certain task, but then we’re not actually going to use that neural network for the task we trained it on! Instead, the goal is actually just to learn the weights of the hidden layer–we’ll see that these weights are actually the “word vectors” that we’re trying to learn.</p>
+
+<div class="message">
+Another place you may have seen this trick is in unsupervised feature learning, where you train an auto-encoder to compress an input vector in the hidden layer, and decompress it back to the original in the output layer. After training it, you strip off the output layer (the decompression step) and just use the hidden layer--it's a trick for learning good image features without having labeled training data.
+</div>
+
+<h1 id="the-fake-task">The Fake Task</h1>
+<p>So now we need to talk about this “fake” task that we’re going to build the neural network to perform, and then we’ll come back later to how this indirectly gives us those word vectors that we are really after.</p>
+
+<p>We’re going to train the neural network to do the following. Given a specific word in the middle of a sentence (the input word), look at the words nearby and pick one at random. The network is going to tell us the probability for every word in our vocabulary of being the “nearby word” that we chose.</p>
+
+<div class="message"> When I say "nearby", there is actually a "window size" parameter to the algorithm. A typical window size might be 5, meaning 5 words behind and 5 words ahead (10 in total).</div>
+
+<p>The output probabilities are going to relate to how likely it is find each vocabulary word nearby our input word. For example, if you gave the trained network the input word “Soviet”, the output probabilities are going to be much higher for words like “Union” and “Russia” than for unrelated words like “watermelon” and “kangaroo”.</p>
+
+<p>We’ll train the neural network to do this by feeding it word pairs found in our training documents. The below example shows some of the training samples (word pairs) we would take from the sentence “The quick brown fox jumps over the lazy dog.” I’ve used a small window size of 2 just for the example. The word highlighted in blue is the input word.</p>
+
+<p><a href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/training_data.png"><img src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/training_data.png" alt="Training Data"></a></p>
+
+<p>The network is going to learn the statistics from the number of times each pairing shows up. So, for example, the network is probably going to get many more training samples of (“Soviet”, “Union”) than it is of (“Soviet”, “Sasquatch”). When the training is finished, if you give it the word “Soviet” as input, then it will output a much higher probability for “Union” or “Russia” than it will for “Sasquatch”.</p>
+
+<h1 id="model-details">Model Details</h1>
+
+<p>So how is this all represented?</p>
+
+<p>First of all, you know you can’t feed a word just as a text string to a neural network, so we need a way to represent the words to the network. To do this, we first build a vocabulary of words from our training documents–let’s say we have a vocabulary of 10,000 unique words.</p>
+
+<p>We’re going to represent an input word like “ants” as a one-hot vector. This vector will have 10,000 components (one for every word in our vocabulary) and we’ll place a “1” in the position corresponding to the word “ants”, and 0s in all of the other positions.</p>
+
+<p>The output of the network is a single vector (also with 10,000 components) containing, for every word in our vocabulary, the probability that a randomly selected nearby word is that vocabulary word.</p>
+
+<p>Here’s the architecture of our neural network.</p>
+
+<p><a href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/skip_gram_net_arch.png"><img src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/skip_gram_net_arch.png" alt="Skip-gram Neural Network Architecture"></a></p>
+
+<p>There is no activation function on the hidden layer neurons, but the output neurons use softmax. We’ll come back to this later.</p>
+
+<p>When <em>training</em> this network on word pairs, the input is a one-hot vector representing the input word and the training output <em>is also a one-hot vector</em> representing the output word. But when you evaluate the trained network on an input word, the output vector will actually be a probability distribution (i.e., a bunch of floating point values, <em>not</em> a one-hot vector).</p>
+
+<h1 id="the-hidden-layer">The Hidden Layer</h1>
+
+<p>For our example, we’re going to say that we’re learning word vectors with 300 features. So the hidden layer is going to be represented by a weight matrix with 10,000 rows (one for every word in our vocabulary) and 300 columns (one for every hidden neuron).</p>
+
+<div class="message">
+300 features is what Google used in their published model trained on the Google news dataset (you can download it from <a href="https://code.google.com/archive/p/word2vec/">here</a>). The number of features is a "hyper parameter" that you would just have to tune to your application (that is, try different values and see what yields the best results).
+</div>
+
+<p>If you look at the <em>rows</em> of this weight matrix, these are actually what will be our word vectors!</p>
+
+<p><a href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/word2vec_weight_matrix_lookup_table.png"><img src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/word2vec_weight_matrix_lookup_table.png" alt="Hidden Layer Weight Matrix"></a></p>
+
+<p>So the end goal of all of this is really just to learn this hidden layer weight matrix – the output layer we’ll just toss when we’re done!</p>
+
+<p>Let’s get back, though, to working through the definition of this model that we’re going to train.</p>
+
+<p>Now, you might be asking yourself–“That one-hot vector is almost all zeros… what’s the effect of that?” If you multiply a 1 x 10,000 one-hot vector by a 10,000 x 300 matrix, it will effectively just <em>select</em> the matrix row corresponding to the “1”. Here’s a small example to give you a visual.</p>
+
+<p><a href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/matrix_mult_w_one_hot.png"><img src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/matrix_mult_w_one_hot.png" alt="Effect of matrix multiplication with a one-hot vector"></a></p>
+
+<p>This means that the hidden layer of this model is really just operating as a lookup table. The output of the hidden layer is just the “word vector” for the input word.</p>
+
+<h1 id="the-output-layer">The Output Layer</h1>
+
+<p>The <code class="highlighter-rouge">1 x 300</code> word vector for “ants” then gets fed to the output layer. The output layer is a softmax regression classifier. There’s an in-depth tutorial on Softmax Regression <a href="http://ufldl.stanford.edu/tutorial/supervised/SoftmaxRegression/">here</a>, but the gist of it is that each output neuron (one per word in our vocabulary!) will produce an output between 0 and 1, and the sum of all these output values will add up to 1.</p>
+
+<p>Specifically, each output neuron has a weight vector which it multiplies against the word vector from the hidden layer, then it applies the function <code class="highlighter-rouge">exp(x)</code> to the result. Finally, in order to get the outputs to sum up to 1, we divide this result by the sum of the results from <em>all</em> 10,000 output nodes.</p>
+
+<p>Here’s an illustration of calculating the output of the output neuron for the word “car”.</p>
+
+<p><a href="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/output_weights_function.png"><img src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/output_weights_function.png" alt="Behavior of the output neuron"></a></p>
+
+<div class="message">
+Note that neural network does not know anything about the offset of the output word relative to the input word. It <em>does not</em> learn a different set of probabilities for the word before the input versus the word after. 
+
+To understand the implication, let's say that in our training corpus, <em>every single occurrence</em> of the word 'York' is preceded by the word 'New'. That is, at least according to the training data, there is a 100% probability that 'New' will be in the vicinity of 'York'. However, if we take the 10 words in the vicinity of 'York' and randomly pick one of them, the probability of it being 'New' <em>is not</em> 100%; you may have picked one of the other words in the vicinity.
+</div>
+
+<h1 id="intuition">Intuition</h1>
+<p>Ok, are you ready for an exciting bit of insight into this network?</p>
+
+<p>If two different words have very similar “contexts” (that is, what words are likely to appear around them), then our model needs to output very similar results for these two words. And one way for the network to output similar context predictions for these two words is if <em>the word vectors are similar</em>. So, if two words have similar contexts, then our network is motivated to learn similar word vectors for these two words! Ta da!</p>
+
+<p>And what does it mean for two words to have similar contexts? I think you could expect that synonyms like “intelligent” and “smart” would have very similar contexts. Or that words that are related, like “engine” and “transmission”, would probably have similar contexts as well.</p>
+
+<p>This can also handle stemming for you – the network will likely learn similar word vectors for the words “ant” and “ants” because these should have similar contexts.</p>
+
+<h1 id="next-up">Next Up</h1>
+<p>You may have noticed that the skip-gram neural network contains a huge number of weights… For our example with 300 features and a vocab of 10,000 words, that’s 3M weights in the hidden layer and output layer each! Training this on a large dataset would be prohibitive, so the word2vec authors introduced a number of tweaks to make training feasible. These are covered in <a href="http://mccormickml.com/2017/01/11/word2vec-tutorial-part-2-negative-sampling/">part 2 of this tutorial</a>.</p>
+
+<p>Did you know that the word2vec model can also be applied to non-text data for recommender systems and ad targeting?  Instead of learning vectors from a sequence of words, you can learn vectors from a sequence of user actions. Read more about this in my new post <a href="http://mccormickml.com/2018/06/15/applying-word2vec-to-recommenders-and-advertising/">here</a>.</p>
+
+<h1 id="other-resources">Other Resources</h1>
+<p>I’ve also created a <a href="http://mccormickml.com/2016/04/27/word2vec-resources/">post</a> with links to and descriptions of other word2vec tutorials, papers, and implementations.</p>
+
+<h3 id="cite">Cite</h3>
+<p>McCormick, C. (2016, April 19). <em>Word2Vec Tutorial - The Skip-Gram Model</em>. Retrieved from http://www.mccormickml.com</p>
+
+
+
+  <script async="" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/f(6).txt"></script>
+<!-- Responsive Unit - End of Post, Colorful -->
+<ins class="adsbygoogle" style="display: block; height: 60px;" data-ad-client="ca-pub-9176681289361741" data-ad-slot="8514028518" data-ad-format="auto" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:700px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:700px;background-color:transparent;"><iframe width="700" height="60" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:700px;height:60px;" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/saved_resource(1).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+  
+  <div id="disqus_thread"></div>
+  <script>
+  
+      var disqus_config = function () {
+          this.page.url = "http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/"
+          this.page.identifier = "/2016/04/19/word2vec-tutorial-the-skip-gram-model/"
+      };
+      
+      var disqus_shortname = 'mccormickml';
+      // var disqus_developer = 1; // Comment out when the site is live
+      var disqus_title      = 'Word2Vec Tutorial - The Skip-Gram Model';
+      
+      (function() {  // DON'T EDIT BELOW THIS LINE
+          var d = document, s = d.createElement('script');
+          
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';        
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  
+  
+</article>
+
+
+<aside class="related">
+  <h3>Related posts</h3>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="http://mccormickml.com/2018/06/15/applying-word2vec-to-recommenders-and-advertising/">
+          Applying word2vec to Recommenders and Advertising
+          <small><time datetime="2018-06-15T08:00:00-07:00">15 Jun 2018</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="http://mccormickml.com/2017/10/22/product-quantizer-tutorial-part-2/">
+          Product Quantizers for k-NN Tutorial Part 2
+          <small><time datetime="2017-10-22T08:00:00-07:00">22 Oct 2017</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="http://mccormickml.com/2017/10/13/product-quantizer-tutorial-part-1/">
+          Product Quantizers for k-NN Tutorial Part 1
+          <small><time datetime="2017-10-13T08:00:00-07:00">13 Oct 2017</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+      </main>
+      
+      <footer class="footer">
+        <small>
+          © <time datetime="2018-09-05T11:56:48-07:00">2018</time>. All rights reserved.
+        </small>
+      </footer>
+    </div>
+
+    
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+       ga('create', 'UA-76624103-1', 'auto');
+       ga('send', 'pageview');
+     </script>
+    
+  
+
+<iframe id="google_osd_static_frame_5647012470923" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/saved_resource(2).html"></iframe></body><iframe id="google_shimpl" style="display: none;" src="./Word2Vec Tutorial - The Skip-Gram Model · Chris McCormick_files/saved_resource(3).html"></iframe></html>

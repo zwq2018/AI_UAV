@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>一文详解 Word2vec 之 Skip-Gram 模型（结构篇） | 雷锋网</title>
+    <meta itemprop="image" content="https://www.leiphone.com/resWeb/images/common/metaLogo.jpg">
+            <link rel="dns-prefetch" href="https://www.leiphone.com/">
+        <link rel="dns-prefetch" href="https://home.leiphone.com/">
+        <link rel="dns-prefetch" href="https://m.leiphone.com/">
+        <link rel="dns-prefetch" href="https://leiphone.com/">
+        <meta name="baidu-site-verification" content="qBnDqyynv4">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2017-06-22T12:06:30+08:00">
+    <meta property="article:author" content="AI研习社">
+    <meta property="article:published_first" content="雷锋网, https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html">
+    	<meta name="google-site-verification" content="4c2S0LRoSpcyGiNmASqakMSa7yVC9C8Jnu-IRNyq5oU">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=1">
+    <meta property="qc:admins" content="10002525706451007656375">
+    <link rel="alternate" media="only screen and(max-width: 640px)" href="https://m.leiphone.com/">
+            	<meta name="keywords" content="Skip-Gram,Word2Vec,CBOW">
+	<meta name="description" content="这可能是关于 Skip-Gram 模型最详细的讲解。">
+    <meta name="sogou_site_verification" content="ilkqV8FehD">
+    <meta name="renderer" content="webkit">
+	<link rel="cannoical" href="https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html">    <link rel="stylesheet" type="text/css" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/common.css" media="all">
+    <script type="text/javascript" async="" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/cmp.api"></script><script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/push.js.下载"></script><script async="" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/gtm.js.下载"></script><script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/hm.js.下载"></script><script type="text/javascript">
+        window.mobilecheck = function() {
+            
+            // var ua=window.navigator.userAgent;
+            // if(ua.indexOf('iPhone')>=0||ua.indexOf('iPod')>=0||ua.indexOf('ndroid')>=0){
+            //     return true;
+            // }
+
+            var check = false;
+            (function(a,b){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+            return check;
+        }
+        var check = mobilecheck();
+        if(check && (window.location.host == 'www.leiphone.com')){
+            window.location.href="//m.leiphone.com" + window.location.pathname + window.location.search;
+        }else if(!check && (window.location.host == 'm.leiphone.com')){
+            window.location.href="//www.leiphone.com" + window.location.pathname + window.location.search;
+        }
+    </script>
+    <!--  
+	<script type='text/javascript'>window.BWEUM||(BWEUM={});BWEUM.info = {"stand":true,"agentType":"browser","agent":"bi-collector.oneapm.com/static/js/bw-send-411.4.5.js","beaconUrl":"bi-collector.oneapm.com/beacon","licenseKey":"fqiyF~7R36YyFnEB","applicationID":2284957};</script><script type="text/javascript" src="//bi-collector.oneapm.com/static/js/bw-loader-411.4.5.js"></script>
+	-->
+    <script>
+                    //百度统计开始
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?0f7e8686c8fcc36f05ce11b84012d5ee";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+            //百度统计结束
+        
+        var SCRIPT_URL 	= "https://www.leiphone.com/";
+		var BASE_URL 	= "https://www.leiphone.com/";
+		var HOME_URL 	= "https://home.leiphone.com/";
+		var IS_LOGIN 	= "1";
+        var LEIPHONE_HOME_URL = USER_CENTER  = "https://home.leiphone.com/";
+        var HAITAO_URL  = "https://haitao.leiphone.com";
+        var TRYOUT_URL  = "https://tryout.igao7.com/";
+        var PRODUCT_URL = "https://product.igao7.com/";
+	</script>
+
+	<!--[if IE]>
+    <script>
+       (function(){var e="abbr, article, aside, audio, canvas, datalist, details, dialog, eventsource, figure, footer, header, hgroup, mark, menu, meter, nav, output, progress, section, time, video".split(', ');var i=e.length;while(i--){document.createElement(e[i])}})()
+    </script>
+    <![endif]-->
+
+    <!--<script src="/resWeb/js/libs/sea.js"></script>-->
+    <script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/jquery-sea.js.下载"></script>
+    <script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/tips.js.下载"></script><link rel="stylesheet" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/tips.css">
+    <script>
+        seajs.config({
+            map:[
+                ['.js','.js?20180515']
+            ]
+        });
+        seajs.use('https://www.leiphone.com/resWeb/js/common/global',function(){
+                    });
+        document.domain = "leiphone.com";
+         // 英鹏账号登录回调
+        function yingpengIslogin_callback(){
+            seajs.use('https://www.leiphone.com/resWeb/js/common/com_login',function(user) {
+              user.init();
+            });
+        }
+    </script>
+
+<script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/share.js.下载"></script><script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/yp_login.js.下载"></script><link rel="stylesheet" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/yp_login.css"><link rel="stylesheet" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/share_style0_24.css"><script src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/share.js.下载"></script></head>
+<body>
+<!-- 顶栏广告位 -->
+<div class="top-banner" style="display: block;">
+    <a href="https://www.leiphone.com/banner/updateClickNum/id/1408" target="_blank" title="智慧城市">
+        <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bf3b92b7003d.jpg" alt="智慧城市">
+    </a>
+    <em class="closeBanner"></em>
+</div>
+
+<div class="explorer" id="low-explorer">
+    <div class="inner">
+        <em class="warn ico"></em>
+        <span>您正在使用IE低版浏览器，为了您的雷锋网账号安全和更好的产品体验，强烈建议使用更快更安全的浏览器</span>
+        <span class="ico exp-ico1"></span>
+        <span class="ico exp-ico2"></span>
+        <span class="ico exp-ico3"></span>
+        <span class="ico exp-ico4"></span>
+        <span class="ico exp-ico5"></span>
+    </div>
+</div>
+<!--[if lte IE 8]>
+    <script>
+       (function(){var e=['abbr', 'article', 'aside', 'audio', 'canvas', 'datalist', 'details', 'dialog', 'eventsource', 'figure', 'footer', 'header', 'hgroup', 'mark', 'menu', 'meter', 'nav', 'output', 'progress', 'section', 'time', 'video'];for(var i = e.length; i--;) document.createElement(e[i])})()
+
+       //低版本浏览器
+        document.getElementById("low-explorer").style.display = 'block';
+
+    </script>
+<![endif]-->
+
+
+
+<!-- header start-->
+<header class="yp-header">
+    <div class="yp-header-top clr">
+        <a class="yp-header-logo" href="https://www.leiphone.com/">
+            <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/lph-headerlogo.png" alt="雷锋网">
+                        <span>读懂<em>智能</em>&amp;未来</span>
+        </a>
+        <!-- navi -->
+
+        <div class="yp-header-menu">
+            <ul>
+                <li class="first">
+                    <a href="https://www.leiphone.com/" class="sub_a">首页</a>
+                </li>
+                <li>
+                    <a href="http://ai.yanxishe.com/" target="_blank" class="sub_a">AI研习社<em class="newIcon"></em></a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/AiWeights" target="_blank" class="sub_a">AI影响因子</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/events" class="sub_a">活动</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/specials" class="sub_a">专题</a>
+                </li>
+                <li>
+                    <a href="https://www.leiphone.com/specialEdition/list" target="_blank" class="sub_a">精选</a>
+                </li>
+                <li class="borleft aiB" style="">
+                <div class="line"></div>
+                    <!-- <a href="http://www.mooc.ai/?f=leiphone"  target="_blank" class="sub_a">AI慕课学院</a> -->
+                </li>
+                <li class="ej borleft ig">
+                    <a href="http://www.igao7.com/" target="_blank" class="sub_a">爱搞机</a>
+                                    </li>
+                <!-- <li  class="ej borleft ig">
+                    <a href="https://haitao.leiphone.com" class="sub_a">极客购</a>
+                </li> -->
+            </ul>
+            <a href="javascript:;" class="contribute"><em></em>申请专栏作者</a>
+        </div>
+        <!-- 用户登录 -->
+        <div class="yp-header-user-box">
+            <div class="yp-header-user"><input type="hidden" id="is_login_tag_status" value="0"><div class="user-main"><div class="avatar"><a href="https://home.leiphone.com/login/wechatLogin"><img width="36" height="36" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/noLogin.png" alt=""></a></div></div></div>
+        </div>
+        <!-- 用户消息 -->
+        <div class="yp-header-message">
+            <a href="https://home.leiphone.com/notices" class="bell">
+                 <i class="ico"></i>
+                 <em class="count"></em>   
+            </a>
+        </div>
+        <div class="yp-header-search">
+           <form method="GET" name="allSearchForm" action="https://www.leiphone.com/search" style="height: 100%;">
+                <input type="hidden" name="site" value="">
+                <input class="text" type="text" name="s" autocomplete="off" value="">
+                <input class="submit" type="submit" value="">
+                <input class="submit2" type="submit" value="">
+            </form>
+        </div>
+        <a href="https://www.leiphone.com/search" class="miniSearch"></a>
+        
+    </div>
+</header>   
+<!-- header end-->
+<nav class="yp-secNav">
+    <div class="wrapper">
+        <a href="https://www.leiphone.com/category/sponsor" class=" ">业界</a>
+        <a href="https://www.leiphone.com/category/ai" class=" ">人工智能</a>
+        <a href="https://www.leiphone.com/category/transportation" class=" ">智能驾驶</a>
+        <a href="https://www.leiphone.com/category/aijuejinzhi" class=" ">AI+</a>
+        <a href="https://www.leiphone.com/category/fintech" class=" "> Fintech&amp;区块链</a>
+        <a href="https://www.leiphone.com/category/aihealth" class=" ">未来医疗</a>
+        <a href="https://www.leiphone.com/category/letshome" class=" ">网络安全</a>
+        <a href="https://www.leiphone.com/category/arvr" class=" ">AR/VR</a>
+        <a href="https://www.leiphone.com/category/robot" class=" ">机器人</a>
+        <a href="https://www.leiphone.com/category/yanxishe" class=" ">开发者</a>
+        <a href="https://www.leiphone.com/category/weiwu" class=" ">智能硬件</a>
+        <a href="https://www.leiphone.com/category/iot" class=" ">物联网</a>
+        <a href="https://gair.leiphone.com/?from=leifengwang2018" target="_blank" class="">GAIR</a>
+    </div>
+</nav>
+
+<link rel="stylesheet" type="text/css" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/artCont_web_admin.css">
+<link rel="stylesheet" type="text/css" href="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/main.css" media="all">
+<script type="text/javascript">
+    var ARTICLE_CATEGORY = '137';
+    var ADMIN_URL = 'https://yingpeng.leiphone.com/';
+</script>
+
+<div class="wrapper">
+    <div class="lph-Nowsite clr">
+        <a href="https://www.leiphone.com/"><em class="ico"></em></a>
+        <em class="arro"></em>
+        <a href="https://www.leiphone.com/category/yanxishe">AI开发</a>
+        <em class="arro"></em>
+        <a href="https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html#">正文</a>
+    </div>
+</div>
+
+<!-- 发送私信 -->
+<div class="sendMsg-pop">
+    <a href="javascript:;" class="closePop"><em></em></a>
+    <div class="title">发私信给<span>AI研习社</span></div>
+    <div class="main">
+        <textarea placeholder="私信内容"></textarea>
+    </div>
+    <div class="btns">
+        <a href="javascript:;" class="send-button">发送</a>
+    </div>
+</div>
+<!-- 评论数 -->
+<a href="https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html#lph-comment-166123" class="cmtNums">
+    <em></em>
+    <p>1</p>
+</a>
+<div class="lph-overlay"></div>
+<!-- 当载入markdown的时候加载 -->
+<script type="text/javascript">
+    var link = "PamWKpfRFEI42McI";
+</script>
+<!-- 文章详情页 -->
+<div class="lphArticle-detail" data-article_url="https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html" data-article_id="166123" data-article_unique="PamWKpfRFEI42McI" data-article_seo_title="一文详解 Word2vec 之 Skip-Gram 模型（结构篇） | 雷锋网" data-article_seo_keywords="Skip-Gram,Word2Vec,CBOW" data-article_seo_description="这可能是关于 Skip-Gram 模型最详细的讲解。" data-comment_type="2" data-collect_type="2" data-author_id="23787" data-author_name="AI研习社" data-article_cmtnum="1">
+    <div class="article-template">
+        <div class="article-title">
+            <div class="inner">
+                <h1 class="headTit">
+                    一文详解 Word2vec 之 Skip-Gram 模型（结构篇）                </h1>
+                <div class="msg">
+                    <table>
+                        <tbody><tr>
+                            <td class="aut">
+                                本文作者：<a href="https://www.leiphone.com/author/AI%E7%A0%94%E4%B9%A0%E7%A4%BE394" target="_blank" rel="nofollow">AI研习社</a>
+                            </td>
+                                                        <td class="time">
+                                2017-06-22 12:06                            </td>
+                                                                                    <!-- <td class="tags">
+                                <em></em> -->
+                                                                                                                            <!-- </td> -->
+                                                      <!--   <td class='cmtNum'>
+                                <a href="https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html#lph-comment-166123">1条评论</a>
+                            </td> -->
+                        </tr>
+                    </tbody></table>
+                </div>
+                <div class="article-lead">
+                    <em></em>导语：这可能是关于 Skip-Gram 模型最详细的讲解。                </div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="wrapper clr">
+                <div class="article-left">
+                     <div class="lph-article-comView">
+                                                 
+                         <!-- AI影响因子 -->
+                        <!-- xhBPeYDbNuuRZkwy -->
+                                                <!-- AI影响因子 -->
+                        <!-- 正文内容 -->
+                        <p><strong>雷锋网按：这是一个关于&nbsp;Skip-Gram 模型的系列教程，依次分为结构、<a href="https://www.leiphone.com/news/201706/eV8j3Nu8SMqGBnQB.html" target="_blank">训练</a>和<a href="https://www.leiphone.com/news/201706/QprrvzsrZCl4S2lw.html" target="_blank">实现</a>三个部分，本文为第一部分：结构篇，后面两个部分我们将陆续发布，敬请期待。原文</strong><strong style="line-height: 1.8;">作者天雨粟，原载于作者<a href="https://zhuanlan.zhihu.com/p/27234078" target="_blank" rel="nofollow">知乎专栏</a>，雷锋网已获授权。</strong></p><p><span style="line-height: 1.8;">这次的分享主要是对Word2Vec模型的两篇英文文档的翻译、理解和整合，这两篇英文文档都是介绍Word2Vec中的Skip-Gram模型。下一篇专栏文章将会用TensorFlow实现基础版Word2Vec的skip-gram模型，所以本篇文章先做一个理论铺垫。</span></p><p>原文英文文档请参考链接：</p><blockquote><p style="margin-top: 5px; margin-bottom: 5px;">- Word2Vec Tutorial - The Skip-Gram Model</p><p><a href="http://t.cn/Rc5RfJ2" target="_blank" rel="nofollow">http://t.cn/Rc5RfJ2</a></p></blockquote><blockquote><p style="margin-bottom: 5px; margin-top: 5px;">- Word2Vec (Part 1): NLP With Deep Learning with Tensorflow (Skip-gram)</p><p><a href="http://t.cn/RoVEiUB" target="_blank" rel="nofollow">http://t.cn/RoVEiUB</a></p></blockquote><h2>什么是Word2Vec和Embeddings？</h2><p>Word2Vec是从大量文本语料中以无监督的方式学习语义知识的一种模型，它被大量地用在自然语言处理（NLP）中。那么它是如何帮助我们做自然语言处理呢？Word2Vec其实就是通过学习文本来用词向量的方式表征词的语义信息，即通过一个嵌入空间使得语义上相似的单词在该空间内距离很近。Embedding其实就是一个映射，将单词从原先所属的空间映射到新的多维空间中，也就是把原先词所在空间嵌入到一个新的空间中去。</p><p>我们从直观角度上来理解一下，cat这个单词和kitten属于语义上很相近的词，而dog和kitten则不是那么相近，iphone这个单词和kitten的语义就差的更远了。通过对词汇表中单词进行这种数值表示方式的学习（也就是将单词转换为词向量），能够让我们基于这样的数值进行向量化的操作从而得到一些有趣的结论。比如说，如果我们对词向量kitten、cat以及dog执行这样的操作：kitten - cat + dog，那么最终得到的嵌入向量（embedded vector）将与puppy这个词向量十分相近。</p><h2>模型</h2><p>Word2Vec模型中，主要有Skip-Gram和CBOW两种模型，从直观上理解，Skip-Gram是给定input word来预测上下文。而CBOW是给定上下文，来预测input word。本篇文章仅讲解Skip-Gram模型。</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b306c8b3b1.png"></p><p>Skip-Gram模型的基础形式非常简单，为了更清楚地解释模型，我们先从最一般的基础模型来看Word2Vec（下文中所有的Word2Vec都是指Skip-Gram模型）。</p><p>Word2Vec模型实际上分为了两个部分，<strong>第一部分为建立模型，第二部分是通过模型获取嵌入词向量</strong>。Word2Vec的整个建模过程实际上与自编码器（auto-encoder）的思想很相似，即先基于训练数据构建一个神经网络，当这个模型训练好以后，我们并不会用这个训练好的模型处理新的任务，我们真正需要的是这个模型通过训练数据所学得的参数，例如隐层的权重矩阵——后面我们将会看到这些权重在Word2Vec中实际上就是我们试图去学习的“word vectors”。基于训练数据建模的过程，我们给它一个名字叫“Fake Task”，意味着建模并不是我们最终的目的。</p><blockquote><p>上面提到的这种方法实际上会在无监督特征学习（unsupervised feature learning）中见到，最常见的就是自编码器（auto-encoder）：通过在隐层将输入进行编码压缩，继而在输出层将数据解码恢复初始状态，训练完成后，我们会将输出层“砍掉”，仅保留隐层。</p></blockquote><h2>The Fake Task</h2><p>我们在上面提到，训练模型的真正目的是获得模型基于训练数据学得的隐层权重。为了得到这些权重，我们首先要构建一个完整的神经网络作为我们的“Fake Task”，后面再返回来看通过“Fake Task”我们如何间接地得到这些词向量。</p><p>接下来我们来看看如何训练我们的神经网络。假如我们有一个句子<strong>“The dog barked at the mailman”</strong>。</p><ul class=" list-paddingleft-2" style="list-style-type: disc;"><li><p>首先我们选句子中间的一个词作为我们的输入词，例如我们选取“dog”作为input word；</p></li><li><p>有了input word以后，我们再定义一个叫做skip_window的参数，它代表着我们从当前input word的一侧（左边或右边）选取词的数量。如果我们设置skip_window=2，那么我们最终获得窗口中的词（包括input word在内）就是<strong>['The', 'dog'，'barked', 'at']</strong>。skip_window=2代表着选取左input word左侧2个词和右侧2个词进入我们的窗口，所以整个窗口大小span=2x2=4。另一个参数叫num_skips，它代表着我们从整个窗口中选取多少个不同的词作为我们的output word，当skip_window=2，num_skips=2时，我们将会得到两组 <strong>(input word, output word) </strong>形式的训练数据，即 <strong>('dog', 'barked')</strong>，<strong>('dog', 'the')</strong>。</p></li><li><p>神经网络基于这些训练数据将会输出一个概率分布，这个概率代表着我们的词典中的每个词是output word的可能性。这句话有点绕，我们来看个栗子。第二步中我们在设置skip_window和num_skips=2的情况下获得了两组训练数据。假如我们先拿一组数据<strong> ('dog', 'barked') </strong>来训练神经网络，那么模型通过学习这个训练样本，会告诉我们词汇表中每个单词是“barked”的概率大小。</p></li></ul><p>模型的输出概率代表着到我们词典中每个词有多大可能性跟input word同时出现。举个栗子，如果我们向神经网络模型中输入一个单词“Soviet“，那么最终模型的输出概率中，像“Union”， ”Russia“这种相关词的概率将远高于像”watermelon“，”kangaroo“非相关词的概率。因为”Union“，”Russia“在文本中更大可能在”Soviet“的窗口中出现。我们将通过给神经网络输入文本中成对的单词来训练它完成上面所说的概率计算。下面的图中给出了一些我们的训练样本的例子。我们选定句子<strong>“The quick brown fox jumps over lazy dog”</strong>，设定我们的窗口大小为2（window_size=2），也就是说我们仅选输入词前后各两个词和输入词进行组合。下图中，蓝色代表input word，方框内代表位于窗口内的单词。</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b319eb5f1f.png"></p><p>我们的模型将会从每对单词出现的次数中习得统计结果。例如，我们的神经网络可能会得到更多类似（“Soviet“，”Union“）这样的训练样本对，而对于（”Soviet“，”Sasquatch“）这样的组合却看到的很少。因此，当我们的模型完成训练后，给定一个单词”Soviet“作为输入，输出的结果中”Union“或者”Russia“要比”Sasquatch“被赋予更高的概率。</p><h2>模型细节</h2><p>我们如何来表示这些单词呢？<span style="line-height: 1.8;">首先，我们都知道神经网络只能接受数值输入，我们不可能把一个单词字符串作为输入，因此我们得想个办法来表示这些单词。最常用的办法就是基于训练文档来构建我们自己的词汇表（vocabulary）再对单词进行one-hot编码。</span></p><p>假设从我们的训练文档中抽取出10000个唯一不重复的单词组成词汇表。我们对这10000个单词进行one-hot编码，得到的每个单词都是一个10000维的向量，向量每个维度的值只有0或者1，假如单词ants在词汇表中的出现位置为第3个，那么ants的向量就是一个第三维度取值为1，其他维都为0的10000维的向量（ants=[0, 0, 1, 0, ..., 0]）。</p><p>还是上面的例子，“The dog barked at the mailman”，那么我们基于这个句子，可以构建一个大小为5的词汇表（忽略大小写和标点符号）：("the", "dog", "barked", "at", "mailman")，我们对这个词汇表的单词进行编号0-4。那么”dog“就可以被表示为一个5维向量[0, 1, 0, 0, 0]。</p><p>模型的输入如果为一个10000维的向量，那么输出也是一个10000维度（词汇表的大小）的向量，它包含了10000个概率，每一个概率代表着当前词是输入样本中output word的概率大小。</p><p>下图是我们神经网络的结构：</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b31d0920ef.png"></p><p>隐层没有使用任何激活函数，但是输出层使用了sotfmax。</p><p>我们基于成对的单词来对神经网络进行训练，训练样本是 ( input word, output word ) 这样的单词对，input word和output word都是one-hot编码的向量。最终模型的输出是一个概率分布。</p><h2>隐层</h2><p>说完单词的编码和训练样本的选取，我们来看下我们的隐层。如果我们现在想用300个特征来表示一个单词（即每个词可以被表示为300维的向量）。那么隐层的权重矩阵应该为10000行，300列（隐层有300个结点）。</p><p>Google在最新发布的基于Google news数据集训练的模型中使用的就是300个特征的词向量。词向量的维度是一个可以调节的超参数（在Python的gensim包中封装的Word2Vec接口默认的词向量大小为100， window_size为5）。</p><p>看下面的图片，左右两张图分别从不同角度代表了输入层-隐层的权重矩阵。左图中每一列代表一个10000维的词向量和隐层单个神经元连接的权重向量。从右边的图来看，每一行实际上代表了每个单词的词向量。</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b320f8ed60.png"></p><p>所以我们最终的目标就是学习这个隐层的权重矩阵。</p><p>我们现在回来接着通过模型的定义来训练我们的这个模型。</p><p>上面我们提到，input word和output word都会被我们进行one-hot编码。仔细想一下，我们的输入被one-hot编码以后大多数维度上都是0（实际上仅有一个位置为1），所以这个向量相当稀疏，那么会造成什么结果呢。如果我们将一个1 x 10000的向量和10000 x 300的矩阵相乘，它会消耗相当大的计算资源，为了高效计算，它仅仅会选择矩阵中对应的向量中维度值为1的索引行（这句话很绕），看图就明白。</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b322ae0c72.png"></p><p>我们来看一下上图中的矩阵运算，左边分别是1 x 5和5 x 3的矩阵，结果应该是1 x 3的矩阵，按照矩阵乘法的规则，结果的第一行第一列元素为0 x 17 + 0 x 23 + 0 x 4 + 1 x 10 + 0 x 11 = 10，同理可得其余两个元素为12，19。如果10000个维度的矩阵采用这样的计算方式是十分低效的。</p><p>为了有效地进行计算，这种稀疏状态下不会进行矩阵乘法计算，可以看到矩阵的计算的结果实际上是矩阵对应的向量中值为1的索引，上面的例子中，左边向量中取值为1的对应维度为3（下标从0开始），那么计算结果就是矩阵的第3行（下标从0开始）—— [10, 12, 19]，这样模型中的隐层权重矩阵便成了一个”查找表“（lookup table），进行矩阵计算时，直接去查输入向量中取值为1的维度下对应的那些权重值。隐层的输出就是每个输入单词的“嵌入词向量”。</p><h2>输出层</h2><p>经过神经网络隐层的计算，ants这个词会从一个1 x 10000的向量变成1 x 300的向量，再被输入到输出层。输出层是一个softmax回归分类器，它的每个结点将会输出一个0-1之间的值（概率），这些所有输出层神经元结点的概率之和为1。</p><p>下面是一个例子，训练样本为 (input word: “ants”， output word: “car”) 的计算示意图。</p><p style="text-align: center;"><img alt="一文详解 Word2vec 之 Skip-Gram 模型（结构篇）" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b3267c64f4.png"></p><h2>直觉上的理解</h2><p>下面我们将通过直觉来进行一些思考。</p><p>如果两个不同的单词有着非常相似的“上下文”（也就是窗口单词很相似，比如“Kitty climbed the tree”和“Cat climbed the tree”），那么通过我们的模型训练，这两个单词的嵌入向量将非常相似。</p><p>那么两个单词拥有相似的“上下文”到底是什么含义呢？比如对于同义词“intelligent”和“smart”，我们觉得这两个单词应该拥有相同的“上下文”。而例如”engine“和”transmission“这样相关的词语，可能也拥有着相似的上下文。</p><p>实际上，这种方法实际上也可以帮助你进行词干化（stemming），例如，神经网络对”ant“和”ants”两个单词会习得相似的词向量。</p><blockquote><p>词干化（stemming）就是去除词缀得到词根的过程。</p></blockquote><p style="margin-bottom: 5px;">雷锋网<span style="color:#FD5D3C;">(公众号：雷锋网)</span>相关阅读：</p><p style="margin-bottom: 5px;"><a href="https://www.leiphone.com/news/201706/eV8j3Nu8SMqGBnQB.html" target="_blank">一文详解 Word2vec 之 Skip-Gram 模型（训练篇）</a></p><p style="margin-bottom: 5px;"><a href="https://www.leiphone.com/news/201706/QprrvzsrZCl4S2lw.html" target="_blank">一文详解 Word2vec 之 Skip-Gram 模型（实现篇）</a></p><p style="margin-bottom: 5px;"><a href="https://www.leiphone.com/news/201705/MUvp3go9L5Z3YWv2.html" target="_blank">25 行 Python 代码实现人脸检测——OpenCV 技术教程</a></p>
+                                                <p>雷锋网版权文章，未经授权禁止转载。详情见<a href="http://dwz.cn/4ErMxZ" rel="nofollow" target="_blank">转载须知</a>。</p>
+                                               
+                                                <!-- 正文内容结束 -->
+                    </div>
+
+                    <!-- 分享 -->
+                    <div class="pageActive clr">
+                        <div class="mark-like-btn ">
+                            <a class="collect collect-no" href="javascript:;"><i></i><span>15</span>人收藏</a>
+                        </div>
+                        <!-- Baidu Button BEGIN -->
+                        <div class="bdsharebuttonbox bdshare-button-style0-24" data-tag="share_166123" data-bd-bind="1542798134695">
+                            <span class="s-txt">分享：</span>
+                            <a href="javascript:void()" onclick="openYNote(&#39;https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html&#39;,&#39;一文详解 Word2vec 之 Skip-Gram 模型（结构篇）&#39;, &#39;https://static.leiphone.com/uploads/new/article/pic/201706/594b348a52078.jpg&#39;,&#39;leiphone&#39;,&#39;一文详解 Word2vec 之 Skip-Gram 模型（结构篇）&#39;)" class="youdao " title="收藏此篇文章到有道云笔记"><i></i></a>
+                            <a class="bds_tsina weibo-btn  " data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a class="weixin-btn bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a class="bds_more more-btn" data-cmd="more"></a>
+                        </div>
+                        <script type="text/javascript">
+                            //在这里定义bds_config
+                            // var bds_config = {'snsKey':{'tsina':'2475906690'}};
+                            // var qcode = {
+                            //     api : "http://qr.liantu.com/api.php?text=",
+                            //     url :  window.location.href,
+                            //     exist : false,
+                            //     create : function(){
+                            //         if(!this.exist){
+                            //             var image = document.createElement('img');
+                            //             image.src = this.api + this.url;
+                            //             image.width = 120;
+                            //             this.exist = true;
+                            //             return image;
+                            //         }
+                            //     }
+                            // };
+                        </script>
+
+                    </div>
+                    <!-- 相关文章 -->
+                    <!-- 相关文章 start -->
+<div class="realted-article clr">
+    <div class="title clr">
+        <span class="fl">相关文章</span>
+    </div>
+    <div class="related-link clr">
+                         <a href="https://www.leiphone.com/tag/Skip-Gram" target="_blank" title="Skip-Gram">Skip-Gram</a>
+                 <a href="https://www.leiphone.com/tag/Word2Vec" target="_blank" title="Word2Vec">Word2Vec</a>
+                 <a href="https://www.leiphone.com/tag/CBOW" target="_blank" title="CBOW">CBOW</a>
+                     </div>
+    <div class="list">
+        <ul>
+                        <li class="first">
+                <a href="https://www.leiphone.com/news/201706/QprrvzsrZCl4S2lw.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b3e0b22605.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201706/QprrvzsrZCl4S2lw.html" target="_blank">一文详解 Word2vec 之 Skip-Gram 模型（实现篇）</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201706/eV8j3Nu8SMqGBnQB.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b3c92d6c65.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201706/eV8j3Nu8SMqGBnQB.html" target="_blank">一文详解 Word2vec 之 Skip-Gram 模型（训练篇）</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201810/AvRxJkB8Z2o4LNnz.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bc946196b64d.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201810/AvRxJkB8Z2o4LNnz.html" target="_blank">大讲堂 | 计算机辅助词典编纂 ——以异体字词典为例 ...</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201807/5hn7YLV31DEREEeA.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5b515bdcaf57f.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201807/5hn7YLV31DEREEeA.html" target="_blank">ImageNet 带来的预训练模型之风，马上要吹进 NLP 领 ...</a>
+                </div>
+            </li>
+                    </ul>
+    </div>
+</div>
+
+<!-- 相关文章 end -->
+
+
+                    <!-- 推荐文章 -->
+                    <div class="realted-article clr recmdArticle" data-article_id="166123">
+                        <div class="list">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 广告 -->
+                    
+                    <!-- 文章 评论  -->
+                    <!-- 评论 -->
+<div class="article-comment lp-comment" id="lph-comment-166123">
+    <div class="useComJs">
+        <!-- <input id="lp_item_id" type="hidden" name="item_id" value="166123">
+        <input id="lp_item_type" type="hidden" name="type" value="2"> -->
+
+        <div class="h2 clr">
+            <h2>文章点评：</h2>
+            <!-- <strong class="h2-tip">
+                （您需要<a class="c-log" href="javascript:openPop('#lp-login-pop');">登录</a>后才能评论 <a href="https://home.leiphone.com/main/register" class="c-reg">没有账号</a> ？）</strong>
+            -->        
+        </div>
+        <div class="submit clr commentForm" id="">
+            <div class="text">
+                <textarea name="Comment[content]" placeholder="我有话要说……"></textarea>
+            </div>
+            <div class="sub clr publishtosina">
+                <span class="emotionc emotion0" data-emotion="0">表情</span>
+                <label><input id="" type="checkbox" name="pushForWeibo"> 同步到新浪微博</label>
+                <div class="qqFace" style="position:absolute; display:none; z-index:10"></div>
+                <button type="submit" title="提交">提交</button>
+            </div>
+        </div>
+        <!-- <div class="jcWords">
+            <h3><strong>精彩评论</strong></h3>
+            <ul class="comment-say">
+                
+            </ul>
+        </div>
+        <div class="words">
+            <h3><strong>最新评论</strong><span></span>条评论<i></i></h3>
+            <ul class="comment-say">
+                
+            </ul>
+            <div id="comment-say-more" class="comment-say-more">
+
+                <span>加载更多</span>
+                <em>没有更多了</em>
+
+            </div>
+        </div> -->
+    </div>
+				<div class="article-comment-container" data-item-id="166123" data-type-id="2">															<div class="words">						<h3><strong>最新评论</strong></h3>						<ul class="comment-say">																					<li class="comment-say-li clr comment-level-1" data-current-comment-id="225110" data-parent-comment-id="0" data-member-id="5107119">										<div class="csl-img">						<a rel="nofollow" href="https://home.leiphone.com/uprofile/5107119"> <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/19_avatar_pic_40_40.jpg" width="40" height="40"> </a>					</div>					<div class="csl-body">						<div class="cont">							<div class="row clr">								<a rel="nofollow" href="https://home.leiphone.com/uprofile/5107119" class="name replyName">小黑在此								</a>																								<span class="time">10月09日 22:05</span>							</div>							<div class="des">这三篇写的太好了，高产啊！！好想打赏你，太棒了</div>						</div>						<div class="opBtn">							<a href="javascript:;" class="respond-coin" title="回复"><i></i><em>回复</em></a>							<span class="zan "><i></i>								<em class="z-count">									(0)								</em>							</span>						</div>						<ul class="csl-respond">		      			</ul>		      			<div class="respond-submit">		      				<div class="text"><input type="text"><div class="tip">回复<a>小黑在此</a>：</div></div>							<div class="sub clr">								<span class="emotionc">表情</span>								<button>提交</button>								<div class="qqFace" style="position:absolute; display:none; z-index:10">								</div>							</div>						</div>					</div>				</li>											</ul>											</div>									</div>		</div>
+<!-- 评论 -->
+
+
+
+                </div>
+
+                <script>
+    var codeAuthor_id   = "AI研习社394";
+    var author_id       = "23787";
+</script>
+<div class="article-right" style="height: 7928px; box-sizing: border-box; position: relative;">
+        <div class="aboutAur-main">
+        <div class="aboutAur-msg">
+            <a href="https://www.leiphone.com/author/AI%E7%A0%94%E4%B9%A0%E7%A4%BE394" class="avater" target="_blank" rel="nofollow">
+                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/33_avatar_pic_100_100.jpg" alt="" width="80" height="80">
+            </a>
+            <div class="name">
+                <a href="https://www.leiphone.com/author/AI%E7%A0%94%E4%B9%A0%E7%A4%BE394" target="_blank" rel="nofollow"><span>AI研习社</span><em class="gold"></em></a>
+            </div>
+            <p class="profession">编辑</p>
+            <div class="saying">
+                <em class="l-quote"></em>
+                <span>聚焦数据科学，连接AI开发者。</span>
+                <em class="r-quote"></em>
+            </div>
+            <div class="operate-btn">
+                <table>
+                    <tbody><tr>
+                                                                                            </tr>
+                </tbody></table>
+            </div>
+            <div class="btns">
+                <a href="javascript:;">发私信</a>
+            </div>
+        </div>
+
+
+        <!-- 作者的文章 -->
+        
+<div class="mouthHot-article">
+    <div class="title">当月热门文章</div>
+        <div class="list">
+            <ul>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/8EOE4zTdgBL02TgH.html" title="猿桌会 | 人机交互技术探索" target="_blank">猿桌会 | 人机交互技术探索</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201810/OpoTboRznJU8tixZ.html" title="职播间 | 自然语言处理中的多任务学习 &amp; 复旦大学NLP实验室介绍" target="_blank">职播间 | 自然语言处理中的多任务学习 &amp; 复旦大学NLP实验室介绍</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/3rNaz94P8mr7gt2w.html" title="大讲堂 | 深度强化学习在电商推荐中的应用" target="_blank">大讲堂 | 深度强化学习在电商推荐中的应用</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/4mEJo7h1XNYtPqhG.html" title="猿桌会 | 阅读理解进阶三部曲——关键知识、模型性能提升、产品化落地" target="_blank">猿桌会 | 阅读理解进阶三部曲——关键知识、模型性能提升、产品化落地</a>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/JrJSowUBnotTNvR3.html" title="20:00大讲堂 | 机器学习在百度招聘人岗匹配中的应用" target="_blank">20:00大讲堂 | 机器学习在百度招聘人岗匹配中的应用</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+       <!-- 作者文章结束 -->
+    </div>
+
+            
+        
+<div style="width: 255px; position: static; top: 0px;"><div class="weekly-choice hotNew-article">
+        <div class="rComTitle">
+            最新文章
+        </div>
+        <div class="list">
+            <ul class="justTxt">
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/FZM8dsm5CcQpmnNT.html" target="_blank">
+                            <em></em>清华大学韩旭：神经关系抽取模型 | AI研习社71期大讲堂 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/zVI1pdC3oL3S6oXK.html" target="_blank">
+                            <em></em>吸引 7198 支队伍参赛，看 Kaggle 信用预估比赛冠军方案 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/6T23aH3sevzHbeJR.html" target="_blank">
+                            <em></em>百度视觉团队斩获 ECCV Google AI 目标检测竞赛冠军，获奖方案全解读 |  ECCV 2018 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/QxOKclpJ6buroqrn.html" target="_blank">
+                            <em></em>清华大学王延森：如何利用提问增强开放领域对话系统互动性 | AI研习社66期大讲堂 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201809/5QPgCNoBgDYfKGHW.html" target="_blank">
+                            <em></em>如何从静态图像中识别“比心”动作 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201808/CkFtca7oz5h2oCp8.html" target="_blank">
+                            <em></em>ICPR 图像识别与检测挑战赛冠军方案出炉，基于偏旁部首来识别 Duang 字 </a>
+                    </li>
+                            </ul>
+        </div>
+    </div><div class="serKesy-list">
+    <div class="rComTitle">
+        热门搜索
+    </div>
+    <div class="list clr">
+                <a href="https://www.leiphone.com/tag/Oculus" target="_blank">Oculus</a>
+                <a href="https://www.leiphone.com/tag/4G" target="_blank">4G</a>
+                <a href="https://www.leiphone.com/tag/%E4%BC%97%E7%AD%B9" target="_blank">众筹</a>
+                <a href="https://www.leiphone.com/tag/%E6%99%BA%E6%85%A7%E5%9F%8E%E5%B8%82" target="_blank">智慧城市</a>
+                <a href="https://www.leiphone.com/tag/%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5" target="_blank">无线充电</a>
+                <a href="https://www.leiphone.com/tag/%E9%9A%90%E7%A7%81" target="_blank">隐私</a>
+                <a href="https://www.leiphone.com/tag/%E8%8B%8F%E5%AE%81" target="_blank">苏宁</a>
+                <a href="https://www.leiphone.com/tag/Win10" target="_blank">Win10</a>
+                <a href="https://www.leiphone.com/tag/%E5%88%9B%E5%AE%A2%E9%A9%AC%E6%8B%89%E6%9D%BE" target="_blank">创客马拉松</a>
+                <a href="https://www.leiphone.com/tag/TC%20Disrupt" target="_blank">TC Disrupt</a>
+                <a href="https://www.leiphone.com/tag/%E5%BC%80%E6%BA%90%E7%A1%AC%E4%BB%B6" target="_blank">开源硬件</a>
+            </div>
+</div></div></div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="lineBg"></div>
+    <!-- 百度分享 -->
+    <script>
+
+        window._bd_share_config = {
+            common:{
+                bdMiniList:['tsina','weixin','more']
+            },
+            share : [
+                {
+                    bdText : '一文详解 Word2vec 之 Skip-Gram 模型（结构篇）',
+                    bdDesc : '一文详解 Word2vec 之 Skip-Gram 模型（结构篇）',
+                    bdUrl : 'https://www.leiphone.com/news/201706/PamWKpfRFEI42McI.html',
+                    bdPic : 'https://static.leiphone.com/uploads/new/article/pic/201706/594b348a52078.jpg',
+                    "tag" : "share_166123",
+                    "bdSize" : 24
+                },
+            ],
+        }
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://www.leiphone.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+
+    </script>
+</div><!-- 当载入markdown的时候加载 -->
+
+<!-- 文章详情页 -->
+<div class="lphArticle-detail" data-article_url="https://www.leiphone.com/news/201706/Ej2LHEtKxVhaICJK.html?uniqueCode=PamWKpfRFEI42McI" data-article_id="166127" data-article_unique="Ej2LHEtKxVhaICJK" data-article_seo_title="腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？ | 雷锋网" data-article_seo_keywords="人工智能,腾讯AI Lab,计算机视觉" data-article_seo_description="贾佳亚在今日“腾讯·云+未来”AI大数据专场所做的主题演讲《计算机视觉前沿与应用》，雷锋网AI科技评论对速记做了不改动原意的编辑和整理。" data-comment_type="2" data-collect_type="2" data-author_id="9303" data-author_name="奕欣" data-article_cmtnum="0">
+    <div class="article-template">
+        <div class="article-title">
+            <div class="inner">
+                <h1 class="headTit">
+                    腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？                </h1>
+                <div class="msg">
+                    <table>
+                        <tbody><tr>
+                            <td class="aut">
+                                本文作者：<a href="https://www.leiphone.com/author/guoxin" target="_blank" rel="nofollow">奕欣</a>
+                            </td>
+                                                        <td class="time">
+                                2017-06-22 12:04                            </td>
+                                                                                    <!-- <td class="tags">
+                                <em></em> -->
+                                                                                                                            <!-- </td> -->
+                                                      <!--   <td class='cmtNum'>
+                                <a href="https://www.leiphone.com/news/201706/Ej2LHEtKxVhaICJK.html#lph-comment-166127">0条评论</a>
+                            </td> -->
+                        </tr>
+                    </tbody></table>
+                </div>
+                <div class="article-lead">
+                    <em></em>导语：贾佳亚在今日“腾讯·云+未来”AI大数据专场所做的主题演讲《计算机视觉前沿与应用》，雷锋网AI科技评论对速记做了不改动原意的编辑和整理。                </div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="wrapper clr">
+                <div class="article-left">
+                     <div class="lph-article-comView">
+                                                 
+                         <!-- AI影响因子 -->
+                        <!-- xhBPeYDbNuuRZkwy -->
+                                                <!-- AI影响因子 -->
+                        <!-- 正文内容 -->
+                        <p>腾讯优图实验室杰出科学家贾佳亚，香港中文大学计算机科学工程系终身教授，于 2017 年 5 月 15 日公布消息，全职加入腾讯优图实验室，负责计算机视觉、图像处理、模式识别等人工智能领域的研究,及人工智能与各应用场景结合的深度探索。</p><p>雷锋网了解到，贾佳亚在加入腾讯后鲜少露面，本次在“腾讯云+未来”AI大数据专场做主题演讲，也是为数不多能一窥腾讯优图实验室及研究成果的公开场合。以下是贾佳亚在今日“腾讯云+未来”AI大数据专场所做的主题演讲《计算机视觉前沿与应用》，雷锋网<span style="color:#FD5D3C;">(公众号：雷锋网)</span>AI科技评论对速记做了不改动原意的编辑和整理。</p><p style="text-align: center;"><img alt="腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b3efc3ce62.jpg"></p><p>谢谢大家，刚才蒋杰和王龙都介绍了腾讯在整个腾讯云的部署中，其硬件和它的基础构架上的优势，我觉得这是一个非常重要的部分。</p><p>我今天给大家讲讲在 AI 的算法层面，我们能做什么事情。腾讯优图团队在世界上是做图像识别算法非常有优势的，我们有很强的研发团队，在深圳、香港、上海都有自己的研发队伍。这是腾讯这几年变化最大的地方，也就是我们会把新的技术、新的能力、新的硬件、新的软件全部提供给大家，希望给各位有需求的公司或者是业务人员有更加强大的助力。</p><p>计算机视觉是什么？它其实就是一种人的理解，我们看到东西的时候，不仅仅是看到红绿蓝三种颜色，这是我们最基本的对颜色的理解。但是当我们看一张图象的时候，我们不会分离看每一种颜色，我们会把它看成一个整体。这个图是我非常喜欢的，但是我想找到是谁创造的，在网上很难找到是谁发明的图片，这张图片是一张非常完美的正连和侧脸的结合，从一个角度看，你可以说这是一张正脸，你也可以说是一个侧脸。</p><p>什么叫计算机视觉？计算机视觉的目标是让计算机程序能够解读和理解图片，不仅仅是颜色，而是能够更高层的理解它的语义、理解它的特征，从表面来看这个事情是很简单的，事实上很难。1983 年，华盛顿第一次召开计算机视觉大会（雷锋网 AI 科技评论按：即 CVPR，国际计算机视觉与模式识别会议），到现在已经超过了 30 年的历史。在这 30 多年中，对我们现在很多从业者，或者在工业界的朋友而言，其实他们并不了解这 30 年里研究者们到底干了什么事情，有什么发生了。但是到了云的时代，我们会发现能更加直接地对云的技术进行展示，我们也能更加多地接触到用户使用这种技术。</p><p>我们怎么看待这个世界？首先我们要理解计算机视觉为什么要在 1983 年开始？你想想 1983 年的时候大家在用什么样的计算机？我之前在别的地方进行过一个讲座，我问大家还记不记得 2000 年的时候我们的是用什么样的计算机。那时候是没有 LED 和 LCD 的，那时候是用的很笨重的、很大的显示器，那时候用的手机是诺基亚，没有彩色屏幕，全部是一个单独的小机器，上面一个很小的屏幕。但在 1983 年的时候，我们这个领域开始建立起来的时候，那时候连计算机的基本能力都不具备，但是当时很多的科学家已经在开始想象，我们能不能在卫星图像上，比如说当时在军事运用上，或者是在一些非常高精尖的应用上，在卫星或者是载人飞船上面，能不能利用一些机器帮助人们解决问题，所以那时候就开始了这方面的研究。</p><p>这个研究是一种类比，我们之所以研究对视觉的理解过程，是因为我们人眼就是一种自然智能，我们能看到东西，当我们看到东西之后，我们就会自然想象，我能不能让一个机器也看到东西，这是很自然的。当然我们现在能隔空打物，我也想设计一个新的方案让机器也隔空打物，显然我们现在还不行，所以也不会让机器也这样。</p><p>在大脑皮层里，超过 50% 的神经原细胞是处理视觉的，所以我们说计算机视觉是最重要的方向，它代表了信息的多样性和可用的信息。</p><p>计算机视觉有三个打开方式，<strong>第一个是语义理解、识别、检测。</strong>当我们看到一张图的时候，我们能不能像人一样分析这张图里有什么东西。比如说现在这样一个在开车的人，当然这明明是一个人，只是他戴了一个头套，计算机会检测到这里面有一个狼，然后它有蓝色的眼睛，同时还在开车，这是一个理解过程、检测过程，这就是语义的理解、识别、检测，这是非常重要的一个计算机视觉的内容，在腾讯云上以后也会陆续输出这些部分。</p><p style="text-align: center;"><img alt="腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/594b3ef543863.jpg"></p><p>其次是不受想象力约束的神奇效果。前几年有一个电影是讲你在一个梦境里的变化，就是你不停地下楼梯，每次下到最后都回到原点。这个事情我们作为科学家来研究到底是什么原理，我们用软件重构了这样一个系统，我们确实可以在视觉模式上把它搭建起来，虽然在语义逻辑上不是很好理解的，但是我们在视觉上确实可以体现出来，最终产生很酷炫的效果，比如说这个球，它还可以在这上面跳来跳去，跳到最后它就回到原点了，你看他每次都在下台阶，结果却回到了原来的起点，这是一个特殊的神奇效果，在视觉上可以做的事情。</p><p>还有一些固有需求的图像视频计算，比如说我们需要通过一张图像把一些最重要的内容提取出来。</p><p>第一个打开方式，理解识别。理解识别的应用是非常广泛的，这张图是 2006—2012 年我们这个领域里的一个非常大的竞赛，这个竞赛叫做 PASCAL，这个竞赛是给你超过 1000 张图像，希望你从这几千张图像里面找出其中 20 个物体的类别。从 2009 年到 2012 年，在这个领域里有超过 20 种方法解决这个问题，它的准确率不断提高，但是它始终是有瓶颈的，因为类别很少，我们发现大家对这个比赛的认可度也就慢慢降低了。</p><p>后来出现了这个领域里最出名的一个比赛叫做 IMAGE NET，这是斯坦福大学的几个教授发起的比赛，它推翻了原来所有一切的竞赛规则，他说现在在整个数据库里包含了超过 14000 万张图像，相比以前的几千张或者几万张图象，这是一个巨大的进步，在量级上是完全不可同日而语的，同时它有超过 2 万多种类别，你告诉我这张图象是属于 2 万个类别的哪一个，这一个非常大的匹配过程和检测过程，所以 IMAGE NET 推翻了当时对数据的理解，以前大家专注于做小数据，因为大家觉得反正我没有大数据，不如就做小数据，当你在学术界真正的把大数据放出来的时候，是有更多的研究人员愿意去跟上的。</p><p>这张图是告诉大家，我们从 2010 年到 2014 年的时候，开始在这个数据库上做事情，最开始 2010 年的时候，大家发现我们的错误率是 28%，也就是说有 100 张图像里面，有 28 张图像是分错的，就是说它是找不到的，这个准确率已经是一个比较可以的准确率，大家会觉得，可能放在一些不太重要的岗位上或者应用上的时候就可以用了。但是到了 2011 年的时候，我们把它提高了 2%，也就是说现在可以多两张图像，能做得更好了。到 2012 年的时候，我们发现多了 10%，也就是说在 100 张图像里面多 10 张图片可以分析准确了。因为那一年出现了深度学习，它验证自己在整个领域里面，到底能不能推动 AI 的进程，就是通过这样一个竞赛，通过在那一年时间，把准确率提高 10% 这样一次事件，导致对于整个世界上所有的领域、所有的人，业界和学术界开始意识到，我们可以把这个事情做得更好。到现在可以做到 100 张图里只有一两张图是错误的，这个识别率远远高过人的识别率。人眼看一张图，你能分辨 2 万个种类吗？这是很难的事情。</p><p>另外一个就是检测，大家看到检测已经慢慢的变成这个领域的核心的内容或者是应用方向。大家可以想像以后我们的智能家居是什么样的，以后智能家居重要的应用可能是冰箱，你打开冰箱的时候，你会发现里面堆满了各种各样的东西，有苹果、梨、蔬菜、肉类，现在我们想进入智能家居的第一步，是不是说我打开一个冰箱，让电脑自动知道里面还有多少库存，如果库存不够的时候，我们要不要上京东去购买一些，或者我要去其它的电商买一些东西回来，这是一个很有趣的应用，我相信很多人或者是机构都在研发这些技术，其中一个重要的组成部分，在算法层面上，就是对物体的检测，也就是说我们希望发现中间到底这个是苹果还是西红柿，或者是其他的什么东西，它有多大，数量有多少，它能不能够用一个礼拜，或者说只够用 3 天，或者说你现在就必须买，否则明天就没饭吃了，这种状况下，我们希望通过一个检测来发现。</p><p>再往下走就是在最新的研究上，我希望能够分析到更加细颗粒度的图象识别，这个问题就对于智能驾驶、辅助驾驶，或者是大规模的城市理解和建设有着巨大的推动作用，因为在这样一个城市级的道路复杂环境下，你会看到每个东西都在动，上面一张图在下面会分割成不同的部分，机器会告诉你，我识别了这个车，识别了这个树，我也识别了这个电线杆和路，在智能驾驶或者辅助驾驶里需要有这样的颗粒度，越精细越好，以后希望通过计算机视觉帮助我们在自动驾驶这个新兴产业，这个市场规模可能是有几万亿美金，在这样的市场下，怎么体现我们在其中的技术实力，这是一个重要的部分。</p><p><strong>第二个打开方式：新视觉效果。</strong>我给大家介绍一些好玩的东西。这是很早的一个连续剧，它当时有一个片头，就是这个人慢慢的从一张素描变成了一个人的状态，这个过场在当时是非常酷炫的。这是艺术家做出来的，他请了专门的人帮你画了一张素描的图，然后把这个图贴到视频里面慢慢的做转换，现在的 AI 已经自动实现这种功能了，比如说看到非常漂亮的自然场景的时候，我们团队研发的 AI 技术可以自动的产生非常有趣的一些效果，能够把它变成铅笔画、水彩画、油画，甚至是各种抽象的画法，我们在 2011 年的时候已经有这方面的一系列的论文介绍这件事情，这个现在变成了一个可控的东西，每一个客户想去使用这样的功能的时候，通过我们的云，通过我们这样一些技术的扩展方向，我们可以把这件事情很容易的做到，以往你可能需要请一个艺术家坐在边上，大概花一天或者两天时间帮你设计这样东西，今天你可能只要打开电脑，接上我们的网络，用上我们这样一个 API 或者 SDK，然后你在一秒钟内就得到这样一个结果，这是一个非常大的进步和进展，这也是为什么在技术层面上很多东西可以用的，也就是用得更加舒服，比人的操作来得更加方便和直接。</p><p>这是另外一个例子，我们当时做的时候有一个初衷，我们看这张表，大家都有做图表的经验，当你做了这个表格很漂亮的时候，结果打印出来发现并没有做的时候这么好的效果，原因是我们在电脑做出来的效果很好，但是打印机打出来的颜色并没有那么炫。所以我们在前几年花了一两个月的时间做了一个非常小的工具，这个工具就是当我看到这样一张彩色图的时候，我能把它自动转换成一个黑白图象，这样大家要打印这样一张彩色图象的时候，你可以打印出一张非常漂亮的黑白图象，这样你就可以用一个普通的黑白打印机，打印出一个效果上可以媲美于彩色打印机的功能，当然这个功能我们当年是想推销给各种各样的打印机公司的，好像打印机公司也没有兴趣，最后我们就没有用上。</p><p>这是另外一个例子，我们经常会画饼状图，在 PPT 里画的很好看，结果打印出来给老板观察的时候发现分不出具体的颜色的细节。我们就通过一个算法把它直接变成这样一张黑白打印的效果，最后出来的时候，我们可以在 29 毫秒之内，把这张图转变成可以接受的效果，这也是一个技术的进步，当然我们做这个事情也就花了大概一个月不到的时间，这是我觉得有趣的地方，计算机视觉永远可以产生一些新的大家想象不到的效果。</p><p><strong>第三个打开方式：固有需求的图像视频计算。</strong>比如说我要做视频，我希望做前景、背景分割，我需要做手势识别，我需要做人的操作，在图像里面做一些逆运算，比如说去模糊，我看到这样一张图，比如说你跟领导站在台上拍了一张照片，或者是你在领奖的时候，或者是好不容易见到一个你想见的朋友，大家在一块儿开心的照了一张照片，结果照模糊了，这时候你就面临一个非常尴尬的境地，因为你不可能再回到原来的场地再拍一张照片，所以我们当时在设计算法的时候就在想，能不能通过这张图回复其中的固有信息呢？我们通过一个非常高级的计算过程，可以把中间所存在的一些字或者是一些重要的信息重构出来，这样的结果是可以通过我们现在的算法完整实现的。</p><p>这是另外一个例子，这个图是什么东西，估计在座的没有几位能看得清楚，但是我们通过算法可以告诉你，这是一张城市方向的图像，我们甚至可以看得出来上面是「多伦多」，是在这个城市拍摄的图像。</p><p>还有一个是强迫透视。大家如果喜欢摄影，你会发现这个很有意思，这是一双筷子，好像是在夹光点，其实是在拍照的时候特意布置的场景。甚至我们可以做这样一个场景，前面有一个人在吹，后面的人全倒的状况，实际上前景、后景是有深度分别的，这也是在计算机运算里面非常有趣的效果。我们在前两年的时候开始研究这样一些效果上面，是不是背后有自己的原因，我们找找看它的几何的原因，我们分析对一张完全清晰的图象，我们也可以分析各个边缘的细小的分别，通过这些细小的分别，我们可以得到一张图象以后，然后我们可以在后期再去把它变成单反效果，可以把背景虚化，把前景凸显出来，甚至我们可以切换，把这个模糊的地方换得不一样，把聚焦点放在别的地方。我知道在所有的相机厂商采用这个方法之前，我们在学术界里面已经有了一个非常大的研究，我们在这上面是有一系列论文在解决这个问题的，当然现在也有一些厂商是在用我们这个技术，在实现自己的一个后期的单反效果的增强。</p><p>这是其中的一个例子，比如说在一张图像上，我先拍一张图像，后期在这个手机上我可以重新做虚化，显示哪个地方是你想要的，哪个地方是你不想看的，这也是技术发展的一些有趣的进展。每到一个时刻，我们总会产生一些新的大家想象不到的事情，这些都会自然而然的产生。</p><p>我们优图团队实验室着力于在做一些最前沿的研发，我们希望把视觉、自然语言处理和语音这样三个大的方向结合起来，在语音这一块，我们在小微的专场里面还有另外一个同事会介绍我们在语音合成、人声分离等等一系列的技术上的进展，所以大家有兴趣可以在小微专场看到我们的另外一个介绍。</p><p><strong>在视觉这一块，新的视觉体验、识别和视觉内容计算，这是我们不可分割的三个巨大的方向。</strong>在接下来可能会有更多的方向，但是在这几个方向上，我们要做的事情，或者是我们的能力是能够得到充分体现的。其实我加入腾讯的时间并不长，但是我觉得我们整个优图团队在腾讯里面所产生的价值，因为有了云的部署，我们优图的能力会扩展得更加快一些。以后如果是我们的客户，一定会接触到更多更有趣的效果和应用。</p><p>更多资讯请持续关注雷锋网。</p>
+                                                <p>雷锋网版权文章，未经授权禁止转载。详情见<a href="http://dwz.cn/4ErMxZ" rel="nofollow" target="_blank">转载须知</a>。</p>
+                                               
+                                                <!-- 正文内容结束 -->
+                    </div>
+
+                    <!-- 分享 -->
+                    <div class="pageActive clr">
+                        <div class="mark-like-btn ">
+                            <a class="collect collect-no" href="javascript:;"><i></i><span>5</span>人收藏</a>
+                        </div>
+                        <!-- Baidu Button BEGIN -->
+                        <div class="bdsharebuttonbox bdshare-button-style0-24" data-tag="share_166127" data-bd-bind="1542798197890">
+                            <span class="s-txt">分享：</span>
+                            <a href="javascript:void()" onclick="openYNote(&#39;https://www.leiphone.com/news/201706/Ej2LHEtKxVhaICJK.html&#39;,&#39;腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？&#39;, &#39;https://static.leiphone.com/uploads/new/article/pic/201706/594b41614832c.jpg&#39;,&#39;leiphone&#39;,&#39;腾讯优图贾佳亚在“腾讯·云+未来”AI大数据专场分享：计算机视觉有哪三种打开方式？&#39;)" class="youdao " title="收藏此篇文章到有道云笔记"><i></i></a>
+                            <a class="bds_tsina weibo-btn  " data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a class="weixin-btn bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            <a class="bds_more more-btn" data-cmd="more"></a>
+                        </div>
+                        
+
+                    </div>
+                    <!-- 相关文章 -->
+                    <!-- 相关文章 start -->
+<div class="realted-article clr">
+    <div class="title clr">
+        <span class="fl">相关文章</span>
+    </div>
+    <div class="related-link clr">
+                         <a href="https://www.leiphone.com/tag/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD" target="_blank" title="人工智能">人工智能</a>
+                 <a href="https://www.leiphone.com/tag/%E8%85%BE%E8%AE%AFAI%20Lab" target="_blank" title="腾讯AI Lab">腾讯AI Lab</a>
+                 <a href="https://www.leiphone.com/tag/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89" target="_blank" title="计算机视觉">计算机视觉</a>
+                     </div>
+    <div class="list">
+        <ul>
+                        <li class="first">
+                <a href="https://www.leiphone.com/news/201811/U7LJVtoTvKLIwUyU.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bf4b7f76f167.png" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201811/U7LJVtoTvKLIwUyU.html" target="_blank">国内首例！乐普医疗人工智能心电产品获美国FDA批准</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/anDqig3bVCuZNHeg.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bf282962003a.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201811/anDqig3bVCuZNHeg.html" target="_blank">全球权威人脸识别竞赛成绩公布，中国人工智能算法继 ...</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/9BxeBWlzOasjx62O.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5beebb012e6f9.png" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201811/9BxeBWlzOasjx62O.html" target="_blank">机器学习教父 Tom Mitchell ：人工智能将成为自适应 ...</a>
+                </div>
+            </li>
+                        <li>
+                <a href="https://www.leiphone.com/news/201811/fG7S2Hy2o25nJPiY.html" target="_blank" class="pic">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bee667921f46.jpg" alt="" width="170" height="100">
+                </a>
+                <div class="txt">
+                    <a href="https://www.leiphone.com/news/201811/fG7S2Hy2o25nJPiY.html" target="_blank">乂学教育松鼠AI联合创始人周伟：网络教育发展的六次 ...</a>
+                </div>
+            </li>
+                    </ul>
+    </div>
+</div>
+
+<!-- 相关文章 end -->
+
+
+                    <!-- 推荐文章 -->
+                    <div class="realted-article clr recmdArticle" data-article_id="166127">
+                        <div class="list">
+                            <ul><li data-id="178765" data-parameter="0_5021df_rfill_0_8abd5a228bf845b1aec7c25dac89d63e">                                                            <a href="https://www.leiphone.com/news/201808/mkahpJCMQsS488RB.html?ulu-rcmd=0_5021df_rfill_0_8abd5a228bf845b1aec7c25dac89d63e" class="pic" target="_blank">                                                                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5b7f81aabc218.png" alt="ApolloScape ECCV 2018 挑战赛报名即将截止，三大任务等你来战" width="170" height="100">                                                            </a>                                                            <div class="txt">                                                                <a href="https://www.leiphone.com/news/201808/mkahpJCMQsS488RB.html?ulu-rcmd=0_5021df_rfill_0_8abd5a228bf845b1aec7c25dac89d63e" target="_blank">ApolloScape ECCV 2018 挑战赛报名即将截止，三大任务等你来战</a>                                                            </div>                                                        </li><li data-id="178764" data-parameter="0_5021df_rfill_1_8abd5a228bf845b1aec7c25dac89d63e">                                                            <a href="https://www.leiphone.com/news/201808/1glpCcldsEK3FT3a.html?ulu-rcmd=0_5021df_rfill_1_8abd5a228bf845b1aec7c25dac89d63e" class="pic" target="_blank">                                                                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5b7f79090e8b1.png" alt="全球首个AI商用同传驻馆 中关村国家示范区添“黑科技”" width="170" height="100">                                                            </a>                                                            <div class="txt">                                                                <a href="https://www.leiphone.com/news/201808/1glpCcldsEK3FT3a.html?ulu-rcmd=0_5021df_rfill_1_8abd5a228bf845b1aec7c25dac89d63e" target="_blank">全球首个AI商用同传驻馆 中关村国家示范区添“黑科技”</a>                                                            </div>                                                        </li><li data-id="178643" data-parameter="0_5021df_rfill_2_8abd5a228bf845b1aec7c25dac89d63e">                                                            <a href="https://www.leiphone.com/news/201808/4VMVXqR7kGhTYZSk.html?ulu-rcmd=0_5021df_rfill_2_8abd5a228bf845b1aec7c25dac89d63e" class="pic" target="_blank">                                                                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5b7a63188d376.png" alt="用深度学习技术，让你的眼睛可以控制电脑" width="170" height="100">                                                            </a>                                                            <div class="txt">                                                                <a href="https://www.leiphone.com/news/201808/4VMVXqR7kGhTYZSk.html?ulu-rcmd=0_5021df_rfill_2_8abd5a228bf845b1aec7c25dac89d63e" target="_blank">用深度学习技术，让你的眼睛可以控制电脑</a>                                                            </div>                                                        </li><li data-id="178750" data-parameter="0_5021df_rfill_3_8abd5a228bf845b1aec7c25dac89d63e">                                                            <a href="https://www.leiphone.com/news/201808/cO6nDJ8qSG6YZt14.html?ulu-rcmd=0_5021df_rfill_3_8abd5a228bf845b1aec7c25dac89d63e" class="pic" target="_blank">                                                                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5b7e8db20359c.png" alt="银行业中的数据挖掘-贷款审批案例" width="170" height="100">                                                            </a>                                                            <div class="txt">                                                                <a href="https://www.leiphone.com/news/201808/cO6nDJ8qSG6YZt14.html?ulu-rcmd=0_5021df_rfill_3_8abd5a228bf845b1aec7c25dac89d63e" target="_blank">银行业中的数据挖掘-贷款审批案例</a>                                                            </div>                                                        </li></ul>
+                        </div>
+                    </div>
+                    <!-- 广告 -->
+                    
+                    <!-- 文章 评论  -->
+                    <!-- 评论 -->
+<div class="article-comment lp-comment" id="lph-comment-166127">
+    <div class="useComJs">
+        <!-- <input id="lp_item_id" type="hidden" name="item_id" value="166127">
+        <input id="lp_item_type" type="hidden" name="type" value="2"> -->
+
+        <div class="h2 clr">
+            <h2>文章点评：</h2>
+            <!-- <strong class="h2-tip">
+                （您需要<a class="c-log" href="javascript:openPop('#lp-login-pop');">登录</a>后才能评论 <a href="https://home.leiphone.com/main/register" class="c-reg">没有账号</a> ？）</strong>
+            -->        
+        </div>
+        <div class="submit clr commentForm" id="">
+            <div class="text">
+                <textarea name="Comment[content]" placeholder="我有话要说……"></textarea>
+            </div>
+            <div class="sub clr publishtosina">
+                <span class="emotionc emotion0" data-emotion="0">表情</span>
+                <label><input id="" type="checkbox" name="pushForWeibo"> 同步到新浪微博</label>
+                <div class="qqFace" style="position:absolute; display:none; z-index:10"></div>
+                <button type="submit" title="提交">提交</button>
+            </div>
+        </div>
+        <!-- <div class="jcWords">
+            <h3><strong>精彩评论</strong></h3>
+            <ul class="comment-say">
+                
+            </ul>
+        </div>
+        <div class="words">
+            <h3><strong>最新评论</strong><span></span>条评论<i></i></h3>
+            <ul class="comment-say">
+                
+            </ul>
+            <div id="comment-say-more" class="comment-say-more">
+
+                <span>加载更多</span>
+                <em>没有更多了</em>
+
+            </div>
+        </div> -->
+    </div>
+				<div class="article-comment-container" data-item-id="-1" data-type-id="2">														</div>		</div>
+<!-- 评论 -->
+
+
+
+                </div>
+
+                
+<div class="article-right" style="height: 6761px; box-sizing: border-box; position: relative;">
+        <div class="aboutAur-main">
+        <div class="aboutAur-msg">
+            <a href="https://www.leiphone.com/author/guoxin" class="avater" target="_blank" rel="nofollow">
+                <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/97_avatar_pic_100_100.jpg" alt="" width="80" height="80">
+            </a>
+            <div class="name">
+                <a href="https://www.leiphone.com/author/guoxin" target="_blank" rel="nofollow"><span>奕欣</span><em class="gold"></em></a>
+            </div>
+            <p class="profession">初心者</p>
+            <div class="saying">
+                <em class="l-quote"></em>
+                <span></span>
+                <em class="r-quote"></em>
+            </div>
+            <div class="operate-btn">
+                <table>
+                    <tbody><tr>
+                                                                                                <td>
+                            <a href="javascript:;" class="wx sub_a" rel="nofollow">
+                                <em></em>
+                                <div class="hideCode">
+                                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/5bcd2d6c1e74b.png" width="114" height="114">
+                                    <p>扫描关注作者微信</p>
+                                </div>
+                            </a>
+                        </td>
+                                            </tr>
+                </tbody></table>
+            </div>
+            <div class="btns">
+                <a href="javascript:;">发私信</a>
+            </div>
+        </div>
+
+
+        <!-- 作者的文章 -->
+        
+<div class="mouthHot-article">
+    <div class="title">当月热门文章</div>
+        <div class="list">
+            <ul>
+                    </ul>
+    </div>
+</div>
+       <!-- 作者文章结束 -->
+    </div>
+
+            
+        
+<div style="width: 255px; position: static;"><div class="weekly-choice hotNew-article">
+        <div class="rComTitle">
+            最新文章
+        </div>
+        <div class="list">
+            <ul class="justTxt">
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/bMQMLLgWPVaN5Hnl.html" target="_blank">
+                            <em></em>IEEE Fellow 又增一位华人学者，中科院自动化所王亮研究员当选 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/GfpNi4bUgzIkfPOe.html" target="_blank">
+                            <em></em>云从科技 OCR 新突破：端到端的深度学习文本检测框架 Pixel-Anchor </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/11k2UZBu8wXJByCE.html" target="_blank">
+                            <em></em>李飞飞又有新动向，斯坦福 AI 实验室由 Christopher Manning 接棒 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/VNXjhmy1p5nAqtgd.html" target="_blank">
+                            <em></em>怎样免费拿机械键盘、AI研习社定制双肩包和保温杯？邀请朋友学习「CMU 深度学习课程」就行！ </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/k90ZmGaOCRSftqqR.html" target="_blank">
+                            <em></em>不一样的论文解读：2018 KDD best paper「Embeddings at Airbnb」 </a>
+                    </li>
+                                    <li>
+                        <a href="https://www.leiphone.com/news/201811/KtPim8W0cWdoLru8.html" target="_blank">
+                            <em></em>MSRA 成立 20 周年，北大、清华两校校长同台为其致辞 </a>
+                    </li>
+                            </ul>
+        </div>
+    </div><div class="serKesy-list">
+    <div class="rComTitle">
+        热门搜索
+    </div>
+    <div class="list clr">
+                <a href="https://www.leiphone.com/tag/Twitter" target="_blank">Twitter</a>
+                <a href="https://www.leiphone.com/tag/Apple" target="_blank">Apple</a>
+                <a href="https://www.leiphone.com/tag/%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE" target="_blank">激光雷达</a>
+                <a href="https://www.leiphone.com/tag/vivo" target="_blank">vivo</a>
+                <a href="https://www.leiphone.com/tag/%E9%A9%AC%E5%8C%96%E8%85%BE" target="_blank">马化腾</a>
+                <a href="https://www.leiphone.com/tag/%E6%96%B0%E8%83%BD%E6%BA%90" target="_blank">新能源</a>
+                <a href="https://www.leiphone.com/tag/ImageNet" target="_blank">ImageNet</a>
+                <a href="https://www.leiphone.com/tag/%E9%94%A4%E5%AD%90%E6%89%8B%E6%9C%BA" target="_blank">锤子手机</a>
+                <a href="https://www.leiphone.com/tag/%E5%A5%A5%E8%BF%AA" target="_blank">奥迪</a>
+                <a href="https://www.leiphone.com/tag/Alphabet" target="_blank">Alphabet</a>
+                <a href="https://www.leiphone.com/tag/Disrupt%202011" target="_blank">Disrupt 2011</a>
+            </div>
+</div></div></div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="lineBg"></div>
+    <!-- 百度分享 -->
+    
+</div>
+
+
+
+
+
+
+<script>
+    function openYNote(url, title, pic, vendor, summary) {
+        var target = 'http://note.youdao.com/memory/?url=' + encodeURIComponent(url) +
+            '&title=' + encodeURIComponent(title) + '&pic=' + encodeURIComponent(pic) +
+            '&product=' + encodeURIComponent('网页收藏') +
+            '&summary=' + encodeURIComponent(summary) + '&vendor=' + encodeURIComponent(vendor);
+        window.open(target);
+    }
+  seajs.use(['https://www.leiphone.com/resWeb/js/article' , 'https://www.leiphone.com/resWeb/js/load_articles']);
+
+
+
+   // document.getElementById('weixin-qt').insertBefore(qcode.create(),document.getElementById('weixin-qt-msg'));
+</script>
+
+<footer class="yp-footer">
+    <!-- 友情链接，热门关键字 -->
+    <div class="yp-footer-link">
+        <div class="wrapper">
+            <div class="tab_tit clr">
+                                <a href="javascript:;">热门关键字</a>
+            </div>
+            <div class="tab_con">
+                <ul>
+                                        
+                                        <li class="cur">
+                                        
+                                                                                            <a href="http://www.leiphone.com/tags" target="_blank">热门标签</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD" target="_blank">人工智能 </a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">机器人</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" target="_blank">机器学习</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0" target="_blank">深度学习</a>                                                                    <a href="https://www.leiphone.com/tag/%E9%87%91%E8%9E%8D%E7%A7%91%E6%8A%80" target="_blank">金融科技</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%9C%AA%E6%9D%A5%E5%8C%BB%E7%96%97" target="_blank">未来医疗</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6" target="_blank">智能驾驶</a>                                                                    <a href="https://www.leiphone.com/tag/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6" target="_blank">自动驾驶</a>                                                                    <a href="https://www.leiphone.com/tag/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89" target="_blank">计算机视觉</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE" target="_blank">激光雷达</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB" target="_blank">图像识别</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E9%9F%B3%E7%AE%B1" target="_blank">智能音箱</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%8C%BA%E5%9D%97%E9%93%BE" target="_blank">区块链</a>                                                                    <a href="https://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%8A%95%E9%A1%BE" target="_blank">智能投顾</a>                                                                    <a href="https://www.leiphone.com/tag/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F" target="_blank">医学影像</a>                                                                    <a href="https://www.leiphone.com/tag/%E7%89%A9%E8%81%94%E7%BD%91" target="_blank">物联网</a>                                                                    <a href="https://www.leiphone.com/tag/IoT" target="_blank">IoT</a>                                                                    <a href="https://www.leiphone.com/tag/CV" target="_blank">CV</a>                                                                    <a href="http://www.leiphone.com/special/235/201609/57e4fe78a71ea.html" target="_blank">微信小程序平台</a>                                                                    <a href="http://www.leiphone.com/news/201701/ri7dDB7Fq0mMj1qh.html" target="_blank">微信小程序在哪</a>                                                                    <a href="http://www.leiphone.com/tag/CES%202017" target="_blank">CES 2017</a>                                                                    <a href="http://www.leiphone.com/tag/CES" target="_blank">CES</a>                                                                    <a href="http://www.leiphone.com/tag/2016%E5%B9%B4%E6%9C%80%E5%80%BC%E5%BE%97%E8%B4%AD%E4%B9%B0%E7%9A%84%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6" target="_blank">2016年最值得购买的智能硬件</a>                                                                    <a href="http://www.leiphone.com/news/201612/sI2n04bJ5aVzS5Pr.html" target="_blank">2016 互联网</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%A8%8B%E5%BA%8F" target="_blank">小程序</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E4%BF%A1%E6%9C%8B%E5%8F%8B%E5%9C%88" target="_blank">微信朋友圈</a>                                                                    <a href="http://www.leiphone.com/news/201612/J8qZLCwViDpwygen.html" target="_blank">抢票软件</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%89%8B%E6%9C%BA" target="_blank">智能手机</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E5%AE%B6%E5%B1%85" target="_blank">智能家居</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%89%8B%E7%8E%AF" target="_blank">智能手环</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">智能机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86" target="_blank">智能电视</a>                                                                    <a href="http://www.leiphone.com/tag/360%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6" target="_blank">360智能硬件</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E6%91%84%E5%83%8F%E6%9C%BA" target="_blank">智能摄像机</a>                                                                    <a href="http://www.leiphone.com/news/201601/mQ8TFsppN7ROxYmS.html" target="_blank">智能硬件产品</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E5%8F%91%E5%B1%95" target="_blank">智能硬件发展</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E5%88%9B%E4%B8%9A" target="_blank">智能硬件创业</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%BB%91%E5%AE%A2" target="_blank">黑客</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%99%BD%E5%B8%BD%E5%AD%90" target="_blank">白帽子</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE" target="_blank">大数据</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%91%E8%AE%A1%E7%AE%97" target="_blank">云计算</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%96%B0%E8%83%BD%E6%BA%90%E6%B1%BD%E8%BD%A6" target="_blank">新能源汽车</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%97%A0%E4%BA%BA%E9%A9%BE%E9%A9%B6" target="_blank">无人驾驶</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%97%A0%E4%BA%BA%E6%9C%BA" target="_blank">无人机</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%A4%A7%E7%96%86" target="_blank">大疆</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3%E6%97%A0%E4%BA%BA%E6%9C%BA" target="_blank">小米无人机</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%89%B9%E6%96%AF%E6%8B%89" target="_blank">特斯拉</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E6%B8%B8%E6%88%8F" target="_blank">VR游戏</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E7%94%B5%E5%BD%B1" target="_blank">VR电影</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E8%A7%86%E9%A2%91" target="_blank">VR视频</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E7%9C%BC%E9%95%9C" target="_blank">VR眼镜</a>                                                                    <a href="http://www.leiphone.com/tag/VR%E8%B4%AD%E7%89%A9" target="_blank">VR购物</a>                                                                    <a href="http://www.leiphone.com/tag/AR" target="_blank">AR</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%9B%B4%E6%92%AD" target="_blank">直播</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%89%AB%E5%9C%B0%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">扫地机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8C%BB%E7%96%97%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">医疗机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B7%A5%E4%B8%9A%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">工业机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%B1%BB%E4%BA%BA%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">类人机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA" target="_blank">聊天机器人</a>                                                                    <a href="http://www.leiphone.com/news/201606/kyKJpmCelZrWE7K4.html" target="_blank">微信机器人</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F" target="_blank">微信小程序</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%A7%BB%E5%8A%A8%E6%94%AF%E4%BB%98" target="_blank">移动支付</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%94%AF%E4%BB%98%E5%AE%9D" target="_blank">支付宝</a>                                                                    <a href="http://www.leiphone.com/tag/P2P" target="_blank">P2P</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8C%BA%E5%9D%97%E9%93%BE" target="_blank">区块链</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%AF%94%E7%89%B9%E5%B8%81" target="_blank">比特币</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%A3%8E%E6%8E%A7" target="_blank">风控</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%AB%98%E7%9B%9B" target="_blank">高盛</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB" target="_blank">人脸识别</a>                                                                    <a href="http://www.leiphone.com/tag/%E6%8C%87%E7%BA%B9%E8%AF%86%E5%88%AB" target="_blank">指纹识别</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%BB%91%E7%A7%91%E6%8A%80" target="_blank">黑科技</a>                                                                    <a href="http://www.leiphone.com/news/201502/S5yH58slS9gpBrm4.html" target="_blank">谷歌地图</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%B0%B7%E6%AD%8C" target="_blank">谷歌</a>                                                                    <a href="http://www.leiphone.com/tag/IBM" target="_blank">IBM</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%BE%AE%E8%BD%AF" target="_blank">微软</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%B9%90%E8%A7%86" target="_blank">乐视</a>                                                                    <a href="http://www.leiphone.com/tag/%E7%99%BE%E5%BA%A6" target="_blank">百度</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%B8%89%E6%98%9Fs8" target="_blank">三星s8</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%85%BE%E8%AE%AF" target="_blank">腾讯</a>                                                                    <a href="http://www.leiphone.com/list/%E4%B8%89%E6%98%9FNote8" target="_blank">三星Note8 </a>                                                                    <a href="http://www.leiphone.com/news/201610/oUUuMZtyi7H6xMGA.html" target="_blank">小米MIX</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3Note" target="_blank">小米Note</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8D%8E%E4%B8%BA" target="_blank">华为</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%B0%8F%E7%B1%B3" target="_blank">小米</a>                                                                    <a href="http://www.leiphone.com/tag/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4" target="_blank">阿里巴巴</a>                                                                    <a href="http://www.leiphone.com/tag/%E8%8B%B9%E6%9E%9C" target="_blank">苹果</a>                                                                    <a href="http://www.leiphone.com/tag/MacBook%20Pro" target="_blank">MacBook Pro</a>                                                                    <a href="http://www.leiphone.com/tag/iPhone" target="_blank">iPhone</a>                                                                    <a href="http://www.leiphone.com/tag/Facebook" target="_blank">Facebook</a>                                                                    <a href="http://www.leiphone.com/tag/GAIR" target="_blank">GAIR</a>                                                                    <a href="http://www.leiphone.com/tag/IROS" target="_blank">IROS</a>                                                                    <a href="http://www.leiphone.com/tag/%E5%8F%8C%E5%88%9B%E5%91%A8" target="_blank">双创周</a>                                                                    <a href="http://www.leiphone.com/tag/%E4%BA%91%E6%A0%96%E5%A4%A7%E4%BC%9A" target="_blank">云栖大会</a>                                                                    <a href="https://www.iuplus.com/" target="_blank">优葩</a>                                                                    <a href="http://www.leiphone.com/news/201610/qN5pHyh1kQUQEGtw.html" target="_blank">智能硬件公司</a>                                                                    <a href="http://www.leiphone.com/category/weiwu" target="_blank">智能硬件</a>                                                                    <a href="http://www.leiphone.com/news/201701/RnURKJ8H5PaG9g7y.html" target="_blank">QQ红包</a>                                                                    <a href="http://www.leiphone.com/news/201701/RnURKJ8H5PaG9g7y.html" target="_blank">支付宝红包</a>                                                                    <a href="http://www.leiphone.com/news/201701/cdANtd69SJLFwdXs.html" target="_blank">敬业福</a>                                                                                    
+                        <a href="https://www.leiphone.com/list/tensorflow" target="_blank">tensorflow</a><a href="https://www.leiphone.com/list/ddos%E6%94%BB%E5%87%BB" target="_blank">ddos攻击</a><a href="https://www.leiphone.com/list/emoji%E8%A1%A8%E6%83%85%E4%BB%A3%E7%A0%81" target="_blank">emoji表情代码</a><a href="https://www.leiphone.com/list/tile" target="_blank">tile</a><a href="https://www.leiphone.com/list/%E5%A4%A7%E9%A3%9E%E6%9C%BA" target="_blank">大飞机</a><a href="https://www.leiphone.com/list/%E5%85%A8%E6%99%AF%E6%8B%8D%E6%91%84" target="_blank">全景拍摄</a><a href="https://www.leiphone.com/list/xperia%20z5%20compact" target="_blank">xperia z5 compact</a><a href="https://www.leiphone.com/list/%E8%B0%B7%E6%AD%8C%E5%91%98%E5%B7%A5%E7%A6%8F%E5%88%A9" target="_blank">谷歌员工福利</a><a href="https://www.leiphone.com/list/%E9%BB%91%E5%AE%A2%E5%A4%A7%E6%88%98" target="_blank">黑客大战</a><a href="https://www.leiphone.com/list/%E5%81%9C%E8%BD%A6%E5%9C%BA%E8%BD%A6%E4%BD%8D%E9%94%81" target="_blank">停车场车位锁</a><a href="https://www.leiphone.com/list/vr%E6%89%8B%E5%A5%97" target="_blank">vr手套</a><a href="https://www.leiphone.com/list/%E9%92%88%E5%AD%94%E5%BD%95%E5%83%8F%E6%9C%BA" target="_blank">针孔录像机</a><a href="https://www.leiphone.com/list/%E5%8D%AB%E6%98%9F%E5%AE%BD%E5%B8%A6" target="_blank">卫星宽带</a><a href="https://www.leiphone.com/list/%E4%B8%96%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E9%BB%84%E8%89%B2%E7%BD%91%E7%AB%99" target="_blank">世界最大的黄色网站</a><a href="https://www.leiphone.com/list/%E9%A9%AC%E4%B8%81%E8%83%8C%E5%8C%85" target="_blank">马丁背包</a>                        <a href="https://www.leiphone.com/list/" target="_blank">更多</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="yp-footer-msg">
+        <div class="wrapper clr">
+            <!-- links -->
+            <div class="links">
+                <a rel="nofollow" href="https://www.leiphone.com/us/contact">联系我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/us/index">关于我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/news/201611/0nOqnvNoxI6vX4L9.html">加入我们</a>
+                <a rel="nofollow" href="https://www.leiphone.com/us/feedback">意见反馈</a>
+                <a rel="nofollow" href="https://www.leiphone.com/contribute/index">投稿</a>
+            </div>
+            <!-- 下载app -->
+            <div class="downLoad-app">
+                <div class="qrcode">
+                    <!-- /site/download -->
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/downCode.jpg" width="96" height="96" alt="">
+                </div>
+                <div class="txt">
+                    <p>下载雷锋网客户端</p>
+                    <a rel="nofollow" href="https://itunes.apple.com/cn/app/lei-feng-wang-yi-dong-hu-lian/id579529120?mt=8" target="_blank" class="iPhone"><em></em>iPhone</a>
+                    <a rel="nofollow" href="https://android.myapp.com/myapp/detail.htm?apkName=com.leiphone.app" target="_blank" class="Android"><em></em>Android</a>
+                </div>
+            </div>
+            <!-- 关注-->
+            <div class="contact">
+                <a rel="nofollow" href="mailto:web@leiphone.com" class="eml sub_a"><em></em></a>
+                <a rel="nofollow" href="https://www.weibo.com/p/1006062118746300" target="_blank" class="sina sub_a"><em></em></a>
+            </div>
+        </div>
+    </div>
+    <!-- copyRight -->
+    <div class="yp-copyright">
+        <div class="wrapper">
+            <p>Copyright © 2011-2018 www.leiphone.com 雷锋网-移动互联网智能终端第一媒体 All Rights Reserved <a target="_blank" style="color:#9baab6;" href="https://www.miitbeian.gov.cn/">粤ICP备11095991号-1</a>
+<!--                 <a  key ="54914497efbfb06e545f711c"  logo_size="83x30"  logo_type="realname"  href="https://www.anquan.org" ><script src="https://static.anquan.org/static/outer/js/aq_auth.js"></script></a> -->
+                &nbsp;&nbsp;
+                <a href="http://szcert.ebs.org.cn/0ee69ac3-f114-4bd9-9ea1-a5a04f7cd44b" rel="nofollow" target="_blank"><img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/govIcon.gif" width="29" height="40"></a>
+<!--                <script id="ebsgovicon" src="https://szcert.ebs.org.cn/govicon.js?id=0ee69ac3-f114-4bd9-9ea1-a5a04f7cd44b&width=29&height=40&type=1" type="text/javascript" charset="utf-8"></script>                &nbsp;&nbsp;-->
+                <a rel="nofollow" href="https://www.leiphone.com/resWeb/images/ICP.jpg" target="_blank" style="color:#9baab6">ICP证粤B2-20150332</a>
+                <a rel="nofollow" href="http://www.qiniu.com/" target="_blank" style="float:right">
+                    <img src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/hzs4.png">
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+<div id="lph-footer-gotoBar">
+    <div class="gotoTop">   
+        <a href="javascript:;" class="top" data-goto="0" data-start="100" style="display: none;"><em></em></a>
+    </div>
+</div>
+
+<!-- 遮罩层 -->
+<div class="lph-overlay"></div>
+    <!-- 右上角持续提示，邮箱未绑定的时候输出 -->
+    <div class="yzEmail_tip yzEmail_tip1" id="bandEmailTip">
+        <em></em>
+        <span>为了您的账户安全，请<a class="bbtn" href="javascript:;">验证邮箱</a></span>
+        <i class="close"></i>
+    </div>
+
+    <!-- 右上角持续提示，邮箱发送但未验证的时候输出 -->
+    <div class="yzEmail_tip yzEmail_tip2" id="sendEmailTip">
+        <span style="text-align: center;">您的邮箱还未验证,完成可获20积分哟！</span>
+        <p class="links"><a class="rbtn" href="javascript:;">重发邮箱</a><a class="sbtn" href="javascript:;">修改邮箱</a></p>
+        <i class="close"></i>
+    </div>
+
+    <!-- 记cookie弹窗，邮箱未绑定的时候弹出 -->
+    <div class="yzEmail_box yzEmail_box1 lph-pops" id="sendEmailBox">
+        <div class="head">请验证您的邮箱</div>
+        <div class="box">
+            <span class="tipp"><!-- *邮箱 --></span>
+            <input class="inp" id="sendEmail_input" placeholder="输入您的邮箱" value="">
+            <!-- <strong>验证邮件已发送，请您查收</strong> -->
+            <a class="btn" href="javascript:;" target="_blank" id="sendEmail_btn"><i></i><em>立即验证</em></a>
+            <div class="error"></div>
+        </div>
+        <!-- <div class="boxOk">
+            <strong>验证邮件已发送，请您查收</strong>
+        </div> -->
+        <i class="close"></i>
+    </div>
+
+    <!-- 记cookie弹窗，已发送邮件但未验证 -->
+    <div class="yzEmail_box yzEmail_box2 lph-pops" id="setPwBox">
+        <div class="head">完善账号信息</div>
+        <div class="top">
+            <span>您的账号已经绑定，现在您可以<a href="javascript:;">设置密码</a>以方便用邮箱登录</span>
+        </div>
+        <div class="btm">
+            <input class="inp" type="password" id="" placeholder="输入您的密码" value="">
+            <a class="btn" href="javascript:;" target="_blank" id=""><i></i><em>立即设置</em></a>
+            <a class="clo" href="javascript:;">以后再说</a>
+            <div class="error"></div>
+        </div>
+        <i class="close"></i>
+    </div>
+
+<!-- 申请专栏作者 -->
+<form id="applyAutor" onsubmit="return false">
+    <div class="applyAutor-pop">   
+        <i class="close"></i> 
+        <div class="title">请填写申请人资料</div>
+        <div class="main">
+            <div class="rows clr">
+               <span class="name">姓名</span>
+               <input type="text" id="name" name="MemberAuthorType[name]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">电话</span>
+               <input type="text" id="phone" name="MemberAuthorType[phone]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">邮箱</span>
+               <input type="text" id="eml" name="MemberAuthorType[email]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">微信号</span>
+               <input type="text" id="weixin" name="MemberAuthorType[wechat]" value="">
+               <span class="error"></span>
+            </div>
+            <div class="rows clr">
+               <span class="name">作品链接</span>
+               <input type="text" id="job" name="MemberAuthorType[link]" value="">
+            </div>
+            <div class="rows clr">
+               <span class="name">个人简介</span>
+               <textarea id="description" name="MemberAuthorType[description]"></textarea>
+            </div>
+            <div class="rows clr rows-last">
+                <input type="submit" value="提 交" id="subBtn">
+                <input type="button" value="取 消" id="clsBtn">
+            </div>
+        </div>
+    </div>  
+</form>
+<!--<!-- 公告 -->
+<!--<div class="server-mask"></div>-->
+<!--<div class="server-pop">-->
+<!--    <em id='serCls'></em>-->
+<!--    <div class="tit">关于网站服务器维护的公告</div>-->
+<!--    <div class="main">-->
+<!--        <p>尊敬的雷锋网用户：</p>-->
+<!--        <p>&nbsp;&nbsp;&nbsp;&nbsp;由于网站服务器维护升级，雷锋网将在7月14日22:00-24:00 暂时关闭网站。由此给您带来的不便，我们深表歉意。特此公告!</p>-->
+<!--        <p class="txtR mt10">雷锋网</p>-->
+<!--        <p class="txtR">2017年7月13日</p>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script>
+    // 四站登录
+    with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src=BASE_URL+'/resWeb/home/js/login/yp_login.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<!-- 优路跟踪代码 -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5HDG4H');</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https'){
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else{
+            bp.src = 'https://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+             
+    })();
+</script>
+
+
+<iframe id="YP_LOGIN_WINDOW" class="YP-LOGIN" scrolling="no" src="./一文详解 Word2vec 之 Skip-Gram 模型（结构篇） _ 雷锋网_files/saved_resource.html"></iframe><div id="YP_LOGIN_WINDOW_OVERLAY" class="YP-OVERLAY"><div class="close" title="关闭" style="background-image: url(&quot;https://home.leiphone.com/resWeb/home/images/login/close_03.png&quot;);"></div></div>
+<script type="text/javascript" id="">(function(){var g="https://www.qipus.cn/cmp",h=5021,e=function(){function e(a,b){b&&(a.addEventListener?a.onload=b:a.onreadystatechange=function(){a.readyState in{loaded:1,complete:1}&&(a.onreadystatechange=null,b())})}function k(a,b,f){var d=c.createElement("script");d.type="text/javascript";d.async=!0;d.src=a;e(d,b);f&&(d.onerror=f);a=d;b=c.getElementsByTagName("script")[0]||c.body||c.head;b.parentNode.insertBefore(a,b)}var c=document;k(g+"/cmp.api?r\x3d"+encodeURIComponent(c.referrer||"")+"\x26s\x3d"+
+h+"\x26u\x3d"+encodeURIComponent(c.location.href));window._ycnt_cb=function(a,b){}};e()})();</script>
+</body></html>

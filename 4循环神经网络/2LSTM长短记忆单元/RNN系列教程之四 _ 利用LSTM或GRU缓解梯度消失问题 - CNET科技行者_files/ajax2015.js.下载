@@ -1,0 +1,60 @@
+if (typeof (zd_type) == "undefined") {
+    var zd_type = ''
+}
+jQuery(function ($) {
+    $(document).ready(function () {
+        $.get("https://www.zhiding.cn/techzone/ajax/index.php?data[]=u&data[]=e&callback=", function (obj) {
+            if (obj.code == 10000) {
+                var data = obj.data;
+                do_ajax_login(data.u);
+                do_ajax_viplogin(data.v);
+                do_ajax_edm(data.e);
+            }
+        },"jsonp");
+    })
+    function do_ajax_edm(o) {       
+        $(".qu_dings").html('<div class="qu_tit">邮件订阅</div><p class="qu_jies">如果您非常迫切的想了解IT领域最新产品与技术信息，那么订阅至顶网技术邮件将是您的最佳途径之一。</p><form action="//www.zhiding.cn/user/edm" target="_blank" method="get"><input type="text" placeholder="Enter your email address" class="qu_inp" value="' + o + '" id="email" name="email"><input type="submit" class="qu_bis" value="现在订阅"></form>');
+    }
+    function do_ajax_login(o) {
+        if (o != null) {
+            $(".qu_login.comment").html('<ul><LI><a href="//www.zhiding.cn/user/my/' + o.uid + '">' + o.uchome_loginuser + '</a></LI><LI><a target="_self" href="//www.zhiding.cn/user/logout">退出</a></LI><div class="clear"></div></ul>');
+            } 
+    }
+    function do_ajax_viplogin(o){
+        if (o != null) {
+            if(location.host.indexOf('zhiding.cn')!=-1){
+                $(".qu_login.loginvip").html('<ul><li><a href="//www.zhiding.cn/vip">' + o.u + '</a></li><li><a target="_self" href="//www.zhiding.cn/vip/logout">退出</a></li><div class="clear"></div></ul>');
+            }
+            if(location.host.indexOf('zhiding.cn')!=-1){
+                $(".qu_login.loginvip").html('<ul><li><a href="//www.zhiding.cn/vip">' + o.u + '</a></li><li><a target="_self" href="//www.zhiding.cn/vip/logout">退出</a></li><div class="clear"></div></ul>');
+            }
+        }else{
+            
+        }
+    }
+    function do_ajax_c(o) {
+        if (o == null) {
+            $('.pinglun p a').eq(0).html(0)
+        } else {
+            $('.pinglun p a').eq(0).html(o.n);
+            var ele = document.createElement('div');
+            ele.className = 'pageshow';
+            ele.innerHTML = o.l;
+            $('#content_cmt').append(ele);
+            if (o.n > o.s)
+                $('#showmore').html('<a href="javascript:void(0);">查询更多</a>');
+        }
+    }
+    function do_ajax_e(o) {
+        if (o != null) {
+            $('#email').val(o);
+        }
+    }
+    function do_ajax_m(o) {
+        if (o == null) {
+            $('.pinglun p a').eq(0).html(0)
+        } else {
+            $('.pinglun p a').eq(0).html(o.n);
+        }
+    }
+})

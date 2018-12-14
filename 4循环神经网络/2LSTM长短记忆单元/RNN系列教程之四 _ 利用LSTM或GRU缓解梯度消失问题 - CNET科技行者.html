@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0050)http://www.cnetnews.com.cn/2017/1129/3101178.shtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<meta content="深度学习,深度神经网络,RNN" name="keywords">
+             <meta content="在本周的教程中，我们将详细介绍如何建立基于LSTM（长短时记忆）和GRU（门控循环单元）的RNN模型，以缓解梯度消失问题。" name="Description">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://www.cnetnews.com.cn/2017/1129/3101178.shtml">
+<meta property="og:title" content="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 ">
+<meta property="og:description" content="在本周的教程中，我们将详细介绍如何建立基于LSTM（长短时记忆）和GRU（门控循环单元）的RNN模型，以缓解梯度消失问题。"><title>RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题  - CNET科技行者</title>
+<link rel="shortcut icon" href="http://icon.zhiding.cn/cnetnews/120504/images/favicon.ico">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<script src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/push.js.下载"></script><script src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/cnet.gzjs"></script>
+<link href="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/cnet.gzcss" rel="stylesheet" type="text/css">
+<style>
+.l_ads {
+    position: relative;
+}
+.r_ads {
+    position: relative;
+}
+.ads300{
+    position: relative;
+}
+a.ad_hover_href {
+    background: rgba(0, 0, 0, 0) url("http://icon.zhiding.cn/zdnet/2015/images/ad.png") no-repeat scroll 0 0;
+    bottom: 0;
+    height: 17px;
+    left: 0;
+    position: absolute;
+    width: 30px;
+    z-index: 900;
+}
+</style>
+</head>
+<body>
+<a onclick="window.scrollTo(0,0);return false" class="retu" title="返回顶部" target="_self" href="javascript:void(0);" style="display: block;"> </a>
+<div class="qu_nav">
+    <div class="qu_nav_nei">
+        <a href="http://www.cnetnews.com.cn/" class="logo" title="CNETNews 科技行者" target="_self"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/dt5_05.png"></a>
+        <!--ul class="qu_nav02">
+            <li  class="on"><a href="http://www.cnetnews.com.cn">首页</a></li>
+            <li><a  href="http://www.cnetnews.com.cn/net.shtml">互联网+</a></li>
+            <li><a  href="http://www.cnetnews.com.cn/crazy.shtml">科技疯·产品</a></li>
+            <li><a  href="http://www.cnetnews.com.cn/biz.shtml" >商业科技</a></li>
+            <li><a  href="http://www.cnetnews.com.cn/files/list-0-0-322824-0-1.htm">创业黑板报</a></li>
+            <li><a href="http://www.cnetnews.com.cn/files/list-0-0-339487-0-1.htm">IT老外在中国</a></li>
+        </ul-->
+    </div>
+</div>
+<div class="qu_main">
+	<div class="qu_left">
+    	<div class="qu_weizhi"><a href="http://www.cnetnews.com.cn/">CNET科技行者</a>&#8250;<span>RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 </span><p></p></div>
+        <div class="clear20"></div>
+            <h1 class="foucs_title">RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 </h1>
+     <div class="clear20"></div>
+     <div class="qu_consd">
+
+        <ul class="qu_code" id="qu_code" style="top: 8931px;">
+                <li><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/index.php" width="99" alt="分享文章到微信">
+                <p>扫一扫<br>分享文章到微信</p></li>
+              <li><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/w45_06_c.jpg" alt="关注官方公众号-科技行者">
+              <p>扫一扫<br>关注官方公众号<br>科技行者</p></li>
+        </ul>
+        <div class="qu_lix">
+          <div class="qu_zhao">  在本周的教程中，我们将详细介绍如何建立基于LSTM（长短时记忆）和GRU（门控循环单元）的RNN模型，以缓解梯度消失问题。 </div>
+          <div class="qu_zuo">
+            
+            <p>     来源：CNET科技行者     【编译】       2017年11月29日   </p>
+            <p class="guzhu">关键字：<a href="http://www.cnetnews.com.cn/files/list-7-0-345718-0-1.htm" target="_blank">RNN</a> <a href="http://www.cnetnews.com.cn/files/list-7-0-344891-0-1.htm" target="_blank">深度神经网络</a> <a href="http://www.cnetnews.com.cn/files/list-7-0-331560-0-1.htm" target="_blank">深度学习</a></p>
+            <p></p>
+            <div class="clear"></div>
+          </div>
+              <ul class="qu_li058x">
+                <li><a href="http://www.cnetnews.com.cn/2017/1129/3101178.shtml#comment" id="weixin">
+                   <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_11.jpg" alt="评论"></a></li>
+               <li><a href="javascript:;" date-url="http://service.weibo.com/share/share.php?title=RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 :在本周的教程中，我们将详细介绍如何建立基于LSTM（长短时记忆）和GRU（门控循环单元）的RNN模型，以缓解梯度消失问题。&amp;url=http://www.cnetnews.com.cn/2017/1129/3101178.shtml&amp;pic=http://img.zhiding.cn/5/289/lizCTeTKr3iKs_SEZE_ZDNET.jpg&amp;ralateUid=#" class="s_wb" id="weibo">
+                 <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_08.jpg" alt="分享微博"></a></li>
+              <li><a href="javascript:;" date-url="http://s.jiathis.com/?webid=email&amp;url=http://www.cnetnews.com.cn/2017/1129/3101178.shtml&amp;title=RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 &amp;su=1" class="s_wb" id="mail">
+                 <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_14.jpg" alt="分享邮件"></a></li>
+                <div class="clear"></div>
+             </ul>
+                <div class="clear30"></div>
+                
+                <div class="qu_ocn">
+                <p><span style="color: #888888; font-size: 15px;">本部分是本系列RNN教程的最后一部分。错过前三部分的可点击以下文字链接进行回顾：</span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important;"><span style="color: #888888; font-size: 15px;">1.<a href="http://www.cnetnews.com.cn/2017/1108/3100232.shtml" target="_blank">循环神经网络（RNN）的基本介绍</a><br>2.<a href="http://www.cnetnews.com.cn/2017/1116/3100639.shtml" target="_blank">在Python和Theano框架下实现RNN</a><br>3.<a href="http://www.cnetnews.com.cn/2017/1118/3100705.shtml" target="_blank">基于时间的反向传播算法和梯度消失问题</a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;">&nbsp;<a class="fancybox_content" href="http://img.zhiding.cn/5/289/lizCTeTKr3iKs.jpg?rand=161"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/lizCTeTKr3iKs_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important;">&nbsp;<span style="color: #888888;"><em><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">今天，我们将详细介绍LSTM（长短时记忆）神经网络和GRU（门控循环单元）。LSTM于1997年由Sepp Hochreiter 和Jürgen Schmidhuber首次提出，是当前应用最广的NLP深度学习模型之一。GRU于2014年首次被提出，是LSTM的简单变体，两者有诸多共性。</span></em></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="color: #888888;"><em><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">先来看看LSTM，随后再探究LSTM与GRU的差异。</span></em></span></p>
+<h2 style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="color: #d92142; font-size: 16px;"><strong><span style="color: #d92142; max-width: 100%; box-sizing: border-box !important; overflow-wrap: break-word !important;">-1- </span><span style="color: #d92142; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">LSTM网络</span></strong></span></h2>
+<p style="text-align: left;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">我们在第三部分的教程中提到过梯度消失问题是如何阻碍标准RNN学习长期依赖的。而LSTM就是通过引入一个叫做“门”（gating）的机制来缓解梯度消失问题。为了更好的理解这一问题，不妨先看看LSTM是如何计算隐藏层s_t的：</span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/290/lihF4EHv9sXx6.jpg?rand=157"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/lihF4EHv9sXx6_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">LSTM计算式子</span></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">这些式子看似复杂，实则不难。首先，我们要注意<strong>LSTM层仅仅是计算隐藏层的另一种方式</strong>。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">在传统的RNN中，我们用s_t = tanh(Ux_t + Ws_)这个式子来计算隐藏层。其中，隐藏层的输入单元有两个，一个是当前时刻t的输入x_t以及前一时刻的隐藏状态s_。LSTM单元的功能与之相同，只是方式不同而已。这是理解LSTM的关键。<strong>你基本上可将LSTB（和GRU）单元视为黑匣子，只要你给定当前输入和前一时刻的隐藏状态，便可计算出下一隐藏状态</strong>。如下图：</span></p>
+<p style="text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/291/li2cIYr9UyEI.jpg?rand=36"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/li2cIYr9UyEI_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">&nbsp;</span><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">简化LSTM和GRU模型</span></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">了解这一点后，就可以来看看LSTM单元中隐藏层的计算方法了。Chris Olah的一篇博文详细介绍过这一点（http://colah.github.io/posts/2015-08-Understanding-LSTMs/），此处不作赘述，仅简单介绍。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">总结如下：<br></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/290/lihF4EHv9sXx6.jpg?rand=127"><img style="display: block; margin-left: auto; margin-right: auto;" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/lihF4EHv9sXx6_600(1).jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<ul>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">i, f, o分别为input（输入）门，forget（遗忘）门和output（输出）门。需要注意的是，它们的方程式完全相同，只是参数矩阵不同。而之所以被称作“门”，是由于sigmoid函数将这些向量值的区间缩减为0到1，然后将其与另一向量对应相乘，便可界定让多少其它的向量能“通过”这个门。输入门决定的是让多少新计算出的隐藏状态通过当前输入。遗忘门则决定让多少之前的隐藏状态通过。最后的输出门则决定了让多少信息传递到更高一层的神经网络或者下一时刻。这三个“门”都有相同的的维度ds，即隐藏层的大小。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">g是基于当前输入和先前隐藏状态计算出的“候选”隐藏状态。它与传统RNN中的方程式完全相同，此处仅将参数U和W重命名为U^g和W^g。在传统RNN中，我们指定g的值为新隐藏状态，并输出给下一个状态，而在LSTM中，我们将通过输入门来挑选g的一部分值，再输出给下一个状态。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">c_t是内部的记忆单元。它等于前一时刻的记忆c_乘以遗忘门的结果，再加上隐藏候选状态g和输入门的相乘结果。直观上，它是一个可以由我们决定的先前记忆和新输入数值的组合。因此，我们可选择完全忽略上一个记忆单元的内容(即把遗忘门全部设为0)，或完全忽略新输入的状态（即输入门全部设为0）。但现实情况是，我们需要在这两个极端之间寻求某种平衡。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">给定记忆单元c_t，与输出门相乘，最终可计算出隐藏层s_t。当然，并不是所有的内部记忆单元都与其他隐藏状态相关。</span></li>
+</ul>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;"><a class="fancybox_content" href="http://img.zhiding.cn/5/292/liuHUCnjsOLMo.jpg?rand=166"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liuHUCnjsOLMo_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">LSTM的内部细节</span></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><em><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;">图片来源：“Empirical evaluation of gated recurrent neural networks on sequence modeling.” Chung, Junyoung等著。</span></em></p>
+<p><strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">直观上，传统的RNN可视作LSTM的一个特殊情况</span></strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">。即当我们把所有输入门固定为1，所有忘记门固定为0（即永远忽略前一时刻的记忆单元），所有输出门固定为1（即呈现所有记忆），就近乎得到了标准的RNN，只不过多出一个附加的tanh，缩小了输出范围。正是这个“门机制”让LSTM可以明确建立长期记忆以来的模型，通过学习这些“门”的参数，神经网络能够更好地学习如何利用这些记忆。</span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">显然，基础LSTM架构也有几种变体。最常见的变体是创建了窥视孔（peephole）连接，使“门”不仅仅取决于前一时刻的隐藏状态s_和前一时刻的内部记忆单元c_，并在“门”的方程中增加了附选项即可。当然，LSTM还有更多变体。这篇论文（LSTM: A Search Space Odyssey）做了更详述的介绍，如有需要可供参考。</span></p>
+<h2 style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="color: #d92142; font-size: 16px;"><strong><span style="color: #d92142; max-width: 100%; box-sizing: border-box !important; overflow-wrap: break-word !important;">-2-</span><span style="color: #d92142; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"> GRU网络</span></strong></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU网络的原理与LSTM非常相似，方程式也几乎相同，如下：<br></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/293/liXiduIUorUDI.jpg?rand=84"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liXiduIUorUDI_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU计算式子</span></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><br>GRU有两个门：重置（reset）门r和更新（update）门z。直观来讲，<strong>重置门决定了新的输入与前一时刻记忆的组合方式，更新门则决定了先前记忆信息的保留程度</strong>。如果将所有重置门设为1，所有更新门设为0，即可再次得到传统的RNN模型。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">我们发现，GRU中用门机制来实现学习长期记忆的基本原理与LSTM相同，但也有一些区别：</span></p>
+<ul>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU有两个门，而LSTM有三个门。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU中不存在区别于内部记忆单元(c_t)，也没有LSTM中的输出门。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">LSTM的输入门和遗忘门，在GRU中被整合成一个更新门z；而重置门r被直接用到前一个隐藏状态上面了。因此，LSTM中重置门的功能实际上由GRU中的重置门r和更新门z代替。</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">计算输出时，不再借助非线性函数。</span></li>
+</ul>
+<p style="text-align: center;"><a class="fancybox_content" href="http://img.zhiding.cn/5/294/lipYBXb2n5IXE.jpg?rand=135"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/lipYBXb2n5IXE_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU内部细节</span></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><em><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;">图片来源：“Empirical evaluation of gated recurrent neural networks on sequence modeling.” Chung, Junyoung等人于2014年著。</span></em></p>
+<h2 style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="color: #d92142; font-size: 16px;"><strong><span style="color: #d92142; max-width: 100%; box-sizing: border-box !important; overflow-wrap: break-word !important;">-3- </span><span style="color: #d92142; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU vs LSTM</span></strong></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">现在，我们已经了解了解决RNN梯度消失问题的两种模型，但可能还不清楚应该使用哪一种模型。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">具体来看，GRU仍处于初级阶段（于2014年提出），关于它的一些利弊现在还没有探索清楚。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">但事实上，这两种模型在许多任务中都不相上下，因此，<strong>与挑选出一个理想的架构相比，调整层数这些超参数等更重要</strong>。</span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">GRU的参数较少（U和W都较小），因此其训练速度更快，或需要归纳的数据更少。相对应的，如果有足够的训练数据，表达能力更强的LSTM或许效果更佳。</span></strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">&nbsp;</span></p>
+<h2 style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: left;"><span style="color: #d92142; font-size: 16px;"><strong><span style="color: #d92142; max-width: 100%; box-sizing: border-box !important; overflow-wrap: break-word !important;">-4- </span><span style="color: #d92142; max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">实现RNN</span></strong></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">现在我们借助GRU来实现第二部分中的语言模型（LSTM也差不多，只是式子不同而已）。<br><br>我们基于之前Theano版本的代码来修改。别忘了GRU (LSTM)层只是计算隐藏状态的另一种方式，因此我们需要在前向转播的代码里，把隐藏层的计算步骤修改一下。<br></span></p>
+<p style="text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/295/liPDWOydXjdp2.jpg?rand=57"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liPDWOydXjdp2_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%;">Tip：点击图片可看大图</span></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">我们也在实现中增加了偏置单元 b, c，这在之前的式子中没有体现。由于参数U和W的维度有所改变，还需修改参数U和W的初始值。Gitub上已有该初始化编码（https://github.com/dennybritz/rnn-tutorial-gru-lstm），在此就不一一展示。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">在这里，我还添加了一个词嵌入层（word embedding）E，后文会有详细介绍。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">接下来说说梯度。像之前一样，我们可以用链式求导法则推导E、W、U、b和c的梯度。但在实际操作中，多数人偏爱用像Theano这样的框架来实现。如果你还想要自己计算梯度，就需要实现不同模块的求导算法。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">这里，我们利用Theano来计算梯度：</span></p>
+<p style="text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/296/liVUIghLPxrY.jpg?rand=7"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liVUIghLPxrY_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><span style="max-width: 100%; font-size: 15px; color: #bb445e;"><strong>差不多就是这样。为得到优质结果，也可在实现中额外使用一些技巧：</strong></span><br><br><span style="max-width: 100%; font-size: 15px; color: #000000;"><strong><span style="max-width: 100%; font-size: 15px;">1.用RMSProp（SGD的一种优化算法）更新参数</span></strong></span><br><br>在第二部分教程中，我们用随机梯度下降(SGD)的基础版更新了参数。结果不尽人意。但如果将学习率设置得足够低，<strong>SGD确实能让你得到非常好的训练效果，只是实际操作时会耗费大量时间</strong>。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">为了解决这个问题，SGD还有有许多变体，如(Nesterov) Momentum Method、AdaGrad、AdaDelta 和RMSProp等等。这篇文章中有详述的总结（http://cs231n.github.io/neural-networks-3/#update）。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">这里，我们将使用RMSProp这个方法，其基本原理是根据先前的梯度之和来调整每个参数的学习率。直观上，出现频率越高的参数学习率越小（因为梯度总和更大），反之亦然。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">RMSProp的实现非常简单。我们保留每个参数的缓存变量，并在梯度下降时更新以下参数以及缓存变量，如下（以W为例）：<br></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/297/liKUjXW17orTs.jpg?rand=38"><img style="display: block; margin-left: auto; margin-right: auto;" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liKUjXW17orTs_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">衰减通常设为0.9到0.95之间，另外，添加1e-6是为了避免除数为0。</span></p>
+<h2><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #000000;"><strong>2.添加嵌入（embedding）层</strong></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">诸如word2vec和GloVe这样的词嵌入（ word embedding）是提升模型准确度的常用方法。和用one-hot表示句子不同，这种词嵌入的方法用低维（通常是几百维）的向量来表示词语，这有个好处，那就是能通过向量来判断两个词的语义是否相近，因为如果他们意思相近的话，他们的向量就很相近。要使用这些向量，需要预训练语料库。从直觉上来看，使用word embedding层，就相当于你告诉神经网络词语的意思，从而神经网络就不需要学习关于这些词语的知识了。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">我的实验中并未使用预训练的单词向量，只添加了一个嵌入层（即编码中的矩阵E），便于插入单词。嵌入式矩阵与查表类似，第i栏的向量对应单词表中第i个词。通过更新矩阵E可自学单词向量，但仅针对我们的任务（以及数据集），不同于那些由大量文档训练而成的可下载的数据。</span></p>
+<h2><span style="color: #000000;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">3.</span><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><strong>添加第二个GRU层</strong></span></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">添加第二层能使网络捕捉到更高层次的交互，还可以添加其他层，但本实验中我没这么做。2到3层之后，可能会出现递减倒退（计算值逐渐减小），除非数据足够庞大（但我们没有），否则层数的增加不仅不会产生明显变化，还将导致过拟合。<br></span></p>
+<p style="text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/298/litRw9MwOFs.jpg?rand=130"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/litRw9MwOFs_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">增加一层GRU或者LSTM</span></span></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">第二层的添加过程非常简单，只需（再次）修正前向传播的计算过程和初始化函数即可：<br></span></p>
+<p style="text-align: center;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><a class="fancybox_content" href="http://img.zhiding.cn/5/299/liqY71G1gqIbU.jpg?rand=105"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/liqY71G1gqIbU_600.jpg" alt="RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 "></a></span></p>
+<p style="max-width: 100%; min-height: 1em; box-sizing: border-box !important; overflow-wrap: break-word !important; text-align: center;"><span style="font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; max-width: 100%; color: #888888;"><span style="max-width: 100%; color: #d92142; font-size: 14px; letter-spacing: 1px; text-align: center; background-color: #ffffff;">▲</span><span style="color: #888888; max-width: 100%;">Tip：点击图片可看大图</span></span></p>
+<p>&nbsp;<em><strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">此处附上GRU网络的完整代码：https://github.com/dennybritz/rnn-tutorial-gru-lstm/blob/master/gru_theano.py</span></strong></em></p>
+<h2><span style="color: #000000;"><strong><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">4.性能注释</span></strong></span></h2>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">之前我对此也有疑惑，因此提前声明，在此提供的编码效率较低，其优化版仅用于解说和教学目的。尽管它能够配合模型运作，但无法胜任生产或大型数据集训练。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">优化RNN性能的方法有很多，但最重要的是批量处理所有更新。由于GPU能够高效处理大型矩阵乘法，因此你可以对相同长度的句子进行分组或将所有句子调整成相同长度（而非逐句学习），进行大型矩阵乘法运算并对整批数据梯度求和。不这么做的话，我们只能依靠GPU得到小幅提速，训练过程将会极其缓慢。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">所以<strong>如果想训练大型模型，我首推那些经过性能优化的已有深度学习框架。训练一个模型，利用上述编码可能花费数日或数周，但借助这些框架只需要几个小时</strong>。我个人偏爱Keras，因其操作简单且附有许多RNN的示例。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #000000;"><strong>5.结果</strong></span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">为节省训练模型的时间，我训练了一个与第二部分中类似的模型。该模型词汇规模为8000，我将词映射到48维向量并使用了两个128维GRU层。iPython notebook内含载入该模型的代码，可以操作或修改代码、生成文本。</span></p>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">以下为该网络输出的成功示例（我修改了大小写）。</span></p>
+<ul>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">I am a bot, and this action was performed automatically .</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">I enforce myself ridiculously well enough to just youtube.</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">I’ve got a good rhythm going !</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">There is no problem here, but at least still wave !</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">It depends on how plausible my judgement is .</span></li>
+<li><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important; color: #888888;">( with the constitution which makes it impossible )</span><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;"><br></span></li>
+</ul>
+<p><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">多个时间步长后，观察句子的语义依赖性非常有趣。举个例子，机器人和自动化联系紧密，就像括号的两端。我们的网络能够学会这些，确实非常有用。<br></span></p>
+<p style="margin-top: 10px; margin-bottom: 10px; min-height: 1em; line-height: 1.75em;"><span style="color: #888888; font-size: 15px;"><span style="max-width: 100%; font-size: 15px; box-sizing: border-box !important; overflow-wrap: break-word !important;">至此，本系列关于RNN的教程就结束，如果您对其它教程感兴趣，欢迎在评论区留言。科技行者将不遗余力为您呈上！</span></span></p>
+                
+                </div>
+                 <ul class="qu_lixddd"><li><a target="_blank" title="RNN深度神经网络" href="http://www.cnetnews.com.cn/tags-345718-344891-1.html">RNN深度神经网络</a></li><p><a href="http://cio.zhiding.cn/special/engage_2017" style="color:#FF0000;" target="_blank">连接 智能 共赢-Engage 2017销售易用户大会</a></p></ul>
+                <div class="clear30"></div>
+             <ul class="qu_li058x">
+                <li><a href="http://www.cnetnews.com.cn/2017/1129/3101178.shtml#comment" id="weixin">
+                   <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_11.jpg" alt="评论"></a></li>
+               <li><a href="javascript:;" date-url="http://service.weibo.com/share/share.php?title=RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 :在本周的教程中，我们将详细介绍如何建立基于LSTM（长短时记忆）和GRU（门控循环单元）的RNN模型，以缓解梯度消失问题。&amp;url=http://www.cnetnews.com.cn/2017/1129/3101178.shtml&amp;pic=http://img.zhiding.cn/5/289/lizCTeTKr3iKs_SEZE_ZDNET.jpg&amp;ralateUid=#" class="s_wb" id="weibo">
+                 <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_08.jpg" alt="分享微博"></a></li>
+              <li><a href="javascript:;" date-url="http://s.jiathis.com/?webid=email&amp;url=http://www.cnetnews.com.cn/2017/1129/3101178.shtml&amp;title=RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 &amp;su=1" class="s_wb" id="mail">
+                 <img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/wvvx_14.jpg" alt="分享邮件"></a></li>
+                <div class="clear"></div>
+             </ul>
+                <div class="qu_liix">
+                	<!--input type="button" onclick="window.open('/techzone/changweibo/index.php?document_id=3101178')" value="生成长微博" name="changweibo"-->
+                        <input style="display:none" type="button" onclick="window.open(&#39;/files/all-3101178.htm#3101178&#39;)" value="在本页阅读全文">
+                </div>
+                <div class="qu_fe123">
+		<div style="display:none;" id="newsPageTitle" class="newsinnerhrtit"> <i class="pagenavtag" style="display:none;"></i></div>
+                	
+                </div>
+                <div class="clear40"></div>
+                	<div class="qu_guo3">
+                       <div class="qu_lix05s">        <input type="button" value="RNN" class="on">        <input type="button" value="深度神经网络" class="">        <input type="button" value="深度学习" class="end"></div>
+       <div class="qu_qihi434x">
+          <div>
+                <ul class="qu_lies" style="display:block">                <li><a href="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" title="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" target="blank">RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 </a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1120/3100746.shtml" title="http://www.cnetnews.com.cn/2017/1120/3100746.shtml" target="blank">对话深度学习大神Yoshua Bengio：蒙特利尔何以成为AI圣地？</a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1118/3100705.shtml" title="http://www.cnetnews.com.cn/2017/1118/3100705.shtml" target="blank">RNN系列教程之三 | 基于时间的反向传播算法和梯度消失问题 </a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1116/3100639.shtml" title="http://www.cnetnews.com.cn/2017/1116/3100639.shtml" target="blank">RNN系列教程之二 | 在Python和Theano框架下实现RNN </a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1108/3100232.shtml" title="http://www.cnetnews.com.cn/2017/1108/3100232.shtml" target="blank">来自谷歌大脑工程师的RNN系列教程 | RNN的基本介绍</a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1102/3099994.shtml" title="http://www.cnetnews.com.cn/2017/1102/3099994.shtml" target="blank">来自硅谷工程师的Google TensorFlow 教程：开始训练你的第一个RNN吧</a></li></ul><ul class="qu_lies">                <li><a href="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" title="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" target="blank">RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 </a></li></ul><ul class="qu_lies">                <li><a href="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" title="http://www.cnetnews.com.cn/2017/1129/3101178.shtml" target="blank">RNN系列教程之四 | 利用LSTM或GRU缓解梯度消失问题 </a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1127/3101049.shtml" title="http://www.cnetnews.com.cn/2017/1127/3101049.shtml" target="blank">这两位谷歌前员工创办AI公司，想搞定六大皮肤问题</a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1120/3100746.shtml" title="http://www.cnetnews.com.cn/2017/1120/3100746.shtml" target="blank">对话深度学习大神Yoshua Bengio：蒙特利尔何以成为AI圣地？</a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1116/3100639.shtml" title="http://www.cnetnews.com.cn/2017/1116/3100639.shtml" target="blank">RNN系列教程之二 | 在Python和Theano框架下实现RNN </a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1113/3100446.shtml" title="http://www.cnetnews.com.cn/2017/1113/3100446.shtml" target="blank">解析机器学习应用：数据中心和云计算成为企业新战场</a></li>                <li><a href="http://www.cnetnews.com.cn/2017/1108/3100232.shtml" title="http://www.cnetnews.com.cn/2017/1108/3100232.shtml" target="blank">来自谷歌大脑工程师的RNN系列教程 | RNN的基本介绍</a></li></ul>
+             </div>
+       </div>
+               </div>
+
+               <div class="clear20"></div>
+               <!--script>document.write(unescape('%3Cdiv id="hm_t_6722"%3E%3C/div%3E%3Cscript charset="utf-8" src="http://crs.baidu.com/t.js?siteId=f91f79c1a92e85695fa850ff886e97df&planId=6722&async=0&referer=') + encodeURIComponent(document.referrer) + '&title=' + encodeURIComponent(document.title) + '&rnd=' + (+new Date) + unescape('"%3E%3C/script%3E'));</script-->
+               <!--div id="hm_t_6722"></div--><!--百度推荐-->
+               <div class="qu_llpns">
+                    
+               </div>
+        </div>
+     </div>
+        	<div class="clear"></div>
+    </div>
+    <div class="qu_right">
+    	<form id="search" class="siteSearch" action="http://s.zhiding.cn/" onsubmit="Omniture.trackSearchSubmit(this, $(this).find(&#39;[name=q]&#39;).val());">
+        <fieldset class="box">
+          <!--input获得焦点是，加上CLASS名："cls"-->
+          <input type="text" class="ser" placeholder="Search" tabindex="1" name="word" value="">
+          <input type="hidden" name="obj_type" value="1">
+          <input type="submit" class="bn" value=" ">
+          <div class="clear"></div>
+        </fieldset>
+      </form> 
+       <div class="ads300">
+      <!--cnet_mp_1_pip -->
+      <a href="javascript:void(0);" class="ad_hover_href"></a><div>
+                        <link href="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/qu_guanggao.css" rel="stylesheet" type="text/css">
+                        <div class="guanggao_300_250 default_ads" id="default250_6">
+                            <i>推荐专题</i>
+                            <h2><a href="http://www.zhiding.cn/special/thinktank_opensource_2018_2" title="企业开源智库 开源人才培养" target="_blank">企业开源智库 开源人才培养</a></h2>
+                            <a href="http://www.zhiding.cn/special/thinktank_opensource_2018_2" title="进入专题 &#187;" class="more" target="_blank">进入专题 &#187;</a>
+                        </div>
+</div> 
+     
+    </div>
+<br>
+      
+       <div class="qu_tit02 m90"><span><a href="http://www.cnetnews.com.cn/files/list-0-7-0-0-1.htm" target="_blank">HOT NEWS</a></span><div class="clear"></div></div>
+        <ul class="qu_lies">
+        	<li><a href="http://www.cnetnews.com.cn/2017/1122/3100848.shtml" title="对话高通创投沈劲：当我们谈AI投资时谈些什" target="_blank">对话高通创投沈劲：当我们谈AI投资时谈些什</a></li><li><a href="http://www.cnetnews.com.cn/2017/1122/3100867.shtml" title="除了美食，工业制造是广东省的又一张名片，" target="_blank">除了美食，工业制造是广东省的又一张名片，</a></li><li><a href="http://www.cnetnews.com.cn/2017/1123/3100924.shtml" title="关于AI，都柏林理工学院教授谈到了几个重点" target="_blank">关于AI，都柏林理工学院教授谈到了几个重点</a></li><li><a href="http://www.cnetnews.com.cn/2017/1123/3100930.shtml" title="美国的油价以后可能由AI决定了" target="_blank">美国的油价以后可能由AI决定了</a></li><li><a href="http://www.cnetnews.com.cn/2017/1123/3100949.shtml" title="GFK月报：小米在乌克兰市场份额升至17%排名" target="_blank">GFK月报：小米在乌克兰市场份额升至17%排名</a></li><li><a href="http://www.cnetnews.com.cn/2017/1124/3100976.shtml" title="关于中国移动的数字化关键词解读：5G、人工" target="_blank">关于中国移动的数字化关键词解读：5G、人工</a></li><li><a href="http://www.cnetnews.com.cn/2017/1124/3100982.shtml" title="中国移动发布NB-IoT安全白皮书" target="_blank">中国移动发布NB-IoT安全白皮书</a></li><li><a href="http://www.cnetnews.com.cn/2017/1124/3100984.shtml" title="全球首个基于3GPP标准的端到端5G新空口系统" target="_blank">全球首个基于3GPP标准的端到端5G新空口系统</a></li><li><a href="http://www.cnetnews.com.cn/2017/1124/3101000.shtml" title="三年酝酿半年落地，图腾打造“理想生活实验" target="_blank">三年酝酿半年落地，图腾打造“理想生活实验</a></li><li><a href="http://www.cnetnews.com.cn/2017/1127/3101049.shtml" title="这两位谷歌前员工创办AI公司，想搞定六大皮" target="_blank">这两位谷歌前员工创办AI公司，想搞定六大皮</a></li>
+        </ul>
+         <div class="clear40"></div> 
+	<div class="qu_tit02 m90"><span>最新文章</span><div class="clear"></div></div>
+        <ul class="qu_lies"><li><a href="http://www.cnetnews.com.cn/2017/1128/3101126.shtml" title="没有全面屏和人工智能的手机公司终究是不完整的，所以一加5T来了" target="_blank"> 没有全面屏和人工智能的手机公司终究是不完整的，所以一加5T来了</a></li><li><a href="http://www.cnetnews.com.cn/2017/1124/3100976.shtml" title="关于中国移动的数字化关键词解读：5G、人工智能、物联网" target="_blank"> 关于中国移动的数字化关键词解读：5G、人工智能、物联网</a></li><li><a href="http://www.cnetnews.com.cn/2017/1123/3100924.shtml" title="关于AI，都柏林理工学院教授谈到了几个重点" target="_blank"> 关于AI，都柏林理工学院教授谈到了几个重点</a></li><li><a href="http://www.cnetnews.com.cn/2017/1122/3100867.shtml" title="除了美食，工业制造是广东省的又一张名片，而阿里想助力其发展工业互联网" target="_blank"> 除了美食，工业制造是广东省的又一张名片，而阿里想助力其发展工业互联网</a></li><li><a href="http://www.cnetnews.com.cn/2017/1122/3100848.shtml" title="对话高通创投沈劲：当我们谈AI投资时谈些什么？" target="_blank"> 对话高通创投沈劲：当我们谈AI投资时谈些什么？</a></li><li><a href="http://www.cnetnews.com.cn/2017/1121/3100836.shtml" title="深度 | 英特尔AI战略全面解读" target="_blank"> 深度 | 英特尔AI战略全面解读</a></li><li><a href="http://www.cnetnews.com.cn/2017/1117/3100652.shtml" title="德勤调研报告：恰恰相反，人工智能似乎正在创造新的就业机会" target="_blank"> 德勤调研报告：恰恰相反，人工智能似乎正在创造新的就业机会</a></li><li><a href="http://www.cnetnews.com.cn/2017/1116/3100621.shtml" title="李彦宏带队，在百度世界大会演示了七个AI应用场景" target="_blank"> 李彦宏带队，在百度世界大会演示了七个AI应用场景</a></li><li><a href="http://www.cnetnews.com.cn/2017/1115/3100576.shtml" title="对话英特尔：我们不仅有神经网络处理器，我们的AI在每个行业都有合作" target="_blank"> 对话英特尔：我们不仅有神经网络处理器，我们的AI在每个行业都有合作</a></li><li><a href="http://www.cnetnews.com.cn/2017/1115/3100538.shtml" title="英特尔AI拓展负责人：人工智能在演进（25PPT）" target="_blank"> 英特尔AI拓展负责人：人工智能在演进（25PPT）</a></li></ul><div class="clear20"></div>
+<div class="clear40"></div>
+<div class="qu_tit02 m90"><span>热门标签</span><div class="clear"></div></div>
+<ul class="qu_lies">
+    <li><a target="_blank" href="http://server.zhiding.cn/special/SAP_ByD_2017" title="量体裁云，SAP与成长型企业共话云端管理之道">量体裁云，SAP与成长型企业共话云端管理之道</a></li>
+    <li><a target="_blank" href="http://www.cnetnews.com.cn/2017/0823/3097197.shtml" title="5与伦比 三星移动固态硬盘T5荣耀发布">5与伦比 三星移动固态硬盘T5荣耀发布</a></li>
+    <li><a target="_blank" href="http://server.zhiding.cn/special/H3C_Computing_Storage" title="新IT 新动能 新格局-新华三下一代计算与存储发布会">新IT 新动能 新格局-新华三下一代计算与存储发布会</a></li>
+   <li><a target="_blank" href="http://cio.zhiding.cn/special/yonyoucloud" title="用友云助力企业智能运营">用友云助力企业智能运营</a></li>
+   <li><a target="_blank" href="http://cio.zhiding.cn/special/engage_2017" title="连接 智能 共赢-Engage 2017销售易用户大会">连接 智能 共赢-Engage 2017销售易用户大会</a></li>
+   <li><a target="_blank" href="http://www.26wei.cn/" title="26维网">26维网</a></li>
+   <li><a target="_blank" href="http://www.edt2017.com/" title="26维网">就绪IT平台 走进智能企业</a></li>
+</ul><div class="clear40"></div>       
+       
+    </div>
+    <div class="clear20"></div>
+    
+</div>
+
+<div class="qu_footer">
+	<div class="qu_main">
+    	<div class="qu_lid"><a href="http://www.cnetnews.com.cn/" title="科技资讯网" target="_self"><img src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/s54_63.jpg"></a></div>
+    	<div class="qu_mind">
+            
+            <div class="qu_copy"><p>京ICP证15039648号 京ICP备15039648号-3<img border="0" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/icon.png">京公网安备 11010802021500号<br>
+                    北京第二十六维信息技术有限公司（至顶网） 版权所有。| <a target="_blank" href="http://www.cnetnews.com.cn/introd.shtml">科技行者简介</a> <a target="_blank" href="http://www.cnetnews.com.cn/contact.shtml">联络我们</a> <a target="_blank" href="http://www.cnetnews.com.cn/agreement.shtml">服务协议</a> <a target="_blank" href="http://www.cnetnews.com.cn/privacy.shtml">隐私权声明</a><br>
+                违法和不良信息举报电话：010-62428333-5060　举报邮箱:jubao@zhiding.cn</p></div>
+          </div>
+
+          <div class="clear"></div>
+    </div>
+
+
+</div>
+
+<div style="display: none;"><script language="javascript" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/pv.js.下载"></script><img border="0" width="1" height="1" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/pvhit0001.gif"><script src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/h.js.下载" type="text/javascript"></script><script language="javascript" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/ajax2015.js.下载"></script><script language="javascript" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/ol_zdnet.js.下载"></script><script type="text/javascript" id="adstat_js" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/ol.js.下载"></script><script type="text/javascript" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/bms_tag.php"></script><img id="log_click_link" width="0" height="0" style="display:none;"> </div>
+
+<script>
+jQuery(function($){
+        var sel = $('.sel').val();
+        title_nav(sel);
+    });
+</script>
+<script type="text/javascript" id="speedup_test" src="./RNN系列教程之四 _ 利用LSTM或GRU缓解梯度消失问题 - CNET科技行者_files/su.js.下载"></script>
+
+</body></html>

@@ -1,0 +1,195 @@
+*{margin:0;padding:0}body,div,dl,dt,dd,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,input,textarea,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;font-size:12px}img{border:0}input,textarea,select,button{padding:1px;font-size:14px;vertical-align:middle}ol,ul{list-style:none}caption,th{text-align:left}cite,em{font-style:normal}button{cursor:pointer}body{font:14px/1.6 microsoft yahei,Verdana;color:#5f5f5f}textarea,input,select,body{font-size:14px}h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,dd{font:14px/1.6 microsoft yahei,Verdana;word-break:break-all}fieldset,form{background:none;border:none;padding:0;margin:0}.clear{clear:both;font-size:0;line-height:0;display:block;height:0;visibility:hidden}.clear20{clear:both;font-size:0;line-height:0;display:block;height:20px;visibility:hidden}.clear30{clear:both;font-size:0;line-height:0;display:block;height:30px;visibility:hidden}.clear40{clear:both;font-size:0;line-height:0;display:block;height:40px;visibility:hidden}.clear10{clear:both;font-size:0;line-height:0;display:block;height:10px;visibility:hidden}a{text-decoration:none;color:#5f5f5f}a:hover{text-decoration:underline}ul,li,dt,dl,dd{display:block}td{vertical-align:top}#top{position:fixed;bottom:30px;right:10px;text-align:center;z-index:100px;padding:10px
+5px;background:#f3f3f3}#top
+a{color:#747474;text-decoration:none}.top{height:41px;background:url(http://icon.zdnet.com.cn/security_zone/special/mcafee/images/br_02.jpg) repeat-x 0 0;overflow:hidden}.qu_daoh{width:968px;margin:0
+auto}.qu_daoh
+li{float:left;margin:12px
+0 0 0;padding:0
+11px;font:12px/1 microsoft yahei,Verdana;border-right:1px #535353 solid}.qu_daoh
+li.logo{width:109px;height:41px;background:url(http://icon.zdnet.com.cn/cio/special/cfo/images/bx_03.png) no-repeat 0 0;margin:0;line-height:0;padding:0;border:0}.qu_daoh li.logo
+a{width:109px;height:41px;display:block;float:left;text-indent:-99999px}.qu_daoh
+li.nod{border:0}.qu_daoh li
+a{color:#535353}.retu{background:url(http://icon.zdnet.com.cn/soft/special/oracle_2013/images/vev_25.png) no-repeat scroll 0 0 transparent;bottom:90px;display:none;height:61px;left:50%;margin-left:650px;position:fixed;width:61px}.retu:hover{background-position:0 -71px}.qu_head{height:341px;overflow:hidden;background:url(http://icon.zdnet.com.cn/software_zone/special/tianyi_cloud/images/bg.jpg) no-repeat center top}.qu_head
+p{width:968px;margin:0
+auto}.qu_toos{background:#2a2a2a;text-align:center;padding:1.2em 0;color:#858585}.qu_ad_head{background:#191919}.headads{width:1200px;margin:0
+auto;padding:12px
+0}.l_ads{width:876px;float:left;text-align:center}.r_ads{width:300px;float:right;text-align:center}.i_ad{margin-bottom:4px}a.logo{display:block;width:143px;height:90px;position:absolute;top:0;left:-15px;z-index:300}.qu_nav{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/w5_03.jpg) repeat-x 0 0;margin-top:21px}.qu_nav_nei{width:1200px;height:90px;margin:0
+auto;position:relative}a.logo{display:block;width:143px;height:90px;position:absolute;top:0;left:-15px;z-index:300}.qu_nav01{position:absolute;top:40px;left:390px;z-index:200;width:825px}.qu_nav01 li
+a{color:#859aa9}.qu_nav02{position:absolute;height:59px;left:89px;top:15px;z-index:300}.qu_nav02
+li{float:left;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wf53_08.jpg) no-repeat right top}.qu_nav02 li
+a{color:#fff;display:block;padding:0
+36px 0 34px;font:bold 16px/59px microsoft yahei,verdana}.qu_nav02 li a:hover{text-decoration:none}.qu_nav02 li:last-child{background:none}.qu_nav02:after{clear:both}.qu_main{width:1200px;margin:0
+auto}.qu_left{width:870px;float:left}.qu_right{width:300px;float:right}.qu_foucs{border-top:3px #f00 solid;position:relative}.qu_foucs
+h2{display:block;position:absolute;left:0;width:850px;bottom:30px;z-index:400;padding:0
+0 0 26px;font:30px/1.6 microsoft yahei,verdana}.qu_foucs h2
+a{color:#fff}.qu_foucs
+i{display:block;height:414px;width:100%;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wfx_03.png) repeat-x left bottom;position:absolute;left:0;bottom:0;z-index:300}.qu_tis{position:absolute;padding:0
+24px 0 24px;font:22px/37px microsoft yahei,verdana;background:#f54a33;float:left;color:#fff;left:0;top:20px;z-index:500}.qu_ijb{width:870px;overflow:hidden}.qu_ijb
+ul{width:3480px}.qu_ijb ul
+li{width:870px;float:left;position:relative}.qu_potsd{width:108px;position:absolute;right:10px;bottom:20px;z-index:400}.qu_potsd
+li{float:left;width:11px;height:11px;text-indent:-9999px;overflow:hidden;margin-right:16px;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/e5_03.png) no-repeat -27px 0;cursor:pointer}.qu_potsd
+li.on{background-position:0 0}.siteSearch{display:block;height:32px;background:#d2d7db;margin-bottom:20px}.siteSearch
+input.bn{width:42px;height:32px;border:0;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/vvs_19.gif) no-repeat 0 0;float:left;cursor:pointer}.siteSearch
+input.ser{width:236px;float:left;font:14px/32px microsoft yahei,verdana;border:0;background:none;padding:0
+10px}.qu_login{border:1px
+#d9d9d9 solid;width:298px;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/vv_23.gif) no-repeat center top;margin-bottom:20px}.qu_login
+li{width:50%;float:left;text-align:center;font:18px/46px microsoft yahei,verdana}.qu_login li
+a{color:#f43738}.ads300{width:300px;text-align:center}.qu_dings{border:1px
+#bcbcbc solid;width:auto;padding:0
+14px 28px 14px}.qu_tit{font:20px/50px microsoft yahei,verdana;color:#f00}.qu_jies{font:12px/18px microsoft yahei,verdana;color:#5f5f5f}.qu_inp{border:1px
+#bcbcbc solid;width:100%;font:14px/32px microsoft yahei,verdana;margin:10px
+0}.qu_bis{background:#f43738;color:#fff;font:14px/27px microsoft yahei,verdana;padding:0
+12px;border:0;cursor:pointer;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}.qu_tit02{font:18px/1 microsoft yahei,verdana;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wvv_47.gif) repeat-x 0 0;padding:0
+0 0 10px;color:#f00}.qu_tit02
+span{float:left;background:#fff;padding:0
+14px}.m90{padding-left:90px}.qu_lists
+li{width:300px;padding:20px
+0 20px 0;border-bottom:1px #d5d5d5 solid}.qu_lists li
+img{float:left;margin-right:16px}.qu_lists li
+p{color:#444;font:16px/22px microsoft yahei,verdana}.qu_lists
+li.end{border-bottom:0}.il{font-style:italic}.qu_l99{}.qu_l99
+li{float:left;padding:18px
+0 0 8px}.qu_l99 li
+img{border:1px
+#d3d3d3 solid}.qu_lies{padding-left:10px}.qu_lies
+li{font:14px/20px microsoft yahei,verdana;padding-top:1em}.qu_lies li
+a{color:#5f5f5f}.qu_qies{border-bottom:1px #dcdcdc solid;border-top:3px #a8a8a8 solid}.qu_qies
+li{float:left;font:18px/40px microsoft yahei,verdana;padding:0
+23px;cursor:pointer;color:#000}.qu_qies
+li.on{color:#f23838}.qu_loop{border-bottom:1px #dcdcdc solid;padding:32px
+0 32px 0;width:auto;position:relative}.qu_tix{width:676px;float:right}.qu_tix
+b{display:block;font:bold 20px/1.6 microsoft yahei,verdana;margin-top:-7px}.qu_tix b
+a{color:#444}.qu_tix
+p{font:14px/24px microsoft yahei,verdana;color:#5f5f5f}.qu_tix p
+a{color:#5f5f5f}.qu_ims{width:180px;float:left}.qu_times{position:absolute;width:126px;padding:0
+10px;right:0;top:-7px;z-index:400;font:12px/1 microsoft yahei,verdana;background:#fff}.qu_times
+img{vertical-align:middle}.end_d{border:0}.qu_tabk{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wvv_40.jpg) no-repeat 0 0;height:44px;margin:28px
+0 28px 0;position:relative}.qu_ti_bg{position:absolute;left:12px;top:0;font:18px/44px microsoft yahei,verdana}.qu_ti_bg
+a{color:#5f5f5f}.qu_yes{width:73px;height:26px;padding:0
+0 0 10px;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wv_42.jpg) no-repeat 0 0;position:absolute;right:107px;top:7px;z-index:200;color:#fff;font:bold 14px/26px microsoft yahei,verdana;cursor:pointer}.qu_no{width:58px;height:26px;padding:0
+0 0 10px;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wbx_55.jpg) no-repeat 0 0;position:absolute;right:20px;top:7px;z-index:200;color:#fff;font:bold 14px/26px microsoft yahei,verdana;cursor:pointer}.qu_more{text-align:right;font:18px/44px microsoft yahei,verdana}.qu_more
+a{text-align:center;font:18px/44px microsoft yahei,verdana;display:block;width:100%}.qu_footer{border-top:1px #dcdcdc solid;padding:30px
+0 0 0;background:#e3e3e3}.qu_ul_l
+li{float:left;font:14px/1.6 microsoft yahei,verdana;padding-right:10px}.qu_ul_l li
+a{color:#5b5b5b}.ib02{font:14px/28px microsoft yahei,verdana;color:#474747}.qu_pot
+a{display:block;float:left;padding-right:10px;color:#848484;font:12px/1.6 microsoft yahei,verdana}.qu_lis45
+li{float:left;font:14px/1 microsoft yahei,verdana;border-right:1px #657c8d solid;padding:0
+14px 0 14px}.qu_lis45 li
+a{color:#657c8d}.qu_lis45
+li.end{border-right:0}.qu_lis45
+li.fir{padding-left:0}.qu_copy{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/vwv_67.gif) repeat-x left top;padding:30px
+0}.qu_copy
+p{font:14px/2 microsoft yahei,verdana;color:#38424b}.qu_copy
+a{color:#38424b}.qu_mind{width:806px;float:left}.qu_lid{width:130px;float:left}.qu_l87x{width:224px;float:right;padding-top:30px}.qu_fuwo{width:876px;background:#7caacb}.qu_fuwo
+li{float:left;padding:0
+18px 0 18px;font:16px/34px microsoft yahei,verdana}.qu_fuwo li
+a{color:#fff}.qu_fuwo li a:hover{text-decoration:none}.qu_fuwo
+li.on{background:#f54a33}.qu_i7x{width:876px;border-bottom:1px #dcdcdc solid;padding:32px
+0 32px 0}.qu_i7x
+li{padding-right:52px;float:left;width:180px}.qu_i7x li
+p{font:16px/22px microsoft yahei,verdana}.qu_i7x
+li.end{padding-right:0}.qu_oixd
+li{float:left;width:134px;padding:20px
+21px 0 10px}.qu_oixd li
+p{font:14px/18px microsoft yahei,verdana}.qu_oixd li:nth-child(2n){padding:20px
+0 0 0;float:right}.qu_tabs02{border-bottom:1px #dcdcdc solid}.qu_tabs02
+li{float:left;font:16px/2 microsoft yahei,verdana;margin-right:30px;padding:0
+6px;cursor:pointer;color:#6e7e8a}.qu_tabs02
+li.on{border-bottom:3px #f00 solid;color:#f00}.qu_tabs02
+li.end{margin-right:0}.qu_qihix
+ul{display:none}.qu_weizhi{}.qu_weizhi
+a{padding:0
+10px;color:#f00}.qu_weizhi
+span{padding-left:10px}.qu_weizhi a:first-child{padding-left:0}h1.foucs_title{font:bold 36px/48px microsoft yahei,Verdana;color:#000}.qu_code{width:100px;padding:22px
+0 0 0;border-top:1px #f00 solid;position:absolute;left:0}.qu_consd{width:876px;position:relative}.qu_lix{width:746px;float:right}.qu_zhao{border:#7f7f7f solid;border-width:1px 0;font:16px/32px microsoft yahei,verdana;padding:12px
+0}.qu_zuo{padding:33px
+0}.thumb{display:inline-block;max-width:100%;position:relative;z-index:2}.qu_zuo
+a.thumb{float:left;margin-right:20px}.thumb::after{bottom:9px;box-shadow:0 10px 5px rgba(0,0,0,0.3);content:"";height:9%;position:absolute;right:4%;transform:rotate(3deg);width:70%;z-index:-1}.thumb::before{box-shadow:0 1px 15px rgba(0, 0, 0, 0.2) inset, 0 0 40px rgba(0, 0, 0, 0.05) inset;content:"";height:100%;left:0;position:absolute;top:0;width:100%;z-index:3}.guzhu{height:20px}.qu_li058x
+li{width:33.333%;float:left}.qu_li058x li
+a{display:block;text-align:center}.qu_li058x li a
+img{}.qu_li058x li
+a#weixin{background:#6eb239;height:31px;padding-top:9px}.qu_li058x li
+a#weibo{background:#e84327;height:33px;padding-top:7px}.qu_li058x li
+a#mail{background:#1992e0;height:28px;padding-top:12px}.qu_fenye_div{padding-bottom:20px}.qu_fenye_div
+p{font:16px/36px microsoft yahei,verdana;color:#4c88b6}.qu_fenye_div p
+a{color:#4c88b6}.qu_fenye_div
+select{width:415px;padding:0
+23px;background:#7199b7;height:36px;border:0;color:#fff;font:16px/36px microsoft yahei,verdana;-moz-border-radius:2em;-webkit-border-radius:2em;border-radius:2em}.qu_fenye_div
+option{background:#fff;color:#000}.qu_ocn{padding:0
+20px 0 0;font:16px/32px microsoft yahei}.qu_ocn
+p{font:16px/32px microsoft yahei;margin-bottom:20px}.qu_ocn p
+span{font:16px/32px microsoft yahei,verdana}.qu_ocn
+h2{font:bold 16px/32px microsoft yahei,verdana;margin-bottom:20px}.qu_ocn
+ul{margin-bottom:20px}.qu_ocn ul
+li{font:16px/32px microsoft yahei,verdana;padding:0
+0 0 16px;list-style:disc inside;display:list-item}.qu_ocn ol
+li{font:16px/32px microsoft yahei,verdana;padding:0
+0 0 16px;list-style:decimal inside;display:list-item}.qu_lixddd{float:right}.qu_lixddd
+li{font:14px/1.6 microsoft yahei,verdana,verdana;text-align:right}.qu_lixddd li
+a{color:#f23838}.qu_liix{text-align:center;padding-top:32px;border-top:1px #e5e5e5 solid}.qu_liix
+input{margin:0
+24px 0 24px;font:18px/36px microsoft yahei,verdana;border:0;padding:0
+40px;background:#e92c2c;color:#fff;-moz-border-radius:2em;-webkit-border-radius:2em;border-radius:2em;cursor:pointer}.qu_fe123{text-align:center;padding:43px
+0 0 0}.qu_fe123
+input{margin:0
+24px 0 24px;width:36px;height:36px;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/vvx_23.gif) no-repeat 0 0;border:0;font:18px/32px verdana;color:#6e7e8a;cursor:pointer}.qu_fe123
+input.sel{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/vvx_21.gif) no-repeat center 0;color:#fff}.qu_guo{width:358px;float:left}.qu_guo2{width:358px;float:right}.qu_lixs{text-align:center;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/svv_28.gif) repeat-x 0 0}.qu_lixs
+input{font:14px/18px microsoft yahei,verdana;color:#f00;background:#fff;padding:0
+20px;border:0}.qu_zhinan{padding-top:20px}.qu_zhinan
+img{float:left;padding-right:12px}.qu_zhinan
+p{font:14px/1.6 microsoft yahei,verdana}.qu_zhinan
+p.mor{text-align:right}.qu_zhinan p.mor
+a{color:#4c88b6}.qu_lix05s{text-align:center;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/svv_28.gif) repeat-x 0 0}.qu_lix05s
+input{font:14px/18px microsoft yahei,verdana;background:#fff;padding:0
+10px;border:0;cursor:pointer;color:#8c8c8c}.qu_lix05s
+input.on{color:#f00}.qu_qihi434x
+ul{padding:0;display:none}.qu_weoox{text-align:center;padding-bottom:30px}.qu_icon:after{clear:both}.qu_icon
+li{float:left;width:99px;border-right:1px #e3e7ea solid;padding:7px
+0 0 0;margin-bottom:20px}.qu_icon
+li.no_bor{border:0}.qu_icon li
+a{display:block;text-align:center;padding:44px
+0 0 0;color:#444;font:14px/1 microsoft yahei,verdana}.qu_icon li a:hover{text-decoration:none;color:#f43738}.qu_icon li
+a.a1{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_14.jpg) no-repeat center top}.qu_icon li a.a1:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_14.jpg) no-repeat center top}.qu_icon li
+a.a2{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_16.jpg) no-repeat center top}.qu_icon li a.a2:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_16.jpg) no-repeat center top}.qu_icon li
+a.a3{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_18.jpg) no-repeat center top}.qu_icon li a.a3:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_18.jpg) no-repeat center top}.qu_icon li
+a.a4{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_24.jpg) no-repeat center top}.qu_icon li a.a4:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_24.jpg) no-repeat center top}.qu_icon li
+a.a5{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_26.jpg) no-repeat center top}.qu_icon li a.a5:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_26.jpg) no-repeat center top}.qu_icon li
+a.a6{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_28.jpg) no-repeat center top}.qu_icon li a.a6:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_28.jpg) no-repeat center top}.qu_icon li
+a.a7{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_33.jpg) no-repeat center top}.qu_icon li a.a7:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_33.jpg) no-repeat center top}.qu_icon li
+a.a8{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_35.jpg) no-repeat center top}.qu_icon li a.a8:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_35.jpg) no-repeat center top}.qu_icon li
+a.a9{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_37.jpg) no-repeat center top}.qu_icon li a.a9:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_37.jpg) no-repeat center top}.qu_icon li
+a.a10{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_42.jpg) no-repeat center top}.qu_icon li a.a10:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_42.jpg) no-repeat center top}.qu_icon li
+a.a11{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_b_43.jpg) no-repeat center top}.qu_icon li a.a11:hover{background:url(http://icon.zdnet.com.cn/zdnet/2015/images/a_c_43.jpg) no-repeat center top}.qu_weix{text-align:center;padding:20px
+0}.qu_fenxis
+li{float:left;margin-right:47px}.qu_di_fi{float:left}.qu_tabs05{border-bottom:1px dotted #c6c6c6;padding-bottom:20px;width:auto}.qu_tabs05
+li{color:#005399;cursor:pointer;height:25px;margin-right:15px;padding:2px
+0 8px;position:relative}.qu_tabs05
+li.selected{color:#000;float:left;font:bold 22px/1.6 microsoft yahei,verdana}.qu_tabs05
+li.wenzi{color:#000;float:right;font:16px/1.6 microsoft yahei,verdana;margin-right:10px;width:auto}.inpo{float:right;position:relative;width:auto}.boder_1px{-moz-border-bottom-colors:none;-moz-border-left-colors:none;-moz-border-right-colors:none;-moz-border-top-colors:none;background:#fff none repeat scroll 0 0;border-color:#999 #d8d8d8 #d8d8d8 #999;border-image:none;border-style:solid;border-width:1px;height:25px;line-height:23px;width:auto}.lo{background:#fff none repeat scroll 0 0;border:0
+none;color:#666;float:left;font-size:14px;height:20px;line-height:20px;margin-top:2px;padding-left:5px;width:110px}.lo
+.moren{display:block;float:left;font-size:14px;width:auto}.btny{display:block;float:right;height:6px;padding-right:2px;width:9px}.btnbtn{margin-top:8px}.ma{background:#fafafa none repeat scroll 0 0;border-bottom:1px solid #999;border-left:1px solid #999;border-right:1px solid #d8d8d8;display:block;left:0;position:absolute;top:29px;width:115px}.ma
+li{background:#fafafa none repeat scroll 0 0;border-bottom:1px solid #ececec;height:28px;margin:0
+10px;padding:4px
+0 0}.ma li
+a{border:0
+none;color:#666;font-size:14px;text-decoration:none}
+.qu_foucs
+i{display:block;height:414px;width:100%;background:url(http://icon.zdnet.com.cn/zdnet/2015/images/wfx_03.png) repeat-x left bottom;position:absolute;left:0;bottom:0;z-index:300}.page{margin-top:20px;text-align:center;height:auto}.page
+a.act{background:none repeat scroll 0 0 #3463BD;border:1px
+solid #2A56B2;color:#FFF;text-decoration:none}.qu_tit02
+a{color:red}.page
+a{border:1px
+solid #C9D9F2;cursor:pointer;display:inline-block;font-size:14px;padding:5px
+10px;margin:0
+4px;line-height:normal}.pib{float:left}.jiathis_style{float:left;width:120px;margin-top:4px;margin-left:10px}.qu_tix .meta
+a{color:#4c88b6;padding-right:10px}.qu_tix p
+a{color:#4c88b6;padding:0
+5px}.noimg
+.qu_ims{display:none}.noimg
+.qu_tix{width:100%;float:none}.qu_rss_list{padding:0px
+10px 12px 10px;width:280px;height:112px;background:url(http://icon.zdnet.com.cn/cnetnews/120504/images/ex_27.jpg) no-repeat 0 0}.qu_rss_list
+li{background:url("http://icon.zdnet.com.cn/cnetnews/new_css/images/xni_70.jpg") no-repeat scroll 0 4px transparent;float:left;font-weight:bold;height:24px;overflow:hidden;padding:4px
+0 0 26px;width:113px}.qu_rss_list
+p{font-size:14px;font-weight:bold;line-height:32px}.newsinnerhrtit{color:#999;font-size:14px;left:0;line-height:1.6em;padding-bottom:15px;position:absolute;text-align:center;top:0;width:620px;z-index:5}.newsinnerhrtit
+.pagenavtag{background:rgba(0, 0, 0, 0) url(http://icon.zdnet.com.cn/zdnet/2015/images/news_shadow.jpg) no-repeat scroll 0px bottom;bottom:0;display:block;height:15px;left:50%;margin-left:-60px;position:absolute;width:130px}.newsinnerhrtit
+a{text-decoration:none}.qu_codes{border-top:1px solid #f00;padding-top:22px;padding-bottom:22px;position:fixed;top:0px;left:0px;width:100px;z-index:10001}.qu_codes
+li{padding-bottom:50px;text-align:center}

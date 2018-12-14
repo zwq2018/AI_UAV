@@ -1,0 +1,374 @@
+/* Layout: 980px fixed-width: 40px margin, 600px main tex,           */
+/* 40px margin, 240px for toc and marginalia, 40px margin            */
+/*                                                                   */
+/*                                                                   */
+/* Colours:                                                          */
+/*                                                                   */
+/* #1C3950: header and h1 background, h2, h3 foreground, main links  */
+/* HSV: 207, 65, 31                                                  */
+/* Decimal RGB: 28, 57, 80                                           */
+/*                                                                   */
+/* #2A6EA6; link colour, graph line colour, d3 paths, widgets        */
+/* HSV: 207, 75, 65                                                  */
+/* Decimal RGB: 42, 110, 166                                         */
+/*                                                                   */
+/* #FFA933: complement to #2A6EA6, for use on graphs                 */
+/*                                                                   */
+/* Triad: #2A6EA6, #FFCD33, #FF7033                                  */
+/*                                                                   */
+/* #eee: header text                                                 */
+
+
+/* Reset */
+
+body {
+    background: #fff;
+    font-style: normal;
+    font: 15pt 'Georgia', 'Times New Roman', serif; 
+    line-height: 1.7;
+    /* font-family: "Helvetica", "Arial", sans-serif; */
+    color: #000;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    position: relative;
+}
+
+
+/* Header */
+
+.header, .nonumber_header {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    margin: 0;
+    background-color: #1C3950;
+}
+
+.header {
+    height: 120px;
+}
+
+.nonumber_header {
+    height: 80px;
+}
+
+h1 {
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    right: 40px;
+    padding: 0px;
+    margin: 0px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 34px;
+    line-height: 1.2;
+    color: #eee;
+    white-space: nowrap;
+    font-weight: 400;
+}
+
+h1.chapter_number {
+    margin-top: 10px;
+    font-size: 24px;
+    border-bottom: 1px solid #BBB;
+}
+
+h1.chapter_number a {
+    color: #eee;
+}
+
+h1.chapter_title {
+    margin-top: 56px;
+    font-size: 34px;
+}
+
+h1.chapter_title a {
+    color: #eee;
+}
+
+h2 {
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    right: 40px;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 34px;
+    line-height: 1.2;
+    color: #eee;
+    white-space: nowrap;
+}
+
+h2 a {
+    color: #eee;
+}
+
+/********/
+/* Main */
+/********/
+
+#insertion {
+    font: 15pt 'Georgia', 'Times New Roman', serif; 
+    line-height: 1.7;
+    color: #333;
+    padding: 5px 10px 5px 10px;
+    background: #ccaaaa;
+    border: 1px solid;
+    margin: 10px 0px 0px 0px;
+}
+
+p {
+    font: 15pt 'Georgia', 'Times New Roman', serif; 
+    line-height: 1.7;
+    color: #333;
+    margin: 0 0 1 0;
+}
+
+h3 {
+    color: #1C3950;
+    margin: 40px 0px 20px 0px;
+    padding: 0;
+    font-size: 32px;
+    line-height: 1.2;
+    font-family: "Helvetica", "Arial", sans-serif;
+    border-bottom: 1px solid #666;
+}
+
+h4 {
+    color: #1C3950;
+    margin: 30px 0px 15px 0px;
+    padding: 0;
+    padding-left: 0px;
+    font-size: 26px;
+    line-height: 1.2;
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+
+h5 {
+    color: #1C3950;
+    margin: 20px 0px 10px 0px;
+    padding: 0;
+    padding-left: 0px;
+    font-size: 26px;
+    line-height: 1.2;
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+
+.section {
+    width: 600px;
+    margin-left: 40px;
+}
+
+a { 
+    color: #2A6EA6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.equation_link {
+    color: #2A6EA6;
+}
+
+.equation_link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.MathJax {
+    color: #2A2A2A;
+}
+
+/* Set the font size for Pygments */
+.highlight {
+    font-size: 9pt;
+}
+
+/* Set the font size for code */
+tt {
+    font-size: 12pt;
+    font-style: monospace;
+}
+
+
+/* d3 styling */
+path {
+    stroke: rgb(42, 110, 166);
+    stroke-width: 1;
+    fill: none;
+}
+.axis {
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 11px;
+}
+.axis line, .axis path {
+    stroke: grey;
+}
+
+.axisLabel {
+  font-size: 18px;
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+/* Table of contents, and margin notes */
+
+#toc, .marginnote, .marginequation {
+    position: absolute;
+    left: 680px;
+    width: 260px;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar {
+    margin: 0 0 5px 0;
+    padding: 0;
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+.toc_title {
+    margin: 0; 
+    padding: 0;
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+.toc_not_mainchapter {
+    margin: 0;
+    padding: 0 0 0 15px;
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+.toc_mainchapter {
+    margin: 0; 
+    padding: 0 0 0 15px; 
+    text-indent: -15px;
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+
+.toc_reveal {
+    cursor: pointer;
+}
+
+.toc_section {
+    padding: 0 0 0 15px; 
+    margin: 0;
+}
+
+#toc ul {
+    padding: 0 0 0 15px;
+    list-style-position: inside;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.sidebar_title {
+    font-size: 18pt;
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+
+.marginnote {
+    font-size: 9pt;
+    color: #666;
+    display: inline-block;
+}
+
+.marginnote .MathJax {
+    color: #666;
+}
+
+.marginnote tt {
+    font-size: 9pt
+}
+
+.marginequation .MathJax {
+    color: #2A6EA6;
+}
+
+#toc {
+    font-size: 12pt;
+    color: #000;
+}
+
+/* Footer */
+
+.footer {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    height: 130px;
+    margin: 0;
+    background-color: #1C3950;
+}
+
+span.left_footer, span.right_footer {
+    position: absolute;
+    top: 12px;
+    left: 40px;
+    padding: 0px;
+    margin: 0px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 9pt;
+    font-style: bold;
+    line-height: 1.5;
+    color: #eee;
+}
+
+span.left_footer {
+    display: block;
+    width: 600px;
+    word-wrap:break-word;
+}
+
+span.right_footer {
+    right: 40px;
+    text-align: right;
+}
+
+.MathJax_Display {
+    color: #333 !important;
+}
+
+
+
+/* Adapted from http://worrydream.com/ScrubbingCalculator/style.css, */
+/* by Bret Victor */
+.videoOverlay {
+    position: absolute;
+    cursor: pointer;
+    background-color: white;
+    z-index: 100;
+}
+
+.videoOverlay img {
+    position: absolute;
+    display: block;
+}
+
+/* class for text labels on the 3d graphs */
+.graph3D {
+    position: absolute;
+    font: 15px MJX_Math;
+    background-color: white;
+    border-radius: 5px;
+    line-height: 18px;
+    padding-top: 0;
+    padding-right: 3px;
+    padding-bottom: 0px;
+    padding-left: 3px;
+}

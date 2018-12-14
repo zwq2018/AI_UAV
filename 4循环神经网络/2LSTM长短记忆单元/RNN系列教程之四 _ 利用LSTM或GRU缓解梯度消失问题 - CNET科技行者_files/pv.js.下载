@@ -1,0 +1,41 @@
+if(document.domain.indexOf('bnet.com.cn')==-1&&document.domain.indexOf('zhiding')==-1&&document.domain.indexOf('zdnet')==-1&&document.domain.indexOf('cnetnews')==-1&&document.domain.indexOf('solidot')==-1&&document.domain.indexOf('ipaotuan')==-1&&document.domain.indexOf('26wei')==-1){document.body.innerHTML="&nbsp;";document.head.innerHTML="&nbsp;";}
+function pv_d(pv_subcatid){
+	var now = new Date().getTime();	
+  	var datestr=escape(now*1000+Math.round(Math.random()*1000));
+	    datestr+="befrombj";
+  	var imgsrc='';	
+	var imgsrc1='';	
+	  	//增加产品线统计
+
+        //某些情况下，不统计
+        if(location.hash == '#cwmysxghgu'){
+                return;
+        }   	
+
+	imgsrc='//pv.zhiding.cn/images/pvhit0001.gif?t='+datestr+'&subcat='+pv_subcatid+'&'+encodeURIComponent(document.referrer);
+	if(imgsrc!='') document.write('<img border=0 width=1 height=1 src="'+imgsrc+'">');	
+}
+
+if(typeof(pv_subcatid)=="undefined")var pv_subcatid=0;	 
+
+pv_d(pv_subcatid);
+
+//百度自动推送
+(function(){ var bp = document.createElement('script');var curProtocol = window.location.protocol.split(':')[0];if (curProtocol === 'https') {bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; }else {bp.src = 'http://push.zhanzhang.baidu.com/push.js';}var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(bp,s);})(); 
+
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+//百度统计
+if(location.host.indexOf('bnet.com.cn')!=-1){
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Facc538be702acd20e51ac0ae9d5ffab7' type='text/javascript'%3E%3C/script%3E"));
+}
+if(location.host.indexOf('cnetnews.com.cn')!=-1){
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F249619bc54d10936c2d19fafba458a41' type='text/javascript'%3E%3C/script%3E"));
+}
+if(location.host.indexOf('solidot.org')!=-1){
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd11396a350156e4682e4156a671bdaf1' type='text/javascript'%3E%3C/script%3E"));
+}
+if(location.host.indexOf('zhiding.cn')!=-1){
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/hm.js?ce0c401375e5b508294ff13c8faa1309' type='text/javascript'%3E%3C/script%3E"));
+}
+document.write("<script language='javascript' src='//icon.zhiding.cn/zdnet/2015/js/ajax2015.js'></script>");
+document.write("<script language='javascript' src='//stat.zhiding.cn/ol_zdnet.js'></script>");

@@ -1,0 +1,319 @@
+/* Minification failed. Returning unminified contents.
+(182,73): run-time error CSS1036: Expected expression, found '#'
+ */
+body {
+	background-image: url(images/bg.gif);
+	background-repeat: repeat;
+	background-color: #FFFDFA;
+}
+.clear {
+
+	clear: both;
+}
+
+html {
+	color: #000;
+	overflow-y: scroll;
+	background: #fff;
+}
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fieldset, lengend, button, input, textarea, form, th, td {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	list-style-image: none;
+}
+/*pre,code	{
+	width:100%-20px;
+	margin: 10px 0;
+	padding: 10px;
+	border: 0;
+	border: 1px dotted #785;
+	background: #f5f5f5;
+	word-wrap:break-word;
+	}*/
+body, button, input, select, textarea {
+	font: 12px/1.5 Tahoma, Arial, Helvetica, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+address, cite, dfn, em, var {
+	font-style: normal;
+}
+code, kbd, pre, samp, tt {
+	font-family: "Courier New", Courier, monospace;
+}
+small {
+	font-size: 12px;
+}
+ul, ol {
+	list-style: none;
+}
+a:link, a:visited {
+	text-decoration: none;
+	color: #3399ff;
+}
+a:hover {
+	text-decoration: underline;
+	color: #3399FF;
+}
+abbr[title], acronym[title] {
+	border-bottom: 1px dotted;
+	cursor: help;
+}
+q:before, q:after {
+	content: '';
+}
+:focus {
+	outline: 0;
+}
+legend {
+	color: #000;
+}
+fieldset, img {
+	border: none;
+}
+button, input, select, textarea {
+	font-size: 100%;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img {
+	-ms-interpolation-mode: bicubic;
+}
+/*html5*/
+article, aside, dialog, footer, header, hground, section, footer, nav, figure, menu {
+	display: block
+}
+
+#navigator,#blogTitle,#main,#footer{width: 1000px;
+	position: relative;
+	margin: 0 auto;}
+
+#header{
+	height: 40px;
+	width: 100%;
+	background-color:#2175bc;
+
+}
+#main{
+	margin-top: 6px;
+	background-color: rgb(245, 245, 245);
+	margin-bottom: 0px;
+	
+}
+#mainContent{
+	width: 765px;
+	background: white;
+	box-shadow: 0px 0px 8px #999;
+	-moz-box-shadow: 0px 0px 8px #999;
+	-web-kit-shadow: 0px 0px 8px #999;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-web-kit-shadow: 6px;
+	float: left;
+	display: inline-block;
+}
+#sideBar{
+	width: 200px;
+	padding: 16px;
+	display: inline-block;
+	overflow: hidden;
+	color: #2D2D2D;
+}
+#footer{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	color: #000;
+	font-size: 12px;
+}
+
+
+#navigator{
+	top: 8px;
+}
+#navList li{
+	float: left;
+	margin-right: 25px;
+	display: inline;
+}
+#navList li a{
+	font-size:15px;
+	text-decoration: none;
+	color: #FFF;
+	padding: 10px;
+	background-color: #2175bc;
+}
+#navList li a:hover{
+	background-color:#2586d7;
+	margin-top:-2px;
+	padding-bottom:12px;
+	color: #fff;
+	opacity:1; 
+	}
+
+.blogStats{
+	color: #CACACA;
+	font-size: 12px;
+	text-align: right;
+}
+#Header1_HeaderTitle{
+	color:white;
+}
+
+#Header1_HeaderTitle:hover{
+	text-decoration: none;
+}
+
+.day{background:white; padding:32px;}
+.postTitle,.postTitl2,.entrylistPosttitle{
+	font-size: 20px;
+	padding-right: 64px;
+	padding-left: 10px;
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: #2175bc;
+}
+.postTitle a,.postTitl2 a,.entrylistPosttitle a{
+	color: #333;
+}
+.postTitle a:link, .post-title a:visited,.postTitl2 a:link,.postTitl2 a:visited,.entrylistPosttitle a:link,.entrylistPosttitle a:visited{color:black;}
+.postTitle a:hover,.postTitl2 a:hover,.entrylistPosttitle a:hover{color:##3399ff;text-decoration:none;}
+
+.postBody,.postCon,.entrylistPostSummary{clear:both; margin-top:26px;}
+.postBody,.postCon,.entrylistPostSummary{font-size:14px;color:#444;line-height:1.8;}
+.postCon h1, .postCon h2, .postCon h3, .postCon h4, .postCon h5, .postCon h6{
+    font-weight:bold;
+    line-height:1.8;
+}
+.postBody h1,.postCon h1{font-size:20px;}
+.postBody h2,.postCon h2{font-size:18px;}
+.postBody h3,.postCon h3{font-size:16px;}
+.postBody h4,.postCon h4{font-size:14px;}
+.postBody h5,.postCon h5{font-size:14px;}
+.postBody h6,.postCon h6{font-size:14px;}
+.postBody dd,.postCon dd{padding-left:2em;}
+.postBody ul,.postCon ul{list-style:none;margin-left:20px;}
+.postBody ul li,.postCon ul li{list-style:inside disc;}
+.postBody dt,.postCon dt{ font-weight:bold; padding:6px 0; clear:both}
+.postBody ol,.postCon ol{list-style:none;margin-left:20px;}
+.postBody blockquote,.postCon blockquote{width:90%;margin:0 auto;padding:6px 0 6px 45px;color:#666;
+    background:white url(/images/blockquote.gif) top left no-repeat;}
+.dayTitle,.postDesc{ font-size:12px; color:#999999;}
+.postDesc,.postDesc2,.entrylistItemPostDesc{
+	border-bottom: 1px dashed #E8E7D0;
+	text-align: right;
+	margin: 20px 0px;
+	padding:5px 0px;
+}
+.dayTitle{
+    border:1px solid #cccccc;
+	position: relative;
+	top: -20px;
+	width: 100px;
+	left: -20px;
+	padding-top: 3px;
+	padding-right: 0px;
+	padding-bottom: 3px;
+	padding-left: 8px;
+}
+
+.dayTitle a{
+ 	color:#333;
+ }
+
+.topicListFooter{
+	padding: 32px;
+}
+#sideBarMain div{margin-bottom:26px;}
+#sideBarMain div div{margin-bottom:5px;}
+#sideBarMain h3{
+	font-weight: bold;
+	margin-bottom: 12px;
+	color: #333;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #D4D4D4;
+	padding-bottom: 10px;
+	margin-top: 20px;
+}
+
+#blog-comments-placeholder,#divRefreshComments,.commentform,#AjaxHolder_UpdatePanel1{padding: 0 32px;}
+
+.post{padding: 32px;}
+
+.feedbackItem{
+	border: 1px solid #E3E3E3;
+	padding: 5px;
+	margin-bottom: 10px;
+	background-color: #F6F6F6;
+}
+.blog_comment_body{
+	color: #929292;
+	padding-top: 10px;
+}
+.forFlow p{margin-bottom:18px;}
+.forFlow img{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.PostList,.entrylistItem{
+	margin:20px;
+}
+
+.entrylistTitle,.PostListTitle{
+	display:none;
+}
+
+
+#blogTitle{
+	display:none;
+}
+
+.cnblogs_code img{
+margin:0;
+float:left;
+}
+
+.cnblogs_code_toolbar {
+margin-top: 0px;
+}
+
+.code{
+padding:0 10px;
+}
+
+h4{
+font-size: 16px;
+background-color: #F60;
+margin: 0 -32px;
+padding: 0 32px;
+color: white;
+}
+
+#myposts .myposts_title{font-size: 16px;margin-top: 20px;text-align: center;}
+
+#myposts .postTitl2 {border-left: none;padding-left: 0px;padding-right: 0px;}
+
+#myposts .postTitl2 a{	font-size: 16px;}
+
+#myposts .postDesc2 {margin: 20px 0 20px 5px;}
+
+#cnblogs_post_body{font-size: 14px;}
+
+#green_channel img {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#cnblogs_post_body img { max-width: 650px; }
+
+.commentbox_main img{
+    margin-top: 0;
+    margin-bottom: 0;
+}

@@ -1,0 +1,93 @@
+/* 
+  Inline formulas format:
+  <img class="$1" src="imageURL"/>
+
+  $1 - default class ql-img-inline-formula
+  
+/* Style for <img> tag of in-text formula */
+.ql-img-inline-formula{
+	background:none !important; 
+	border:none !important;
+	padding:0px !important;
+	margin:0px  !important;
+}
+
+/* Style for the <img> tag of displayed equation */
+.ql-img-displayed-equation{
+	background:none  !important;
+	border:none  !important;
+	padding:0px  !important;
+	margin:0px   !important;
+	vertical-align:middle  !important;
+	display:inline-block  !important;	
+}
+
+/* Style for <img> tag of tikZ images */
+.ql-img-picture{
+	background:none  !important;
+	border:none  !important;
+	padding:0px  !important;
+	margin:0px  !important;
+}
+
+/* Style for <p> tag of displayed equation - align: center */
+.ql-center-displayed-equation {
+	text-align:center  !important;
+	white-space: nowrap  !important;
+	overflow:hidden  !important;
+}
+
+/* Style for <p> tag of displayed equation - align: left */
+.ql-left-displayed-equation {
+	text-align:left  !important;
+	white-space: nowrap  !important;
+	overflow:hidden  !important;
+}
+
+/* Style for <p> tag of displayed equation - align: right */
+.ql-right-displayed-equation {
+	text-align:right  !important;
+	white-space: nowrap  !important;
+	overflow:hidden  !important;
+}
+
+/* Equation numbering - align: left */
+.ql-left-eqno{
+	width:3em !important;
+    text-align:left !important;
+	float:left !important;
+	display:inline-block !important;	
+	font-size:110% !important;
+}
+
+/* Equation numbering - align: right */
+.ql-right-eqno{
+	width:3em !important;
+    text-align:right !important;
+	float:right !important;
+	display:inline-block !important;	
+	font-size:110%	!important;
+}
+
+/* <p> tikZ picture styles*/
+.ql-center-picture{
+	border:none  !important;
+	text-align:center  !important;
+	background:none !important; 
+}
+
+/* Error reporting */
+.ql-errors{
+ color: #222222;
+ font-family: Georgia,"Bitstream Charter",serif;
+ font-size: 16px;
+ border:1px solid #FF0000;
+}
+
+/* Operating mode - manual */
+.ql-manual-mode{
+	background:none;
+	border:none;
+	padding:0px;
+	margin:0px;
+}

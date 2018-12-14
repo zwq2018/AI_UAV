@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://www.jianshu.com/p/9dc9f41f0b29 -->
+<html><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+
+  <!-- Start of Baidu Transcode -->
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="mobile-agent" content="format=html5;url=https://www.jianshu.com/p/9dc9f41f0b29">
+  <!-- End of Baidu Transcode -->
+
+    <meta name="description" content="Hi，我是 朱小虎 Neil，University AI 创始人 &amp; Chief Scientist，致力于推进世界人工智能化进程。制定并实施 UAI 中长期增长战略和目标，带领团队快速成长为人工智能领域最专业的力量。 作为行业领导者，他和UAI一起在2014年创建了TASA（中国最早的人工智能社团）, DL Center（深度学习知识中心全球价值网络），AI growth（行业智库培训）等...">
+
+  <meta name="360-site-verification" content="604a14b53c6b871206001285921e81d8">
+  <meta property="wb:webmaster" content="294ec9de89e7fadb">
+  <meta property="qc:admins" content="104102651453316562112116375">
+  <meta property="qc:admins" content="11635613706305617">
+  <meta property="qc:admins" content="1163561616621163056375">
+  <meta name="google-site-verification" content="cV4-qkUJZR6gmFeajx_UyPe47GW9vY6cnCrYtCHYNh4">
+  <meta name="google-site-verification" content="HF7lfF8YEGs1qtCE-kPml8Z469e2RHhGajy6JPVy5XI">
+  <meta http-equiv="mobile-agent" content="format=html5; url=https://www.jianshu.com/p/9dc9f41f0b29">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-title" content="简书">
+
+    <!--  Meta for Smart App Banner -->
+  <meta name="apple-itunes-app" content="app-id=888237539, app-argument=jianshu://notes/1936343">
+  <!-- End -->
+
+  <!--  Meta for Twitter Card -->
+  <meta content="summary" property="twitter:card">
+  <meta content="@jianshucom" property="twitter:site">
+  <meta content="[译] 理解 LSTM 网络" property="twitter:title">
+  <meta content="Hi，我是 朱小虎 Neil，University AI 创始人 &amp; Chief Scientist，致力于推进世界人工智能化进程。制定并实施 UAI 中长期增长战略和目标，..." property="twitter:description">
+  <meta content="https://www.jianshu.com/p/9dc9f41f0b29" property="twitter:url">
+  <!-- End -->
+
+  <!--  Meta for OpenGraph -->
+  <meta property="fb:app_id" content="865829053512461">
+  <meta property="og:site_name" content="简书">
+  <meta property="og:title" content="[译] 理解 LSTM 网络">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.jianshu.com/p/9dc9f41f0b29">
+  <meta property="og:description" content="Hi，我是 朱小虎 Neil，University AI 创始人 &amp; Chief Scientist，致力于推进世界人工智能化进程。制定并实施 UAI 中长期增长战略和目标，带领团队快速成长为人...">
+  <!-- End -->
+
+  <!--  Meta for Facebook Applinks -->
+  <meta property="al:ios:url" content="jianshu://notes/1936343">
+  <meta property="al:ios:app_store_id" content="888237539">
+  <meta property="al:ios:app_name" content="简书">
+
+  <meta property="al:android:url" content="jianshu://notes/1936343">
+  <meta property="al:android:package" content="com.jianshu.haruki">
+  <meta property="al:android:app_name" content="简书">
+  <!-- End -->
+
+
+    <title>[译] 理解 LSTM 网络 - 简书</title>
+
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="y7OPuBibQ4U8G6mtdVY0Mx+qk99KumMYc92qG7mdM5rCStgKyUBitb+cHOWYQWazLcCYYGXVDQ/KxqCvbq28vw==">
+
+  <link rel="stylesheet" media="all" href="./[译] 理解 LSTM 网络 - 简书_files/web-bfc15fabb3b20492f7d4.css">
+  
+  <link rel="stylesheet" media="all" href="./[译] 理解 LSTM 网络 - 简书_files/entry-00e12f5a757a30f65da3.css">
+
+  <link href="https://cdn2.jianshu.io/assets/favicons/favicon-e743bfb1821442341c3ab15bdbe804f7ad97676bd07a770ccc9483473aa76f06.ico" rel="shortcut icon" type="image/x-icon">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/57-a6f1f1ee62ace44f6dc2f6a08575abd3c3b163288881c78dd8d75247682a4b27.png" sizes="57x57">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/72-fb9834bcfce738fd7b9c5e31363e79443e09a81a8e931170b58bc815387c1562.png" sizes="72x72">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/76-49d88e539ff2489475d603994988d871219141ecaa0b1a7a9a1914f4fe3182d6.png" sizes="76x76">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/114-24252fe693524ed3a9d0905e49bff3cbd0228f25a320aa09053c2ebb4955de97.png" sizes="114x114">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/120-1bb7371f5e87f93ce780a5f1a05ff1b176828ee0d1d130e768575918a2e05834.png" sizes="120x120">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/152-bf209460fc1c17bfd3e2b84c8e758bc11ca3e570fd411c3bbd84149b97453b99.png" sizes="152x152">
+
+  <!-- Start of 访问统计 -->
+    <script src="./[译] 理解 LSTM 网络 - 简书_files/push.js.下载"></script><script src="./[译] 理解 LSTM 网络 - 简书_files/hm.js.下载"></script><script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0c0e9d9b1e7d617b3e6842e85b9fb068";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <!-- End of 访问统计 -->
+<script charset="utf-8" id="ParadigmSDKv3" src="./[译] 理解 LSTM 网络 - 简书_files/ParadigmSDK_v3.js.下载">
+    </script><script>
+      ParadigmSDKv3.init("5cc57c5e8add401aa5533ff26dde2532");
+      ParadigmSDKv3.trackDetailPageShow(524);
+    </script><style type="text/css">@charset "UTF-8";.image-package .image-container{position:relative;z-index:2;background-color:#eee;-webkit-transition:background-color .1s linear;-o-transition:background-color .1s linear;transition:background-color .1s linear;margin:0 auto}body.reader-night-mode .image-package .image-container{background-color:#545454}.image-package .image-container-fill{z-index:1}.image-package .image-container .image-view{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.image-package .image-container .image-view-error:after{content:"图片获取失败，请点击重试";position:absolute;top:50%;left:50%;width:100%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);color:#888;font-size:14px}.image-package .image-container .image-view img.image-loading{opacity:.3}.image-package .image-container .image-view img{-webkit-transition:all .15s linear;-o-transition:all .15s linear;transition:all .15s linear;z-index:2;opacity:1}</style><style type="text/css">fieldset[disabled] .multiselect {
+  pointer-events: none;
+}
+
+.multiselect__spinner {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  width: 48px;
+  height: 35px;
+  background: #fff;
+  display: block;
+}
+
+.multiselect__spinner:after,
+.multiselect__spinner:before {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border-color: #41b883 transparent transparent;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px transparent;
+}
+
+.multiselect__spinner:before {
+  animation: a 2.4s cubic-bezier(.41,.26,.2,.62);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__spinner:after {
+  animation: a 2.4s cubic-bezier(.51,.09,.21,.8);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__loading-enter-active,
+.multiselect__loading-leave-active {
+  transition: opacity .4s ease-in-out;
+  opacity: 1;
+}
+
+.multiselect__loading-enter,
+.multiselect__loading-leave-active {
+  opacity: 0;
+}
+
+.multiselect,
+.multiselect__input,
+.multiselect__single {
+  font-family: inherit;
+  font-size: 14px;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+.multiselect {
+  box-sizing: content-box;
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+  text-align: left;
+  color: #35495e;
+}
+
+.multiselect * {
+  box-sizing: border-box;
+}
+
+.multiselect:focus {
+  outline: none;
+}
+
+.multiselect--disabled {
+  opacity: .6;
+}
+
+.multiselect--active {
+  z-index: 1;
+}
+
+.multiselect--active:not(.multiselect--above) .multiselect__current,
+.multiselect--active:not(.multiselect--above) .multiselect__input,
+.multiselect--active:not(.multiselect--above) .multiselect__tags {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.multiselect--active .multiselect__select {
+  transform: rotate(180deg);
+}
+
+.multiselect--above.multiselect--active .multiselect__current,
+.multiselect--above.multiselect--active .multiselect__input,
+.multiselect--above.multiselect--active .multiselect__tags {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.multiselect__input,
+.multiselect__single {
+  position: relative;
+  display: inline-block;
+  min-height: 20px;
+  line-height: 20px;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 0 0 5px;
+  width: 100%;
+  transition: border .1s ease;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+
+.multiselect__tag~.multiselect__input,
+.multiselect__tag~.multiselect__single {
+  width: auto;
+}
+
+.multiselect__input:hover,
+.multiselect__single:hover {
+  border-color: #cfcfcf;
+}
+
+.multiselect__input:focus,
+.multiselect__single:focus {
+  border-color: #a8a8a8;
+  outline: none;
+}
+
+.multiselect__single {
+  padding-left: 6px;
+  margin-bottom: 8px;
+}
+
+.multiselect__tags-wrap {
+  display: inline;
+}
+
+.multiselect__tags {
+  min-height: 40px;
+  display: block;
+  padding: 8px 40px 0 8px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.multiselect__tag {
+  position: relative;
+  display: inline-block;
+  padding: 4px 26px 4px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  color: #fff;
+  line-height: 1;
+  background: #41b883;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+.multiselect__tag-icon {
+  cursor: pointer;
+  margin-left: 7px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-weight: 700;
+  font-style: normal;
+  width: 22px;
+  text-align: center;
+  line-height: 22px;
+  transition: all .2s ease;
+  border-radius: 5px;
+}
+
+.multiselect__tag-icon:after {
+  content: "\D7";
+  color: #266d4d;
+  font-size: 14px;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background: #369a6e;
+}
+
+.multiselect__tag-icon:focus:after,
+.multiselect__tag-icon:hover:after {
+  color: #fff;
+}
+
+.multiselect__current {
+  min-height: 40px;
+  overflow: hidden;
+  padding: 8px 12px 0;
+  padding-right: 30px;
+  white-space: nowrap;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+}
+
+.multiselect__current,
+.multiselect__select {
+  line-height: 16px;
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.multiselect__select {
+  position: absolute;
+  width: 40px;
+  height: 38px;
+  right: 1px;
+  top: 1px;
+  padding: 4px 8px;
+  text-align: center;
+  transition: transform .2s ease;
+}
+
+.multiselect__select:before {
+  position: relative;
+  right: 0;
+  top: 65%;
+  color: #999;
+  margin-top: 4px;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  border-color: #999 transparent transparent;
+  content: "";
+}
+
+.multiselect__placeholder {
+  color: #adadad;
+  display: inline-block;
+  margin-bottom: 10px;
+  padding-top: 2px;
+}
+
+.multiselect--active .multiselect__placeholder {
+  display: none;
+}
+
+.multiselect__content-wrapper {
+  position: absolute;
+  display: block;
+  background: #fff;
+  width: 100%;
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #e8e8e8;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.multiselect__content {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+  vertical-align: top;
+}
+
+.multiselect--above .multiselect__content-wrapper {
+  bottom: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: none;
+  border-top: 1px solid #e8e8e8;
+}
+
+.multiselect__content::webkit-scrollbar {
+  display: none;
+}
+
+.multiselect__element {
+  display: block;
+}
+
+.multiselect__option {
+  display: block;
+  padding: 12px;
+  min-height: 40px;
+  line-height: 16px;
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.multiselect__option:after {
+  top: 0;
+  right: 0;
+  position: absolute;
+  line-height: 40px;
+  padding-right: 12px;
+  padding-left: 20px;
+}
+
+.multiselect__option--highlight {
+  background: #41b883;
+  outline: none;
+  color: #fff;
+}
+
+.multiselect__option--highlight:after {
+  content: attr(data-select);
+  background: #41b883;
+  color: #fff;
+}
+
+.multiselect__option--selected {
+  background: #f3f3f3;
+  color: #35495e;
+  font-weight: 700;
+}
+
+.multiselect__option--selected:after {
+  content: attr(data-selected);
+  color: silver;
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #ff6a6a;
+  color: #fff;
+}
+
+.multiselect__option--selected.multiselect__option--highlight:after {
+  background: #ff6a6a;
+  content: attr(data-deselect);
+  color: #fff;
+}
+
+.multiselect--disabled {
+  background: #ededed;
+  pointer-events: none;
+}
+
+.multiselect--disabled .multiselect__current,
+.multiselect--disabled .multiselect__select,
+.multiselect__option--disabled {
+  background: #ededed;
+  color: #a6a6a6;
+}
+
+.multiselect__option--disabled {
+  cursor: text;
+  pointer-events: none;
+}
+
+.multiselect__option--disabled.multiselect__option--highlight {
+  background: #dedede!important;
+}
+
+.multiselect-enter-active,
+.multiselect-leave-active {
+  transition: all .15s ease;
+}
+
+.multiselect-enter,
+.multiselect-leave-active {
+  opacity: 0;
+}
+
+.multiselect__strong {
+  margin-bottom: 8px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+[dir=rtl] .multiselect {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__select {
+  right: auto;
+  left: 1px;
+}
+
+[dir=rtl] .multiselect__tags {
+  padding: 8px 8px 0 40px;
+}
+
+[dir=rtl] .multiselect__content {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__option:after {
+  right: auto;
+  left: 0;
+}
+
+[dir=rtl] .multiselect__clear {
+  right: auto;
+  left: 12px;
+}
+
+[dir=rtl] .multiselect__spinner {
+  right: auto;
+  left: 1px;
+}
+
+@keyframes a {
+  0% {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(2turn);
+  }
+}</style><style type="text/css">
+#free-reward-panel .reward-users-modal main {
+  padding: 0;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.reward-note-modal .v-modal {
+  width: 620px;
+  text-align: center;
+}
+.reward-note-modal .v-modal form {
+    margin: 0 auto 25px auto;
+    padding: 0 40px;
+}
+.reward-note-modal .v-modal .reward-intro {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.reward-note-modal .v-modal .reward-intro .avatar {
+      cursor: default !important;
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
+      display: inline-block;
+}
+.reward-note-modal .v-modal .reward-intro .intro {
+      margin-right: 5px;
+      font-weight: bold;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .reward-intro i {
+      color: #EA6F5A;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs {
+    margin: 25px 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group {
+      margin: 0 -5px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input {
+        display: none;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input:checked + .option {
+        color: #EA6F5A;
+        border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-text {
+        opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-amount-input {
+        opacity: 1;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option {
+        position: relative;
+        margin: 0 5px 15px;
+        width: 156px;
+        height: 56px;
+        line-height: 54px;
+        border: 1px solid #E6E6E6;
+        border-radius: 4px;
+        font-weight: normal;
+        color: #999999;
+        cursor: pointer;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option i {
+          font-size: 16px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .amount {
+          font-size: 28px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .piece {
+          font-size: 13px;
+          vertical-align: sub;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input {
+          position: absolute;
+          top: 0;
+          z-index: -1;
+          width: 100%;
+          opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input i {
+            position: absolute;
+            top: 0;
+            left: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input .piece {
+            position: absolute;
+            top: 4px;
+            right: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input {
+            display: block;
+            margin: 0 auto;
+            width: 80px;
+            height: 54px;
+            line-height: 54px;
+            border: none;
+            font-size: 28px;
+            text-align: center;
+            background: transparent;
+            -moz-appearance: textfield;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-outer-spin-button, .reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-inner-spin-button {
+              -webkit-appearance: none !important;
+}
+.reward-note-modal .v-modal .main-inputs .message {
+      padding: 15px 20px;
+      margin-bottom: 0;
+      font-size: 14px;
+      border: 1px solid #E6E6E6;
+      color: #333333;
+      border-radius: 4px;
+      background-color: rgba(180, 180, 180, 0.1);
+}
+.reward-note-modal .v-modal .main-inputs .message textarea {
+        width: 100%;
+        height: 44px;
+        padding: 0;
+        margin: 0;
+        resize: none;
+        background: none !important;
+        border: none !important;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+}
+.reward-note-modal .v-modal .main-inputs .message textarea:focus {
+          outline: none;
+}
+.reward-note-modal .v-modal .reward-info .amount {
+    font-size: 28px;
+    font-weight: bold;
+    color: #EA6F5A;
+}
+.reward-note-modal .v-modal .reward-info .pay-method {
+    font-size: 14px;
+}
+.reward-note-modal .v-modal .reward-info .pay-method a {
+      color: #3194D0;
+}
+.reward-note-modal .v-modal .choose-pay {
+    margin: 0 -5px;
+}
+.reward-note-modal .v-modal .choose-pay input {
+      display: none;
+}
+.reward-note-modal .v-modal .choose-pay input:checked + .option {
+      color: #EA6F5A;
+      border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .choose-pay .option {
+      margin: 20px 5px 10px;
+      width: 156px;
+      height: 56px;
+      line-height: 54px;
+      text-align: center;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+      cursor: pointer;
+}
+.reward-note-modal .v-modal .choose-pay .option img {
+        height: 30px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.alipay, .reward-note-modal .v-modal .choose-pay .option img.night.alipay {
+        min-width: 85px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.wechat, .reward-note-modal .v-modal .choose-pay .option img.night.wechat {
+        min-width: 112px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.night {
+        display: none;
+}
+.reward-note-modal .v-modal .choose-pay .tooltip {
+      width: 230px;
+}
+.reward-note-modal .v-modal .modal-footer {
+    padding: 0 15px 20px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+}
+.reward-note-modal .v-modal .modal-footer .btn {
+      padding: 8px 45px;
+      font-size: 24px;
+}
+.reward-note-modal .v-modal .btn-pay {
+    padding: 8px 25px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #F5A623;
+}
+.weixin-pay, .success-pay {
+  text-align: center;
+}
+.weixin-pay .v-modal, .success-pay .v-modal {
+    width: 350px;
+}
+.weixin-pay .ic-successed, .success-pay .ic-successed {
+    font-size: 60px;
+    color: #3db922;
+}
+.weixin-pay h2, .weixin-pay h3, .success-pay h2, .success-pay h3 {
+    margin-bottom: 20px;
+    color: #333333;
+}
+.weixin-pay h2, .success-pay h2 {
+    margin: 0 0 40px 0;
+    font-size: 24px;
+}
+.weixin-pay .bind-text, .success-pay .bind-text {
+    position: relative;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #999999;
+}
+.weixin-pay .bind-text:before, .weixin-pay .bind-text:after, .success-pay .bind-text:before, .success-pay .bind-text:after {
+      content: "";
+      border-top: 1px solid #999;
+      display: block;
+      position: absolute;
+      width: 40px;
+      top: 8px;
+}
+.weixin-pay .bind-text:before, .success-pay .bind-text:before {
+      left: 30px;
+}
+.weixin-pay .bind-text:after, .success-pay .bind-text:after {
+      right: 30px;
+}
+.weixin-pay .share-bind, .success-pay .share-bind {
+    display: block;
+    margin-bottom: 30px;
+}
+.weixin-pay .share-bind i, .success-pay .share-bind i {
+      margin-right: 4px;
+      font-size: 22px;
+      vertical-align: middle;
+}
+.weixin-pay .share-bind.wechat i, .success-pay .share-bind.wechat i {
+      color: #00BB29;
+}
+.weixin-pay .share-bind.weibo i, .success-pay .share-bind.weibo i {
+      color: #E05244;
+}
+.weixin-pay .wx-qr-code, .success-pay .wx-qr-code {
+    display: inline-block;
+}
+.weixin-pay .wx-qr-code img, .success-pay .wx-qr-code img {
+      margin: 0 auto;
+      padding: 10px;
+      width: 200px;
+      background-color: #ffffff;
+}
+.weixin-pay .pay-amount, .success-pay .pay-amount {
+    margin: 20px 0;
+    color: #787878;
+}
+.weixin-pay .pay-amount span, .success-pay .pay-amount span {
+      color: #F5A623;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.v-modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: transparent;
+}
+.v-modal-wrap.modal-leave-active {
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+}
+.v-modal-wrap.modal-enter-active .v-modal-mask, .v-modal-wrap.modal-leave-active .v-modal-mask {
+    opacity: 0;
+}
+.v-modal-wrap.modal-enter-active .v-modal, .v-modal-wrap.modal-leave-active .v-modal {
+    -webkit-transform: translate(-50%, -70%);
+        -ms-transform: translate(-50%, -70%);
+            transform: translate(-50%, -70%);
+    opacity: 0;
+}
+.v-modal-wrap .v-modal-mask {
+    background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+.v-modal-wrap .v-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+    transition: opacity 0.3s, -webkit-transform 0.3s;
+    -o-transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
+    opacity: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow: hidden;
+}
+.v-modal-wrap .v-modal > header:before, .v-modal-wrap .v-modal > header:after, .v-modal-wrap .v-modal > main:before, .v-modal-wrap .v-modal > main:after, .v-modal-wrap .v-modal > footer:before, .v-modal-wrap .v-modal > footer:after {
+      content: '';
+      clear: both;
+      display: table;
+}
+.v-modal-wrap .v-modal > header {
+      padding: 20px;
+      border-bottom: 1px solid #F0F0F0;
+}
+.v-modal-wrap .v-modal > header h4 {
+        margin: 0;
+        color: #333;
+        text-align: left;
+}
+.v-modal-wrap .v-modal .close {
+      position: absolute;
+      right: 16px;
+      top: 20px;
+      font-size: 26px;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.8);
+}
+.v-modal-wrap .v-modal .close:hover {
+        color: #000000;
+}
+.v-modal-wrap .v-modal > main {
+      padding: 20px 20px 20px 20px;
+      font-size: 15px;
+      color: #333;
+      -webkit-box-flex: 1;
+      -webkit-flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
+      overflow-x: hidden;
+      overflow-y: auto;
+}
+.v-modal-wrap .v-modal > footer {
+      padding: 20px;
+      background-color: #fff;
+}
+.v-modal-wrap .v-modal > footer button {
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        border: 0;
+        float: right;
+}
+.v-modal-wrap .v-modal > footer button:focus {
+          outline: 0;
+}
+.v-modal-wrap .v-modal > footer .submit {
+        padding: 4px 12px;
+        border: 1px solid;
+        border-radius: 20px;
+}
+.v-modal-wrap .v-modal > footer .cancel {
+        margin-top: 5px;
+}
+.v-modal-wrap .v-modal > footer .cancel:hover {
+          color: #333333;
+}
+.reader-night-mode .v-modal-wrap .v-modal-mask {
+  background-color: rgba(63, 63, 63, 0.7);
+}
+.reader-night-mode .v-modal-wrap .v-modal {
+  background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal header {
+    border-color: #2F2F2F;
+}
+.reader-night-mode .v-modal-wrap .v-modal header h4 {
+      color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close:hover {
+      color: #ffffff;
+}
+.reader-night-mode .v-modal-wrap .v-modal main {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer {
+    background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer .cancel:hover {
+      color: #C8C8C8;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.like[data-v-6ddd02c6] {
+  display: inline-block;
+}
+.like .like-group[data-v-6ddd02c6] {
+    position: relative;
+    padding: 13px 0 15px 0;
+    font-size: 0;
+    border: 1px solid #EA6F5A;
+    border-radius: 40px;
+}
+.like .like-group[data-v-6ddd02c6]:hover {
+      background-color: rgba(236, 97, 73, 0.05);
+}
+.like .like-group .btn-like[data-v-6ddd02c6] {
+      display: inline-block;
+      font-size: 19px;
+}
+.like .like-group .btn-like[data-v-6ddd02c6]:before {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 2px;
+        width: 50px;
+        height: 50px;
+        background-image: url(//cdn2.jianshu.io/assets/web/like_animation_steps-62a00a7b52377d3069927cdb8e61fd34.png);
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: 1000px 50px;
+}
+.like .like-group .btn-like a[data-v-6ddd02c6] {
+        position: relative;
+        padding: 18px 30px 18px 55px;
+        color: #EA6F5A;
+}
+.like .like-group .modal-wrap[data-v-6ddd02c6] {
+      font-size: 18px;
+      border-left: 1px solid rgba(236, 97, 73, 0.4);
+      display: inline-block;
+      margin-left: -15px;
+}
+.like .like-group .modal-wrap a[data-v-6ddd02c6] {
+        color: #EA6F5A;
+        padding: 18px 26px 18px 18px;
+}
+.like .like-group.like-animation[data-v-6ddd02c6], .like .like-group.active[data-v-6ddd02c6] {
+      background-color: #EA6F5A;
+}
+.like .like-group.like-animation .btn-like a[data-v-6ddd02c6], .like .like-group.active .btn-like a[data-v-6ddd02c6] {
+        color: white;
+}
+.like .like-group.like-animation .modal-wrap[data-v-6ddd02c6], .like .like-group.active .modal-wrap[data-v-6ddd02c6] {
+        border-left: 1px solid white;
+}
+.like .like-group.like-animation .modal-wrap a[data-v-6ddd02c6], .like .like-group.active .modal-wrap a[data-v-6ddd02c6] {
+          color: white;
+}
+.like .like-group.like-animation .btn-like[data-v-6ddd02c6]:before {
+      -webkit-animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+              animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+      background-position: right;
+}
+@-webkit-keyframes likeBlast {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+@keyframes likeBlast-data-v-6ddd02c6 {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+.like .like-group.active .btn-like[data-v-6ddd02c6]:before {
+      background-position: right;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.main {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 0 30px 0;
+  width: 620px;
+}
+.main .title {
+    padding-left: 8px;
+    border-left: 3px solid #EA6F5A;
+    line-height: 1;
+    font-size: 15px;
+}
+.main .collection-settings {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: 13px;
+    color: #A0A0A0;
+}
+.main .collection-settings span {
+      padding-left: 4px;
+}
+.main .include-collection {
+    width: 100%;
+    padding-top: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+}
+.main .include-collection .item {
+      display: inline-block;
+      margin: 0 12px 12px 0;
+      min-height: 32px;
+      background-color: white;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+      vertical-align: top;
+      overflow: hidden;
+}
+.main .include-collection .item img {
+        width: 32px;
+        height: 32px;
+}
+.main .include-collection .item .name {
+        display: inline-block;
+        padding: 0 10px;
+        font-size: 14px;
+}
+.main .include-collection .add-collection-wrap {
+      margin: 0 12px 12px 0;
+}
+.main .include-collection .add-collection {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+}
+.main .include-collection .add-collection i {
+        margin-right: 4px;
+        color: #969696;
+}
+.main .recommend-note a {
+    position: relative;
+    margin: 20px 2px 0 0;
+    width: 200px;
+    height: 160px;
+    display: inline-block;
+}
+.main .recommend-note a:after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 160px;
+      border-radius: 0 0 4px 4px;
+      -webkit-box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+              box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      z-index: 1;
+}
+.main .recommend-note .name {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    right: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffffff;
+    z-index: 2;
+}
+.main .recommend-note .author {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 2;
+}
+.main .recommend-note .avatar {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.main .recommend-note .avatar img {
+      border-radius: 50%;
+}
+.main .recommend-note .author-name {
+    font-size: 12px;
+    color: #ffffff;
+    display: inline-block;
+    vertical-align: -1px;
+}
+.main .show-more {
+    margin: 0 12px 12px 0;
+    font-size: 14px;
+    color: #A0A0A0;
+}
+</style></head>
+
+  <!-- 只给10%的用户添加代码 -->
+    <!-- ###第四范式-智能推荐：代码直接复制 无需修改参数### -->
+    <!-- ###功能：上报内容并反馈用户行为### -->
+    
+    
+  <body lang="zh-CN" class="reader-black-font">
+    <!-- 全局顶部导航栏 -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="width-limit">
+    <!-- 左上方 Logo -->
+    <a class="logo" href="https://www.jianshu.com/"><img src="./[译] 理解 LSTM 网络 - 简书_files/nav-logo-4c7bbafe27adc892f3046e6978459bac.png" alt="Nav logo"></a>
+
+    <!-- 右上角 -->
+      <!-- 未登录显示登录/注册/写文章 -->
+      <a class="btn write-btn" target="_blank" href="https://www.jianshu.com/writer#/">
+        <i class="iconfont ic-write"></i>写文章
+</a>      <a class="btn sign-up" id="sign_up" href="https://www.jianshu.com/sign_up">注册</a>
+      <a class="btn log-in" id="sign_in" href="https://www.jianshu.com/sign_in">登录</a>
+
+    <!-- 如果用户登录，显示下拉菜单 -->
+
+    <div class="style-mode"><a class="style-mode-btn"><i class="iconfont ic-navigation-mode"></i></a> <div class="popover-modal" style="left: 0px; display: none;"><div class="meta"><i class="iconfont ic-navigation-night"></i><span>夜间模式</span></div> <div class="switch day-night-group"><a class="switch-btn">开</a> <a class="switch-btn active">关</a></div> <hr> <div class="switch font-family-group"><a class="switch-btn font-song">宋体</a> <a class="switch-btn font-hei active">黑体</a></div> <div class="switch"><a class="switch-btn active">简</a> <a class="switch-btn">繁</a></div></div></div>
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav">
+            <li class="tab ">
+              <a href="https://www.jianshu.com/">
+                <span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+</a>            </li>
+            <li class="tab ">
+              <a id="web-nav-app-download-btn" class="app-download-btn" href="https://www.jianshu.com/apps?utm_medium=desktop&amp;utm_source=navbar-apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
+            </li>
+          <li class="search">
+            <form target="_blank" action="https://www.jianshu.com/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+              <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索" class="search-input">
+              <a class="search-btn" href="javascript:void(null)"><i class="iconfont ic-search"></i></a>
+</form>          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    
+<div class="note">
+  <div id="note-fixed-ad-container">
+      <a target="_blank" href="https://www.jianshu.com/apps/redirect?utm_source=side-banner-click" id="web-note-ad-fixed"><span class="close">×</span></a>
+    <div id="fixed-ad-container">
+      <iframe scrolling="no" style="width: 100%; height: 180px; border: 0px;" src="./[译] 理解 LSTM 网络 - 简书_files/saved_resource.html"></iframe><span id="youdao-fixed-ad" class="ad-badge" style="visibility: visible;">广告</span>
+      <div id="_so_pdsBy_0"></div>
+    </div>
+  </div>
+  <div class="post">
+    <div class="article">
+        <h1 class="title">[译] 理解 LSTM 网络</h1>
+
+        <!-- 作者区域 -->
+        <div class="author">
+          <a class="avatar" href="https://www.jianshu.com/u/696dc6c6f01c">
+            <img src="./[译] 理解 LSTM 网络 - 简书_files/0e4e103b9892" alt="96">
+</a>          <div class="info">
+            <span class="name"><a href="https://www.jianshu.com/u/696dc6c6f01c">朱小虎Neil</a></span>
+              <img class="badge-icon" data-toggle="tooltip" title="" src="./[译] 理解 LSTM 网络 - 简书_files/22d8d123-271c-4d80-9c59-6990844a9e37" alt="22d8d123 271c 4d80 9c59 6990844a9e37" data-original-title="简书会员">
+            <!-- 关注用户按钮 -->
+            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <!-- 文章数据信息 -->
+            <div class="meta">
+              <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
+                <span class="publish-time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="最后编辑于 2018.11.16 01:34">2015.08.28 12:36*</span>
+              <span class="wordage">字数 3985</span>
+            <span class="views-count">阅读 362212</span><span class="comments-count">评论 85</span><span class="likes-count">喜欢 617</span><span class="rewards-count ">赞赏 27</span></div>
+          </div>
+          <!-- 如果是当前作者，加入编辑按钮 -->
+        </div>
+
+
+        <!-- 文章内容 -->
+        <div data-note-content="" class="show-content">
+          <div class="show-content-free">
+            <blockquote>
+<p>Hi，我是 朱小虎 Neil，University AI 创始人 &amp; Chief Scientist，致力于推进世界人工智能化进程。制定并实施 UAI 中长期增长战略和目标，带领团队快速成长为人工智能领域最专业的力量。</p>
+</blockquote>
+<blockquote>
+<p>作为行业领导者，他和UAI一起在2014年创建了TASA（中国最早的人工智能社团）, DL Center（深度学习知识中心全球价值网络），AI growth（行业智库培训）等，为中国的人工智能人才建设输送了大量的血液和养分。此外，他还参与或者举办过各类国际性的人工智能峰会和活动，产生了巨大的影响力，书写了60万字的人工智能精品技术内容，生产翻译了全球第一本深度学习入门书《神经网络与深度学习》，生产的内容被大量的专业垂直公众号和媒体转载与连载。曾经受邀为国内顶尖大学制定人工智能学习规划和教授人工智能前沿课程，均受学生和老师好评。</p>
+</blockquote>
+<p>本文译自 <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="nofollow">Christopher Olah 的博文</a></p>
+<h1>Recurrent Neural Networks</h1>
+<p>人类并不是每时每刻都从一片空白的大脑开始他们的思考。在你阅读这篇文章时候，你都是基于自己已经拥有的对先前所见词的理解来推断当前词的真实含义。我们不会将所有的东西都全部丢弃，然后用空白的大脑进行思考。我们的思想拥有持久性。</p>
+<p>传统的神经网络并不能做到这点，看起来也像是一种巨大的弊端。例如，假设你希望对电影中的每个时间点的时间类型进行分类。传统的神经网络应该很难来处理这个问题——使用电影中先前的事件推断后续的事件。</p>
+<p>RNN 解决了这个问题。RNN 是包含循环的网络，允许信息的持久化。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 458px; max-height: 1086px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 155.24%;"></div>
+<div class="image-view" data-width="458" data-height="711"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-f16c8acc01d2d469.png" data-original-width="458" data-original-height="711" data-original-format="" data-original-filesize="27257" class="" style="cursor: zoom-in;" src="./[译] 理解 LSTM 网络 - 简书_files/42741-f16c8acc01d2d469.png"></div>
+</div>
+<div class="image-caption">RNN 包含循环</div>
+</div>
+<p>在上面的示例图中，神经网络的模块，<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math" alt="A" mathimg="1">，正在读取某个输入 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(1)" alt="x_i" mathimg="1">，并输出一个值 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(2)" alt="h_i" mathimg="1">。循环可以使得信息可以从当前步传递到下一步。</p>
+<p>这些循环使得 RNN 看起来非常神秘。然而，如果你仔细想想，这样也不比一个正常的神经网络难于理解。RNN 可以被看做是同一神经网络的多次复制，每个神经网络模块会把消息传递给下一个。所以，如果我们将这个循环展开：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 183px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 26.27%;"></div>
+<div class="image-view" data-width="2706" data-height="711"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-d6749df8fb93b0b0.png" data-original-width="2706" data-original-height="711" data-original-format="" data-original-filesize="123317" class="" style="cursor: zoom-in;" src="./[译] 理解 LSTM 网络 - 简书_files/42741-d6749df8fb93b0b0.png"></div>
+</div>
+<div class="image-caption">展开的 RNN</div>
+</div>
+<p>链式的特征揭示了 RNN 本质上是与序列和列表相关的。他们是对于这类数据的最自然的神经网络架构。</p>
+<p>并且 RNN 也已经被人们应用了！在过去几年中，应用 RNN 在语音识别，语言建模，翻译，图片描述等问题上已经取得一定成功，并且这个列表还在增长。我建议大家参考 Andrej Karpathy 的博客文章——<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="nofollow">The Unreasonable Effectiveness of Recurrent Neural Networks</a> 来看看更丰富有趣的 RNN 的成功应用。</p>
+<p>而这些成功应用的关键之处就是 LSTM 的使用，这是一种特别的 RNN，比标准的 RNN 在很多的任务上都表现得更好。几乎所有的令人振奋的关于 RNN 的结果都是通过 LSTM 达到的。这篇博文也会就 LSTM 进行展开。</p>
+<h1>长期依赖（Long-Term Dependencies）问题</h1>
+<p>RNN 的关键点之一就是他们可以用来连接先前的信息到当前的任务上，例如使用过去的视频段来推测对当前段的理解。如果 RNN 可以做到这个，他们就变得非常有用。但是真的可以么？答案是，还有很多依赖因素。</p>
+<p>有时候，我们仅仅需要知道先前的信息来执行当前的任务。例如，我们有一个语言模型用来基于先前的词来预测下一个词。如果我们试着预测 “the clouds are in the sky” 最后的词，我们并不需要任何其他的上下文 —— 因此下一个词很显然就应该是 sky。在这样的场景中，相关的信息和预测的词位置之间的间隔是非常小的，RNN 可以学会使用先前的信息。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 322px;">
+<div class="image-container-fill" style="padding-bottom: 46.089999999999996%;"></div>
+<div class="image-view" data-width="1855" data-height="855"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-feb16ca499c4b96a.png" data-original-width="1855" data-original-height="855" data-original-format="" data-original-filesize="272556" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">不太长的相关信息和位置间隔</div>
+</div>
+<p>但是同样会有一些更加复杂的场景。假设我们试着去预测“I grew up in France... I speak fluent French”最后的词。当前的信息建议下一个词可能是一种语言的名字，但是如果我们需要弄清楚是什么语言，我们是需要先前提到的离当前位置很远的 France 的上下文的。这说明相关信息和当前预测位置之间的间隔就肯定变得相当的大。</p>
+<p>不幸的是，在这个间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 241px;">
+<div class="image-container-fill" style="padding-bottom: 34.44%;"></div>
+<div class="image-view" data-width="2523" data-height="869"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-becb05d96b1e4af7.png" data-original-width="2523" data-original-height="869" data-original-format="" data-original-filesize="290277" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">相当长的相关信息和位置间隔</div>
+</div>
+<p>在理论上，RNN 绝对可以处理这样的 长期依赖 问题。人们可以仔细挑选参数来解决这类问题中的最初级形式，但在实践中，RNN 肯定不能够成功学习到这些知识。<a href="http://www-dsi.ing.unifi.it/~paolo/ps/tnn-94-gradient.pdf" target="_blank" rel="nofollow">Bengio, et al. (1994)</a>等人对该问题进行了深入的研究，他们发现一些使训练 RNN 变得非常困难的相当根本的原因。</p>
+<p>然而，幸运的是，LSTM 并没有这个问题！</p>
+<h1>LSTM 网络</h1>
+<p>Long Short Term 网络—— 一般就叫做 LSTM ——是一种 RNN 特殊的类型，可以学习长期依赖信息。LSTM 由<a href="http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf" target="_blank" rel="nofollow">Hochreiter &amp; Schmidhuber (1997)</a>提出，并在近期被<a href="https://scholar.google.com/citations?user=DaFHynwAAAAJ&amp;hl=en" target="_blank" rel="nofollow">Alex Graves</a>进行了改良和推广。在很多问题，LSTM 都取得相当巨大的成功，并得到了广泛的使用。</p>
+<p>LSTM 通过刻意的设计来避免长期依赖问题。记住长期的信息在实践中是 LSTM 的默认行为，而非需要付出很大代价才能获得的能力！</p>
+<p>所有 RNN 都具有一种重复神经网络模块的链式的形式。在标准的 RNN 中，这个重复的模块只有一个非常简单的结构，例如一个 <code>tanh</code> 层。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 261px;">
+<div class="image-container-fill" style="padding-bottom: 37.419999999999995%;"></div>
+<div class="image-view" data-width="2242" data-height="839"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-9ac355076444b66f.png" data-original-width="2242" data-original-height="839" data-original-format="" data-original-filesize="245560" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">标准 RNN 中的重复模块包含单一的层</div>
+</div><br>
+<p>LSTM 同样是这样的结构，但是重复的模块拥有一个不同的结构。不同于 单一神经网络层，这里是有四个，以一种非常特殊的方式进行交互。</p>
+
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 263px;">
+<div class="image-container-fill" style="padding-bottom: 37.57%;"></div>
+<div class="image-view" data-width="2233" data-height="839"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-b9a16a53d58ca2b9.png" data-original-width="2233" data-original-height="839" data-original-format="" data-original-filesize="293685" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">LSTM 中的重复模块包含四个交互的层</div>
+</div><br>
+<p>不必担心这里的细节。我们会一步一步地剖析 LSTM 解析图。现在，我们先来熟悉一下图中使用的各种元素的图标。</p>
+
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 177px;">
+<div class="image-container-fill" style="padding-bottom: 18.63%;"></div>
+<div class="image-view" data-width="950" data-height="177"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-ea943b818b8e18d0.png" data-original-width="950" data-original-height="177" data-original-format="" data-original-filesize="26862" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">LSTM 中的图标</div>
+</div><br>
+<p>在上面的图例中，每一条黑线传输着一整个向量，从一个节点的输出到其他节点的输入。粉色的圈代表按位 pointwise 的操作，诸如向量的和，而黄色的矩阵就是学习到的神经网络层。合在一起的线表示向量的连接，分开的线表示内容被复制，然后分发到不同的位置。</p>
+
+<h1>LSTM 的核心思想</h1>
+<p>LSTM 的关键就是细胞状态，水平线在图上方贯穿运行。</p>
+<p>细胞状态类似于传送带。直接在整个链上运行，只有一些少量的线性交互。信息在上面流传保持不变会很容易。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-ac1eb618f37a9dea.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="72024" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">Paste_Image.png</div>
+</div>
+<p>LSTM 有通过精心设计的称作为“门”的结构来去除或者增加信息到细胞状态的能力。门是一种让信息选择式通过的方法。他们包含一个 <code>sigmoid</code> 神经网络层和一个按位的乘法操作。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 198px; max-height: 242px;">
+<div class="image-container-fill" style="padding-bottom: 122.22%;"></div>
+<div class="image-view" data-width="198" data-height="242"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-7169541c790efd13.png" data-original-width="198" data-original-height="242" data-original-format="" data-original-filesize="6055" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">Paste_Image.png</div>
+</div>
+<p>Sigmoid 层输出 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(3)" alt="0" mathimg="1"> 到 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(4)" alt="1" mathimg="1"> 之间的数值，描述每个部分有多少量可以通过。<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(3)" alt="0" mathimg="1"> 代表“不许任何量通过”，<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(4)" alt="1" mathimg="1"> 就指“允许任意量通过”！</p>
+<p>LSTM 拥有三个门，来保护和控制细胞状态。</p>
+<h1>逐步理解 LSTM</h1>
+<p>在我们 LSTM 中的第一步是决定我们会从细胞状态中丢弃什么信息。这个决定通过一个称为<strong>忘记门层</strong>完成。该门会读取 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(5)" alt="h_{t-1}" mathimg="1"> 和 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(6)" alt="x_t" mathimg="1">，输出一个在 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(3)" alt="0" mathimg="1"> 到 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(4)" alt="1" mathimg="1"> 之间的数值给每个在细胞状态 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(7)" alt="C_{t-1}" mathimg="1"> 中的数字。<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(4)" alt="1" mathimg="1"> 表示“完全保留”，<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(3)" alt="0" mathimg="1"> 表示“完全舍弃”。</p>
+<p>让我们回到语言模型的例子中来基于已经看到的预测下一个词。在这个问题中，细胞状态可能包含当前<strong>主语</strong>的性别，因此正确的<strong>代词</strong>可以被选择出来。当我们看到新的<strong>主语</strong>，我们希望忘记旧的<strong>主语</strong>。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-96b387f711d1d12c.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="84131" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">决定丢弃信息</div>
+</div>
+<p>下一步是确定什么样的新信息被存放在细胞状态中。这里包含两个部分。第一，<code>sigmoid</code> 层称 “输入门层” 决定什么值我们将要更新。然后，一个 <code>tanh</code> 层创建一个新的候选值向量，<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(8)" alt="\tilde{C}_t" mathimg="1">，会被加入到状态中。下一步，我们会讲这两个信息来产生对状态的更新。</p>
+<p>在我们语言模型的例子中，我们希望增加新的主语的性别到细胞状态中，来替代旧的需要忘记的主语。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-7fa07e640593f930.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="98293" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">确定更新的信息</div>
+</div>
+<p>现在是更新旧细胞状态的时间了，<img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(7)" alt="C_{t-1}" mathimg="1"> 更新为 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(9)" alt="C_t" mathimg="1">。前面的步骤已经决定了将会做什么，我们现在就是实际去完成。</p>
+<p>我们把旧状态与 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(10)" alt="f_t" mathimg="1"> 相乘，丢弃掉我们确定需要丢弃的信息。接着加上 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(11)" alt="i_t * \tilde{C}_t" mathimg="1">。这就是新的候选值，根据我们决定更新每个状态的程度进行变化。</p>
+<p>在语言模型的例子中，这就是我们实际根据前面确定的目标，丢弃旧代词的性别信息并添加新的信息的地方。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-d88caa3c4faf5353.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="87925" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">更新细胞状态</div>
+</div>
+<p>最终，我们需要确定输出什么值。这个输出将会基于我们的细胞状态，但是也是一个过滤后的版本。首先，我们运行一个 <code>sigmoid</code> 层来确定细胞状态的哪个部分将输出出去。接着，我们把细胞状态通过 <code>tanh</code> 进行处理（得到一个在 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(12)" alt="-1" mathimg="1"> 到 <img class="math-inline" src="./[译] 理解 LSTM 网络 - 简书_files/math(4)" alt="1" mathimg="1"> 之间的值）并将它和 <code>sigmoid</code> 门的输出相乘，最终我们仅仅会输出我们确定输出的那部分。</p>
+<p>在语言模型的例子中，因为他就看到了一个 <strong>代词</strong>，可能需要输出与一个 <strong>动词</strong> 相关的信息。例如，可能输出是否代词是单数还是负数，这样如果是动词的话，我们也知道动词需要进行的词形变化。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-4c9186bf786063d6.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="97095" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">输出信息</div>
+</div>
+<h1>LSTM 的变体</h1>
+<p>我们到目前为止都还在介绍正常的 LSTM。但是不是所有的 LSTM 都长成一个样子的。实际上，几乎所有包含 LSTM 的论文都采用了微小的变体。差异非常小，但是也值得拿出来讲一下。</p>
+<p>其中一个流形的 LSTM 变体，就是由 <a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank" rel="nofollow">Gers &amp; Schmidhuber (2000)</a> 提出的，增加了 “peephole connection”。是说，我们让 门层 也会接受细胞状态的输入。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-0f80ad5540ea27f9.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="121667" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">peephole 连接</div>
+</div>
+<p>上面的图例中，我们增加了 peephole 到每个门上，但是许多论文会加入部分的 peephole 而非所有都加。</p>
+<p>另一个变体是通过使用 coupled 忘记和输入门。不同于之前是分开确定什么忘记和需要添加什么新的信息，这里是一同做出决定。我们仅仅会当我们将要输入在当前位置时忘记。我们仅仅输入新的值到那些我们已经忘记旧的信息的那些状态 。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-bd2f1feaea22630e.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="88725" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">coupled 忘记门和输入门</div>
+</div>
+<p>另一个改动较大的变体是 Gated Recurrent Unit (GRU)，这是由 <a href="http://arxiv.org/pdf/1406.1078v3.pdf" target="_blank" rel="nofollow">Cho, et al. (2014)</a> 提出。它将忘记门和输入门合成了一个单一的 更新门。同样还混合了细胞状态和隐藏状态，和其他一些改动。最终的模型比标准的 LSTM 模型要简单，也是非常流行的变体。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 564px;">
+<div class="image-container-fill" style="padding-bottom: 30.89%;"></div>
+<div class="image-view" data-width="1826" data-height="564"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-dd3d241fa44a71c0.png" data-original-width="1826" data-original-height="564" data-original-format="" data-original-filesize="112905" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">GRU</div>
+</div>
+<p>这里只是部分流行的 LSTM 变体。当然还有很多其他的，如<a href="http://arxiv.org/pdf/1508.03790v2.pdf" target="_blank" rel="nofollow">Yao, et al. (2015)</a> 提出的 Depth Gated RNN。还有用一些完全不同的观点来解决长期依赖的问题，如<a href="http://arxiv.org/pdf/1402.3511v1.pdf" target="_blank" rel="nofollow">Koutnik, et al. (2014)</a> 提出的 Clockwork RNN。</p>
+<p>要问哪个变体是最好的？其中的差异性真的重要吗？<a href="http://arxiv.org/pdf/1503.04069.pdf" target="_blank" rel="nofollow">Greff, et al. (2015)</a> 给出了流行变体的比较，结论是他们基本上是一样的。<a href="http://jmlr.org/proceedings/papers/v37/jozefowicz15.pdf" target="_blank" rel="nofollow">Jozefowicz, et al. (2015)</a> 则在超过 1 万种 RNN 架构上进行了测试，发现一些架构在某些任务上也取得了比 LSTM 更好的结果。</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 330px; max-height: 166px;">
+<div class="image-container-fill" style="padding-bottom: 50.3%;"></div>
+<div class="image-view" data-width="330" data-height="166"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-acd4c079d94803d8.png" data-original-width="330" data-original-height="166" data-original-format="" data-original-filesize="31838" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">Jozefowicz等人论文截图</div>
+</div>
+<h1>结论</h1>
+<p>刚开始，我提到通过 RNN 得到重要的结果。本质上所有这些都可以使用 LSTM 完成。对于大多数任务确实展示了更好的性能！</p>
+<p>由于 LSTM 一般是通过一系列的方程表示的，使得 LSTM 有一点令人费解。然而本文中一步一步地解释让这种困惑消除了不少。</p>
+<p>LSTM 是我们在 RNN 中获得的重要成功。很自然地，我们也会考虑：哪里会有更加重大的突破呢？在研究人员间普遍的观点是：“Yes! 下一步已经有了——那就是<strong>注意力</strong>！” 这个想法是让 RNN 的每一步都从更加大的信息集中挑选信息。例如，如果你使用 RNN 来产生一个图片的描述，可能会选择图片的一个部分，根据这部分信息来产生输出的词。实际上，<a href="http://arxiv.org/pdf/1502.03044v2.pdf" target="_blank" rel="nofollow">Xu, <em>et al.</em>(2015)</a>已经这么做了——如果你希望深入探索<strong>注意力</strong>可能这就是一个有趣的起点！还有一些使用注意力的相当振奋人心的研究成果，看起来有更多的东西亟待探索……<br>
+注意力也不是 RNN 研究领域中唯一的发展方向。例如，<a href="http://arxiv.org/pdf/1507.01526v1.pdf" target="_blank" rel="nofollow">Kalchbrenner, <em>et al.</em> (2015)</a> 提出的 Grid LSTM 看起来也是很有前途。使用生成模型的 RNN，诸如<a href="http://arxiv.org/pdf/1502.04623.pdf" target="_blank" rel="nofollow">Gregor, <em>et al.</em> (2015)</a> <a href="http://arxiv.org/pdf/1506.02216v3.pdf" target="_blank" rel="nofollow">Chung, <em>et al.</em> (2015)</a> 和 <a href="http://arxiv.org/pdf/1411.7610v3.pdf" target="_blank" rel="nofollow">Bayer &amp; Osendorfer (2015)</a> 提出的模型同样很有趣。在过去几年中，RNN 的研究已经相当的燃，而研究成果当然也会更加丰富！</p>
+<h1>致谢</h1>
+<p>I’m grateful to a number of people for helping me better understand LSTMs, commenting on the visualizations, and providing feedback on this post.<br>
+I’m very grateful to my colleagues at Google for their helpful feedback, especially <a href="http://research.google.com/pubs/OriolVinyals.html" target="_blank" rel="nofollow">Oriol Vinyals</a>,<a href="http://research.google.com/pubs/GregCorrado.html" target="_blank" rel="nofollow">Greg Corrado</a>, <a href="http://research.google.com/pubs/JonathonShlens.html" target="_blank" rel="nofollow">Jon Shlens</a>, <a href="http://people.cs.umass.edu/~luke/" target="_blank" rel="nofollow">Luke Vilnis</a>, and <a href="http://www.cs.toronto.edu/~ilya/" target="_blank" rel="nofollow">Ilya Sutskever</a>. I’m also thankful to many other friends and colleagues for taking the time to help me, including <a href="https://www.linkedin.com/pub/dario-amodei/4/493/393" target="_blank" rel="nofollow">Dario Amodei</a>, and <a href="http://cs.stanford.edu/~jsteinhardt/" target="_blank" rel="nofollow">Jacob Steinhardt</a>. I’m especially thankful to <a href="http://www.kyunghyuncho.me/" target="_blank" rel="nofollow">Kyunghyun Cho</a> for extremely thoughtful correspondence about my diagrams.<br>
+Before this post, I practiced explaining LSTMs during two seminar series I taught on neural networks. Thanks to everyone who participated in those for their patience with me, and for their feedback.</p>
+<blockquote>
+<p>人工智能时代每个人都将面临挑战，想要了解更多相关知识和实践经验，请关注公众号“UniversityAI”。</p>
+<br>
+<div class="image-package">
+<div class="image-container" style="max-width: 344px; max-height: 344px;">
+<div class="image-container-fill" style="padding-bottom: 100.0%;"></div>
+<div class="image-view" data-width="344" data-height="344"><img data-original-src="//upload-images.jianshu.io/upload_images/42741-eb690dcaf2f0285f.jpg" data-original-width="344" data-original-height="344" data-original-format="" data-original-filesize="8192" class="image-loading" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">UAI 人工智能</div>
+</div>
+</blockquote>
+
+          </div>
+        </div>
+    </div>
+
+    <!-- 如果是付费文章，未购买，则显示购买按钮 -->
+
+    <!-- 连载目录项 -->
+
+    <!-- 如果是付费文章 -->
+      <!-- 如果是付费连载，已购买，且作者允许赞赏，则显示付费信息和赞赏 -->
+        <div id="free-reward-panel" class="support-author"><p>您的支持可以鼓励作者写出更多的文章。</p> <div class="btn btn-pay">赞赏支持</div> <div class="supporter"><ul class="support-list"><li><a target="_blank" href="javascript:void(0)" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/wechat-771371d5741b0c32cd805caeb48ad6c0.png"></a></li><li><a target="_blank" href="https://www.jianshu.com/u/0172a03d04fd" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/8bf60fe6-a3b4-43eb-abc9-770375fc4830"></a></li><li><a target="_blank" href="javascript:void(0)" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/alipay-c192a7455bcf21ab8dd23d96679fc1c0.png"></a></li><li><a target="_blank" href="javascript:void(0)" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/alipay-c192a7455bcf21ab8dd23d96679fc1c0.png"></a></li><li><a target="_blank" href="https://www.jianshu.com/u/cab3d6d84d66" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/5-33d2da32c552b8be9a0548c7a4576607.jpg"></a></li><li><a target="_blank" href="https://www.jianshu.com/u/bb1b6acadae3" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/b50c9937-00dc-4967-b101-d5f6ed7c1d26"></a></li><li><a target="_blank" href="javascript:void(0)" class="avatar"><img src="./[译] 理解 LSTM 网络 - 简书_files/wechat-771371d5741b0c32cd805caeb48ad6c0.png"></a></li></ul> <span>等27人</span></div> <!----> <!----></div>
+
+      <div class="show-foot">
+        <a class="notebook" href="https://www.jianshu.com/nb/339523">
+          <i class="iconfont ic-search-notebook"></i>
+          <span>deep learning</span>
+</a>        <div class="copyright" data-toggle="tooltip" data-html="true" data-original-title="转载请联系作者获得授权，并标注“简书作者”。">
+          © 著作权归作者所有
+        </div>
+        <div class="modal-wrap" data-report-note="">
+          <a id="report-modal">举报文章</a>
+        </div>
+      </div>
+
+      <!-- 文章底部作者信息 -->
+        <div class="follow-detail">
+          <div class="info">
+            <a class="avatar" href="https://www.jianshu.com/u/696dc6c6f01c">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/0e4e103b9892" alt="96">
+</a>            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <a class="title" href="https://www.jianshu.com/u/696dc6c6f01c">朱小虎Neil</a>
+              <img class="badge-icon" data-toggle="tooltip" title="" src="./[译] 理解 LSTM 网络 - 简书_files/22d8d123-271c-4d80-9c59-6990844a9e37" alt="22d8d123 271c 4d80 9c59 6990844a9e37" data-original-title="简书会员">
+              <i class="iconfont ic-man"></i>
+          <p>写了 486587 字，被 3822 人关注，获得了 2120 个喜欢</p></div>
+            <div class="signature">我是朱小虎 Neil，毕业于南京大学计算机系，University AI 创始人 &amp; Chief Scientist，University AI Unconference 发起人/组织者，Google TensorFlow 框架推广者，百度深度学习布道师，致力于推进世界人工智能化进程。制定并实施 University AI 增长战略和目标，带领团队快速成长为人工智能领域一股专业力量。
+
+作为行业领导者，早在 2014 年创建了 TASA（中国最早的人工智能社团）, DL Center（深度学习知识中心全球价值网络），AI Growth（行业智库培训）等，为中国人工智能人才建设输送了大量的血液和养分。此外，还举办/参与过各类国际性的人工智能峰会和活动，产生了巨大的影响力，持续书写了近百万字的人工智能精品技术内容，翻译全球深度学习经典入门《神经网络与深度学习》，生产的内容被大量的专业垂直公众号和媒体转载与连载。曾经受邀为国内顶尖大学制定人工智能学习规划和教授人工智能前沿课程，均受学生和老师好评。
+
+与小伙伴翻译的 O'Reilly Learning TensorFlow 现已出版，在各大平台均有销售。
+
+大家对我们的事业感兴趣可以通过微信联系我或者加入meetup: 
+https://www.meetup.com/UniversityAI-AI-Unconference/
+
+如果大家想要进一步学习人工智能，也可以加入我们UAI的成长社，那里会有更加系统的进阶式课程：https://h5.xiaoeknow.com/content_page/eyJ0eXBlIjozLCJyZXNvdXJjZV90eXBlIjoiIiwicmVzb3VyY2VfaWQiOiIiLCJwcm9kdWN0X2lkIjoicF81OTkyNmU3ODE2NmUxXzZ1dEJRdWRlIiwiYXBwX2lkIjoiYXBwUXRWV0dsUFk1NjQ2In0</div>
+        </div>
+
+    <div class="meta-bottom">
+      <div data-v-6ddd02c6="" class="like"><div data-v-6ddd02c6="" class="btn like-group"><div data-v-6ddd02c6="" class="btn-like"><a data-v-6ddd02c6="">喜欢</a></div> <div data-v-6ddd02c6="" class="modal-wrap"><a data-v-6ddd02c6="">617</a></div></div> <!----></div>
+      <div class="share-group">
+        <a class="share-circle" data-action="weixin-share" data-toggle="tooltip" data-original-title="分享到微信">
+          <i class="iconfont ic-wechat"></i>
+        </a>
+        <a class="share-circle" data-action="weibo-share" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;&#39;, &#39;推荐 @not_god 的文章《[译] 理解 LSTM 网络》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));" data-original-title="分享到微博">
+          <i class="iconfont ic-weibo"></i>
+        </a>
+        <a class="share-circle" data-toggle="tooltip" id="longshare" target="_blank" data-original-title="" title="">
+            <div class="qrcode" id="qrcode">
+             <img src="./[译] 理解 LSTM 网络 - 简书_files/download-index-side-qrcode-cb13fc9106a478795f8d10f9f632fccf.png" alt="Download index side qrcode">
+             <p>下载app生成长微博图片</p>
+             </div>
+          <i class="iconfont ic-picture"></i>
+        </a>
+        <a class="share-circle more-share" tabindex="0" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="
+          &lt;ul class=&quot;share-list&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 朱小虎Neil 的文章《[译] 理解 LSTM 网络》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-zone&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 朱小虎Neil 的文章《[译] 理解 LSTM 网络》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-twitter&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-facebook&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-google&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;[译] 理解 LSTM 网络&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-douban&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        " data-original-title="" title="">更多分享</a>
+      </div>
+    </div>
+      <a id="web-note-ad-1" target="_blank" href="https://www.jianshu.com/apps/redirect?utm_source=note-bottom-click"><img src="./[译] 理解 LSTM 网络 - 简书_files/web-note-ad-1-c2e1746859dbf03abe49248893c9bea4.png" alt="Web note ad 1"></a>
+    <!--
+    <div id="note-comment-above-ad-container">
+      <span id="youdao-comment-ad" class="ad-badge">广告</span>
+    </div>
+    -->
+    <div id="vue_comment"></div>
+  </div>
+
+  <div class="side-tool"><ul><li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="回到顶部" style="display: none;"><a class="function-button"><i class="iconfont ic-backtop"></i></a></li> <!----> <!----> <!----> <li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="分享文章" id="share"><a tabindex="0" role="button" data-toggle="popover" data-placement="left" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="&lt;ul class=&#39;share-list&#39; style=&quot;width:220px&quot;&gt;
+                  &lt;li&gt;&lt;a class=&quot;weixin-share&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-weixin&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到微信&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;&#39;, &#39;推荐 @not_god 的文章《[译] 理解 LSTM 网络》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-weibo&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到微博&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 朱小虎Neil 的文章《[译] 理解 LSTM 网络》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-zone&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 朱小虎Neil 的文章《[译] 理解 LSTM 网络》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-twitter&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-facebook&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-google&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/9dc9f41f0b29?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;[译] 理解 LSTM 网络&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-douban&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;" data-original-title="" title="" class="function-button"><i class="iconfont ic-share"></i></a> <!----></li> <!----></ul></div>
+</div>
+<div class="note-bottom">
+  <div><div class="main"><div class="title">被以下专题收入，发现更多相似内容</div> <!----> <div class="include-collection"><!----> <a href="https://www.jianshu.com/c/ba90746aebc2?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/search.jpg"><div class="name">关于搜索，我们聊聊</div></a><a href="https://www.jianshu.com/c/3sT4qY?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/今日看点.png"><div class="name">今日看点</div></a><a href="https://www.jianshu.com/c/bb62bc7671d2?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/1436127886.jpg"><div class="name">iOS学习笔记</div></a><a href="https://www.jianshu.com/c/e77ce8b808e2?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/android.graphics.Bitmap_45920a90.jpeg"><div class="name">好东西</div></a><a href="https://www.jianshu.com/c/9150acdad06d?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/CollectionImage.jpg"><div class="name">码源</div></a><a href="https://www.jianshu.com/c/109142bca086?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/1440799142.jpg"><div class="name">已打赏</div></a><a href="https://www.jianshu.com/c/87fb8a4db6f7?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./[译] 理解 LSTM 网络 - 简书_files/1440799285.jpg"><div class="name">疯狂的学习</div></a> <a class="show-more">
+        展开更多
+        <i class="iconfont ic-show"></i></a></div></div> <!----> <!----></div>
+  <div data-vcomp="recommended-notes" data-note-id="1936343"></div>
+  <!-- 相关文章 -->
+  <div class="seo-recommended-notes">
+
+        <div class="note have-img">
+          <a class="cover" target="_blank" href="https://www.jianshu.com/p/fdd348db23fe?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <img src="./[译] 理解 LSTM 网络 - 简书_files/11550176-ca6fbd5278168c6b.png" alt="240">
+</a>          <a class="title" target="_blank" href="https://www.jianshu.com/p/fdd348db23fe?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">深度学习综述</a>
+          <p class="description">The History Began from AlexNet: A Comprehensive Survey on Deep Learning Approaches 作者：Md Zahangir Alom, Tarek M. Taha, Christopher Yakopc...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/ec6093f99ec0?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/9dee9a76-8633-4e17-90a2-5f938c739358.jpg" alt="48">
+            </div>
+            <span class="name">Limityoung</span>
+</a>        </div>
+
+        <div class="note have-img">
+          <a class="cover" target="_blank" href="https://www.jianshu.com/p/f054f8daec68?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <img src="./[译] 理解 LSTM 网络 - 简书_files/6011252-1fe573b6313bd7f6" alt="240">
+</a>          <a class="title" target="_blank" href="https://www.jianshu.com/p/f054f8daec68?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">多图 | 从神经元到CNN、RNN、GAN…神经网络看本文绝对够了</a>
+          <p class="description">作者 | FJODOR VAN VEEN 编译 | AI100（ID：rgznai100） 在深度学习十分火热的今天，不时会涌现出各种新型的人工神经网络，想要实时了解这些新型神经网络的架构还真是不容易。光是知道各式各样的神经网络模型缩写（如：DCIGN、BiLSTM、DCG...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/da69420ec62d?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/7a0a40dc-6ebb-43e2-8cc3-6e4273d0c100.png" alt="48">
+            </div>
+            <span class="name">AI科技大本营</span>
+</a>        </div>
+
+        <div class="note have-img">
+          <a class="cover" target="_blank" href="https://www.jianshu.com/p/e834a5e22028?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <img src="./[译] 理解 LSTM 网络 - 简书_files/5557575-5f663c620b6c0301.png" alt="240">
+</a>          <a class="title" target="_blank" href="https://www.jianshu.com/p/e834a5e22028?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">深度学习笔记 - 理解LSTM网络</a>
+          <p class="description">转载：《理解 LSTM 网络 | 我爱计算机》 Recurrent Neural Networks 人类对事物的理解并不是从一片空白开始的，往往都是基于对先前所见所闻的理解来对看到的进行推断；我们的思想有持久性，对市场历史的理解对将来的走势也具有一定的参考和借鉴。传统的神经...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/a068f7c95c7b?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/0dd400c8-5000-44e9-9e91-c99d633da72f" alt="48">
+            </div>
+            <span class="name">Kimichen7764</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/f0bcd862eef1?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">译 理解RNN和LSTM网络</a>
+          <p class="description">循环神经网络(RNN) 人们的每次思考并不都是从零开始的。比如说你在阅读这篇文章时，你基于对前面的文字的理解来理解你目前阅读到的文字，而不是每读到一个文字时，都抛弃掉前面的思考，从头开始。你的记忆是有持久性的。 传统的神经网络并不能如此，这似乎是一个主要的缺点。例如，假设你...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/7ebb78d8c38a?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/df9d23fb-2b85-4f23-99ca-e722f81ad7cd.jpg" alt="48">
+            </div>
+            <span class="name">云时之间</span>
+</a>        </div>
+
+        <div class="note have-img">
+          <a class="cover" target="_blank" href="https://www.jianshu.com/p/aeb6be0b8d40?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <img src="./[译] 理解 LSTM 网络 - 简书_files/1552893-dc9acfd9f4478460.jpg" alt="240">
+</a>          <a class="title" target="_blank" href="https://www.jianshu.com/p/aeb6be0b8d40?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">神经网络浅讲：从神经元到深度学习</a>
+          <p class="description">原文地址：http://www.cnblogs.com/subconscious/p/5058741.html 神经网络是一门重要的机器学习技术。它是目前最为火热的研究方向--深度学习的基础。学习神经网络不仅可以让你掌握一门强大的机器学习方法，同时也可以更好地帮助你理解深度...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/185a3c553fc6?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/8bd1f15a-ea45-49f3-bc0f-c36caf4c6b36.jpg" alt="48">
+            </div>
+            <span class="name">Albert陈凯</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/3dd35cf3b921?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">css样式（一部分） - 草稿</a>
+          <p class="description">width：宽 height: 高 margin: 外边距 padding; 内边距 float : left 左浮动 float : right 右浮动 background - color： 背景颜色 color : 字体颜色 overflow: hidden 消除浮动...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/56829b005d98?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/15-a7ac401939dd4df837e3bbf82abaa2a8.jpg" alt="48">
+            </div>
+            <span class="name">yy小</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/63a62b389a6d?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">寻找遗失的理想</a>
+          <p class="description">  理想是美好的，失去理想的日子，是空虚的，是混沌的，是荒诞的，是可怕的！   我常常在深夜里无法入睡，是因为惦记着什么。因为，你失去了理想，失去了生活的追求。迷茫，害怕，恐惧，失落，让你无法心安理得地入睡。告诉自己，迷失了自己，遗失了理想，已经很久了。要重新找回自己，找回...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/d2c123027919?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/14-0651acff782e7a18653d7530d6b27661.jpg" alt="48">
+            </div>
+            <span class="name">多情雨</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/e5430950c40f?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">2018-03-22  ##阴##</a>
+          <p class="description">JS继承的实现方式 1、原型链继承 核心：将父类的实例作为子类的原型 function Cat(){ } Cat.prototype = new Animal(); Cat.prototype.name = 'cat'; //Test Code var cat = new ...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/823d0a3383c8?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/2f025bbf-a29e-481f-ab3e-a9db807348ed.png" alt="48">
+            </div>
+            <span class="name">栀丿東</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/f0cde4d2b5a2?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">印象家乡修路的日子</a>
+          <p class="description">印象家乡修路的日子 文/蓝凤蝶 家乡的路今年又重修了一次，这次不但平整了许多，也宽阔了些许。 已记不起这是第几次修路了，印象中，每次修路，交通都会堵。为了尽快到达目的地的人们就会从车里钻出来，前去查看情况，等不及的则会绕道而行。好在条条大道通罗马，七拐八绕虽说多走了几里路，...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/5a9b170099a2?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./[译] 理解 LSTM 网络 - 简书_files/784d1b661e83" alt="48">
+            </div>
+            <span class="name">蓝凤蝶</span>
+</a>        </div>
+  </div>
+</div>
+
+    <script type="application/json" data-name="page-data">{"user_signed_in":false,"locale":"zh-CN","os":"windows","read_mode":"day","read_font":"font2","note_show":{"is_author":false,"is_following_author":false,"is_liked_note":false,"follow_state":0,"uuid":"3ad0ca40-920a-41a3-a3b8-bcdd02a97712"},"note":{"id":1936343,"slug":"9dc9f41f0b29","user_id":42741,"notebook_id":339523,"commentable":true,"likes_count":617,"views_count":362212,"public_wordage":3985,"comments_count":85,"featured_comments_count":0,"total_rewards_count":27,"is_author":false,"paid_type":"free","paid":false,"paid_content_accessible":false,"author":{"nickname":"朱小虎Neil","total_wordage":486587,"followers_count":3822,"total_likes_count":2120}}}</script>
+    
+    <script src="./[译] 理解 LSTM 网络 - 简书_files/babel-polyfill-d171e3dec4b6c15634dd.js.下载" crossorigin="anonymous"></script>
+    <script src="./[译] 理解 LSTM 网络 - 简书_files/web-base-b9608e2ea37894929454.js.下载" crossorigin="anonymous"></script>
+<script src="./[译] 理解 LSTM 网络 - 简书_files/web-e452f2bf4d92309dc7c1.js.下载" crossorigin="anonymous"></script>
+    
+    <script src="./[译] 理解 LSTM 网络 - 简书_files/entry-cdb8bd3264abc721fa90.js.下载" crossorigin="anonymous"></script>
+    <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+  
+
+<!----><!----><iframe id="cros_iframe" src="./[译] 理解 LSTM 网络 - 简书_files/cross-store-server.html" style="width: 1px; height: 1px; border: 0px; position: absolute; left: -9999px; top: -9999px;"></iframe></body></html>
