@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://www.araya.org/archives/1183 -->
+<html lang="en-US" prefix="og: http://ogp.me/ns#" class=" csstransforms csstransforms3d csstransitions"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<link rel="pingback" href="https://www.araya.org/wp/xmlrpc.php">
+
+
+<title>Stability of Generative Adversarial Networks | ARAYA Inc.</title>
+
+<!-- All in One SEO Pack 2.9.1 by Michael Torbert of Semper Fi Web Designob_start_detected [-1,-1] -->
+<meta name="description" content="Generative Adversarial Networks (and the related DCGAN) are a relatively new type of neural network architecture which pits two sub-networks against each-other">
+
+<link rel="canonical" href="https://www.araya.org/archives/1183">
+<meta property="og:title" content="Stability of Generative Adversarial Networks | ARAYA Inc.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.araya.org/archives/1183">
+<meta property="og:image" content="https://www.araya.org/wp/wp-content/uploads/2016/10/gaussian_vs_gaussian.png">
+<meta property="og:site_name" content="Araya Brain Imaging">
+<meta property="og:description" content="Generative Adversarial Networks (and the related DCGAN) are a relatively new type of neural network architecture which pits two sub-networks against each-other in order to learn very realistic generative models of high-dimensional data (mostly used for image synthesis, though extensions to sound, text, and other media have been constructed). When one generates something like an image, the pixels themselves are not individually so responsible for the realism of the image as the correlations and relatively arrangements of pixels, and so hand-crafted loss functions to measure reconstruction accuracy have a tendency towards blurriness or other perceptual artefacts. But when you allow two networks to compete with each-other: one to make a plausible fake, the other to distinguish forgeries from reality, then the networks (in principle) eliminate the noticeable differences from reality one-by-one. A blurry image can be detected, so it eliminates blurriness, and so on. The results of this">
+<meta property="article:published_time" content="2016-10-05T05:30:25Z">
+<meta property="article:modified_time" content="2016-10-08T12:57:48Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Stability of Generative Adversarial Networks | ARAYA Inc.">
+<meta name="twitter:description" content="Generative Adversarial Networks (and the related DCGAN) are a relatively new type of neural network architecture which pits two sub-networks against each-other in order to learn very realistic generative models of high-dimensional data (mostly used for image synthesis, though extensions to sound, text, and other media have been constructed). When one generates something like an image, the pixels themselves are not individually so responsible for the realism of the image as the correlations and relatively arrangements of pixels, and so hand-crafted loss functions to measure reconstruction accuracy have a tendency towards blurriness or other perceptual artefacts. But when you allow two networks to compete with each-other: one to make a plausible fake, the other to distinguish forgeries from reality, then the networks (in principle) eliminate the noticeable differences from reality one-by-one. A blurry image can be detected, so it eliminates blurriness, and so on. The results of this">
+<meta name="twitter:image" content="https://www.araya.org/wp/wp-content/uploads/2016/10/gaussian_vs_gaussian.png">
+<meta itemprop="image" content="https://www.araya.org/wp/wp-content/uploads/2016/10/gaussian_vs_gaussian.png">
+			<script type="text/javascript">
+				window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+				ga('create', 'UA-76667315-2', 'auto');
+				// Plugins
+				
+				ga('send', 'pageview');
+			</script>
+			<script async="" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/analytics.js.下载"></script>
+			<!-- /all in one seo pack -->
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="ARAYA Inc. » Feed" href="https://www.araya.org/en/feed">
+<link rel="alternate" type="application/rss+xml" title="ARAYA Inc. » Comments Feed" href="https://www.araya.org/en/comments/feed">
+<link rel="alternate" type="application/rss+xml" title="ARAYA Inc. » Stability of Generative Adversarial Networks Comments Feed" href="https://www.araya.org/archives/1183/feed">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.araya.org\/wp\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.8"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/wp-emoji-release.min.js.下载" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="pt-cv-public-style-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/cv.css" type="text/css" media="all">
+<link rel="stylesheet" id="pt-cv-public-pro-style-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/cvpro.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/bootstrap.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="aps-animate-css-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/animate.css" type="text/css" media="all">
+<link rel="stylesheet" id="aps-frontend-css-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/frontend.css" type="text/css" media="all">
+<link rel="stylesheet" id="bbp-default-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/bbpress.css" type="text/css" media="screen">
+<link rel="stylesheet" id="contact-form-7-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="ts_fab_css-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/ts-fab.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="team-style-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="single-team-member-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/single-team-member.css" type="text/css" media="all">
+<link rel="stylesheet" id="team-style.skins-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/style.skins.css" type="text/css" media="all">
+<link rel="stylesheet" id="team-style.layout-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/style.layout.css" type="text/css" media="all">
+<link rel="stylesheet" id="ligature-symbols-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/lsf.css" type="text/css" media="all">
+<link rel="stylesheet" id="gianism-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gianism-style.css" type="text/css" media="all">
+<link rel="stylesheet" id="parent-style-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/style(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="flexslider-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/flexslider.css" type="text/css" media="all">
+<link rel="stylesheet" id="astrid-style-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/style(2).css" type="text/css" media="all">
+<style id="astrid-style-inline-css" type="text/css">
+.site-header {position: fixed;}
+.woocommerce .woocommerce-message:before,.woocommerce #payment #place_order,.woocommerce-page #payment #place_order,.woocommerce .cart .button, .woocommerce .cart input.button,.woocommerce-cart .wc-proceed-to-checkout a.checkout-button,.woocommerce #review_form #respond .form-submit input,.woocommerce a.button,.woocommerce div.product form.cart .button,.woocommerce .star-rating,.page-header .page-title .fa,.site-footer a:hover,.footer-info a:hover,.footer-widgets a:hover,.testimonial-title a:hover,.employee-title a:hover,.fact .fa,.service-title a:hover,.widget-area .widget a:hover,.entry-meta a:hover,.entry-footer a:hover,.entry-title a:hover,.comment-navigation a:hover,.posts-navigation a:hover,.post-navigation a:hover,.main-navigation a:hover,.main-navigation li.focus > a,a,a:hover,button,.button,input[type="button"],input[type="reset"],input[type="submit"] { color:#ffa01c}
+.social-menu-widget a,.woocommerce span.onsale,.woocommerce #payment #place_order:hover, .woocommerce-page #payment #place_order:hover,.woocommerce .cart .button:hover, .woocommerce .cart input.button:hover,.woocommerce-cart .wc-proceed-to-checkout a.checkout-button:hover,.woocommerce #review_form #respond .form-submit input:hover,.woocommerce div.product form.cart .button:hover,.woocommerce a.button:hover,.preloader-inner ul li,.progress-animate,button:hover,.button:hover,input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover { background-color:#ffa01c}
+.woocommerce .woocommerce-message,.woocommerce #payment #place_order,.woocommerce-page #payment #place_order,.woocommerce .cart .button, .woocommerce .cart input.button,.woocommerce-cart .wc-proceed-to-checkout a.checkout-button,.woocommerce #review_form #respond .form-submit input,.woocommerce a.button,.woocommerce div.product form.cart .button,.main-navigation li a::after,.main-navigation li a::before,button,.button,input[type="button"],input[type="reset"],input[type="submit"] { border-color:#ffa01c}
+.site-title a,.site-title a:hover { color:#ffffff}
+.site-description { color:#BDBDBD}
+.site-header,.site-header.header-scrolled { background-color:rgba(255,255,255,0.9)}
+@media only screen and (max-width: 1024px) { .site-header.has-header,.site-header.has-video,.site-header.has-single,.site-header.has-shortcode { background-color:rgba(255,255,255,0.9)} }
+body, .widget-area .widget, .widget-area .widget a { color:#494949}
+.footer-widgets, .site-footer, .footer-info { background-color:#cccccc}
+body {font-family: 'Open Sans', sans-serif;}
+h1, h2, h3, h4, h5, h6, .fact .fact-number, .fact .fact-name, .site-title {font-family: 'Open Sans', sans-serif;}
+.site-title { font-size:36px; }
+.site-description { font-size:14px; }
+h1 { font-size:36px; }
+h2 { font-size:26px; }
+h3 { font-size:24px; }
+h4 { font-size:10px; }
+h5 { font-size:14px; }
+h6 { font-size:12px; }
+body { font-size:14px; }
+
+</style>
+<link rel="stylesheet" id="astrid-body-fonts-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/css" type="text/css" media="all">
+<link rel="stylesheet" id="astrid-headings-fonts-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/css" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/font-awesome.min.css" type="text/css" media="all">
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/jquery.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/jquery-migrate.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/frontend.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/ts-fab.min.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var team_ajax = {"team_ajaxurl":"https:\/\/www.araya.org\/wp\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/scripts.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/masonry.pkgd.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/jquery.easing.min.js.下载"></script>
+<link rel="https://api.w.org/" href="https://www.araya.org/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.araya.org/wp/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.araya.org/wp/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Global Brain has invested in ARAYA Brain Imaging 9/1/2016" href="https://www.araya.org/archives/1147">
+<link rel="next" title="Papers published 10/11/2016" href="https://www.araya.org/archives/1234">
+<meta name="generator" content="WordPress 4.9.8">
+<link rel="shortlink" href="https://www.araya.org/?p=1183">
+<link rel="alternate" type="application/json+oembed" href="https://www.araya.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.araya.org%2Farchives%2F1183">
+<link rel="alternate" type="text/xml+oembed" href="https://www.araya.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.araya.org%2Farchives%2F1183&amp;format=xml">
+<!-- Favicon Rotator -->
+<link rel="shortcut icon" href="https://www.araya.org/wp/wp-content/uploads/2015/11/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://www.araya.org/wp/wp-content/uploads/2015/11/touchIcon.png">
+<!-- End Favicon Rotator -->
+<style>.simplemap img{max-width:none !important;padding:0 !important;margin:0 !important;}.staticmap,.staticmap img{max-width:100% !important;height:auto !important;}.simplemap .simplemap-content{display:none;}</style>
+<script>var google_map_api_key = "AIzaSyBV_aS7-Uy0d9Nz7x8UvULudRdDmxJ-Xio";</script><style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through;
+}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+<link rel="alternate" href="https://www.araya.org/archives/1216" hreflang="ja">
+<link rel="alternate" href="https://www.araya.org/archives/1183" hreflang="en">
+		<style type="text/css" id="wp-custom-css">
+			/*
+You can add your own CSS here.
+
+Click the help icon above to learn more.
+*/
+
+button, .button, input[type="button"], input[type="reset"], input[type="submit"] {
+    font-size: 12px;
+    padding: 8px 20px;
+}
+
+.entry-title {
+    font-size: 18px;
+	line-height: 28px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 24px;
+	  line-height: 38px;
+}
+
+h2 {
+    font-size: 24px;
+	  line-height: 38px;
+}
+
+h3 {
+	  font-size: 20px;
+    line-height: 30px;
+}
+
+h4 {
+	  font-size: 16px;
+    line-height: 28px;
+}
+
+.site-content {
+    margin-top: 30px;
+}
+
+.main-navigation a {
+    color: #000;
+}
+
+.site-header {
+    border-bottom: 1px solid rgba(200,200,200,0.4);
+}
+
+.site-header.header-scrolled {
+    border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+.site-header.has-header, .site-header.has-video {
+    background-color: #ffffff;
+}
+
+.main-navigation li {
+    padding: 10px 12px;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.custom-logo-link img {
+    margin-top: 10px;
+	  margin-bottom: 10px;
+}
+
+.btn-menu {
+    color: #ccc;
+		margin-bottom: 10px;
+}
+
+#mainnav-mobi a {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.btn-submenu {
+    margin-left: 0px;
+}
+
+.btn-submenu:before {
+	content: "\f107";
+	color: #000;
+	font-size: 16px;
+  font-weight: bold;
+	padding-left: 0px;
+}
+
+.btn-submenu.active:before {
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+		content: "\f106";
+    padding-left: 0px;
+}
+
+.main-navigation ul ul {
+	background-color: #eee;
+}
+
+#mainnav-mobi {
+    background-color: #e0e0e0;
+}
+
+#mainnav-mobi li {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+#mainnav-mobi ul ul {
+	background-color: rgba(190, 190, 190, 1);
+}
+
+.flex-control-paging li a {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+.hentry {
+    padding-top: 20px;
+    padding-left: 60;
+    padding-right: 60;
+    padding-bottom: 60;
+}
+
+.header-clone[style] {
+  height: 40px !important;
+}
+
+.service-items {
+	font-size: 1.3em;
+	color: #555;
+	}
+
+.bnone {
+    border: none;
+}
+
+		</style>
+	<style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></head>
+
+<body data-rsssl="1" class="post-template-default single single-post postid-1183 single-format-standard custom-background wp-custom-logo fullwidth-single group-blog">
+
+<div class="preloader preloader-hidden" style="display: none;">
+<div class="preloader-inner">
+	<ul><li></li><li></li><li></li><li></li><li></li><li></li></ul>
+</div>
+</div>
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="https://www.araya.org/archives/1183#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+		<div class="container">
+
+			<div class="site-branding col-md-4 col-sm-6 col-xs-12">
+				<a href="https://www.araya.org/top-page" class="custom-logo-link" rel="home" itemprop="url"><img width="400" height="86" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/heder_logo.png" class="custom-logo" alt="ARAYA Inc." itemprop="logo" srcset="https://www.araya.org/wp/wp-content/uploads/2018/02/heder_logo.png 400w, https://www.araya.org/wp/wp-content/uploads/2018/02/heder_logo-300x65.png 300w, https://www.araya.org/wp/wp-content/uploads/2018/02/heder_logo-360x77.png 360w, https://www.araya.org/wp/wp-content/uploads/2018/02/heder_logo-250x54.png 250w, https://www.araya.org/wp/wp-content/uploads/2018/02/heder_logo-100x22.png 100w" sizes="(max-width: 400px) 100vw, 400px"></a>			</div>
+			<div class="btn-menu col-md-8 col-sm-6 col-xs-12"><i class="fa fa-navicon"></i></div>
+			<nav id="mainnav" class="main-navigation col-md-8 col-sm-6 col-xs-12" role="navigation">
+				<div class="menu-newmenu_en-container"><ul id="primary-menu" class="menu"><li id="menu-item-2762" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2762"><a href="https://www.araya.org/en/">Top</a></li>
+<li id="menu-item-4238" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4238"><a href="https://www.araya.org/service-en">Service</a></li>
+<li id="menu-item-2758" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2758"><a href="https://www.araya.org/publications-en">Research</a></li>
+<li id="menu-item-2756" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2756"><a href="https://www.araya.org/membersen">Members</a></li>
+<li id="menu-item-2757" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2757"><a href="https://www.araya.org/about-usen">About Us</a></li>
+<li id="menu-item-2755-ja" class="lang-item lang-item-4 lang-item-ja lang-item-first menu-item menu-item-type-custom menu-item-object-custom menu-item-2755-ja"><a href="https://www.araya.org/archives/1216" hreflang="ja" lang="ja">日本語</a></li>
+</ul></div>			</nav><!-- #site-navigation -->
+		</div>
+
+
+
+	</header><!-- #masthead -->
+
+
+			<div class="header-clone" style="height: 53px;"></div>
+		
+
+				
+	
+	<div id="content" class="site-content">
+		<div class="container">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+<article id="post-1183" class="post-1183 post type-post status-publish format-standard has-post-thumbnail hentry category-blog-en clearfix">
+
+
+	<header class="entry-header">
+		<h1 class="entry-title">Stability of Generative Adversarial Networks</h1>	</header><!-- .entry-header -->	
+
+					<div class="single-thumb">
+			<a href="https://www.araya.org/archives/1183" title="Stability of Generative Adversarial Networks"><img width="480" height="479" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian.png" class="attachment-astrid-large-thumb size-astrid-large-thumb wp-post-image" alt=""></a>
+		</div>	
+			
+		<div class="entry-content">
+		<p><a href="https://arxiv.org/abs/1406.2661">Generative Adversarial Networks</a>&nbsp;(and the related <a href="https://arxiv.org/abs/1511.06434">DCGAN</a>) are a relatively new type of neural network architecture which pits two sub-networks against each-other in order to learn very realistic generative models of high-dimensional data (mostly used for <a href="https://arxiv.org/abs/1605.05396">image synthesis</a>, though extensions to <a href="https://github.com/jacotar/sound-GAN">sound</a>, <a href="https://arxiv.org/abs/1609.05473">text</a>, and other media have been constructed). When one generates something like an image, the pixels themselves are not individually so responsible for the realism of the image as the correlations and relatively arrangements of pixels, and so hand-crafted loss functions to measure reconstruction accuracy have a tendency towards blurriness or other perceptual artefacts. But when you allow two networks to compete with each-other: one to make a plausible fake, the other to distinguish forgeries from reality, then the networks (in principle) eliminate the noticeable differences from reality one-by-one. A blurry image can be detected, so it eliminates blurriness, and so on. The results of this approach are visually quite impressive, but because the two sub-networks are trained against different, opposed target functions, there is a wealth of new instabilities and problems that can crop up compared to training traditional neural networks which have a single unified loss function.</p>
+<p>In this post, I’m going to look at extremely simple adversarial networks – ones with only one parameter for each sub-network – so that we can exhaustively explore the parameter space, and hopefully get some intuition for how these adversarial networks behave when trained.</p>
+<hr>
+<h3>Landscapes and Vector Fields</h3>
+<p>When training&nbsp;the usual neural network architecture, there is some kind of objective which the network is tuned to optimize (the loss function), and training proceeds by performing gradient descent on the parameters of the network to try to increase or decrease this function. Since it’s just a scalar function, it&nbsp;defines a kind of landscape [latex]F(x,y,…)[/latex]&nbsp;– a given set of network parameters maps to a certain value of the function – potentially expensive to compute, but very well-defined. If that function changes in the right direction, you know that training is proceeding correctly, and if it goes in the wrong direction you know that you should stop, reduce the learning rate, etc. If you make the learning rate small enough, be careful enough, you have a pretty strong guarantee that you can make it so that the loss function is always going in the right direction up until the point where it finds some local optimum. You can ultimately be sure that the network can’t possibly get any worse at the task than it already is (at least, on the training data), so the worst thing that can happen is for it to get stuck somewhere.&nbsp;Even in that case, if you have two networks trained completely separately from different initial conditions and so on, you can always compare them and see which is better just by comparing their loss functions.</p>
+<p><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gan.png"><img class="aligncenter wp-image-1198" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gan.png" alt="gan" width="700" height="218"></a></p>
+<p>For adversarial networks, the structure is a bit different. The first sub-network, the Generator, takes a random variable and outputs what it thinks an example from the data set that can fool the other network looks like. The second network, the Discriminator, takes as inputs both real examples and fake examples, and is tasked to classify them. So the Discriminator has a loss function [latex]F_D(W_D, W_G, \hat{y})[/latex], but the Generator has a different loss function [latex]F_G(W_D, W_G)[/latex]. These loss functions are chosen to guarantee&nbsp;the theoretical result that if the generator can output samples from an arbitrary probability distribution [latex]g(x)[/latex] and the discriminator can assign an arbitrary probability to a sample [latex]d(x)[/latex], then for data distributed according to a true distribution [latex]p(x)[/latex] there should be a fixed point when [latex]g(x)=d(x)=p(x)[/latex] – that is, the correct answer to the problem is a point at which neither the discriminator nor generator can improve their individual loss functions.</p>
+<p>However, this is a much weaker guarantee than you have in gradient descent on a landscape – you don’t know whether this fixed point is stable, or if one even exists if the generator and discriminator are finite networks. When training both networks in parallel, there isn’t guaranteed to be some objective way to measure the improvement of the network as a whole – you can’t read out improvements or convergence by examining a training curve. As this is a generalized dynamical system, you can get limit cycles and strange attractors, meaning that training can go in circles or become chaotic.</p>
+<p style="text-align: center"><strong>That said, GANs work shockingly well.</strong></p>
+<p>Even if they can be hard to tune and to get working, there are <a href="https://arxiv.org/abs/1606.03657">many</a> <a href="https://arxiv.org/abs/1512.09300">papers</a> and open-source <a href="https://github.com/Newmu/dcgan_code">implementations</a> showing <a href="https://github.com/mattya/chainer-DCGAN">impressive</a>, stable results from GANs. When GANs work, they learn <em>fast</em> – producing realistic images even after a single epoch of training.&nbsp;So even if these kinds of troublesome behaviors are possible, they are either not guaranteed to be a problem or often they simply don’t matter when it comes to GANs producing reasonable outputs. At the same time, tuning GANs is currently somewhat of an art form, and requires significant human intervention and inspection of the results, making it hard to extend to tasks where a human cannot readily judge gradations in quality of different sets of outputs.There was a <a href="https://arxiv.org/abs/1609.03126">recent paper</a> which tried&nbsp;to impose a scalar landscape onto the GAN training, essentially treating the adversarial part as a perturbation on top of a more traditional, well-defined training problem. So even if GANs are working, there’s reason to try to figure out what’s going on, objectively evaluate their performance, and move back towards scalar optimization if possible or beneficial.</p>
+<hr>
+<h3>The Really Simple GAN</h3>
+<p>If I want to plot how a GAN would train in a way that we can evaluate by eye, it really needs to be in 2D (or 3D at most). So that leaves me with two trainable parameters, across two sub-networks. This is going to be a very simple GAN.</p>
+<p>Given how few variables I have, lets try to make a GAN which takes random numbers from a 1D Gaussian as input, and generates samples from a 1D Gaussian with the same standard deviation but potentially with a shifted mean as output. And actually, lets make it a trivial problem – the mean is the same too, so the best generator should just pass its input through without modification. Keeping it as simple as possible, my generator ‘network’ is going to be:</p>
+<p style="text-align: center">[latex]g(z) = W_g z+b_g[/latex]
+</p><p>where [latex]z[/latex] is the latent variable input, a unit-standard deviation zero-mean Gaussian. So this network just scales its input by [latex]W_g[/latex], applies a constant shift [latex]b_g[/latex], and has no nonlinearity. But this is going to be too many parameters to visualize, so lets just restrict [latex]W_g=1[/latex] for now and let [latex]b_g[/latex] vary.</p>
+<p>My discriminator ‘network’ is going to be:</p>
+<p style="text-align: center">[latex]d(x) = \sigma(W_d x + b_d)[/latex]
+</p><p>where [latex]\sigma(…)[/latex] is a sigmoid function and [latex]x[/latex] is a sample either from the generator, or from data (which is a unit Gaussian with zero mean). Again, too many parameters to visualize, so lets just fix [latex]W_d = 1[/latex] for now.</p>
+<p>The loss function for the discriminator is the log loss:</p>
+<p style="text-align: center">[latex]L_d = -\hat{y}\log(d(x)) – (1-\hat{y})\log(1-d(x))[/latex],</p>
+<p>where [latex]\hat{y} = 1[/latex] if x is a real sample, and [latex]\hat{y} = 0[/latex] if x is a fake. The loss function for the generator is just the negative of the loss for the discriminator (it wants to output a sample that fools the discriminator), but for the generator all examples are going to be fake, so this is just [latex]L_g = \log(1-d(g(z)))[/latex].</p>
+<p>Given this set of networks, we can calculate the gradient vector, if we were just training these two networks together via gradient descent against their respective loss functions [latex]-(\frac{\partial L_g}{\partial b_g}, \frac{\partial L_d}{\partial b_d})[/latex], and plot that as a function of [latex]b_g[/latex] and [latex]b_d[/latex]. The results are a bit worrying: there doesn’t appear to be any kind of finite fixed point, so this training will never converge. Instead, it looks as though the generator parameter [latex]b_g[/latex] will become positive infinity, and the discriminator parameter [latex]b_d[/latex] goes to negative infinity. What gives?</p>
+<figure id="attachment_1184" style="width: 300px" class="wp-caption alignright"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_sigmoid.png"><img class="wp-image-1184" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_sigmoid.png" alt="Gradient Descent on b_d and b_g" width="300" height="299"></a><figcaption class="wp-caption-text">Gradient descent flow in the [latex]b_d[/latex] vs [latex]b_g[/latex] space for the sigmoid classifier.</figcaption></figure>It turns out that this discriminator has a critical blind spot. It’s using a sigmoid as the output nonlinearity, which is pretty normal for making a network with a probabilistic output on a single binary question. But in this case, the discriminator is too weak to properly classify both [latex]x \rightarrow \infty[/latex] and [latex]x \rightarrow -\infty[/latex] as unrealistic samples. It has to be one or the other. If the discriminator decides that [latex]x=-\infty[/latex] is unrealistic, then [latex]x=+\infty[/latex] has to be the ‘most realistic sample’, and vice versa. Even worse, in this case because [latex]W_d[/latex] is fixed, the discriminator can never declare a larger value of x less realistic than a smaller one!<p></p>
+<p>So in order to always win, the generator just has to hide out at [latex]+\infty[/latex], and there’s nothing the discriminator can do about it. Because the discriminator lacks the capacity to properly model the probability distribution that the network is being asked to generate, the result is a fundamental instability of the training process in this case – no matter how slow you go or how careful you are, you won’t converge to the data distribution.</p>
+<p>Fortunately, this kind of problem may only exist in these artificially tiny networks. It’s known that if you give a neural network enough nodes, they can act as&nbsp;universal function approximators. That is to say, if a given network can’t model a particular function well enough, you can in principle always just make the network bigger. So presumably this kind of problem is one that goes away when you’re working with large enough networks. But, correspondingly, it suggests that a discriminator network which is too small may actually be <strong>unstable</strong> for a GAN, whereas it would simply underfit in a standard neural network)</p>
+<figure id="attachment_1185" style="width: 300px" class="wp-caption alignleft"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian(1).png"><img class="wp-image-1185" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian(1).png" alt="gaussian_vs_gaussian" width="300" height="299"></a><figcaption class="wp-caption-text">Gradient descent flows for a Gaussian classifier, now with stable fixed point.</figcaption></figure>
+<p>For our tiny network, the asymptotic behavior of the sigmoid function is the source of the problem, but we can replace the sigmoid nonlinearity with a Gaussian. So that way we know the discriminator can exactly, accurately model the true distribution: [latex]d(x) = \exp(-(W_d x + b_d)^2)[/latex]. This appears to work much better. There’s now a clear stable fixed point at (0,0), though the approach to the fixed point is oscillatory. It turns out that even if we force [latex]W_d[/latex] to the wrong value, e.g. [latex]W_d = 2[/latex] or [latex]W_d = 0.5[/latex], we still get the stable fixed point in the middle – so not all errors or limitations of the discriminator lead to a fundamental training instability.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<figure id="attachment_1187" style="width: 300px" class="wp-caption alignright"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/generator_entropy_collapse_in_WvsW.png"><img class="wp-image-1187" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/generator_entropy_collapse_in_WvsW.png" alt="generator_entropy_collapse_in_wvsw" width="300" height="299"></a><figcaption class="wp-caption-text">Gradient descent flows for the weight matrices.</figcaption></figure>
+<p>&nbsp;</p>
+<p>It appears that the biases are doing the right thing now – this network correctly discerns the mean of the data Gaussian, albeit in a somewhat round-about way. So what if we do the same thing with fixed biases ([latex]b_d = b_g = 0[/latex]), but now look at training the weights [latex]W_g[/latex] and [latex]W_d[/latex]? In principle, this should have a fixed point at (1,1) and at (-1,-1) (because the Gaussian with zero mean is symmetric under reflection). What actually happens?</p>
+<p>&nbsp;</p>
+<p>It’s a bit hard to see from the plot, but something is going wrong. The horizontal axis ([latex]W_d[/latex]) seems to be doing alright – there are fixed points close to [latex]\pm 1[/latex], so that’s okay. But the vertical axis ([latex]W_g[/latex]) appears to be collapsing to zero! That means that the generator is outputting a delta function at [latex]x=0[/latex], not a Gaussian with the same standard deviation as the data distribution! Why?</p>
+<p>Ag<a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/true_gen_disc.svg_.png"><img class="alignleft wp-image-1188" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/true_gen_disc.svg_.png" alt="true_gen_disc-svg" width="300" height="139"></a>ain, this is a problem with the discriminator not being powerful enough. In the theoretical picture on GANs, if the generator deviates at all from the true [latex]p(x)[/latex], there’s always some function [latex]d(x)[/latex] the discriminator can come up with to get some extra advantage. But that [latex]d(x)[/latex] function in this case would not be a Gaussian, it would be something bi-modal with a dip in the center where the generator has decided to focus. So even if the discriminator is capable of modeling the true distribution exactly, that may not be sufficient – it needs to be able to cover some set of fluctuations around the true distribution in order to prevent the GAN from exploiting those vulnerabilities.</p>
+<p style="text-align: center">Essentially, the discriminator needs to be able to model the true distribution plus&nbsp;<strong>every possible perturbation around it that&nbsp;the generator could come up with</strong>.</p>
+<p>The universal function approximation properties of neural networks can actually work against things here – if the generator is too powerful compared to the discriminator, it could just find some function the discriminator can never answer.</p>
+<p>The outcome&nbsp;mirrors a problem that does actually occur in higher-dimensional GANs. If we look at what happens to the data generated here during this malfunction, the generator is only outputting copies of the single most likely data point – the diversity of the generated set has collapsed. This kind of collapse happens in image-generation GANs as well, where if the generator gets too far ahead it just memorizes one example from the training set and only outputs that regardless of the variations in the noise source. Once the network has fallen into that hole, it’s usually very hard to recover the entropy of the outputs&nbsp;with further training.&nbsp;The usual protocol is to adjust the learning rates to keep the error of both the generator and discriminator from getting too small, but perhaps the reason why this kind of careful management is necessary is that there are true fixed points in the parameter space corresponding to this collapse, and unless those fixed points are somehow destabilized then the networks will always be at risk of going there if you continue training indefinitely.</p>
+<hr>
+<h3>Data Dependency</h3>
+<p>Another question we can ask with these visualizations is, how much data is needed and how does the vector field respond to having insufficient data? In a standard single network case, the usual result is overfitting, and the signature in the loss function landscape is that the local and global minima become very sharp. So far, these plots have been generated using 2500 samples. What if we go down to 100 samples? We’ll examine the [latex]b_g, b_d[/latex] plane [latex]W_g = W_d = 1[/latex] for this one, since training is ostensibly stable and correct in that set of parameters.</p>
+<figure id="attachment_1186" style="width: 300px" class="wp-caption alignright"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_small_data.png"><img class="wp-image-1186" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_small_data.png" alt="gaussian_vs_gaussian_small_data" width="300" height="299"></a><figcaption class="wp-caption-text">With only 100 samples, the gradient descent becomes a bit messy.</figcaption></figure>
+<p>With only&nbsp;100 samples, we get a much more ragged set of contours. On a ‘landscape’ like this, the wrong step-size could easily end up running off to somewhere weird, getting further away from the fixed point, getting trapped in parasitic cycles, or accidentally escaping the approach to the fixed point and having a ‘collapse’. 100 samples is tiny for a data-set, but keep in mind that this is a 1D data set, so what constitutes small enough to create snags might be a much larger number of samples in higher dimensions where you can’t possibly cover the entire space.</p>
+<figure id="attachment_1189" style="width: 300px" class="wp-caption alignleft"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_5samples.png"><img class="wp-image-1189" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_5samples.png" alt="gaussian_vs_gaussian_5samples" width="300" height="299"></a><figcaption class="wp-caption-text">Gradient descent in the bias space with only 5 data samples.</figcaption></figure>
+<p>We can reduce the amount of data further, down to 5 samples, and this becomes a real nightmare. It’s unclear whether gradient descent will find the fixed point anymore, no matter how careful you are. The regions at (-4,4) and (4,-4) become essentially noise patterns without any clear escape trajectory. An additional saddle point has appeared around (1,-2), and it looks as though there may be a number of local minima. Of course, asking anything from 5 samples is unreasonable, but this gives an idea of how things look when they break.</p>
+<p>&nbsp;</p>
+<p>Is there a reasonable way to fix this kind of mess? In classic neural networks, one would use regularization – usually <a href="https://arxiv.org/abs/1207.0580">dropout</a>. We can’t do that here (we only have one link to turn off!), but what we can do instead is add noise to the parameters. Even as we’re looking at these very low-data vector fields, its mostly the local structure that has become messy due to the small amount of data. The overall global structure remains quite similar in all cases, even the 5 sample case. So if we could somehow take a local average of the gradient direction over some radius, it might actually fix these local snags and make the training behavior more stable.</p>
+<figure id="attachment_1193" style="width: 300px" class="wp-caption alignright"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_100samples_0.2param_noise.png"><img class="wp-image-1193" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/gaussian_vs_gaussian_100samples_0.2param_noise.png" alt="gaussian_vs_gaussian_100samples_0-2param_noise" width="300" height="299"></a><figcaption class="wp-caption-text">Gradient descent with parameter noise – much smoother, even though only 100 samples!</figcaption></figure>
+<p>&nbsp;</p>
+<p>To do this, we sample each gradient 30 times, but adding Gaussian random noise with standard deviation 0.2 to the parameters [latex](b_d,b_g)[/latex]. We keep the same data and latent vectors (100 samples for this plot), but basically just average over the local neighborhood in the parameter space. The results are much smoother (of course), and also much more directly approach the fixed point. So the lesson for larger GANs is:</p>
+<p style="text-align: center">Yes, <strong>regularization matters for GANs</strong>!</p>
+<p>Sample a lot of random variations of the parameters (e.g. through dropout), apply [latex]L_2[/latex] normalization to the weights and biases to shut down fixed points at infinity, etc – all of those things should help with the instabilities and problems we found here.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr>
+<h3>Speculation&nbsp;on an Extension to&nbsp;Large Networks</h3>
+<figure id="attachment_1192" style="width: 250px" class="wp-caption alignright"><a href="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/random_gradient_slice5.png"><img class="wp-image-1192" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/random_gradient_slice5.png" alt="random_gradient_slice5" width="250" height="248"></a><figcaption class="wp-caption-text">Random slice of the bias space for a large network.</figcaption></figure>
+<p>Can we do anything like this analysis in full-sized GANs? After all, everything here could just be an artefact of the tiny, extremely weak ‘networks’ we’re forced to use to make 2D visualizations. Well, its hard to say.</p>
+<p>One thing we can in principle do is to take 2D slices out of the parameter space of the larger network, and look for fixed points, saddles, and run-off-to-infinity behaviors on those slices. On the left is a random cut taken out of the bias space of a randomly initialized GAN with two 100 neuron hidden layers for both the generator and discriminator, and it seems to show some of the same characteristics as our tiny network –&nbsp;in this case, it looks like the first bias plot with things appearing to run off to infinity. However, unlike our 2-parameter network, there is significant out-of-plane motion here which is not visualized – that means that something appearing to run off to infinity could just be on an oscillatory approach to a fixed point somewhere out-of-plane (which is probably the case here, as training this kind of 1D GAN tends to be relatively well-behaved for larger networks). So some caution in directly applying the visualization technique is probably necessary.</p>
+<p>On the other hand, perhaps the&nbsp;<strong>features</strong> of these vector field landscapes as seen from the point of view of a network-in-training will be more robust and reliable. In dynamical systems theory, one metric which can be used to evaluate the overall behavior of a dynamical system is the <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponent</a> – it measures the rate at which nearby trajectories diverge from each-other, and detects the presence (and structure) of chaos in the system.</p>
+<p>So the idea is, by training a cluster of nearby networks together, one should be able to detect when the training process passes near saddle points, whether it’s sitting near a fixed point or just drifting off to infinity. I think that this must ultimately be related to Hessian-based update rules – the cluster of nearby trajectories is essentially locally sampling the second derivatives of the loss function along a random set of directions. The interesting aspect of it for GANs is that this higher-order gradient information won’t just determine the stable step size, but also might be able to tell you if you’re stuck in a limit cycle or crashing or things like that, and may be able provide the information needed to bias the training updates in such a way as to damp out those oscillations.</p>
+<p>For example, one can generically decompose vector fields into a gradient of a scalar field and a curl of another vector field: [latex]\vec{v}(\vec{r}) = \vec{\nabla} \phi(\vec{r}) + \vec{\nabla} \times \vec{A}[/latex].&nbsp;If that decomposition can be done locally (which requires knowledge of the derivatives of [latex]\vec{v}[/latex], e.g. second-order derivatives of the loss function), then its possible to only follow the [latex]\vec{\nabla} \phi[/latex] part of the field, recovering a scalar optimization problem.</p>
+<p>So I think it might be interesting to look at efficient ways to approximate the Hessian as a way to get information to stabilize the training updates of GANs. But for now, that extends beyond the scope of this post.</p>
+	</div>
+	
+			
+	</article><!-- #post-## -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://www.araya.org/archives/1147" rel="prev">Global Brain has invested in ARAYA Brain Imaging 9/1/2016</a></div><div class="nav-next"><a href="https://www.araya.org/archives/1234" rel="next">Papers published 10/11/2016</a></div></div>
+	</nav>
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+		</div>
+	</div><!-- #content -->
+
+	<div class="footer-wrapper">
+				
+				
+		<footer id="colophon" class="site-footer" role="contentinfo">	
+			<div class="site-info container">
+
+<p>©2018 ARAYA</p>
+
+			</div><!-- .site-info -->
+	</footer></div>
+
+</div><!-- #page -->
+
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/editor.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/jquery.form.min.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpcf7 = {"recaptcha":{"messages":{"empty":"Please verify that you are not a robot."}}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/scripts.js(1).下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var PT_CV_PUBLIC = {"_prefix":"pt-cv-","page_to_show":"5","_nonce":"d04fea10fd","is_admin":"","is_mobile":"","ajaxurl":"https:\/\/www.araya.org\/wp\/wp-admin\/admin-ajax.php","lang":"","loading_image_src":"data:image\/gif;base64,R0lGODlhDwAPALMPAMrKygwMDJOTkz09PZWVla+vr3p6euTk5M7OzuXl5TMzMwAAAJmZmWZmZszMzP\/\/\/yH\/C05FVFNDQVBFMi4wAwEAAAAh+QQFCgAPACwAAAAADwAPAAAEQvDJaZaZOIcV8iQK8VRX4iTYoAwZ4iCYoAjZ4RxejhVNoT+mRGP4cyF4Pp0N98sBGIBMEMOotl6YZ3S61Bmbkm4mAgAh+QQFCgAPACwAAAAADQANAAAENPDJSRSZeA418itN8QiK8BiLITVsFiyBBIoYqnoewAD4xPw9iY4XLGYSjkQR4UAUD45DLwIAIfkEBQoADwAsAAAAAA8ACQAABC\/wyVlamTi3nSdgwFNdhEJgTJoNyoB9ISYoQmdjiZPcj7EYCAeCF1gEDo4Dz2eIAAAh+QQFCgAPACwCAAAADQANAAAEM\/DJBxiYeLKdX3IJZT1FU0iIg2RNKx3OkZVnZ98ToRD4MyiDnkAh6BkNC0MvsAj0kMpHBAAh+QQFCgAPACwGAAAACQAPAAAEMDC59KpFDll73HkAA2wVY5KgiK5b0RRoI6MuzG6EQqCDMlSGheEhUAgqgUUAFRySIgAh+QQFCgAPACwCAAIADQANAAAEM\/DJKZNLND\/kkKaHc3xk+QAMYDKsiaqmZCxGVjSFFCxB1vwy2oOgIDxuucxAMTAJFAJNBAAh+QQFCgAPACwAAAYADwAJAAAEMNAs86q1yaWwwv2Ig0jUZx3OYa4XoRAfwADXoAwfo1+CIjyFRuEho60aSNYlOPxEAAAh+QQFCgAPACwAAAIADQANAAAENPA9s4y8+IUVcqaWJ4qEQozSoAzoIyhCK2NFU2SJk0hNnyEOhKR2AzAAj4Pj4GE4W0bkJQIAOw==","live_filter_submit":"Submit","live_filter_reset":"Reset","is_mobile_tablet":"","sf_no_post_found":"No posts found."};
+var PT_CV_PAGINATION = {"first":"\u00ab","prev":"\u2039","next":"\u203a","last":"\u00bb","goto_first":"Go to first page","goto_prev":"Go to previous page","goto_next":"Go to next page","goto_last":"Go to last page","current_page":"Current page is","goto_page":"Go to page"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/cv.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/cvpro.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/effect.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/effect-highlight.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/js.cookie.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var GianismHelper = {"confirmLabel":"Consent Required","btnConfirm":"Confirm","btnCancel":"Cancel"};
+var Gianism = {"admin":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/public-notice.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/jquery.flexslider-min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/main.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/scripts.min.js.下载"></script>
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/comment-reply.min.js.下载"></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://www.araya.org/wp/wp-content/themes/astrid/js/html5shiv.js?ver=4.9.8'></script>
+<![endif]-->
+<script type="text/javascript" src="./Stability of Generative Adversarial Networks _ ARAYA Inc._files/wp-embed.min.js.下载"></script>
+			<script type="text/javascript">
+				jQuery.noConflict();
+				(function( $ ) {
+					$(function() {
+						// More code using $ as alias to jQuery
+						$("area[href*=\\#],a[href*=\\#]:not([href=\\#]):not([href^='\\#tab']):not([href^='\\#quicktab']):not([href^='\\#pane'])").click(function() {
+							if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+								var target = $(this.hash);
+								target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+								if (target.length) {
+								$('html,body').animate({
+								scrollTop: target.offset().top - 70  
+								},900 ,'easeInQuint');
+								return false;
+								}
+							}
+						});
+					});
+				})(jQuery);	
+			</script>				
+				
+
+
+<div id="cvpboxOverlay" style="display: none;"></div><div id="cvpcolorbox" class="" role="dialog" tabindex="-1" style="display: none;"><div id="cvpboxWrapper"><div><div id="cvpboxTopLeft" style="float: left;"></div><div id="cvpboxTopCenter" style="float: left;"></div><div id="cvpboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cvpboxMiddleLeft" style="float: left;"></div><div id="cvpboxContent" style="float: left;"><div id="cvpboxTitle" style="float: left;"></div><div id="cvpboxCurrent" style="float: left;"></div><button type="button" id="cvpboxPrevious"></button><button type="button" id="cvpboxNext"></button><button id="cvpboxSlideshow"></button><div id="cvpboxLoadingOverlay" style="float: left;"></div><div id="cvpboxLoadingGraphic" style="float: left;"></div></div><div id="cvpboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cvpboxBottomLeft" style="float: left;"></div><div id="cvpboxBottomCenter" style="float: left;"></div><div id="cvpboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div></body></html>

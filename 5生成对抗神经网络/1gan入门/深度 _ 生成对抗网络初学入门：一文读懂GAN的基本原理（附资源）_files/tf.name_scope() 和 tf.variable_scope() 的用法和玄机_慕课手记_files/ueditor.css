@@ -1,0 +1,1874 @@
+/*基础UI构建
+  修改了现用功能的样式，后期有用到其它功能样式不对的，再加上
+*/
+
+/* common layer */
+.edui-imooc .edui-box {
+    border: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.edui-imooc a.edui-box {
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+.edui-imooc a.edui-box:hover {
+    text-decoration: none;
+}
+
+.edui-imooc a.edui-box:active {
+    text-decoration: none;
+}
+
+.edui-imooc table.edui-box {
+    border-collapse: collapse;
+}
+
+.edui-imooc ul.edui-box {
+    list-style-type: none;
+}
+
+div.edui-box {
+    position: relative;
+    display: -moz-inline-box !important;
+    display: inline-block !important;
+    vertical-align: top;
+}
+
+.edui-imooc .edui-clearfix {
+    zoom: 1
+}
+
+.edui-imooc .edui-clearfix:after {
+    content: '\20';
+    display: block;
+    clear: both;
+}
+
+ * html div.edui-box {
+    display: inline !important;
+}
+
+*:first-child+html div.edui-box {
+    display: inline !important;
+}
+
+/* control layout */
+.edui-imooc .edui-button-body, .edui-splitbutton-body, .edui-menubutton-body, .edui-combox-body {
+    position: relative;
+}
+
+.edui-imooc .edui-popup {
+    position: absolute;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.edui-imooc .edui-popup .edui-shadow {
+    position: absolute;
+    z-index: -1;
+}
+
+.edui-imooc .edui-popup .edui-bordereraser {
+    position: absolute;
+    overflow: hidden;
+}
+
+.edui-imooc .edui-tablepicker .edui-canvas {
+    position: relative;
+}
+
+.edui-imooc .edui-tablepicker .edui-canvas .edui-overlay {
+    position: absolute;
+}
+
+.edui-imooc .edui-dialog-modalmask, .edui-dialog-dragmask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.edui-imooc .edui-toolbar {
+    position: relative;
+}
+
+/*
+ * default theme
+ */
+.edui-imooc .edui-label {
+    cursor: default;
+}
+
+.edui-imooc span.edui-clickable {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.edui-imooc span.edui-unclickable {
+    color: gray;
+    cursor: default;
+}
+/* 工具栏 */
+.edui-imooc .edui-toolbar {
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    padding: 1px;
+    overflow: hidden; /*全屏下单独一行不占位*/
+    zoom: 1;
+    width:auto;
+    height:auto;
+}
+
+.edui-imooc .edui-toolbar .edui-button,
+.edui-imooc .edui-toolbar .edui-splitbutton,
+.edui-imooc .edui-toolbar .edui-menubutton,
+.edui-imooc .edui-toolbar .edui-combox {
+    margin: 1px;
+}
+/*UI工具栏、编辑区域、底部*/
+.edui-imooc .edui-editor {
+    border: 1px solid #c8cdd2;
+    background-color: white;
+    position: relative;
+    overflow: visible;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+.edui-editor-focus{
+    border-color:#98a1a6;
+}
+.edui-editor div{
+    width:auto;
+    height:auto;
+}
+.edui-imooc .edui-editor-toolbarbox {
+    position: relative;
+    zoom: 1;
+}
+
+.edui-imooc .edui-editor-toolbarboxouter {
+    border-bottom: 1px solid #c8cdd2;
+    background-color: #eceef0;
+
+    *zoom: 1;
+}
+
+.edui-imooc .edui-editor-toolbarboxinner {
+    padding: 2px;
+}
+
+.edui-imooc .edui-editor-iframeholder {
+    position: relative;
+    /*for fix ie6 toolbarmsg under iframe bug. relative -> static */
+    /*_position: static !important;*
+}
+
+.edui-imooc .edui-editor-iframeholder textarea {
+    font-family: consolas, "Courier New", "lucida console", monospace;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.edui-imooc .edui-editor-bottombar {
+    /*border-top: 1px solid #ccc;*/
+    /*height: 20px;*/
+    /*width: 40%;*/
+    /*float: left;*/
+    /*overflow: hidden;*/
+}
+
+.edui-imooc .edui-editor-bottomContainer {
+    overflow: hidden;
+}
+
+.edui-imooc .edui-editor-bottomContainer table {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-spacing: 0;
+}
+
+.edui-imooc .edui-editor-bottomContainer td {
+    white-space: nowrap;
+    border-top: 1px solid #ccc;
+    line-height: 20px;
+    font-size: 12px;
+    font-family: Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
+}
+
+.edui-imooc .edui-editor-wordcount {
+    text-align: right;
+    margin-right: 5px;
+    color: #aaa;
+}
+.edui-imooc .edui-editor-scale {
+    width: 12px;
+}
+.edui-imooc .edui-editor-scale .edui-editor-icon {
+    float: right;
+    width: 100%;
+    height: 12px;
+    margin-top: 10px;
+    background: url(../images/scale.png) no-repeat;
+    cursor: se-resize;
+}
+.edui-imooc .edui-editor-breadcrumb {
+    margin: 2px 0 0 3px;
+}
+
+.edui-imooc .edui-editor-breadcrumb span {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+
+.edui-imooc .edui-toolbar .edui-for-fullscreen {
+    float: right;
+}
+
+.edui-imooc .edui-bubble .edui-popup-content {
+    border: 1px solid #DCAC6C;
+    background-color: #fff6d9;
+    padding: 5px;
+    font-size: 10pt;
+    font-family: "宋体";
+}
+
+.edui-imooc .edui-bubble .edui-shadow {
+    /*box-shadow: 1px 1px 3px #818181;*/
+    /*-webkit-box-shadow: 2px 2px 3px #818181;*/
+    /*-moz-box-shadow: 2px 2px 3px #818181;*/
+    /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');*/
+}
+
+.edui-imooc .edui-editor-toolbarmsg {
+    background-color: #FFF6D9;
+    border-bottom: 1px solid #ccc;
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    z-index: 1009;
+    width: 99.9%;
+}
+
+.edui-imooc .edui-editor-toolbarmsg-upload {
+    font-size: 14px;
+    color: blue;
+    width: 100px;
+    height: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    left: 350px;
+}
+
+.edui-imooc .edui-editor-toolbarmsg-label {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 4px;
+}
+
+.edui-imooc .edui-editor-toolbarmsg-close {
+    float: right;
+    width: 20px;
+    height: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    color: red;
+}
+/*可选中菜单按钮*/
+.edui-imooc .edui-list .edui-bordereraser {
+    display: none;
+}
+
+.edui-imooc .edui-listitem {
+    padding: 1px;
+    white-space: nowrap;
+    -webkit-transition:background-color .2s;
+    -moz-transition:background-color .2s;
+    transition:background-color .2s;
+}
+
+.edui-imooc .edui-list .edui-state-hover {
+    position: relative;
+    background-color: #d0d6d9;
+
+}
+
+.edui-imooc .edui-for-fontfamily .edui-listitem-label {
+    min-width: 130px;
+    _width: 120px;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 5px;
+}
+.edui-imooc .edui-for-insertcode .edui-listitem-label {
+    min-width: 120px;
+    _width: 120px;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 5px;
+}
+.edui-imooc .edui-for-underline .edui-listitem-label {
+    min-width: 120px;
+    _width: 120px;
+    padding: 3px 5px;
+    font-size: 12px;
+}
+
+.edui-imooc .edui-for-fontsize .edui-listitem-label {
+    min-width: 120px;
+    _width: 120px;
+    padding: 3px 5px;
+
+}
+
+.edui-imooc .edui-for-paragraph .edui-listitem-label {
+    min-width: 100px;
+    padding: 2px 10px;
+}
+
+.edui-imooc .edui-for-rowspacingtop .edui-listitem-label,
+.edui-imooc .edui-for-rowspacingbottom .edui-listitem-label {
+    min-width: 53px;
+    _width: 53px;
+    padding: 2px 5px;
+}
+
+.edui-imooc .edui-for-lineheight .edui-listitem-label {
+    min-width: 53px;
+    _width: 53px;
+    padding: 2px 5px;
+}
+
+.edui-imooc .edui-for-customstyle .edui-listitem-label {
+    min-width: 200px;
+    _width: 200px;
+    width: 200px !important;
+    padding: 2px 5px;
+}
+/* 可选中按钮弹出菜单*/
+.edui-imooc .edui-menu {
+    z-index: 3000;
+}
+
+.edui-imooc .edui-menu .edui-popup-content {
+    padding: 3px;
+}
+
+.edui-imooc .edui-menu-body {
+    _width: 150px;
+    min-width: 170px;
+    background: url("../images/sparator_v.png") repeat-y 25px;
+}
+
+.edui-imooc .edui-menuitem-body {
+}
+
+.edui-imooc .edui-menuitem {
+    height: 20px;
+    cursor: default;
+    vertical-align: top;
+}
+
+.edui-imooc .edui-menuitem .edui-icon {
+    width: 20px !important;
+    height: 20px !important;
+    background: url(../images/icons.png) 0 -4000px;
+    background: url(../images/icons.gif) 0 -4000px\9;
+}
+
+.edui-imooc .edui-menuitem .edui-label {
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px;
+    padding-left: 10px;
+}
+
+.edui-imooc .edui-state-checked .edui-menuitem-body {
+    background: url("../images/icons-all.gif") no-repeat 6px -205px;
+}
+
+.edui-imooc .edui-state-disabled .edui-menuitem-label {
+    color: gray;
+}
+
+
+/*不可选中菜单按钮 */
+.edui-imooc .edui-toolbar .edui-combox-body .edui-button-body {
+    width: 60px;
+    font-size: 12px;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 5px;
+    white-space: nowrap;
+    margin: 0 3px 0 0;
+}
+
+.edui-imooc .edui-toolbar .edui-combox-body .edui-arrow {
+    background: url(../images/ud-toolbar.png) -360px 0;
+    height: 28px;
+    width: 20px;
+}
+
+.edui-imooc .edui-toolbar .edui-combox .edui-combox-body {
+    border: 1px solid #fff;
+    background-color: white;
+}
+
+.edui-imooc .edui-toolbar .edui-combox-body .edui-splitborder {
+    display: none;
+}
+
+.edui-imooc .edui-toolbar .edui-combox-body .edui-arrow {
+
+}
+
+.edui-imooc .edui-toolbar .edui-state-hover .edui-combox-body {
+
+    border: 1px solid #d0d6d9;
+    box-shadow: 0 1px 4px #d0d6d9;
+}
+
+.edui-imooc .edui-toolbar .edui-state-hover .edui-combox-body .edui-arrow {
+}
+
+.edui-imooc .edui-toolbar .edui-state-checked .edui-combox-body {
+    background-color: #FFE69F;
+    border: 1px solid #DCAC6C;
+}
+
+.edui-toolbar .edui-state-checked .edui-combox-body .edui-arrow {
+    border-left: 1px solid #DCAC6C;
+}
+
+.edui-toolbar .edui-state-disabled .edui-combox-body {
+    background-color: #F0F0EE;
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+
+.edui-toolbar .edui-state-opened .edui-combox-body {
+    background-color: white;
+    border: 1px solid gray;
+}
+/*普通按钮样式及状态*/
+.edui-imooc .edui-toolbar .edui-button .edui-icon,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-icon,
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-icon {
+    height: 28px !important;
+    width: 28px !important;
+    background-image: url(../images/ud-toolbar.png);
+    background-repeat:no-repeat;
+}
+
+.edui-imooc .edui-toolbar .edui-button .edui-button-wrap {
+    padding: 1px;
+    position: relative;
+}
+
+.edui-imooc .edui-toolbar .edui-button .edui-state-hover .edui-button-wrap {
+    background-color: #d0d6d9;
+    padding: 0;
+    border: 1px solid #d0d6d9;
+}
+
+.edui-imooc .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap {
+    background-color: #d0d6d9;
+    padding: 0;
+    border: 1px solid #d0d6d9;
+}
+
+.edui-imooc .edui-toolbar .edui-button .edui-state-active .edui-button-wrap {
+    background-color: #ffffff;
+    padding: 0;
+    border: 1px solid gray;
+}
+.edui-imooc .edui-toolbar .edui-state-disabled .edui-label {
+    color: #ccc;
+}
+.edui-imooc .edui-toolbar .edui-state-disabled .edui-icon {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+
+/* toolbar icons */
+.edui-imooc .edui-for-undo .edui-icon {
+    background-position: -300px 0px;
+}
+
+.edui-imooc  .edui-for-redo .edui-icon {
+    background-position: -270px 0px;
+}
+
+.edui-imooc  .edui-for-bold .edui-icon {
+    background-position: 0px 0px;
+}
+
+.edui-imooc  .edui-for-italic .edui-icon {
+    background-position: -30px 0px;
+}
+
+.edui-imooc  .edui-for-fontborder .edui-icon {
+    background-position:-160px -40px;
+}
+.edui-imooc  .edui-for-underline .edui-icon {
+    background-position: -60px 0;
+}
+
+.edui-imooc  .edui-for-strikethrough .edui-icon {
+    background-position: -120px 0;
+}
+
+.edui-imooc  .edui-for-subscript .edui-icon {
+    background-position: -600px 0;
+}
+
+.edui-imooc  .edui-for-superscript .edui-icon {
+    background-position: -620px 0;
+}
+
+.edui-imooc  .edui-for-blockquote .edui-icon {
+    background-position: -240px 0;
+}
+
+.edui-imooc  .edui-for-forecolor .edui-icon {
+    background-position: -720px 0;
+}
+
+.edui-imooc  .edui-for-backcolor .edui-icon {
+    background-position: -760px 0;
+}
+
+.edui-imooc  .edui-for-inserttable .edui-icon {
+    background-position: -580px -20px;
+}
+
+.edui-imooc  .edui-for-autotypeset .edui-icon {
+    background-position: -640px -40px;
+}
+
+.edui-imooc  .edui-for-justifyleft .edui-icon {
+    background-position: -460px 0;
+}
+
+.edui-imooc  .edui-for-justifycenter .edui-icon {
+    background-position: -420px 0;
+}
+
+.edui-imooc  .edui-for-justifyright .edui-icon {
+    background-position: -480px 0;
+}
+
+.edui-imooc  .edui-for-justifyjustify .edui-icon {
+    background-position: -440px 0;
+}
+
+.edui-imooc  .edui-for-insertorderedlist .edui-icon {
+    background-position: -210px 0;
+}
+
+.edui-imooc  .edui-for-insertunorderedlist .edui-icon {
+    background-position: -180px 0;
+}
+
+.edui-imooc  .edui-for-lineheight .edui-icon {
+    background-position: -725px -40px;
+}
+
+.edui-imooc  .edui-for-rowspacingbottom .edui-icon {
+    background-position: -745px -40px;
+}
+
+.edui-imooc  .edui-for-rowspacingtop .edui-icon {
+    background-position: -765px -40px;
+}
+
+.edui-imooc  .edui-for-horizontal .edui-icon {
+    background-position: -360px 0;
+}
+
+.edui-imooc  .edui-for-link .edui-icon {
+    background-position: -120px 0px;
+}
+
+.edui-imooc  .edui-for-code .edui-icon {
+    background-position: -440px -40px;
+}
+
+.edui-imooc  .edui-for-insertimage .edui-icon {
+    background-position: -90px 0px;
+}
+
+.edui-imooc  .edui-for-insertframe .edui-icon {
+    background-position: -240px -40px;
+}
+
+.edui-imooc  .edui-for-emoticon .edui-icon {
+    background-position: -60px -20px;
+}
+
+.edui-imooc  .edui-for-spechars .edui-icon {
+    background-position: -240px 0;
+}
+
+.edui-imooc  .edui-for-help .edui-icon {
+    background-position: -340px 0;
+}
+
+.edui-imooc  .edui-for-print .edui-icon {
+    background-position: -440px -20px;
+}
+
+.edui-imooc  .edui-for-preview .edui-icon {
+    background-position: -330px 0;
+}
+
+.edui-imooc  .edui-for-selectall .edui-icon {
+    background-position: -400px -20px;
+}
+
+.edui-imooc  .edui-for-searchreplace .edui-icon {
+    background-position: -520px -20px;
+}
+
+.edui-imooc  .edui-for-map .edui-icon {
+    background-position: -40px -40px;
+}
+
+.edui-imooc  .edui-for-gmap .edui-icon {
+    background-position: -260px -40px;
+}
+
+.edui-imooc  .edui-for-insertvideo .edui-icon {
+    background-position: -320px -20px;
+}
+
+.edui-imooc  .edui-for-time .edui-icon {
+    background-position: -160px -20px;
+}
+
+.edui-imooc  .edui-for-date .edui-icon {
+    background-position: -140px -20px;
+}
+
+.edui-imooc  .edui-for-cut .edui-icon {
+    background-position: -680px 0;
+}
+
+.edui-imooc  .edui-for-copy .edui-icon {
+    background-position: -700px 0;
+}
+
+.edui-imooc  .edui-for-paste .edui-icon {
+    background-position: -560px 0;
+}
+
+.edui-imooc  .edui-for-formatmatch .edui-icon {
+    background-position: -40px 0;
+}
+
+.edui-imooc  .edui-for-pasteplain .edui-icon {
+    background-position: -360px -20px;
+}
+
+.edui-imooc  .edui-for-directionalityltr .edui-icon {
+    background-position: -20px -20px;
+}
+
+.edui-imooc  .edui-for-directionalityrtl .edui-icon {
+    background-position: -40px -20px;
+}
+
+.edui-imooc  .edui-for-source .edui-icon {
+    background-position: -261px -0px;
+}
+
+.edui-imooc  .edui-for-removeformat .edui-icon {
+    background-position: -580px 0;
+}
+
+.edui-imooc  .edui-for-unlink .edui-icon {
+    background-position: -150px 0px;
+}
+
+.edui-imooc  .edui-for-touppercase .edui-icon {
+    background-position: -786px 0;
+}
+
+.edui-imooc  .edui-for-tolowercase .edui-icon {
+    background-position: -806px 0;
+}
+
+.edui-imooc  .edui-for-insertrow .edui-icon {
+    background-position: -478px -76px;
+}
+
+.edui-imooc  .edui-for-insertrownext .edui-icon {
+    background-position: -498px -76px;
+}
+
+.edui-imooc  .edui-for-insertcol .edui-icon {
+    background-position: -455px -76px;
+}
+
+.edui-imooc  .edui-for-insertcolnext  .edui-icon {
+    background-position: -429px -76px;
+}
+
+.edui-imooc  .edui-for-mergeright .edui-icon {
+    background-position: -60px -40px;
+}
+
+.edui-imooc  .edui-for-mergedown .edui-icon {
+    background-position: -80px -40px;
+}
+
+.edui-imooc  .edui-for-splittorows .edui-icon {
+    background-position: -100px -40px;
+}
+
+.edui-imooc  .edui-for-splittocols .edui-icon {
+    background-position: -120px -40px;
+}
+
+.edui-imooc  .edui-for-insertparagraphbeforetable .edui-icon {
+    background-position: -140px -40px;
+}
+
+.edui-imooc  .edui-for-deleterow .edui-icon {
+    background-position: -660px -20px;
+}
+
+.edui-imooc  .edui-for-deletecol .edui-icon {
+    background-position: -640px -20px;
+}
+
+.edui-imooc  .edui-for-splittocells .edui-icon {
+    background-position: -800px -20px;
+}
+
+.edui-imooc  .edui-for-mergecells .edui-icon {
+    background-position: -760px -20px;
+}
+
+.edui-imooc  .edui-for-deletetable .edui-icon {
+    background-position: -620px -20px;
+}
+
+.edui-imooc  .edui-for-cleardoc .edui-icon {
+    background-position: -520px 0;
+}
+
+.edui-imooc  .edui-for-fullscreen .edui-icon {
+    background-position: -100px -20px;
+}
+
+.edui-imooc  .edui-for-anchor .edui-icon {
+    background-position: -200px 0;
+}
+
+.edui-imooc  .edui-for-pagebreak .edui-icon {
+    background-position: -460px -40px;
+}
+
+.edui-imooc  .edui-for-imagenone .edui-icon {
+    background-position: -480px -40px;
+}
+
+.edui-imooc  .edui-for-imageleft .edui-icon {
+    background-position: -500px -40px;
+}
+
+.edui-imooc  .edui-for-wordimage .edui-icon {
+    background-position: -660px -40px;
+}
+
+.edui-imooc  .edui-for-imageright .edui-icon {
+    background-position: -520px -40px;
+}
+
+.edui-imooc  .edui-for-imagecenter .edui-icon {
+    background-position: -540px -40px;
+}
+
+.edui-imooc  .edui-for-indent .edui-icon {
+    background-position: -400px 0;
+}
+
+.edui-imooc  .edui-for-outdent .edui-icon {
+    background-position: -540px 0;
+}
+
+.edui-imooc  .edui-for-webapp .edui-icon {
+    background-position: -601px -40px
+}
+
+.edui-imooc  .edui-for-table .edui-icon {
+    background-position: -580px -20px;
+}
+
+.edui-imooc  .edui-for-edittable .edui-icon {
+    background-position: -420px -40px;
+}
+
+.edui-imooc  .edui-for-template .edui-icon {
+    background-position: -339px -40px;
+}
+
+.edui-imooc  .edui-for-delete .edui-icon {
+    background-position: -360px -40px;
+}
+
+.edui-imooc  .edui-for-attachment .edui-icon {
+    background-position: -620px -40px;
+}
+
+.edui-imooc  .edui-for-edittd .edui-icon {
+    background-position: -700px -40px;
+}
+
+.edui-imooc  .edui-for-snapscreen .edui-icon {
+    background-position: -581px -40px
+}
+
+.edui-imooc  .edui-for-scrawl .edui-icon {
+    background-position: -801px -41px
+}
+
+.edui-imooc  .edui-for-background .edui-icon {
+    background-position: -680px -40px;
+}
+
+.edui-imooc  .edui-for-music .edui-icon {
+    background-position: -18px -40px
+}
+
+.edui-imooc  .edui-for-formula .edui-icon {
+    background-position: -200px -40px
+}
+
+.edui-imooc  .edui-for-aligntd  .edui-icon {
+    background-position: -236px -76px;
+}
+
+.edui-imooc  .edui-for-insertparagraphtrue  .edui-icon {
+    background-position: -625px -76px;
+}
+
+.edui-imooc  .edui-for-insertparagraph  .edui-icon {
+    background-position: -602px -76px;
+}
+
+.edui-imooc  .edui-for-insertcaption  .edui-icon {
+    background-position: -336px -76px;
+}
+
+.edui-imooc  .edui-for-deletecaption  .edui-icon {
+    background-position: -362px -76px;
+}
+
+.edui-imooc  .edui-for-inserttitle  .edui-icon {
+    background-position: -286px -76px;
+}
+
+.edui-imooc  .edui-for-deletetitle  .edui-icon {
+    background-position: -311px -76px;
+}
+
+.edui-imooc  .edui-for-aligntable  .edui-icon {
+    background-position: -440px 0;
+}
+
+.edui-imooc  .edui-for-tablealignment-left  .edui-icon {
+    background-position: -460px 0;
+}
+
+.edui-imooc  .edui-for-tablealignment-center  .edui-icon {
+    background-position: -420px 0;
+}
+
+.edui-imooc  .edui-for-tablealignment-right  .edui-icon {
+    background-position: -480px 0;
+}
+
+.edui-imooc  .edui-for-drafts  .edui-icon {
+    background-position: -560px 0;
+}
+
+.edui-imooc  .edui-for-charts  .edui-icon {
+    background: url( ../images/charts.png ) no-repeat 2px 3px!important;
+}
+
+.edui-imooc  .edui-for-inserttitlecol  .edui-icon {
+    background-position: -673px -76px;
+}
+
+.edui-imooc  .edui-for-deletetitlecol  .edui-icon {
+    background-position: -698px -76px;
+}
+
+.edui-imooc  .edui-for-simpleupload  .edui-icon {
+    background-position: -380px 0px;
+}
+/*splitbutton*/
+.edui-imooc .edui-toolbar .edui-splitbutton-body .edui-arrow,
+.edui-imooc .edui-toolbar .edui-menubutton-body .edui-arrow {
+    background: url(../images/icons.png) -741px 0;
+    _background: url(../images/icons.gif) -741px 0;
+    height: 20px;
+    width: 9px;
+}
+
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-splitbutton-body,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-menubutton-body {
+    padding: 1px;
+}
+
+.edui-imooc .edui-toolbar .edui-splitborder {
+    width: 1px;
+    height: 20px;
+}
+
+.edui-imooc .edui-toolbar .edui-state-hover .edui-splitborder {
+    width: 1px;
+    border-left: 0px solid #dcac6c;
+}
+
+.edui-imooc .edui-toolbar .edui-state-active .edui-splitborder {
+    width: 1px;
+    border: 0;
+}
+
+.edui-imooc .edui-toolbar .edui-state-opened .edui-splitborder {
+    width: 1px;
+    border: 0;
+}
+
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-state-hover .edui-splitbutton-body,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-state-hover .edui-menubutton-body {
+    background-color: #fff5d4;
+    border: 1px solid #dcac6c;
+    padding: 0;
+}
+
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-state-checked .edui-splitbutton-body,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-state-checked .edui-menubutton-body {
+    background-color: #FFE69F;
+    border: 1px solid #DCAC6C;
+    padding: 0;
+}
+
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-state-active .edui-splitbutton-body,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-state-active .edui-menubutton-body {
+    background-color: #ffffff;
+    border: 1px solid gray;
+    padding: 0;
+}
+
+.edui-imooc .edui-state-disabled .edui-arrow {
+    opacity: 0.3;
+    _filter: alpha(opacity = 30);
+}
+
+.edui-imooc .edui-toolbar .edui-splitbutton .edui-state-opened .edui-splitbutton-body,
+.edui-imooc .edui-toolbar .edui-menubutton .edui-state-opened .edui-menubutton-body {
+    background-color: white;
+    border: 1px solid gray;
+    padding: 0;
+}
+
+.edui-imooc .edui-for-insertorderedlist .edui-bordereraser,
+.edui-imooc .edui-for-lineheight .edui-bordereraser,
+.edui-imooc .edui-for-rowspacingtop .edui-bordereraser,
+.edui-imooc .edui-for-rowspacingbottom .edui-bordereraser,
+.edui-imooc .edui-for-insertunorderedlist .edui-bordereraser {
+    background-color: white;
+}
+
+/* 解决嵌套导致的图标问题 */
+.edui-imooc .edui-for-insertorderedlist .edui-popup-body .edui-icon,
+.edui-imooc .edui-for-lineheight .edui-popup-body .edui-icon,
+.edui-imooc .edui-for-rowspacingtop .edui-popup-body .edui-icon,
+.edui-imooc .edui-for-rowspacingbottom .edui-popup-body .edui-icon,
+.edui-imooc .edui-for-insertunorderedlist .edui-popup-body .edui-icon {
+    /*background-position: 0 -40px;*/
+    background-image: none  ;
+}
+
+/* 弹出菜单 */
+.edui-imooc .edui-popup {
+    z-index: 3000;
+    background-color: #ffffff;
+    width:auto;
+    height:auto;
+
+}
+
+.edui-imooc .edui-popup .edui-shadow {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.edui-imooc .edui-popup-content {
+    border:1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    -webkit-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+
+    padding: 5px 0;
+    background:#ffffff;
+}
+.edui-imooc .edui-popup-content::-webkit-scrollbar {
+  width: 10px;  /* for vertical scrollbars */
+  height: 10px; /* for horizontal scrollbars */
+}
+
+.edui-imooc .edui-popup-content::-webkit-scrollbar-track{
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.edui-imooc .edui-popup-content::-webkit-scrollbar-thumb{
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+.edui-imooc .edui-popup .edui-bordereraser {
+    background-color: white;
+    height: 3px;
+}
+
+.edui-imooc .edui-menu .edui-bordereraser {
+    height: 3px;
+}
+
+.edui-imooc .edui-anchor-topleft .edui-bordereraser {
+    left: 1px;
+    top: -2px;
+}
+
+.edui-imooc .edui-anchor-topright .edui-bordereraser {
+    right: 1px;
+    top: -2px;
+}
+
+.edui-imooc .edui-anchor-bottomleft .edui-bordereraser {
+    left: 0;
+    bottom: -6px;
+    height: 7px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.edui-imooc .edui-anchor-bottomright .edui-bordereraser {
+    right: 0;
+    bottom: -6px;
+    height: 7px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.edui-popup div{
+    width:auto;
+    height:auto;
+}
+.edui-imooc .edui-editor-messageholder {
+    display: block;
+    width: 150px;
+    height: auto;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 28px;
+    right: 3px;
+}
+
+.edui-imooc .edui-message{
+    min-height: 10px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    padding: 0;
+    margin-bottom: 3px;
+    position: relative;
+}
+.edui-imooc .edui-message-body{
+    border-radius: 3px;
+    padding: 8px 15px 8px 8px;
+    color: #c09853;
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+}
+.edui-imooc .edui-message-type-info{
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1
+}
+.edui-imooc .edui-message-type-success{
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6
+}
+.edui-imooc .edui-message-type-danger,
+.edui-imooc .edui-message-type-error{
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7
+}
+.edui-imooc .edui-message .edui-message-closer {
+    display: block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+    text-shadow: 0 1px 0 #fff;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.edui-imooc .edui-message .edui-message-content {
+    font-size: 10pt;
+    word-wrap: break-word;
+    word-break: normal;
+}
+/* 弹出对话框按钮和对话框大小 */
+.edui-imooc .edui-dialog {
+    z-index: 2000;
+    position: absolute;
+
+}
+
+.edui-dialog div{
+    width:auto;
+}
+
+.edui-imooc .edui-dialog-wrap {
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.edui-imooc .edui-dialog-fullscreen-flag {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.edui-imooc .edui-dialog-body {
+    position: relative;
+    padding:2px 0 0 2px;
+    _zoom: 1;
+}
+
+.edui-imooc .edui-dialog-fullscreen-flag .edui-dialog-body {
+    padding: 0;
+}
+
+.edui-imooc .edui-dialog-shadow {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+
+.edui-imooc .edui-dialog-foot {
+    background-color: white;
+}
+
+.edui-imooc .edui-dialog-titlebar {
+    position: relative;
+    height: 26px;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: move;
+    color: #474747;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
+    border-bottom: 1px solid #999;
+
+    background: #cfd1cf;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#cfd1cf));
+    background-image: -moz-linear-gradient(top,#f5f5f5,#cfd1cf);
+    background-image: -webkit-linear-gradient(top,#f5f5f5,#cfd1cf);
+    background-image: -o-linear-gradient(top,#f5f5f5,#cfd1cf);
+    background-image: -ms-linear-gradient(top,#f5f5f5,#cfd1cf);
+    background-image: linear-gradient(top,#f5f5f5,#cfd1cf);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0,startColorstr='#f5f5f5',endColorstr='#cfd1cf');
+
+}
+.edui-imooc .edui-dialog-caption {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 26px;
+    padding-left: 5px;
+}
+
+.edui-imooc .edui-dialog-draghandle {
+    height: 26px;
+}
+
+.edui-imooc .edui-dialog-closebutton {
+    position: absolute !important;
+    right: 5px;
+    top: 3px;
+}
+
+.edui-imooc .edui-dialog-closebutton .edui-button-body {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    background: url("../images/icons-all.gif") no-repeat 0 -59px;
+}
+
+.edui-imooc .edui-dialog-closebutton .edui-state-hover .edui-button-body {
+    background: url("../images/icons-all.gif") no-repeat 0 -89px;
+}
+
+.edui-imooc .edui-dialog-foot {
+    height: 40px;
+}
+
+.edui-imooc .edui-dialog-buttons {
+    position: absolute;
+    right: 0;
+}
+
+.edui-imooc .edui-dialog-buttons .edui-button {
+    margin-right: 10px;
+}
+
+.edui-imooc .edui-dialog-buttons .edui-button .edui-button-body {
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    color: #565656;
+    padding: 0 18px;
+    display: inline-block;
+    border-radius: 3px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    float: left;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.edui-imooc .edui-dialog-buttons .edui-button .edui-state-hover .edui-button-body {
+    background: #cfcfcf;
+}
+
+.edui-imooc .edui-dialog iframe {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
+
+.edui-imooc .edui-dialog-modalmask {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+    background-color: #ccc;
+    position: absolute;
+    /*z-index: 1999;*/
+}
+
+.edui-imooc .edui-dialog-dragmask {
+    position: absolute;
+    /*z-index: 2001;*/
+    background-color: transparent;
+    cursor: move;
+}
+
+.edui-imooc .edui-dialog-content {
+    position: relative;
+}
+
+.edui-imooc .dialogcontmask {
+    cursor: move;
+    visibility: hidden;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+}
+
+/*link-dialog*/
+.edui-imooc .edui-for-link .edui-dialog-content {
+    width: 420px;
+    height: 100px;
+    overflow: hidden;
+}
+/*background-dialog*/
+.edui-imooc .edui-for-background .edui-dialog-content {
+    width: 440px;
+    height: 280px;
+    overflow: hidden;
+}
+
+/*template-dialog*/
+.edui-imooc .edui-for-template .edui-dialog-content {
+    width: 630px;
+    height: 390px;
+    overflow: hidden;
+}
+
+/*scrawl-dialog*/
+.edui-imooc .edui-for-scrawl .edui-dialog-content {
+    width: 515px;
+    *width: 506px;
+    height: 360px;
+}
+
+/*spechars-dialog*/
+.edui-imooc .edui-for-spechars .edui-dialog-content {
+    width: 620px;
+    height: 500px;
+    *width: 630px;
+    *height: 570px;
+}
+
+/*image-dialog*/
+.edui-imooc .edui-for-insertimage .edui-dialog-content {
+    width: 650px;
+    height: 400px;
+    overflow: hidden;
+}
+/*webapp-dialog*/
+.edui-imooc .edui-for-webapp .edui-dialog-content {
+    width: 560px;
+    _width: 565px;
+    height: 450px;
+    overflow: hidden;
+}
+
+/*image-insertframe*/
+.edui-imooc .edui-for-insertframe .edui-dialog-content {
+    width: 350px;
+    height: 200px;
+    overflow: hidden;
+}
+
+/*wordImage-dialog*/
+.edui-imooc .edui-for-wordimage .edui-dialog-content {
+    width: 620px;
+    height: 380px;
+    overflow: hidden;
+}
+
+/*attachment-dialog*/
+.edui-imooc .edui-for-attachment .edui-dialog-content {
+    width: 650px;
+    height: 400px;
+    overflow: hidden;
+}
+
+
+/*map-dialog*/
+.edui-imooc .edui-for-map .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+
+/*gmap-dialog*/
+.edui-imooc .edui-for-gmap .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+
+/*video-dialog*/
+.edui-imooc .edui-for-insertvideo .edui-dialog-content {
+    width: 590px;
+    height: 390px;
+}
+
+/*anchor-dialog*/
+.edui-imooc .edui-for-anchor .edui-dialog-content {
+    width: 320px;
+    height: 60px;
+    overflow: hidden;
+}
+
+/*searchreplace-dialog*/
+.edui-imooc .edui-for-searchreplace .edui-dialog-content {
+    width: 400px;
+    height: 220px;
+}
+
+/*help-dialog*/
+.edui-imooc .edui-for-help .edui-dialog-content {
+    width: 400px;
+    height: 420px;
+}
+
+/*edittable-dialog*/
+.edui-imooc .edui-for-edittable .edui-dialog-content {
+    width: 540px;
+    _width:590px;
+    height: 335px;
+}
+
+/*edittip-dialog*/
+.edui-imooc .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
+.edui-imooc .edui-for-edittd .edui-dialog-content {
+    width: 240px;
+    height: 50px;
+}
+/*snapscreen-dialog*/
+.edui-imooc .edui-for-snapscreen .edui-dialog-content {
+    width: 400px;
+    height: 220px;
+}
+
+/*music-dialog*/
+.edui-imooc .edui-for-music .edui-dialog-content {
+    width: 515px;
+    height: 360px;
+}
+
+/*段落弹出菜单*/
+.edui-imooc .edui-for-paragraph .edui-listitem-label {
+    font-family: Tahoma, Verdana, Arial, Helvetica;
+}
+
+
+/* 表格弹出菜单 */
+.edui-imooc .edui-for-inserttable .edui-splitborder {
+    display: none
+}
+.edui-imooc .edui-for-inserttable  .edui-splitbutton-body .edui-arrow {
+    width: 0
+}
+.edui-imooc .edui-toolbar .edui-for-inserttable  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
+.edui-imooc .edui-tablepicker .edui-infoarea {
+    height: 14px;
+    line-height: 14px;
+    font-size: 12px;
+    width: 220px;
+    margin-bottom: 3px;
+    clear: both;
+}
+
+.edui-imooc .edui-tablepicker .edui-infoarea .edui-label {
+    float: left;
+}
+
+.edui-imooc .edui-dialog-buttons .edui-label {
+    line-height: 24px;
+}
+
+.edui-imooc .edui-tablepicker .edui-infoarea .edui-clickable {
+    float: right;
+}
+
+.edui-imooc .edui-tablepicker .edui-pickarea {
+    background: url("../images/unhighlighted.gif") repeat;
+    height: 220px;
+    width: 220px;
+}
+
+.edui-imooc .edui-tablepicker .edui-pickarea .edui-overlay {
+    background: url("../images/highlighted.gif") repeat;
+}
+
+/* 颜色弹出菜单 */
+.edui-imooc .edui-colorpicker-topbar {
+    height: 27px;
+    width: 200px;
+    /*border-bottom: 1px gray dashed;*/
+}
+
+.edui-imooc .edui-colorpicker-preview {
+    height: 20px;
+    border: 1px inset black;
+    margin-left: 1px;
+    width: 128px;
+    float: left;
+}
+
+.edui-imooc .edui-colorpicker-nocolor {
+    float: right;
+    margin-right: 1px;
+    font-size: 12px;
+    line-height: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+.edui-imooc .edui-colorpicker-tablefirstrow {
+    height: 30px;
+}
+
+.edui-imooc .edui-colorpicker-colorcell {
+    width: 14px;
+    height: 14px;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+}
+
+.edui-imooc .edui-colorpicker-colorcell:hover {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+.edui-imooc .edui-colorpicker-advbtn{
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    height:20px;
+}
+.arrow_down{
+    background: white url('../images/arrow_down.png') no-repeat center;
+}
+.arrow_up{
+    background: white url('../images/arrow_up.png') no-repeat center;
+}
+/*高级的样式*/
+.edui-colorpicker-adv{
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    display: none;
+}
+.edui-colorpicker-plant, .edui-colorpicker-hue {
+    border: solid 1px #666;
+}
+.edui-colorpicker-pad {
+    width: 150px;
+    height: 150px;
+    left: 14px;
+    top: 13px;
+    position: absolute;
+    background: red;
+    overflow: hidden;
+    cursor: crosshair;
+}
+.edui-colorpicker-cover{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: url("../images/tangram-colorpicker.png") -160px -200px;
+}
+.edui-colorpicker-padDot{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    overflow: hidden;
+    background: url(../images/tangram-colorpicker.png) 0px -200px repeat-x;
+    z-index: 1000;
+
+}
+.edui-colorpicker-sliderMain {
+    position: absolute;
+    left: 171px;
+    top: 13px;
+    width: 19px;
+    height: 152px;
+    background: url(../images/tangram-colorpicker.png) -179px -12px no-repeat;
+
+}
+.edui-colorpicker-slider {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.edui-colorpicker-thumb{
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    height: 3px;
+    left: -1px;
+    right: -1px;
+    border: 1px solid black;
+    background: white;
+    opacity: .8;
+}
+/*自动排版弹出菜单*/
+.edui-imooc .edui-autotypesetpicker .edui-autotypesetpicker-body {
+    font-size: 12px;
+    margin-bottom: 3px;
+    clear: both;
+}
+
+.edui-imooc .edui-autotypesetpicker-body table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+.edui-imooc .edui-autotypesetpicker-body td {
+    font-size: 12px;
+    word-wrap:break-word;
+}
+
+.edui-imooc .edui-autotypesetpicker-body td input {
+    margin: 3px 3px 3px 4px;
+    *margin: 1px 0 0 0;
+}
+/*自动排版弹出菜单*/
+.edui-imooc .edui-cellalignpicker .edui-cellalignpicker-body {
+    width: 70px;
+    font-size: 12px;
+    cursor: default;
+}
+
+.edui-imooc .edui-cellalignpicker-body table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.edui-imooc .edui-cellalignpicker-body td{
+    padding: 1px;
+}
+.edui-imooc .edui-cellalignpicker-body .edui-icon{
+    height: 20px;
+    width: 20px;
+    padding: 1px;
+    background-image: url(../images/table-cell-align.png);
+}
+
+.edui-imooc .edui-cellalignpicker-body .edui-left{
+    background-position: 0 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body .edui-center{
+    background-position: -25px 0;
+}
+.edui-imooc .edui-cellalignpicker-body .edui-right{
+    background-position: -51px 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-state-hover .edui-left{
+    background-position: -73px 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-state-hover .edui-center{
+    background-position: -98px 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-state-hover .edui-right{
+    background-position: -124px 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-cellalign-selected .edui-left {
+    background-position: -146px 0;
+    background-color: #f1f4f5;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-cellalign-selected .edui-center {
+    background-position: -245px 0;
+}
+
+.edui-imooc .edui-cellalignpicker-body td.edui-cellalign-selected .edui-right {
+    background-position: -271px 0;
+}
+/*分隔线*/
+.edui-imooc .edui-toolbar .edui-separator {
+    width: 2px;
+    height: 20px;
+    margin: 2px 4px 2px 3px;
+    background: url(../images/icons.png) -181px 0;
+    background: url(../images/icons.gif) -181px 0 \9;
+}
+
+/*颜色按钮 */
+.edui-imooc .edui-toolbar .edui-colorbutton .edui-colorlump {
+    position: absolute;
+    overflow: hidden;
+    bottom: 1px;
+    left: 1px;
+    width: 18px;
+    height: 4px;
+}
+/*表情按钮及弹出菜单*/
+/*去除了表情的下拉箭头*/
+.edui-imooc .edui-for-emotion .edui-icon {
+    background-position: -60px -20px;
+}
+.edui-imooc .edui-for-emotion .edui-popup-content iframe
+{
+    width: 514px;
+    height: 380px;
+    overflow: hidden;
+}
+.edui-imooc .edui-for-emotion .edui-popup-content
+{
+    position: relative;
+    z-index: 555
+}
+
+.edui-imooc .edui-for-emotion .edui-splitborder {
+    display: none
+}
+
+.edui-imooc .edui-for-emotion .edui-splitbutton-body .edui-arrow
+{
+    width: 0
+}
+.edui-imooc .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder
+{
+    border-left: 1px solid transparent;
+}
+/*contextmenu*/
+.edui-imooc .edui-hassubmenu .edui-arrow {
+    height: 20px;
+    width: 20px;
+    float: right;
+    background: url("../images/icons-all.gif") no-repeat 10px -233px;
+}
+
+.edui-imooc .edui-menu-body .edui-menuitem {
+    padding: 1px;
+}
+
+.edui-imooc .edui-menuseparator {
+    margin: 2px 0;
+    height: 1px;
+    overflow: hidden;
+}
+
+.edui-imooc .edui-menuseparator-inner {
+    border-bottom: 1px solid #e2e3e3;
+    margin-left: 29px;
+    margin-right: 1px;
+}
+
+.edui-imooc .edui-menu-body .edui-state-hover {
+    padding: 0 !important;
+    background-color: #fff5d4;
+    border: 1px solid #dcac6c;
+}
+/*弹出菜单*/
+.edui-imooc .edui-shortcutmenu {
+    padding: 2px;
+    width: 190px;
+    height: 50px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/*粘贴弹出菜单*/
+.edui-imooc .edui-wordpastepop .edui-popup-content{
+    border: none;
+    padding: 0;
+    width: 54px;
+    height: 21px;
+}
+.edui-imooc  .edui-pasteicon {
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/wordpaste.png');
+    background-position: 0 0;
+}
+
+.edui-imooc  .edui-pasteicon.edui-state-opened {
+    background-position: 0 -34px;
+}
+
+.edui-imooc  .edui-pastecontainer {
+    position: relative;
+    visibility: hidden;
+    width: 97px;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.edui-imooc  .edui-pastecontainer .edui-title {
+    font-weight: bold;
+    background: #F8F8FF;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+.edui-imooc  .edui-pastecontainer .edui-button {
+    overflow: hidden;
+    margin: 3px 0;
+}
+
+.edui-imooc  .edui-pastecontainer .edui-button .edui-richtxticon,
+.edui-imooc  .edui-pastecontainer .edui-button .edui-tagicon,
+.edui-imooc  .edui-pastecontainer .edui-button .edui-plaintxticon{
+    float: left;
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    margin-left: 5px;
+    background-image: url('../images/wordpaste.png');
+    background-repeat: no-repeat;
+}
+.edui-imooc  .edui-pastecontainer .edui-button .edui-richtxticon {
+    margin-left: 0;
+    background-position: -109px 0;
+}
+.edui-imooc  .edui-pastecontainer .edui-button .edui-tagicon {
+    background-position: -148px 1px;
+}
+
+.edui-imooc  .edui-pastecontainer .edui-button .edui-plaintxticon {
+    background-position: -72px 0;
+}
+
+.edui-imooc  .edui-pastecontainer .edui-button .edui-state-hover .edui-richtxticon {
+    background-position: -109px -34px;
+}
+.edui-imooc  .edui-pastecontainer .edui-button .edui-state-hover .edui-tagicon{
+    background-position: -148px -34px;
+}
+.edui-imooc  .edui-pastecontainer .edui-button  .edui-state-hover .edui-plaintxticon{
+    background-position: -72px -34px;
+}

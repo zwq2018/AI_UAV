@@ -1,0 +1,118 @@
+.aps-each-icon{
+	display:inline-block;
+	position:relative;
+	
+}
+.aps-each-icon a{
+	display:block;
+	position:relative;
+	z-index:555;
+    border-bottom:none !important;
+	
+}
+.aps-each-icon img{
+	-webkit-transition: opacity 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
+}
+.aps-each-icon a:hover img{
+	opacity:1 !important;
+}
+.aps-each-icon .aps-icon-tooltip{
+	font-size:10px;
+	line-height:1;
+	padding:5px;
+	border-radius:4px;
+	position:absolute;
+	width:auto;
+	z-index:777;
+	white-space:nowrap;
+}
+.aps-group-horizontal .aps-each-icon:first-child{
+	margin-left:0 !important;
+}
+.aps-each-icon .aps-icon-tooltip-top{
+	top:-25px;
+	left:50%;
+	margin-top:0 !important;
+}
+.aps-each-icon .aps-icon-tooltip-top:before{
+	content:"";
+	position:absolute;
+	border-left:5px solid transparent !important;
+	border-right:5px solid transparent !important;
+	border-top-width: 5px;
+	border-top-style:solid;
+	margin-left:-5px;
+	bottom:-5px;
+	left:50%;
+	z-index:555;
+}
+.aps-each-icon .aps-icon-tooltip-right{
+	left:115%;
+	top:50%;
+	margin-left:0 !important;
+}
+.aps-each-icon .aps-icon-tooltip-right:before{
+	content:"";
+	position:absolute;
+	border-top:5px solid transparent !important;
+	border-bottom:5px solid transparent !important;
+	border-right-width: 5px;
+	border-right-style:solid;
+	margin-top:-5px;
+	top:50%;
+	left:-5px;
+	z-index:555;
+}
+.aps-each-icon .aps-icon-tooltip-bottom{
+	bottom:-25px;
+	left:50%;
+	margin-top:0 !important;
+}
+.aps-each-icon .aps-icon-tooltip-bottom:before{
+	content:"";
+	position:absolute;
+	border-left:5px solid transparent !important;
+	border-right:5px solid transparent !important;
+	border-bottom-width: 5px;
+	border-bottom-style:solid;
+	margin-left:-5px;
+	top:-5px;
+	left:50%;
+	z-index:555;
+}
+.aps-each-icon .aps-icon-tooltip-left{
+	right:115%;
+	top:50%;
+	margin-left:0px !important;
+}
+.aps-each-icon .aps-icon-tooltip-left:before{
+	content:"";
+	position:absolute;
+	border-top:5px solid transparent !important;
+	border-bottom:5px solid transparent !important;
+	border-left-width: 5px;
+	border-left-style:solid;
+	margin-top:-5px;
+	top:50%;
+	right:-5px;
+	z-index:555;
+}
+.aps-social-icon-wrapper:before,
+.aps-social-icon-wrapper:after{
+	content:"";
+	display:table;
+}
+.aps-social-icon-wrapper:after{
+	clear:both;
+}
+.aps-social-icon-wrapper .aps-group-vertical{
+	float:left;
+	text-align:center;
+}
+@media (max-width:768px){
+	.aps-social-icon-wrapper .aps-group-vertical{
+		float:none;
+	}
+}

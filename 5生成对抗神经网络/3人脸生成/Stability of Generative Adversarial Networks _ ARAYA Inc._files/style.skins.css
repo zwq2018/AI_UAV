@@ -1,0 +1,76 @@
+/*
+Skins css
+*/
+
+/*################### flat ########################*/
+.skin.flat {
+  vertical-align: top;
+}
+.skin.flat .layer-media{}
+.skin.flat .layer-content {
+  padding: 5px 10px;
+}
+.skin.flat .layer-hover {
+  display: none;
+}
+
+
+
+/*################### zoomout ########################*/
+.skin.zoomout {
+  overflow: hidden;
+  position: relative;
+  vertical-align: top;
+}
+.skin.zoomout:hover .layer-media {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.skin.zoomout .layer-media {
+  transition: all 1s ease 0s;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.skin.zoomout:hover .layer-content{
+  opacity: 1;
+}
+.skin.zoomout .layer-content {
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  transition: all 1s ease 0s;
+}
+.skin.zoomout .layer-hover {
+  display: none;
+}
+
+
+/*################### thumbrounded ########################*/
+
+
+.skin.thumbrounded{}
+.skin.thumbrounded .layer-media {
+  background: rgb(255, 255, 255) none repeat scroll 0 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.skin.thumbrounded .layer-media .thumb {
+  height:240px;
+}
+
+.skin.thumbrounded .layer-content{}
+.skin.thumbrounded .layer-hover {
+  display: none;
+}
+
+
+
+
+
+
+

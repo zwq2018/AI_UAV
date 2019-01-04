@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://www.cnblogs.com/MY0213/p/9208503.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园</title>
+<meta property="og:description" content="举例说明 TensorFlow中的变量一般就是模型的参数。当模型复杂的时候共享变量会无比复杂。 官网给了一个case，当创建两层卷积的过滤器时，每输入一次图片就会创建一次过滤器对应的变量，但是我们希望">
+<link type="text/css" rel="stylesheet" href="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/bundle-Autumn.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/bundle-Autumn-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/MY0213/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/MY0213/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/MY0213/wlwmanifest.xml">
+<script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/f.txt"></script><script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/pubads_impl_rendering_275.js.下载"></script><script async="" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/analytics.js.下载"></script><script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'MY0213', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/f(1).txt" as="script"><script type="text/javascript" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/f(1).txt"></script><script src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/pubads_impl_275.js.下载" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-31/html/container.html"></head>
+<body>
+<a name="top"></a>
+
+<table id="blog_header" cellspacing="0" cellpadding="0" width="100%" border="0" class="banner" height="250" background="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/bg_banner.jpg">
+        <tbody><tr>
+            <td width="61">
+                &nbsp;
+            </td>
+            <td width="236" align="center">
+                
+<br><br><br><br><br><br><br>
+<div id="header">
+	<span>
+		<a id="Header1_HeaderTitle" href="https://www.cnblogs.com/MY0213/">善良的大猪猪</a><br><br>
+		
+	</span>
+</div>
+            </td>
+            <td style="padding-bottom: 30px" align="center" valign="bottom">
+                &nbsp;
+            </td>
+        </tr>
+</tbody></table>
+<table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tbody><tr>
+        <td width="60">
+            &nbsp;
+        </td>
+        <td id="sidebar" valign="top" s="">
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white">
+                <tbody><tr>
+                    <td class="banner" valign="top" style="padding-top: 0px">
+                        
+                            
+<div class="news"><div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/MY0213/">善良的大猪猪</a><br>园龄：<a href="https://home.cnblogs.com/u/MY0213/" title="入园时间：2015-07-13">3年4个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/MY0213/followers/">1</a><br>关注：<a href="https://home.cnblogs.com/u/MY0213/followees/">13</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;9605a5c1-6d29-e511-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('9605a5c1-6d29-e511-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script></div>
+
+                            <div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/MY0213/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/MY0213/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/MY0213/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/MY0213/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/MY0213/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="https://www.cnblogs.com/MY0213/tag/python/">python</a>(8)</li><li><a href="https://www.cnblogs.com/MY0213/tag/%E6%A8%A1%E5%9D%97/">模块</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/sys/">sys</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/TCP/">TCP</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/deque/">deque</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/meta/">meta</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/os/">os</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/queue/">queue</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/RCNN/">RCNN</a>(2)</li><li><a href="https://www.cnblogs.com/MY0213/tag/re/">re</a>(1)</li><li><a href="https://www.cnblogs.com/MY0213/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+		<h1 class="listtitle">随笔档案</h1>
+		
+				<ul class="list">
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_0" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/11.html">2018年11月 (3)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_1" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/10.html">2018年10月 (7)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_2" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/09.html">2018年9月 (7)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_3" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/08.html">2018年8月 (14)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_4" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/07.html">2018年7月 (6)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_5" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/06.html">2018年6月 (4)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_6" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/05.html">2018年5月 (15)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_7" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/04.html">2018年4月 (4)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_8" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2018/03.html">2018年3月 (6)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_9" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2017/11.html">2017年11月 (28)</a> </li>
+			
+				<li class="listitem"><a id="CatList_LinkList_0_Link_10" class="listitem" href="https://www.cnblogs.com/MY0213/archive/2017/10.html">2017年10月 (2)</a> </li>
+			
+				</ul>
+			
+	
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/MY0213/p/8985710.html#4061438">1. Re:python 调用aiohttp</a></li>
+        <li class="recent_comment_body">大神！</li>
+        <li class="recent_comment_author">--你猜_2</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/MY0213/p/9208503.html">1. tensorflow变量作用域（variable scope）(3093)</a></li><li><a href="https://www.cnblogs.com/MY0213/p/8798926.html">2. TCP、UDP绑定同一端口通信的解释(2300)</a></li><li><a href="https://www.cnblogs.com/MY0213/p/8985710.html">3. python 调用aiohttp(1487)</a></li><li><a href="https://www.cnblogs.com/MY0213/p/9460562.html">4. 目标检测算法总结(1250)</a></li><li><a href="https://www.cnblogs.com/MY0213/p/9270864.html">5. tf.Variable、tf.get_variable、tf.variable_scope以及tf.name_scope关系(1152)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/MY0213/p/8985710.html">1. python 调用aiohttp(1)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/MY0213/p/9208503.html">1. tensorflow变量作用域（variable scope）(3)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+                        
+                        <br>
+                        <center>
+                            Powered by <a href="http://www.cnblogs.com/">博客园</a>
+                        </center>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+        <td valign="top" style="padding: 0">
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white" class="index">
+                <tbody><tr>
+                    <td class="banner" valign="top">
+                        <center>
+                            <a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a> <span id="sitehome_link_split">|</span> 
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/MY0213/">首页</a> <span id="bloghome_link_split">|</span> 
+<a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a> <span id="newpost_link_split">|</span> 
+<!--<a id="MyLinks1_NewArticleLink" class="menu" href="/EnterMyBlog.aspx?NewArticle=1">发新文章</a> | -->
+<a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E5%96%84%E8%89%AF%E7%9A%84%E5%A4%A7%E7%8C%AA%E7%8C%AA">联系</a> <span id="contact_link_split">|</span>  
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/MY0213/rss">订阅</a><a id="blog_nav_rss_image" href="https://www.cnblogs.com/MY0213/rss"><img src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/xml.gif" alt="订阅"></a> <span id="rss_link_split">|</span> 
+<a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a>
+
+                        </center>
+                        
+<div id="post_detail">
+<div class="block">
+	<h1 class="block_title"><a id="cb_post_title_url" href="https://www.cnblogs.com/MY0213/p/9208503.html">tensorflow变量作用域（variable scope）</a></h1>
+	<div class="post">
+		<div class="postcontent">
+			<div id="cnblogs_post_body" class="blogpost-body"><div>
+<div>
+<h2>举例说明</h2>
+<p>TensorFlow中的变量一般就是模型的参数。当模型复杂的时候共享变量会无比复杂。</p>
+<p>官网给了一个case，当创建两层卷积的过滤器时，每输入一次图片就会创建一次过滤器对应的变量，但是我们希望所有图片都共享同一过滤器变量，一共有4个变量：conv1_weights,conv1_biases,conv2_weights, and conv2_biases。</p>
+<p>通常的做法是将这些变量设置为全局变量。但是存在的问题是打破封装性，这些变量必须文档化被其他代码文件引用，一旦代码变化，调用方也可能需要变化。</p>
+<p>还有一种保证封装性的方式是将模型封装成类。</p>
+<p>不过TensorFlow提供了<strong>Variable Scope</strong> 这种独特的机制来共享变量。这个机制涉及两个主要函数：</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_928416" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">tf.get_variable(&lt;name&gt;, &lt;shape&gt;, &lt;initializer&gt;) 创建或返回给定名称的变量</code></div><div class="line number2 index1 alt1"><code class="python plain">tf.variable_scope(&lt;scope_name&gt;) 管理传给get_variable()的变量名称的作用域</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>在下面的代码中，通过tf.get_variable()创建了名称分别为weights和biases的两个变量。</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_934343" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python keyword">def</code> <code class="python plain">conv_relu(</code><code class="python functions">input</code><code class="python plain">, kernel_shape, bias_shape):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Create variable named "weights".</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">weights </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"weights"</code><code class="python plain">, kernel_shape,</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">initializer</code><code class="python keyword">=</code><code class="python plain">tf.random_normal_initializer())</code></div><div class="line number5 index4 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Create variable named "biases".</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">biases </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"biases"</code><code class="python plain">, bias_shape,</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">initializer</code><code class="python keyword">=</code><code class="python plain">tf.constant_initializer(</code><code class="python value">0.0</code><code class="python plain">))</code></div><div class="line number8 index7 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">conv </code><code class="python keyword">=</code> <code class="python plain">tf.nn.conv2d(</code><code class="python functions">input</code><code class="python plain">, weights,</code></div><div class="line number9 index8 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">strides</code><code class="python keyword">=</code><code class="python plain">[</code><code class="python value">1</code><code class="python plain">, </code><code class="python value">1</code><code class="python plain">, </code><code class="python value">1</code><code class="python plain">, </code><code class="python value">1</code><code class="python plain">], padding</code><code class="python keyword">=</code><code class="python string">'SAME'</code><code class="python plain">)</code></div><div class="line number10 index9 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">return</code> <code class="python plain">tf.nn.relu(conv </code><code class="python keyword">+</code> <code class="python plain">biases)</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>但是我们需要两个卷积层，这时可以通过tf.variable_scope()指定作用域进行区分，如with tf.variable_scope("conv1")这行代码指定了第一个卷积层作用域为conv1，</p>
+<p>在这个作用域下有两个变量weights和biases。</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_970103" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python keyword">def</code> <code class="python plain">my_image_filter(input_images):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"conv1"</code><code class="python plain">):</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Variables created here will be named "conv1/weights", "conv1/biases".</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">relu1 </code><code class="python keyword">=</code> <code class="python plain">conv_relu(input_images, [</code><code class="python value">5</code><code class="python plain">, </code><code class="python value">5</code><code class="python plain">, </code><code class="python value">32</code><code class="python plain">, </code><code class="python value">32</code><code class="python plain">], [</code><code class="python value">32</code><code class="python plain">])</code></div><div class="line number5 index4 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"conv2"</code><code class="python plain">):</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Variables created here will be named "conv2/weights", "conv2/biases".</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">return</code> <code class="python plain">conv_relu(relu1, [</code><code class="python value">5</code><code class="python plain">, </code><code class="python value">5</code><code class="python plain">, </code><code class="python value">32</code><code class="python plain">, </code><code class="python value">32</code><code class="python plain">], [</code><code class="python value">32</code><code class="python plain">])</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>最后在image_filters这个作用域重复使用第一张图片输入时创建的变量，调用函数reuse_variables()，代码如下：</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_140653" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"image_filters"</code><code class="python plain">) as scope:</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">result1 </code><code class="python keyword">=</code> <code class="python plain">my_image_filter(image1)</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">scope.reuse_variables()</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">result2 </code><code class="python keyword">=</code> <code class="python plain">my_image_filter(image2)</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<h2>tf.get_variable()工作机制</h2>
+<p>tf.get_variable()工作机制是这样的：</p>
+<ul>
+<li>
+<p>当tf.get_variable_scope().reuse == False，调用该函数会创建新的变量</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_587283" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python keyword">assert</code> <code class="python plain">v.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo/v:0"</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+</li>
+<li>
+<p>当tf.get_variable_scope().reuse == True，调用该函数会重用已经创建的变量</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_919483" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">, reuse</code><code class="python keyword">=</code><code class="python color1">True</code><code class="python plain">):</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v1 </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number5 index4 alt2"><code class="python keyword">assert</code> <code class="python plain">v1 </code><code class="python keyword">is</code> <code class="python plain">v</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+</li>
+</ul>
+<p>变量都是通过作用域/变量名来标识，后面会看到作用域可以像文件路径一样嵌套。</p>
+<h2>tf.variable_scope理解</h2>
+<p>tf.variable_scope()用来指定变量的作用域，作为变量名的前缀，支持嵌套，如下：</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_318309" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"bar"</code><code class="python plain">):</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number4 index3 alt1"><code class="python keyword">assert</code> <code class="python plain">v.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo/bar/v:0"</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>当前环境的作用域可以通过函数tf.get_variable_scope()获取，并且reuse标志可以通过调用reuse_variables()设置为True，这个非常有用，如下</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_705024" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">tf.get_variable_scope().reuse_variables()</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v1 </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number5 index4 alt2"><code class="python keyword">assert</code> <code class="python plain">v1 </code><code class="python keyword">is</code> <code class="python plain">v</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>作用域中的resuse默认是False，调用函数reuse_variables()可设置为True，一旦设置为True，就不能返回到False，并且该作用域的子空间reuse都是True。如果不想重用变量，那么可以退回到上层作用域，相当于exit当前作用域，如</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_629368" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"root"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># At start, the scope is not reusing.</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">tf.get_variable_scope().reuse </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python color1">False</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number5 index4 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Opened a sub-scope, still not reusing.</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">tf.get_variable_scope().reuse </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python color1">False</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">, reuse</code><code class="python keyword">=</code><code class="python color1">True</code><code class="python plain">):</code></div><div class="line number8 index7 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Explicitly opened a reusing scope.</code></div><div class="line number9 index8 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">tf.get_variable_scope().reuse </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python color1">True</code></div><div class="line number10 index9 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"bar"</code><code class="python plain">):</code></div><div class="line number11 index10 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Now sub-scope inherits the reuse flag.</code></div><div class="line number12 index11 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">tf.get_variable_scope().reuse </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python color1">True</code></div><div class="line number13 index12 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python comments"># Exited the reusing scope, back to a non-reusing one.</code></div><div class="line number14 index13 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">tf.get_variable_scope().reuse </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python color1">False</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>一个作用域可以作为另一个新的作用域的参数，如：</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_827332" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">) as foo_scope:</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python plain">with tf.variable_scope(foo_scope):</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">w </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"w"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number5 index4 alt2"><code class="python plain">with tf.variable_scope(foo_scope, reuse</code><code class="python keyword">=</code><code class="python color1">True</code><code class="python plain">):</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v1 </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">w1 </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"w"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number8 index7 alt1"><code class="python keyword">assert</code> <code class="python plain">v1 </code><code class="python keyword">is</code> <code class="python plain">v</code></div><div class="line number9 index8 alt2"><code class="python keyword">assert</code> <code class="python plain">w1 </code><code class="python keyword">is</code> <code class="python plain">w</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>不管作用域如何嵌套，当使用with tf.variable_scope()打开一个已经存在的作用域时，就会跳转到这个作用域。</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_286604" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">) as foo_scope:</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">foo_scope.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo"</code></div><div class="line number3 index2 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"bar"</code><code class="python plain">):</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"baz"</code><code class="python plain">) as other_scope:</code></div><div class="line number5 index4 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">other_scope.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"bar/baz"</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(foo_scope) as foo_scope2:</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">foo_scope2.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo"</code>&nbsp; <code class="python comments"># Not changed.</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>variable scope的Initializers可以创递给子空间和tf.get_variable()函数，除非中间有函数改变，否则不变。</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_64669" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">, initializer</code><code class="python keyword">=</code><code class="python plain">tf.constant_initializer(</code><code class="python value">0.4</code><code class="python plain">)):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">v.</code><code class="python functions">eval</code><code class="python plain">() </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python value">0.4</code>&nbsp; <code class="python comments"># Default initializer as set above.</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">w </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"w"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">], initializer</code><code class="python keyword">=</code><code class="python plain">tf.constant_initializer(</code><code class="python value">0.3</code><code class="python plain">)):</code></div><div class="line number5 index4 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">w.</code><code class="python functions">eval</code><code class="python plain">() </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python value">0.3</code>&nbsp; <code class="python comments"># Specific initializer overrides the default.</code></div><div class="line number6 index5 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"bar"</code><code class="python plain">):</code></div><div class="line number7 index6 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number8 index7 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">v.</code><code class="python functions">eval</code><code class="python plain">() </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python value">0.4</code>&nbsp; <code class="python comments"># Inherited default initializer.</code></div><div class="line number9 index8 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.variable_scope(</code><code class="python string">"baz"</code><code class="python plain">, initializer</code><code class="python keyword">=</code><code class="python plain">tf.constant_initializer(</code><code class="python value">0.2</code><code class="python plain">)):</code></div><div class="line number10 index9 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number11 index10 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python keyword">assert</code> <code class="python plain">v.</code><code class="python functions">eval</code><code class="python plain">() </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python value">0.2</code>&nbsp; <code class="python comments"># Changed default initializer.</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>算子（ops）会受变量作用域（variable scope）影响，相当于隐式地打开了同名的名称作用域（name scope)，如+这个算子的名称为foo/add</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_462687" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">x </code><code class="python keyword">=</code> <code class="python value">1.0</code> <code class="python keyword">+</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number3 index2 alt2"><code class="python keyword">assert</code> <code class="python plain">x.op.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo/add"</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>除了变量作用域（variable scope），还可以显式打开名称作用域（name scope)，名称作用域仅仅影响算子的名称，不影响变量的名称。另外如果tf.variable_scope()传入字符参数，创建变量作用域的同时会隐式创建同名的名称作用域。如下面的例子，变量v的作用域是foo，而算子x的算子变为foo/bar，因为有隐式创建名称作用域foo</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_80266" class="syntaxhighlighter  python"><div class="toolbar"><span><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="python plain">with tf.variable_scope(</code><code class="python string">"foo"</code><code class="python plain">):</code></div><div class="line number2 index1 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">with tf.name_scope(</code><code class="python string">"bar"</code><code class="python plain">):</code></div><div class="line number3 index2 alt2"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">v </code><code class="python keyword">=</code> <code class="python plain">tf.get_variable(</code><code class="python string">"v"</code><code class="python plain">, [</code><code class="python value">1</code><code class="python plain">])</code></div><div class="line number4 index3 alt1"><code class="python spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="python plain">x </code><code class="python keyword">=</code> <code class="python value">1.0</code> <code class="python keyword">+</code> <code class="python plain">v</code></div><div class="line number5 index4 alt2"><code class="python keyword">assert</code> <code class="python plain">v.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo/v:0"</code></div><div class="line number6 index5 alt1"><code class="python keyword">assert</code> <code class="python plain">x.op.name </code><code class="python keyword">=</code><code class="python keyword">=</code> <code class="python string">"foo/bar/add"</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　</p>
+<p>注意： 如果tf.variable_scope()传入的不是字符串而是scope对象，则不会隐式创建同名的名称作用域。</p>
+</div>
+<br><br></div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag">标签: <a href="https://www.cnblogs.com/MY0213/tag/scope/">scope</a>, <a href="https://www.cnblogs.com/MY0213/tag/variable/">variable</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(9208503,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;9605a5c1-6d29-e511-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/MY0213/" target="_blank"><img src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/20171010170916.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/MY0213/">善良的大猪猪</a><br>
+            <a href="http://home.cnblogs.com/u/MY0213/followees">关注 - 13</a><br>
+            <a href="http://home.cnblogs.com/u/MY0213/followers">粉丝 - 1</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;9605a5c1-6d29-e511-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(9208503,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">3</span>
+    </div>
+    <div class="buryit" onclick="votePost(9208503,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/MY0213/p/9132934.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/MY0213/p/9132934.html" title="发布于2018-06-04 13:43">矩阵论中基本概念（一）</a><br><a href="https://www.cnblogs.com/MY0213/p/9225310.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/MY0213/p/9225310.html" title="发布于2018-06-25 17:24">windows10下基于vs2015的 caffe安装教程及python接口实现</a><br></div>
+</div>
+
+
+		</div>
+		<div class="itemdesc">
+			发表于 <span id="post-date">2018-06-21 13:16</span> <a href="https://www.cnblogs.com/MY0213/">善良的大猪猪</a> 阅读(<span id="post_view_count">3093</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=9208503" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/MY0213/p/9208503.html#" onclick="AddToWz(9208503);return false;">收藏</a>
+		</div>
+	</div>
+	<div class="seperator">&nbsp;</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=387117,cb_entryId=9208503,cb_blogApp=currentBlogApp,cb_blogUserGuid='9605a5c1-6d29-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2018/6/21 13:16:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/MY0213/p/9208503.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/MY0213/p/9208503.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云&#39;)">【活动】申请成为华为云云享专家 尊享9大权益</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-SpreadJS&#39;)">【工具】SpreadJS纯前端表格控件，可嵌入应用开发的在线Excel</a><br><a href="https://cloud.tencent.com/act/group/amd/index?fromSource=gwzcw.1608278.1608278.1608278" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【腾讯云】拼团福利，AMD云服务器8元/月</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/double11?fromSource=gwzcw.1608279.1608279.1608279" target="_blank"><img width="300" height="250" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/24442-20181116205423366-85420768.jpg" alt="qcloud" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/guoyaohua/p/9476235.html" target="_blank" onclick="clickRecomItmem(9476235,&#39;akrbyOuDm2sqfXoQkH4/wYT4qpi1EIuA2LyuzcT7vAdX087d25kZ5Z7I9OeVMBNn8AJnM7dCd7F2YV2LjsEYv1KInTkQFibdTYWX6giodq2HOB1/V14l3xVvHP7CvYW0ukh3CVCHW+YP4rP0pZM=&#39;)">TensorFlow 使用变量共享</a><br>·  <a href="https://www.cnblogs.com/hypnus-ly/p/8322671.html" target="_blank" onclick="clickRecomItmem(8322671,&#39;YaqQcZdqAftdle7vcYvBsF5QOcDa2qaY9sdxVIpFiYYGC9OAKs2F92QGA2UX1mGCSvhKLqG48mHkd/jVJPnMF4V7Ijg7th86Wjc14LgXNEjEPbc7OFwoNwxHhgaCDcUNjJL/UBRfxF2h6m5aHoU=&#39;)">tensorflow 基础学习九：mnist卷积神经网络</a><br>·  <a href="https://www.cnblogs.com/jermmyhsu/p/8227985.html" target="_blank" onclick="clickRecomItmem(8227985,&#39;hTGs8QfMC/+qgGVa2eQpMYCJk8MZElMeyvF+tLAEfMDZ776DCA54D/8A0oQAcpvClj3qK1i8QqrqeXWif8lYFQjIt1hAnc+ApN2iMhsu19wqfbdNxBOCTmY99XVnPTh2QcWNrJq7gJJB2z/Zc84=&#39;)">TensorFlow学习笔记：共享变量</a><br>·  <a href="https://www.cnblogs.com/Charles-Wan/p/6200446.html" target="_blank" onclick="clickRecomItmem(6200446,&#39;q0ahNDE4v9YUNq0WC73jud7aUCIcOqO3Z91584GnmwOY42YBhHk+byNPub6USKnE/+tNdr1NomEKBKI5MncZCdigdDo/VcPYaZp+GZD+e1rpxb0nD8LsmHkIE3uJJ1+miDCw7Wh9UcvYLls7/zs=&#39;)">TF Boys (TensorFlow Boys ) 养成记（三）： TensorFlow 变量共享</a><br>·  <a href="https://www.cnblogs.com/weizhen/p/6751683.html" target="_blank" onclick="clickRecomItmem(6751683,&#39;N7eIxgmGnBbjSKeFxS7E7M7mvlMug1Yv4NLUJTbEu5HfWmjj6gPTVBgOdlISZ/vntwX5sBEIohwE2eQT0aohDewdhfy3+4vqp9P6MelWMAecpIuhFH7Ukq8hYLUbv7dJKFs29kf/7WPY5raAWdA=&#39;)">82、TensorFlow教你如何构造卷积层</a><br></div></div>
+<script async="async" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CNKk6qO19t4CFcc3lgodUVIIMw">
+    <script>
+    if (new Date() >= new Date(2018, 9, 13)) {
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    }
+    </script>
+    <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/613419/" target="_blank">5G指南：你想知道的，都在这里了</a><br> ·  <a href="https://news.cnblogs.com/n/613438/" target="_blank">淘宝又一重大内测：接入小红书</a><br> ·  <a href="https://news.cnblogs.com/n/613436/" target="_blank">只需照束光就能诊断早期糖尿病和心脏病</a><br> ·  <a href="https://news.cnblogs.com/n/613446/" target="_blank">能定餐馆的Duplex没说自己是AI，这会是人工智能的道德困境吗</a><br> ·  <a href="https://news.cnblogs.com/n/613411/" target="_blank">港交所总裁李小加：科创板振奋人心 有一石三鸟的效果</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+                    </div></td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody></table>
+
+
+
+<iframe id="google_osd_static_frame_2282107756994" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./tensorflow变量作用域（variable scope） - 善良的大猪猪 - 博客园_files/saved_resource(1).html"></iframe></body></html>

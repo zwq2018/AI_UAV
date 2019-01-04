@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://www.imooc.com/article/22966 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>
+tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记
+</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="mobile-agent" content="format=wml" ;="" url="https://m.imooc.com/article/22966">
+<link rel="alternate" media="only screen and (max-width: 640px)" href="https://m.imooc.com/article/22966">
+<meta name="mobile-agent" content="format=xhtml" ;="" url="https://m.imooc.com/article/22966">
+<meta name="mobile-agent" content="format=html5" ;="" url="https://m.imooc.com/article/22966">
+<meta property="qc:admins" content="77103107776157736375">
+<meta property="wb:webmaster" content="c4f857219bfae3cb">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta http-equiv="Cache-Control" content="no-transform ">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<link rel="dns-prefetch" href="https://www.imooc.com/">
+<link rel="dns-prefetch" href="https://img.imooc.com/">
+<link rel="dns-prefetch" href="https://img.mukewang.com/">
+<link rel="apple-touch-icon" sizes="76x76" href="https://www.imooc.com/static/img/common/touch-icon-ipad.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://www.imooc.com/static/img/common/touch-icon-iphone-retina.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://www.imooc.com/static/img/common/touch-icon-ipad-retina.png">
+
+
+
+<meta name="Description" content="摘要: tf.name_scope()和tf.variable_scope()是两个作用域，一般与两个创建/调用变量的函数tf.variable() 和tf.get_variabl">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/moco.min.css" type="text/css">
+    <link rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/swiper-3.4.2.min.css">
+
+<script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/push.js.下载"></script><script type="text/javascript" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/rt.js.下载"></script><script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/hm.js.下载"></script><script type="text/javascript" id="zhuge-js" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/zhuge.min.js.下载"></script><script type="text/javascript">
+
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('!4(){3 a={};3 c=0;3 5=[{d:\'//o.q.g/o/p/K/J.r\',6:0},{d:\'//p.q.g/I/L-O.r\',6:0}];3 w=4(){3 j,s=e N("(^| )"+"k=([^;]*)(;|$)");8(j=u.l.M(s)){m H(j[2])}E{m z}};3 y=4(t){3 n=w();3 b=e F();b.G(b.D()+13*v*v*10);u.l="k="+t+";14="+b.R()+";S=/;P=Q.g";8(t&&t!=n){X.U.V()}};3 C=4(i){3 7=e W();7.T=4(){12(a[i]);a[i]=z;9(i,0)};7.Z=4(){9(i,1)};a[i]=11(4(){7.B="";9(i,1)},Y);7.B=5[i].d};3 9=4(x,6){c++;5[x].6=6;8(c==5.f){3 h=0;A(3 i=0;i<5.f;i++){8(5[i].6==1){h=1}}y(h)}};A(3 i=0;i<5.f;i++){C(i)}}()',62,67,'|||var|function|urls|flag|imgobj|if|callback|timer|exp|count|url|new|length|com|error||arr|IMCDNS|cookie|return|_0|static|img|mukewang|png|reg||document|60|getcookie|index|setcookie|null|for|src|checkCdn|getTime|else|Date|setTime|unescape|images|logo|common|unknow|match|RegExp|80|domain|imooc|toGMTString|path|onload|location|reload|Image|window|3000|onerror|1000|setTimeout|clearTimeout|24|expires'.split('|'),0,{}))
+
+</script>
+
+
+<script type="text/javascript">
+
+var OP_CONFIG={"module":"article","page":"details"};
+var isLogin = 0;
+var is_choice = "";
+var seajsTimestamp="v=201811271018";
+var _msg_unread = 0; 
+var _not_unread = 0; 
+var _cart_num = 0;
+</script>
+
+
+
+
+
+
+<link href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/captcha.min.css" rel="stylesheet">
+<script>
+var isLogin=0
+var _hmt = _hmt || [];
+var pageInfo = {
+	canForward:"1",
+    id: "22966",
+    praiseNum:"0"
+}
+var dtid = "8783";
+var marking = "be";
+var user = {
+    uid : ""
+}
+var authorUid = {
+    uid : '6364172'
+}
+var curPage = 'details'
+
+var a_id = 22966
+
+// 为html转码，article_content 为新markdown编辑器接收的初始化内容
+var article_content = "&lt;p&gt;摘要: tf.name_scope()和tf.variable_scope()是两个作用域，一般与两个创建/调用变量的函数tf.variable() 和tf.get_variable()搭配使用。它们搭配在一起的两个常见用途：1)变量共享，2)tensorboard画流程图时为了可视化封装变量，这两种用途有特定的搭配方式，掌握好就可以用了。如果您想打破砂锅问到底，想要探寻更多的知识，了解它们的用法和区别，本文中则阐述了更多的详情。&lt;/p&gt;\n&lt;p&gt;一. name_scope 和 variable_scope的用途&lt;br /&gt;\n用途1: 共享变量&lt;br /&gt;\nTensorFlow (TF) 中，name_scope 和 variable_scope 主要是因为 变量共享 的需求。为什么要共享变量？举个简单的例子：例如，当我们研究生成对抗网络GAN的时候，判别器的任务是如果接收到的是生成器生成的图像，判别器就尝试优化自己的网络结构来使自己输出0，如果接收到的是来自真实数据的图像，那么就尝试优化自己的网络结构来使自己输出1。也就是说，生成图像和真实图像经过判别器的时候，要共享同一套变量，所以TensorFlow引入了变量共享机制。&lt;/p&gt;\n&lt;p&gt;变量共享主要涉及两个函数： &lt;/p&gt;\n&lt;p&gt;tf.get_variable(&amp;lt;name&amp;gt;, &amp;lt;shape&amp;gt;, &amp;lt;initializer&amp;gt;)&lt;br /&gt;\ntf.variable_scope(&amp;lt;scope_name&amp;gt;)&lt;br /&gt;\n即就是必须要在tf.variable_scope的作用域下使用tf.get_variable()函数。这里用tf.get_variable( ) 而不用tf.Variable( )，是因为前者拥有一个变量检查机制，会检测已经存在的变量是否设置为共享变量，如果已经存在的变量没有设置为共享变量，TensorFlow 运行到第二个拥有相同名字的变量的时候，就会报错（详见本文的RNN应用例子章节）。&lt;/p&gt;\n&lt;p&gt;两个创建变量的方式。如果使用tf.Variable() 的话每次都会新建变量。但是大多数时候我们是希望重用一些变量，所以就用到了get_variable()，它会去搜索变量名，有就直接用，没有再新建。&lt;br /&gt;\n名字域。既然用到变量名了，就涉及到了名字域的概念。通过不同的域来区别变量名，毕竟让我们给所有变量都取不同名字还是很辛苦。&lt;br /&gt;\n这就是为什么会有scope 的概念。name_scope 作用于操作，variable_scope 可以通过设置reuse 标志以及初始化方式来影响域下的变量。&lt;br /&gt;\n“共享变量” 的应用场景：RNN应用例子&lt;br /&gt;\n在tf.variable_scope的作用域下，通过get_variable()使用已经创建的变量，实现了变量的共享。在 train RNN 和 test RNN 的时候, RNN 的 time_steps 会有不同的取值, 这将会影响到整个 RNN 的结构, 所以导致在 test 的时候, 不能单纯地使用 train 时建立的那个 RNN. 但是 train RNN 和 test RNN 又必须是有同样的 weights biases 的参数. 所以, 这时, 就是使用 reuse variable 的好时机.&lt;/p&gt;\n&lt;p&gt;例子：首先定义train 和 test 的不同参数.&lt;/p&gt;\n&lt;p&gt;class TrainConfig:&lt;br /&gt;\nbatch_size = 20&lt;br /&gt;\ntime_steps = 20&lt;br /&gt;\ninput_size = 10&lt;br /&gt;\noutput_size = 2&lt;br /&gt;\ncell_size = 11&lt;br /&gt;\nlearning_rate = 0.01&lt;/p&gt;\n&lt;p&gt;class TestConfig(TrainConfig):&lt;br /&gt;\ntime_steps = 1&lt;/p&gt;\n&lt;p&gt;train_config = TrainConfig()&lt;br /&gt;\ntest_config = TestConfig()&lt;br /&gt;\n然后让 train_rnn 和 test_rnn 在同一个 tf.variable_scope(&apos;rnn&apos;) 之下.&lt;/p&gt;\n&lt;p&gt;并且定义 scope.reuse_variables(), 使我们能把 train_rnn 的所有 weights, biases 参数全部绑定到 test_rnn 中.&lt;/p&gt;\n&lt;p&gt;这样, 不管两者的 time_steps 有多不同, 结构有多不同, train_rnn W, b 参数更新成什么样, test_rnn 的参数也更新成什么样.&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&apos;rnn&apos;) as scope:&lt;br /&gt;\nsess = tf.Session()&lt;br /&gt;\ntrain_rnn = RNN(train_config)&lt;br /&gt;\nscope.reuse_variables()&lt;br /&gt;\ntest_rnn = RNN(test_config)&lt;br /&gt;\nsess.run(tf.global_variables_initializer())&lt;br /&gt;\nRNN 例子的完整代码可以看这里.&lt;/p&gt;\n&lt;p&gt;因为想要达到变量共享的效果, 就要在 tf.variable_scope()的作用域下使用 tf.get_variable() 这种方式产生和提取变量. 不像 tf.Variable() 每次都会产生新的变量, tf.get_variable() 如果遇到了已经存在名字的变量时, 它会单纯的提取这个同样名字的变量，如果不存在名字的变量再创建.&lt;/p&gt;\n&lt;p&gt;但在重复使用的时候, 一定要在代码中强调 scope.reuse_variables(),如下面代码所示，否则系统将会报错, 以为你是不小心重复使用到了一个变量.&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&amp;quot;a_variable_scope&amp;quot;) as scope:&lt;br /&gt;\ninitializer = tf.constant_initializer(value=3)&lt;br /&gt;\nvar3 = tf.get_variable(name=&apos;var3&apos;, shape=[1], dtype=tf.float32, initializer=initializer)&lt;br /&gt;\nscope.reuse_variables()&lt;br /&gt;\nvar3_reuse = tf.get_variable(name=&apos;var3&apos;,) # var3_reuse&lt;br /&gt;\nvar4 = tf.Variable(name=&apos;var4&apos;, initial_value=[4], dtype=tf.float32)&lt;br /&gt;\nvar4_reuse = tf.Variable(name=&apos;var4&apos;, initial_value=[4], dtype=tf.float32) ＃ var4_reuse&lt;/p&gt;\n&lt;p&gt;with tf.Session() as sess:&lt;br /&gt;\nsess.run(tf.global_variables_initializer())&lt;br /&gt;\nprint(var3.name)            # a_variable_scope/var3:0&lt;br /&gt;\nprint(sess.run(var3))       # [ 3.]&lt;br /&gt;\nprint(var3_reuse.name)      # a_variable_scope/var3:0&lt;br /&gt;\nprint(sess.run(var3_reuse)) # [ 3.]&lt;br /&gt;\nprint(var4.name)            # a_variable_scope/var4:0&lt;br /&gt;\nprint(sess.run(var4))       # [ 4.]&lt;br /&gt;\nprint(var4_reuse.name)      # a_variable_scope/var4_1:0&lt;br /&gt;\nprint(sess.run(var4_reuse)) # [ 4.]&lt;/p&gt;\n&lt;p&gt;不强调reuse_variables()而报错的例子：&lt;/p&gt;\n&lt;p&gt;如果把 tf.Variable 改成 tf.get_variable，直接调用两次，就会报错：&lt;/p&gt;\n&lt;p&gt;result1 = my_image_filter(image1)&lt;br /&gt;\nresult2 = my_image_filter(image2)&lt;/p&gt;\n&lt;div class=&quot;anchor-list&quot;&gt; &lt;a name=&quot;parent_1&quot; class=&quot;lemma-anchor para-title&quot;&gt;&lt;/a&gt;&lt;/div&gt; &lt;strong style=&quot;display:block;font-size:25px;padding-bottom:8px&quot;&gt;Raises ValueError(... conv1/weights already exists ...)&lt;/strong&gt;\n&lt;p&gt;为了解决这个问题，TF提出了 tf.variable_scope 函数：它的主要作用是，在一个 variable_scope 作用域下内共享一些变量。实现方式可以有如下几种用法：&lt;/p&gt;\n&lt;p&gt;1）&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&amp;quot;image_filters&amp;quot;) as scope:&lt;br /&gt;\nresult1 = my_image_filter(image1)&lt;br /&gt;\nscope.reuse_variables() # or &lt;/p&gt;\n&lt;div class=&quot;anchor-list&quot;&gt; &lt;a name=&quot;parent_2&quot; class=&quot;lemma-anchor para-title&quot;&gt;&lt;/a&gt;&lt;/div&gt; &lt;strong style=&quot;display:block;font-size:25px;padding-bottom:8px&quot;&gt;tf.get_variable_scope().reuse_variables()&lt;/strong&gt;\n&lt;pre&gt;&lt;code&gt;result2 = my_image_filter(image2)&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;2）&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&amp;quot;image_filters1&amp;quot;) as scope1:&lt;br /&gt;\nresult1 = my_image_filter(image1)&lt;br /&gt;\nwith tf.variable_scope(scope1, reuse = True)&lt;br /&gt;\nresult2 = my_image_filter(image2)&lt;br /&gt;\n注意最好不要采用的方式：设置 reuse 标识为 False，然后在需要的时候设置 reuse 标识为 True。&lt;/p&gt;\n&lt;p&gt;可视化用途：画tensorboard流程图时封装&lt;br /&gt;\n当然对我们而言name_scope还有个更直观的用处就是：在tensorboard 里可视化的时候用name_scope进行封装后会更清晰. 通常情况下，tf.variable_scope 和 tf.name_scope 配合，能画出非常漂亮的tensorboard流程图，但是他们两个之间又有着细微的差别，那就是 name_scope 只能管住操作 Ops 的名字，而管不住变量 Variables 的名字，看下例：&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&amp;quot;foo&amp;quot;):&lt;br /&gt;\nwith tf.name_scope(&amp;quot;bar&amp;quot;):&lt;br /&gt;\nv = tf.get_variable(&amp;quot;v&amp;quot;, [1])&lt;br /&gt;\nx = 1.0 + v&lt;br /&gt;\nassert v.name == &amp;quot;foo/v:0&amp;quot;&lt;br /&gt;\nassert x.op.name == &amp;quot;foo/bar/add&amp;quot;&lt;br /&gt;\n参考：&lt;a href=&quot;https://www.zhihu.com/question/54513728/answer/177901159&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;https://www.zhihu.com/question/54513728/answer/177901159&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Tensorflow变量共享，参考：&lt;a href=&quot;http://www.cnblogs.com/Charles-Wan/p/6200446.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;http://www.cnblogs.com/Charles-Wan/p/6200446.html&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;参考：&lt;a href=&quot;http://sentiment-mining.blogspot.com/2016/12/tensorflow-name-scope-variable-scope.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;http://sentiment-mining.blogspot.com/2016/12/tensorflow-name-scope-variable-scope.html&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;参考：&lt;a href=&quot;https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/5-12-scope/&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/5-12-scope/&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;二. TensorFlow中name scope和variable scope区别&lt;br /&gt;\n为了在代码的任何部分可以使用某一个已经创建的变量，TF引入了变量共享机制共享变量，而不是传一个变量的引用。&lt;/p&gt;\n&lt;p&gt;I. TF中创建变量的方式有两种：tf.get_variable()和tf.Variable()&lt;br /&gt;\ntf.get_variable(“vname”)方法，在创建变量时，如果这个变量vname已经存在，直接使用这个变量，如果不存在，则重新创建；&lt;br /&gt;\ntf.Variable()在创建变量时，一律创建新的变量，如果这个变量已存在，则后缀会增加0、1、2等数字编号予以区别。&lt;br /&gt;\n例子：在 tf.name_scope() 的框架下使用这两种方式, 结果如下.&lt;/p&gt;\n&lt;p&gt;import tensorflow as tf&lt;/p&gt;\n&lt;p&gt;with tf.name_scope(&amp;quot;a_name_scope&amp;quot;):&lt;br /&gt;\ninitializer = tf.constant_initializer(value=1)&lt;br /&gt;\nvar1 = tf.get_variable(name=&apos;var1&apos;, shape=[1], dtype=tf.float32, initializer=initializer)&lt;br /&gt;\nvar2 = tf.Variable(name=&apos;var2&apos;, initial_value=[2], dtype=tf.float32)&lt;br /&gt;\nvar21 = tf.Variable(name=&apos;var2&apos;, initial_value=[2.1], dtype=tf.float32)&lt;br /&gt;\nvar22 = tf.Variable(name=&apos;var2&apos;, initial_value=[2.2], dtype=tf.float32)&lt;/p&gt;\n&lt;p&gt;with tf.Session() as sess:&lt;br /&gt;\nsess.run(tf.initialize_all_variables())&lt;br /&gt;\nprint(var1.name)        # var1:0&lt;br /&gt;\nprint(sess.run(var1))   # [ 1.]&lt;br /&gt;\nprint(var2.name)        # a_name_scope/var2:0&lt;br /&gt;\nprint(sess.run(var2))   # [ 2.]&lt;br /&gt;\nprint(var21.name)       # a_name_scope/var2_1:0&lt;br /&gt;\nprint(sess.run(var21))  # [ 2.0999999]&lt;br /&gt;\nprint(var22.name)       # a_name_scope/var2_2:0&lt;br /&gt;\nprint(sess.run(var22))  # [ 2.20000005]&lt;br /&gt;\n可以看出使用 tf.Variable() 定义变量的时候, 虽然var2, var21, var22的 name 一样, 但是为了不重复变量名, Tensorflow 为它们做了附加的区分，因为输出的变量名是不一样的. 所以, 本质上tensorflow令 var2, var21, var22 成为不一样的变量.&lt;/p&gt;\n&lt;p&gt;这样做的目的是，搭配上不同的作用域类型，可以实现变量共享机制。&lt;/p&gt;\n&lt;p&gt;II. TF中有两种作用域类型&lt;br /&gt;\n命名域 (name scope)，通过tf.name_scope 或 tf.op_scope创建；&lt;br /&gt;\n变量域 (variable scope)，通过tf.variable_scope 或 tf.variable_op_scope创建；&lt;br /&gt;\n这两种作用域，对于使用tf.Variable()方式创建的变量，具有相同的效果，都会在变量名称前面，加上域名称。&lt;br /&gt;\n对于通过tf.get_variable()方式创建的变量，只有variable scope名称会加到变量名称前面，而name scope不会作为前缀。例如 print(v1.name)   # var1:0&lt;br /&gt;\n例子：&lt;/p&gt;\n&lt;p&gt;with tf.name_scope(&amp;quot;my_name_scope&amp;quot;):&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;v1 = tf.get_variable(&quot;var1&quot;, [1], dtype=tf.float32)\n\nv2 = tf.Variable(1, name=&quot;var2&quot;, dtype=tf.float32)\n\na = tf.add(v1, v2)&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;print(v1.name)  # var1:0&lt;/p&gt;\n&lt;p&gt;print(v2.name)  # my_name_scope/var2:0&lt;/p&gt;\n&lt;p&gt;print(a.name)   # my_name_scope/Add:0&lt;/p&gt;\n&lt;p&gt;小结：name_scope不会作为tf.get_variable变量的前缀，但是会作为tf.Variable的前缀。&lt;/p&gt;\n&lt;p&gt;例子：&lt;/p&gt;\n&lt;p&gt;with tf.variable_scope(&amp;quot;my_variable_scope&amp;quot;):&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;v1 = tf.get_variable(&quot;var1&quot;, [1], dtype=tf.float32)\n\nv2 = tf.Variable(1, name=&quot;var2&quot;, dtype=tf.float32)\n\na = tf.add(v1, v2)&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;print(v1.name)  # my_variable_scope/var1:0&lt;/p&gt;\n&lt;p&gt;print(v2.name)  # my_variable_scope/var2:0&lt;/p&gt;\n&lt;p&gt;print(a.name)   # my_variable_scope/Add:0&lt;/p&gt;\n&lt;p&gt;小结：在variable_scope的作用域下，tf.get_variable()和tf.Variable()都加了scope_name前缀。因此，在tf.variable_scope的作用域下，通过get_variable()可以使用已经创建的变量，实现了变量的共享。&lt;/p&gt;";
+// 为html反转码
+article_content = article_content.replace(/\&lt\;/g, "<").replace(/\&gt\;/g, ">").replace(/\&amp\;/g, "&").replace(/\&quot\;/g, '"').replace(/\&apos\;/g, "'");
+// 递归遍历dom，处理图片懒加载
+function dfs(root) {
+	var nodes = Array.prototype.slice.call(root.children);
+	if (nodes.length) {
+		nodes.forEach(function (node) {
+			if(node.tagName == 'IMG') {
+				var src = node.src;
+				node.setAttribute('data-original', src);
+				node.setAttribute('class', 'lazyload');
+				node.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC';
+			}
+			dfs(node);
+		});
+	}
+}
+// 创建手记内容dom节点
+var articleEl = document.createElement("div");
+articleEl.innerHTML = article_content;
+// 遍历手记dom树
+dfs(articleEl);
+</script>
+
+<script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/init.js.下载"></script>
+<link rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/saved_resource" type="text/css">
+<script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/seajs-text.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/common.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/jquery.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/string.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/userinfo.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/cart.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/cookie.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/suggest.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/store.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/json.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/im.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/details.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/moco.min.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/socket.io.min.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/prettify.js.下载"></script><link charset="utf-8" rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/prettify.css"><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/jquery.lazyload.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/ueditor.parse.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/layer.min.js.下载"></script><link charset="utf-8" rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/layer.css"><link charset="utf-8" rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/ueditor.css"><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/addCopy.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/course_tipoff.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/discoverycount.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/praise.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/common.js(1).下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/verify-code.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/mo.min.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/juicer.min.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/jquery.qrcode.min.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/limitinput.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/publish.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/detail.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/forward.js.下载"></script><script charset="utf-8" async="" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/detail_forward.js.下载"></script><script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/share.js.下载"></script><link rel="stylesheet" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/share_style0_16.css"><link id="syntaxhighlighter_css" rel="stylesheet" type="text/css" href="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/shCoreDefault.css"><script id="syntaxhighlighter_js" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/shCore.js.下载" type="text/javascript" defer="defer"></script><style id="chartsContainerHeight">
+.edui-chart-container { height:500px}</style><style id="list">
+body ol,body ul{margin:0;padding:0;}body .list-paddingleft-1{padding-left:0}
+body .list-paddingleft-2{padding-left:20px}
+body .list-paddingleft-3{padding-left:40px}</style></head>
+
+<body>
+
+
+<div id="new_header" class="special-header">
+    <div class="page-container new-header clearfix" id="nav">
+        <ul class="nav-item">
+            <li><a href="https://www.imooc.com/" target="_self">慕课网首页</a></li>
+            <li><a href="https://www.imooc.com/course/list" target="_self">免费课程</a></li>           
+            <li><a href="https://coding.imooc.com/" target="_self">实战课程</a></li>
+            <li><a href="https://class.imooc.com/" class="" target="_self">就业班</a></li>
+            <li><a href="https://www.imooc.com/wenda" target="_self">猿问</a></li>
+            <li><a href="https://www.imooc.com/article" class="active" target="_self">手记</a></li>
+            <li><a href="https://job.imooc.com/" target="_self">猿聘<i class="icn-new"></i></a></li>
+        </ul>
+        <div class="header-right clearfix">
+            <div class="app-download" id="js-app-load">
+                <a href="https://www.imooc.com/mobile/app" target="_blank" style="width:60px;">下载APP</a>
+                <div class="app-load-box clearfix js-load-box">
+                    <div class="browser-load-box">
+                        <h4>慕课网浏览器 - PC客户端</h4>
+                        <a class="app-load-btn" href="https://www.imooc.com/mobile/app"><i class="imv2-windows"></i>Windows版</a>
+                        <span class="browser-load-mac">Mac版开发中，敬请期待…</span>
+                    </div>
+                    <div class="mobile-load-box">
+                        <h4>慕课网APP - 随时随地学编程</h4>
+                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/appload.png" class="l">
+                        <div class="r">
+                            <a class="app-load-btn" href="https://itunes.apple.com/cn/app/mu-ke-wang/id722179140?mt=8" target="_blank"><i class="icon-apple"></i>App Store下载</a>
+                            <a class="app-load-btn" href="https://www.imooc.com/mobile/mukewang.apk" target="_blank"><i class="icon-android"></i>Android下载</a>
+                            <p>扫描下载慕课网APP</p>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="shop-cart" id="shop-cart">
+                <a href="https://order.imooc.com/pay/cart" class="shop-cart-icon" target="_blank">
+                    <span class="imv2-cart js-endcart"></span><span>购物车</span><span class="shopping_icon js-cart-num" data-ordernum="0" data-cartnum="0" style="display: none">0</span>
+                </a>
+                <div class="my-cart" id="js-my-cart"></div>
+            </div>
+                        <div id="login-area">
+                <ul class="header-unlogin clearfix">
+                    <li class="header-signin">
+                        <a href="https://www.imooc.com/user/newlogin" id="js-signin-btn">登录</a> / <a href="https://www.imooc.com/user/newsignup" id="js-signup-btn">注册</a>
+                    </li>             
+                </ul>
+            </div>
+                    </div>
+    </div>
+</div>
+<div id="sub-header">
+            <div class="sub-container" id="sub-nav">
+            <a class="article-logo" href="https://www.imooc.com/article"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/article-logo.png" alt=""></a>
+            <div class="operate-area clearfix">
+                <span>
+                    <a href="https://www.imooc.com/article/publish" target="_blank" class="btn btn-blue btn-article">写文章</a>
+                </span>
+                <span>
+                    <a href="https://www.imooc.com/discovery" target="_blank" class="btn btn-discovery">动态圈</a>
+                    <a class="count hide">0</a>
+                </span>
+            </div>
+            <div class="search-warp clearfix" style="min-width: 32px;">
+                
+
+                <div class="search-area" data-search="top-banner">
+                    <input class="search-input" data-suggest-trigger="suggest-trigger" placeholder="搜索感兴趣的知识和文章" type="text" autocomplete="off">
+                    <input type="hidden" class="btn_search" data-search-btn="search-btn">
+                    <ul class="search-area-result" data-suggest-result="suggest-result">
+                    </ul>
+                </div>
+                <div class="showhide-search" data-show="no"><i class="icon-search"></i></div>
+            </div>
+            
+        </div>
+    </div>
+<div class="bindHintBox js-bindHintBox hide">
+    <div class="pr">
+        为了账号安全，请及时绑定邮箱和手机<a href="https://www.imooc.com/user/setbindsns" class="ml20 color-red" target="_blank">立即绑定</a>
+        <button class="closeBindHint js-closeBindHint" type="button"></button>
+        <div class="arrow"> </div>
+    </div>
+</div>
+
+
+<div id="main">
+
+<div class="main_con clearfix">
+	<!-- 分享&收藏 -->
+	<div class="active-box js-active-fixed">
+		<div class="share-box">
+			<div class="small-share">
+				<ul class="share-wrap">
+					<li class="weichat-posi">
+						<!-- 推荐 --> 
+						<div class="praise-box">
+														<button id="js-praise-left"><span class="imv2-thumb_up"></span></button>
+																						<span class="praise-num">推荐</span>
+													</div>
+						<!-- 推荐end -->
+
+
+
+						<div class="icon-warp">
+						  <div class="follow-warp">
+							<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;pl&#39;])" data-track="pl-1-1" href="https://www.imooc.com/article/22966#comment" class="icon-nav imv2-chat_bubble" title="评论"></a>  
+							 							 	<span class="comment-num">评论</span>
+							 						  </div>
+						</div>
+						<div class="icon-warp">
+							 								<div class="follow-warp">
+									<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;sc&#39;])" data-track="sc-1-1" data-id="22966" href="javascript:" class="js-follow dc-follow  icon-nav icon-star2 " title="收藏"></a>
+																			<span>收藏</span>
+																	</div>
+													</div>    
+						
+						<p class="line"></p>
+
+
+						<div class="bdsharebuttonbox weichat-style bdshare-button-style0-16" data-bd-bind="1543385134900">
+							<div class="icon-warp2">
+								<a class="js-forward-btn imv2-forward icon-nav" href="https://www.imooc.com/article/22966#">
+								</a>
+								<!-- 只在第一次访问显示 -->
+																<p class="tip js-tip">
+									<span class="text">点击这里，将文章分享到自己的动态</span>
+									<span class="js-close imv2-close"></span>
+								</p>
+															</div>
+							<div class="icon-warp2">
+								<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;wx&#39;])" data-track="letfshare-1-1" href="https://www.imooc.com/article/22966#" class="bds_weixin icon-nav icon-share-weichat share-icon" data-cmd="weixin" title="分享到微信"></a>
+							</div>
+							<div class="icon-warp2">
+								<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;wb&#39;])" data-track="letfshare-1-2" href="https://www.imooc.com/article/22966#" class="bds_tsina icon-nav icon-share-weibo share-icon" data-cmd="tsina" title="分享到新浪微博"></a>
+							</div>
+							<div class="icon-warp2">
+								<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;qq&#39;])" data-track="letfshare-1-3" href="https://www.imooc.com/article/22966#" class="bds_qzone icon-nav icon-share-qq share-icon" data-cmd="qzone" title="分享到QQ空间"></a>    
+							</div>                               
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- 分享&收藏 end -->
+	<div class="left_essay l">
+		<div class="part_essay js-part_essay">
+							<div class="originalImg"></div>
+						<!-- 面包屑 -->
+			<div class="detail-path">
+				<a class="imooc" target="_blank" href="https://www.imooc.com/"><i class="imv2-imooc"></i></a>
+				<a href="https://www.imooc.com/article" target="_blank">手记</a>  /<a href="https://www.imooc.com/article/be" target="_blank" class="js-column">后端开发</a>
+			</div>
+			<!-- 面包屑end -->       
+			<div class="detail-title-wrap">
+				<h1 class="detail-title">
+					<span class="d-t js-title">tf.name_scope() 和 tf.variable_scope() 的用法和玄机</span>
+				</h1>
+				<div class="dc-profile clearfix">
+					<div class="l">
+						<span class="spacer">2018.01.25 11:52</span>
+						<span class="spacer spacer-2">6490浏览</span>
+					</div>
+					<div class="r path-right-box">
+						<div class="rinfo l">
+																					
+							
+						</div> 
+					</div>	
+				</div>
+			</div> 
+
+			 <!-- 手记详情 -->
+			<div class="detail-content-wrap">  
+				<div class="detail-content js-lookimg long-content">
+					
+					<div><p>摘要: tf.name_scope()和tf.variable_scope()是两个作用域，一般与两个创建/调用变量的函数tf.variable() 和tf.get_variable()搭配使用。它们搭配在一起的两个常见用途：1)变量共享，2)tensorboard画流程图时为了可视化封装变量，这两种用途有特定的搭配方式，掌握好就可以用了。如果您想打破砂锅问到底，想要探寻更多的知识，了解它们的用法和区别，本文中则阐述了更多的详情。</p>
+<p>一. name_scope 和 variable_scope的用途<br>
+用途1: 共享变量<br>
+TensorFlow (TF) 中，name_scope 和 variable_scope 主要是因为 变量共享 的需求。为什么要共享变量？举个简单的例子：例如，当我们研究生成对抗网络GAN的时候，判别器的任务是如果接收到的是生成器生成的图像，判别器就尝试优化自己的网络结构来使自己输出0，如果接收到的是来自真实数据的图像，那么就尝试优化自己的网络结构来使自己输出1。也就是说，生成图像和真实图像经过判别器的时候，要共享同一套变量，所以TensorFlow引入了变量共享机制。</p>
+<p>变量共享主要涉及两个函数： </p>
+<p>tf.get_variable(&lt;name&gt;, &lt;shape&gt;, &lt;initializer&gt;)<br>
+tf.variable_scope(&lt;scope_name&gt;)<br>
+即就是必须要在tf.variable_scope的作用域下使用tf.get_variable()函数。这里用tf.get_variable( ) 而不用tf.Variable( )，是因为前者拥有一个变量检查机制，会检测已经存在的变量是否设置为共享变量，如果已经存在的变量没有设置为共享变量，TensorFlow 运行到第二个拥有相同名字的变量的时候，就会报错（详见本文的RNN应用例子章节）。</p>
+<p>两个创建变量的方式。如果使用tf.Variable() 的话每次都会新建变量。但是大多数时候我们是希望重用一些变量，所以就用到了get_variable()，它会去搜索变量名，有就直接用，没有再新建。<br>
+名字域。既然用到变量名了，就涉及到了名字域的概念。通过不同的域来区别变量名，毕竟让我们给所有变量都取不同名字还是很辛苦。<br>
+这就是为什么会有scope 的概念。name_scope 作用于操作，variable_scope 可以通过设置reuse 标志以及初始化方式来影响域下的变量。<br>
+“共享变量” 的应用场景：RNN应用例子<br>
+在tf.variable_scope的作用域下，通过get_variable()使用已经创建的变量，实现了变量的共享。在 train RNN 和 test RNN 的时候, RNN 的 time_steps 会有不同的取值, 这将会影响到整个 RNN 的结构, 所以导致在 test 的时候, 不能单纯地使用 train 时建立的那个 RNN. 但是 train RNN 和 test RNN 又必须是有同样的 weights biases 的参数. 所以, 这时, 就是使用 reuse variable 的好时机.</p>
+<p>例子：首先定义train 和 test 的不同参数.</p>
+<p>class TrainConfig:<br>
+batch_size = 20<br>
+time_steps = 20<br>
+input_size = 10<br>
+output_size = 2<br>
+cell_size = 11<br>
+learning_rate = 0.01</p>
+<p>class TestConfig(TrainConfig):<br>
+time_steps = 1</p>
+<p>train_config = TrainConfig()<br>
+test_config = TestConfig()<br>
+然后让 train_rnn 和 test_rnn 在同一个 tf.variable_scope('rnn') 之下.</p>
+<p>并且定义 scope.reuse_variables(), 使我们能把 train_rnn 的所有 weights, biases 参数全部绑定到 test_rnn 中.</p>
+<p>这样, 不管两者的 time_steps 有多不同, 结构有多不同, train_rnn W, b 参数更新成什么样, test_rnn 的参数也更新成什么样.</p>
+<p>with tf.variable_scope('rnn') as scope:<br>
+sess = tf.Session()<br>
+train_rnn = RNN(train_config)<br>
+scope.reuse_variables()<br>
+test_rnn = RNN(test_config)<br>
+sess.run(tf.global_variables_initializer())<br>
+RNN 例子的完整代码可以看这里.</p>
+<p>因为想要达到变量共享的效果, 就要在 tf.variable_scope()的作用域下使用 tf.get_variable() 这种方式产生和提取变量. 不像 tf.Variable() 每次都会产生新的变量, tf.get_variable() 如果遇到了已经存在名字的变量时, 它会单纯的提取这个同样名字的变量，如果不存在名字的变量再创建.</p>
+<p>但在重复使用的时候, 一定要在代码中强调 scope.reuse_variables(),如下面代码所示，否则系统将会报错, 以为你是不小心重复使用到了一个变量.</p>
+<p>with tf.variable_scope("a_variable_scope") as scope:<br>
+initializer = tf.constant_initializer(value=3)<br>
+var3 = tf.get_variable(name='var3', shape=[1], dtype=tf.float32, initializer=initializer)<br>
+scope.reuse_variables()<br>
+var3_reuse = tf.get_variable(name='var3',) # var3_reuse<br>
+var4 = tf.Variable(name='var4', initial_value=[4], dtype=tf.float32)<br>
+var4_reuse = tf.Variable(name='var4', initial_value=[4], dtype=tf.float32) ＃ var4_reuse</p>
+<p>with tf.Session() as sess:<br>
+sess.run(tf.global_variables_initializer())<br>
+print(var3.name)            # a_variable_scope/var3:0<br>
+print(sess.run(var3))       # [ 3.]<br>
+print(var3_reuse.name)      # a_variable_scope/var3:0<br>
+print(sess.run(var3_reuse)) # [ 3.]<br>
+print(var4.name)            # a_variable_scope/var4:0<br>
+print(sess.run(var4))       # [ 4.]<br>
+print(var4_reuse.name)      # a_variable_scope/var4_1:0<br>
+print(sess.run(var4_reuse)) # [ 4.]</p>
+<p>不强调reuse_variables()而报错的例子：</p>
+<p>如果把 tf.Variable 改成 tf.get_variable，直接调用两次，就会报错：</p>
+<p>result1 = my_image_filter(image1)<br>
+result2 = my_image_filter(image2)</p>
+<div class="anchor-list"> <a name="parent_1" class="lemma-anchor para-title"></a></div> <strong style="display:block;font-size:25px;padding-bottom:8px">Raises ValueError(... conv1/weights already exists ...)</strong>
+<p>为了解决这个问题，TF提出了 tf.variable_scope 函数：它的主要作用是，在一个 variable_scope 作用域下内共享一些变量。实现方式可以有如下几种用法：</p>
+<p>1）</p>
+<p>with tf.variable_scope("image_filters") as scope:<br>
+result1 = my_image_filter(image1)<br>
+scope.reuse_variables() # or </p>
+<div class="anchor-list"> <a name="parent_2" class="lemma-anchor para-title"></a></div> <strong style="display:block;font-size:25px;padding-bottom:8px">tf.get_variable_scope().reuse_variables()</strong>
+<pre><code>result2 = my_image_filter(image2)</code></pre>
+<p>2）</p>
+<p>with tf.variable_scope("image_filters1") as scope1:<br>
+result1 = my_image_filter(image1)<br>
+with tf.variable_scope(scope1, reuse = True)<br>
+result2 = my_image_filter(image2)<br>
+注意最好不要采用的方式：设置 reuse 标识为 False，然后在需要的时候设置 reuse 标识为 True。</p>
+<p>可视化用途：画tensorboard流程图时封装<br>
+当然对我们而言name_scope还有个更直观的用处就是：在tensorboard 里可视化的时候用name_scope进行封装后会更清晰. 通常情况下，tf.variable_scope 和 tf.name_scope 配合，能画出非常漂亮的tensorboard流程图，但是他们两个之间又有着细微的差别，那就是 name_scope 只能管住操作 Ops 的名字，而管不住变量 Variables 的名字，看下例：</p>
+<p>with tf.variable_scope("foo"):<br>
+with tf.name_scope("bar"):<br>
+v = tf.get_variable("v", [1])<br>
+x = 1.0 + v<br>
+assert v.name == "foo/v:0"<br>
+assert x.op.name == "foo/bar/add"<br>
+参考：<a href="https://www.zhihu.com/question/54513728/answer/177901159" target="_blank" rel="nofollow">https://www.zhihu.com/question/54513728/answer/177901159</a></p>
+<p>Tensorflow变量共享，参考：<a href="http://www.cnblogs.com/Charles-Wan/p/6200446.html" target="_blank" rel="nofollow">http://www.cnblogs.com/Charles-Wan/p/6200446.html</a></p>
+<p>参考：<a href="http://sentiment-mining.blogspot.com/2016/12/tensorflow-name-scope-variable-scope.html" target="_blank" rel="nofollow">http://sentiment-mining.blogspot.com/2016/12/tensorflow-name-scope-variable-scope.html</a></p>
+<p>参考：<a href="https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/5-12-scope/" target="_blank" rel="nofollow">https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/5-12-scope/</a></p>
+<p>二. TensorFlow中name scope和variable scope区别<br>
+为了在代码的任何部分可以使用某一个已经创建的变量，TF引入了变量共享机制共享变量，而不是传一个变量的引用。</p>
+<p>I. TF中创建变量的方式有两种：tf.get_variable()和tf.Variable()<br>
+tf.get_variable(“vname”)方法，在创建变量时，如果这个变量vname已经存在，直接使用这个变量，如果不存在，则重新创建；<br>
+tf.Variable()在创建变量时，一律创建新的变量，如果这个变量已存在，则后缀会增加0、1、2等数字编号予以区别。<br>
+例子：在 tf.name_scope() 的框架下使用这两种方式, 结果如下.</p>
+<p>import tensorflow as tf</p>
+<p>with tf.name_scope("a_name_scope"):<br>
+initializer = tf.constant_initializer(value=1)<br>
+var1 = tf.get_variable(name='var1', shape=[1], dtype=tf.float32, initializer=initializer)<br>
+var2 = tf.Variable(name='var2', initial_value=[2], dtype=tf.float32)<br>
+var21 = tf.Variable(name='var2', initial_value=[2.1], dtype=tf.float32)<br>
+var22 = tf.Variable(name='var2', initial_value=[2.2], dtype=tf.float32)</p>
+<p>with tf.Session() as sess:<br>
+sess.run(tf.initialize_all_variables())<br>
+print(var1.name)        # var1:0<br>
+print(sess.run(var1))   # [ 1.]<br>
+print(var2.name)        # a_name_scope/var2:0<br>
+print(sess.run(var2))   # [ 2.]<br>
+print(var21.name)       # a_name_scope/var2_1:0<br>
+print(sess.run(var21))  # [ 2.0999999]<br>
+print(var22.name)       # a_name_scope/var2_2:0<br>
+print(sess.run(var22))  # [ 2.20000005]<br>
+可以看出使用 tf.Variable() 定义变量的时候, 虽然var2, var21, var22的 name 一样, 但是为了不重复变量名, Tensorflow 为它们做了附加的区分，因为输出的变量名是不一样的. 所以, 本质上tensorflow令 var2, var21, var22 成为不一样的变量.</p>
+<p>这样做的目的是，搭配上不同的作用域类型，可以实现变量共享机制。</p>
+<p>II. TF中有两种作用域类型<br>
+命名域 (name scope)，通过tf.name_scope 或 tf.op_scope创建；<br>
+变量域 (variable scope)，通过tf.variable_scope 或 tf.variable_op_scope创建；<br>
+这两种作用域，对于使用tf.Variable()方式创建的变量，具有相同的效果，都会在变量名称前面，加上域名称。<br>
+对于通过tf.get_variable()方式创建的变量，只有variable scope名称会加到变量名称前面，而name scope不会作为前缀。例如 print(v1.name)   # var1:0<br>
+例子：</p>
+<p>with tf.name_scope("my_name_scope"):</p>
+<pre><code>v1 = tf.get_variable("var1", [1], dtype=tf.float32)
+
+v2 = tf.Variable(1, name="var2", dtype=tf.float32)
+
+a = tf.add(v1, v2)</code></pre>
+<p>print(v1.name)  # var1:0</p>
+<p>print(v2.name)  # my_name_scope/var2:0</p>
+<p>print(a.name)   # my_name_scope/Add:0</p>
+<p>小结：name_scope不会作为tf.get_variable变量的前缀，但是会作为tf.Variable的前缀。</p>
+<p>例子：</p>
+<p>with tf.variable_scope("my_variable_scope"):</p>
+<pre><code>v1 = tf.get_variable("var1", [1], dtype=tf.float32)
+
+v2 = tf.Variable(1, name="var2", dtype=tf.float32)
+
+a = tf.add(v1, v2)</code></pre>
+<p>print(v1.name)  # my_variable_scope/var1:0</p>
+<p>print(v2.name)  # my_variable_scope/var2:0</p>
+<p>print(a.name)   # my_variable_scope/Add:0</p>
+<p>小结：在variable_scope的作用域下，tf.get_variable()和tf.Variable()都加了scope_name前缀。因此，在tf.variable_scope的作用域下，通过get_variable()可以使用已经创建的变量，实现了变量的共享。</p></div>
+					<div>
+						<div class=""></div>
+						<div class="showMore"><span>点击查看更多内容</span></div>
+					</div>
+				</div>
+				<!-- 标签 -->
+												<div class="cat-box">
+					<div class="cat-wrap clearfix">
+																		<a class="cat l" href="https://www.imooc.com/article/tag/18" target="_blank">Python</a>
+																		<a class="cat l" href="https://www.imooc.com/article/tag/58" target="_blank">深度学习</a>
+											</div>
+											<div class="original-warp">
+							<p class="original">本文原创发布于慕课网 ，转载请注明出处，谢谢合作</p>    
+						</div>                    
+					                    				</div>
+								<!-- 推荐 --> 
+				<div class="praise-box">
+										<button id="js-praise"><span class="imv2-thumb_up"></span><div style="position: absolute; top: 50%; left: 50%; width: 230px; height: 230px; margin-left: -115px; margin-top: -115px; opacity: 0.6; display: none; transform: rotate(0deg) translate(0px, 0px);"><svg style="position: absolute; width: 100%; height: 100%;"><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="15" rx="15" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="#F9B552" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse></svg></div><div style="position: absolute; top: 50%; left: 50%; width: 180px; height: 180px; margin-left: -90px; margin-top: -90px; opacity: 0.6; display: none; transform: translate(0px, 0px);"><svg style="position: absolute; width: 100%; height: 100%;"><ellipse cy="90" cx="90" ry="0" rx="0" transform="rotate(0,90,90)" fill-opacity="transparent" stroke-linecap="" stroke-dashoffset="" fill="transparent" stroke-dasharray="" stroke-opacity="1" stroke-width="20" stroke="#F9B552"></ellipse></svg></div></button>
+										<div class="num-person"><em class="num">0</em>人点赞</div>
+					<div class="praise-share icon-drop_up hide">
+						<div class="praise-share-box">
+							<p>若觉得本文不错，就分享一下吧！</p>
+							<div class="share-content bdsharebuttonbox bdshare-button-style0-16" data-bd-bind="1543385134900">
+								<div class="icon-warp">
+									<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_top&#39;, &#39;share&#39;, &#39;wx&#39;])" data-track="topshare-1-1" href="https://www.imooc.com/article/22966#" class="bds_weixin icon-nav imv2-weixin_c share-icon" data-cmd="weixin" title="分享到微信"></a>
+								</div>
+								<div class="icon-warp">
+									<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_top&#39;, &#39;share&#39;, &#39;wb&#39;])" data-track="topshare-1-2" href="https://www.imooc.com/article/22966#" class="bds_tsina icon-nav imv2-weibo_c share-icon" data-cmd="tsina" title="分享到新浪微博"></a>
+								</div>
+								<div class="icon-warp">
+									<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_top&#39;, &#39;share&#39;, &#39;qq&#39;])" data-track="topshare-1-3" href="https://www.imooc.com/article/22966#" class="bds_qzone icon-nav imv2-qq_c share-icon" data-cmd="qzone" title="分享到QQ空间"></a>    
+								</div> 
+							</div>
+						</div>	
+					</div>
+				</div>
+				<!-- 推荐end -->
+			</div>
+
+			
+		</div>	
+		<div class="opus-wrap clearfix">
+			<div class="detail-left">
+				<div class="df-title" id="all_comments"><span class="comment-num"><i>0</i></span> 评论</div>
+				<div class="detail-feedback-wrap">
+					<!-- 评论框 -->
+					<div class="df-ipt-wrap clearfix" id="comment">
+					
+						<div class="feeds-author l">
+							
+							评论
+							
+						</div>
+						<p class="fadeInput l js-showcommentModal">共同学习，写下你的评论</p>
+					
+					</div>
+					<!-- 评论框end -->
+					<!-- 评论 -->
+					<div id="js-feedback-list-wrap" class="feedback-list js-feedback-lookimg"><p class="feedback-none">暂无评论</p></div>
+					<!-- 分页页码  -->
+					<!-- <div class="qa-comment-page hide"></div> -->
+
+					<div class="qa-comment-page hide" style="display: none;">
+						<div class="moreBtn js-more" data-page="2">展开查看更多评论</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="article_wrap">
+			<div class="line_con">
+				<p class="line"></p>
+				<p class="line_text">相关文章推荐</p>
+			</div>
+			<div class="article-wrapper">
+				<div class="articleCon js-articleCon js-usercard-box">
+					
+				<div class="article clearfix">                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic24.jpg">                    </div>                    <div class="list-content l">                        <a href="https://www.imooc.com/article/257843" target="_blank" class="title"><p>程序员接私活的玄机</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>3</span>                                </div>                                <div data-fuid="1003566" class="nickName l js-usercard-dialog" data-userid="1003566">安晓辉</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/46" target="_blank"><span>职场生活</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">10.29</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic7.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/74556" target="_blank" class="title"><p>LayoutInflater和inflate的用法(转)</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>4</span>                                </div>                                <div data-fuid="6463820" class="nickName l js-usercard-dialog" data-userid="6463820">catspeake</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/5" target="_blank"><span>Html/CSS</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">09.05</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic13.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/24462" target="_blank" class="title"><p>loaclStorage和sessionStorage的用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>123</span>                                </div>                                <div data-fuid="3444443" class="nickName l js-usercard-dialog" data-userid="3444443">慕粉0202</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/14" target="_blank"><span>Html5</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">03.24</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5940c0cc00018baa06000324-200-200.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/18451" target="_blank" class="title"><p>position 和 display 的取值和各自的意思和用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>1646</span>                                </div>                                <div data-fuid="4094276" class="nickName l js-usercard-dialog" data-userid="4094276">何夜无月_何处无竹柏</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/5" target="_blank"><span>Html/CSS</span></a><a><i class="imv2-dot_samll"></i></a><a href="https://www.imooc.com/article/tag/25" target="_blank"><span>CSS3</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">06.14</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic6.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/255485" target="_blank" class="title"><p>JS中setTimeout（）和 interval()方法的用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>0</span>                                </div>                                <div data-fuid="6305603" class="nickName l js-usercard-dialog" data-userid="6305603">Qyou</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/17" target="_blank"><span>JavaScript</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">10.20</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic23.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/34192" target="_blank" class="title"><p>Python 模块调用和global的用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>0</span>                                </div>                                <div data-fuid="6458195" class="nickName l js-usercard-dialog" data-userid="6458195">蛊毒传说</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/18" target="_blank"><span>Python</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">06.08</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5adaedf60001d8d303800240-200-200.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/27096" target="_blank" class="title"><p>30分钟学会用scikit-learn的基本回归方法（线性、决策树、S</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>15</span>                                </div>                                <div data-fuid="6303958" class="nickName l js-usercard-dialog" data-userid="6303958">慕仔4209126</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/66" target="_blank"><span>人工智能</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">04.21</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5b797cab0001e69004000240-200-200.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/69712" target="_blank" class="title"><p>跟Google 学代码(自定义相机和PrintHelper用法)</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>5</span>                                </div>                                <div data-fuid="6457916" class="nickName l js-usercard-dialog" data-userid="6457916">波斯汪</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/12" target="_blank"><span>Android</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">08.19</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic18.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/253847" target="_blank" class="title"><p>THIS和supper用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>0</span>                                </div>                                <div data-fuid="6143541" class="nickName l js-usercard-dialog" data-userid="6143541">android零基础入门</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/3" target="_blank"><span>JAVA</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">10.13</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic2.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/263551" target="_blank" class="title"><p>在tp5.1.19框架下针对手机站和PC站调用两套模板的方法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>5</span>                                </div>                                <div data-fuid="6798199" class="nickName l js-usercard-dialog" data-userid="6798199">慕虎7371278</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/9" target="_blank"><span>Premiere</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">11.21</div>                        </a></div><a>                    </a></div><a>                </a></div><ul class="clearfix"><li class="l"><a href="https://www.imooc.com/article/tag/18" target="_blank">Python</a></li><li class="l"><a href="https://www.imooc.com/article/tag/35" target="_blank">大数据</a></li><li class="l"><a href="https://www.imooc.com/article/tag/89" target="_blank">Spring Cloud</a></li><li class="l"><a href="https://www.imooc.com/article/tag/85" target="_blank">计算机视觉</a></li><li class="l"><a href="https://www.imooc.com/article/tag/117" target="_blank">爬虫</a></li><li class="l"><a href="https://www.imooc.com/article/tag/66" target="_blank">人工智能</a></li><li class="l"><a href="https://www.imooc.com/article/tag/58" target="_blank">深度学习</a></li><li class="l"><a href="https://www.imooc.com/article/tag/30" target="_blank">C++</a></li><li class="l"><a href="https://www.imooc.com/article/tag/86" target="_blank">自然语言处理</a></li><li class="l"><a href="https://www.imooc.com/article/tag/62" target="_blank">SpringBoot</a></li></ul><div class="article clearfix">                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5bf39fdb0001ba0702720272-200-200.jpg">                    </div>                    <div class="list-content l">                        <a href="https://www.imooc.com/article/250844" target="_blank" class="title"><p>Handler 和 Message 以及 Looper 的基本用法和工</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>109</span>                                </div>                                <div data-fuid="6800556" class="nickName l js-usercard-dialog" data-userid="6800556">繁华开满天机</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/12" target="_blank"><span>Android</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">09.28</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic1.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/26880" target="_blank" class="title"><p>SQL Server的float 和 decimal用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>18</span>                                </div>                                <div data-fuid="6457808" class="nickName l js-usercard-dialog" data-userid="6457808">忽然笑</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/36" target="_blank"><span>SQL Server</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">04.20</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic26.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/254485" target="_blank" class="title"><p>Jquery 和 Ajax的 使用方法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>0</span>                                </div>                                <div data-fuid="6304261" class="nickName l js-usercard-dialog" data-userid="6304261">这个名字没人起</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/15" target="_blank"><span>JQuery</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">10.15</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/pic13.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/26892" target="_blank" class="title"><p>C# 中IDisposable和IEnumerable的用法</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>16</span>                                </div>                                <div data-fuid="133563" class="nickName l js-usercard-dialog" data-userid="133563">12345678_0001</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/38" target="_blank"><span>C#</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">04.20</div>                        </a></div><a>                    </a></div><a>                </a></div><div class="article clearfix"><a>                    <div class="imgCon l">                        <img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5b2e767a0001e29901400098-200-200.jpg">                    </div>                    </a><div class="list-content l"><a>                        </a><a href="https://www.imooc.com/article/38369" target="_blank" class="title"><p>PHP中json_decode()和json_encode()的使用方</p></a>                        <div class="list-bottom clearfix">                            <div class="labels-area l clearfix">                                <div class="browseNum l">                                    <i class="imv2-visibility"></i>                                    <span>3</span>                                </div>                                <div data-fuid="6458122" class="nickName l js-usercard-dialog" data-userid="6458122">繁花不似锦</div>                                <span class="skill clearfix"><a href="https://www.imooc.com/article/tag/2" target="_blank"><span>PHP</span></a><a></a></span><a>                        </a></div><a>                            <div class="createTime r">06.24</div>                        </a></div><a>                    </a></div><a>                </a></div></div>
+				
+				<div class="feed-loading js-feed-loading" data-page="2">
+					<i class="imv2-loading"></i><span>正在加载中</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right_recommend r">
+				<!-- 作者信息 -->
+		<div class="author_info js-author_info clearfix">
+			<a href="https://www.imooc.com/u/6364172/articles" class="l img_con" title="刘小米92" target="_blank">
+				<img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5a68d0bb00015f3a04000400-100-100.jpg">
+			</a>
+			<div class="text_con l">
+				<div class="name_con clearfix">
+					<p class="name l">
+					 	<a class="nick" href="https://www.imooc.com/u/6364172/articles" title="刘小米92" target="_blank">
+						刘小米92
+						</a>
+					</p>
+											<p class="forward">
+							<span class="js-add-follow" data-uid="6364172" data-type="1">关注</span>
+						</p>
+									</div>
+				<div class="job">
+					<span class="job-title" title="算法工程师">算法工程师</span>
+					<span class="job-icon">
+												       
+											</span>
+				</div>
+				<div class="contribution clearfix">
+					<a href="https://www.imooc.com/u/6364172/articles" target="_blank" class="js-article-num l">
+						<span>14</span> 篇手记
+					</a>
+					<a href="https://www.imooc.com/u/6364172/articles" target="_blank" class="js-article-words l">
+						贡献 <span>53533</span> 字
+					</a>
+				</div>
+			</div>
+		</div>   
+		<!-- 作者信息end -->
+				<!-- 作者相关文章 -->
+				<div class="other_article js-other_article clearfix">
+			<div class="title l">作者相关文章</div>
+			<div class="more r">
+				<a href="https://www.imooc.com/u/6364172/articles" target="_blank">更多<i class="imv2-arrow2_r"></i></a>
+			</div>
+			<ul class="l">
+							<li class="article-item clearfix">
+					<i class="imv2-shouji l"></i>
+					<a href="https://www.imooc.com/article/22952" class="l" target="_blank">
+						关于Android Studio 和 Gradle的那些事儿
+					</a>
+				</li>
+							<li class="article-item clearfix">
+					<i class="imv2-shouji l"></i>
+					<a href="https://www.imooc.com/article/22967" class="l" target="_blank">
+						来自官方文档的Ubuntu 16.04 + tensorflow-GPU 配置
+					</a>
+				</li>
+							<li class="article-item clearfix">
+					<i class="imv2-shouji l"></i>
+					<a href="https://www.imooc.com/article/22969" class="l" target="_blank">
+						android studio 运行代码时识别genymotion设备
+					</a>
+				</li>
+							<li class="article-item clearfix">
+					<i class="imv2-shouji l"></i>
+					<a href="https://www.imooc.com/article/22968" class="l" target="_blank">
+						【wav音频解析】之wavread函数的C++实现
+					</a>
+				</li>
+							<li class="article-item clearfix">
+					<i class="imv2-shouji l"></i>
+					<a href="https://www.imooc.com/article/22965" class="l" target="_blank">
+						TF Saver 保存/加载训练好模型（网络+参数）的那些事儿
+					</a>
+				</li>
+						</ul>
+		</div>
+				<!-- 作者相关文章end -->
+		<!-- 相关课程 -->
+		<div class="related_lessons js-related_lessons"><div class="title">相关课程</div><ul class="moco-aside-course"><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/59b8a486000107fb05400300-360-202.jpg"><p class="aside-course-type">实战</p></div><div class="aside-course-content"><a href="https://coding.imooc.com/class/136.html?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">全网最热Python3入门+进阶 更快上手实际开发</a><p class="aside-course-price"><span>￥366</span></p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-grade">初级</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>6735</span></p></div></li><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5859ed790001b9da05400300-360-202.jpg"><p class="aside-course-type">实战</p></div><div class="aside-course-content"><a href="https://coding.imooc.com/class/78.html?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">Python升级3.6 强力Django+杀手级Xadmin打造在线教育平台</a><p class="aside-course-price"><span>￥369</span></p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-grade">中级</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>3209</span></p></div></li><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/58d21b90000135a105400300-360-202.jpg"><p class="aside-course-type">实战</p></div><div class="aside-course-content"><a href="https://coding.imooc.com/class/92.html?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">聚焦Python分布式爬虫必学框架Scrapy 打造搜索引擎</a><p class="aside-course-price"><span>￥388</span></p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-grade">中级</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>3119</span></p></div></li><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/540e57300001d6d906000338-240-135.jpg"></div><div class="aside-course-content"><a href="https://www.imooc.com/learn/177?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">初识Python</a><p class="aside-course-grade">入门</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>568361</span></p></div></li><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/5705b7350001d59b06000338-240-135.jpg"></div><div class="aside-course-content"><a href="https://www.imooc.com/learn/317?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">python进阶</a><p class="aside-course-grade">中级</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>207159</span></p></div></li><li><div class="aside-course-img"><img src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/599a7ab8000179c506000338-228-128.jpg"><p class="aside-course-type">就业班</p></div><div class="aside-course-content"><a href="https://class.imooc.com/sc/36?mc_marking=4655172e1a62839eea65105dbf244230&amp;mc_channel=sjkctjpc" class="aside-course-name" target="_blank">JavaScript基础入门</a><p class="aside-course-price"><span>￥228</span></p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-grade">2步骤/9门课</p><div class="aside-course-dot"><i class="imv2-dot_samll"></i></div><p class="aside-course-people"><i class="imv2-set-sns"></i><span>547</span></p></div></li></ul></div>
+		<!-- 相关课程end -->
+	</div>
+</div>
+<div class="bottom-fixed js-bottom-fixed hide">
+	<ul class="bottom-wrap clearfix">
+		<!-- 推荐 --> 
+		<li class="praise-box l">
+						<button id="js-praise-bottom"><span class="imv2-thumb_up"></span></button>
+										<span class="praise-num">推荐</span>
+					</li>
+		<!-- 推荐end -->
+		<li class="icon-warp l">
+			<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;pl&#39;])" data-track="pl-1-1" href="https://www.imooc.com/article/22966#comment" class="icon-nav imv2-chat_bubble" title="评论"></a>  
+							<span class="comment-num">评论</span>
+					</li>
+		<li class="icon-warp l">
+							<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;sc&#39;])" data-track="sc-1-1" data-id="22966" href="javascript:" class="js-follow icon-nav icon-star2 " title="收藏"></a>
+				<span>收藏</span>   
+					</li>    
+		<li class="input l js-showcommentModal">共同学习，写下你的评论</li>
+		<li class="icon-warp2 l">
+			<a class="js-forward-btn imv2-forward icon-nav2" href="https://www.imooc.com/article/22966#">
+			</a>
+			<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;wx&#39;])" data-track="letfshare-1-1" href="https://www.imooc.com/article/22966#" class="bds_weixin icon-nav2 icon-share-weichat share-icon" data-cmd="weixin" title="分享到微信"></a>
+			<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;wb&#39;])" data-track="letfshare-1-2" href="https://www.imooc.com/article/22966#" class="bds_tsina icon-nav2 icon-share-weibo share-icon" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a onclick="_hmt.push([&#39;_trackEvent&#39;, &#39;sjtj_left&#39;, &#39;share&#39;, &#39;qq&#39;])" data-track="letfshare-1-3" href="https://www.imooc.com/article/22966#" class="bds_qzone icon-nav2 icon-share-qq share-icon" data-cmd="qzone" title="分享到QQ空间"></a>                                  
+		</li>
+	</ul>
+</div>
+
+
+
+
+<div class="hide">
+	<input type="hidden" data-pic="" id="js-share-img">
+	<input type="hidden" data-pic="//img3.mukewang.com/5a68d0bb00015f3a04000400-100-100.jpg" id="js-img-author">
+</div>
+<div class="r"></div>
+
+</div>
+
+
+<div id="J_GotoTop" class="elevator">
+
+    <a href="https://www.imooc.com/user/feedback" class="elevator-msg" target="_blank">
+        <i class="icon-feedback"></i>
+        <span class="">意见反馈</span>
+    </a>
+    <a href="https://www.imooc.com/help" class="elevator-faq" target="_blank">
+        <i class="icon-ques"></i>
+        <span class="">帮助中心</span>
+    </a>
+    <a href="https://www.imooc.com/mobile/app" target="_blank" class="elevator-app">
+        <i class="icon-appdownload"></i>
+        <span class="">APP下载</span>
+        <div class="elevator-app-box"></div>
+    </a>
+    <a href="javascript:void(0)" class="elevator-weixin no-goto" id="js-elevator-weixin">
+        <i class="icon-wxgzh"></i>
+        <span class="">官方微信</span>
+        <div class="elevator-weixin-box"></div>
+    </a>
+    <a href="javascript:void(0)" class="elevator-top no-goto" style="display:none" id="backTop">
+        <i class="icon-up2"></i>
+        <span class="">返回顶部</span>
+    </a>
+</div>
+
+
+
+<script type="text/javascript" charset="utf-8" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/ueditor.final.min.js.下载"></script>
+
+
+<!--script-->
+<script type="text/javascript" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/error.js.下载"></script>
+<script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/ssologin.js.下载"></script>
+<script type="text/javascript" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/sea.js.下载"></script>
+<script type="text/javascript" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/sea_config.js.下载"></script>
+<script type="text/javascript">seajs.use("/static/page/"+OP_CONFIG.module+"/"+OP_CONFIG.page);</script>
+<script>
+    //动态加载advertisementReportjs
+
+    var checkJQ = function(){
+        // console.log(typeof jQuery)
+       if(typeof jQuery != 'undefined') {
+           clearInterval(timer);
+           var scr = document.createElement('script');
+           scr.type="text/javascript";
+           scr.src="/static/page/common/advertisementReport.js";
+           document.body.appendChild(scr);
+
+       }
+    }
+    var timer = setInterval(checkJQ,1000);
+
+</script>
+
+
+<script src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/captcha.min.js.下载"></script>
+<script>
+	// 处理长篇幅文章部分显示
+	var hideArticleInterval, htmlFilterInterval;
+	(function() {
+		hideArticleInterval = setInterval(function() {
+			contentEl = document.querySelector('.detail-content');
+			var height = contentEl.offsetHeight;
+			if(contentEl && height > 0) {
+				clearInterval(hideArticleInterval);
+				hideArticleInterval = null;
+				if(height > 3000) {
+					contentEl.className += ' long-content';
+				}
+				document.querySelector('.showMore span').addEventListener('click', function() {
+					$('.detail-content').removeClass('long-content');
+				});
+			}
+		},5);
+		htmlFilterInterval = setInterval(function() {
+			var articleBox = document.getElementById('article_content');
+			if(window.$ && $.fn.lazyload && articleBox) {
+				clearInterval(htmlFilterInterval);
+				htmlFilterInterval = null;
+				$(articleBox).replaceWith(articleEl);
+				$('img.lazyload').lazyload({
+					load: function() {
+						$(this).removeClass('lazyload');
+					}
+				});
+			}
+		},5);
+	}());
+</script>
+
+<div class="tipoff-block js-tipoff-block"></div>
+<div class="tipoff-box js-tipoff-box">
+	<div class="tipoff-top-box clearfix">
+		<p class="l tipoff-title">举报</p>
+		<span class="r tipoff-close-btn icon-close2 js-tipoff-close"></span>
+	</div>
+	<div class="tipoff-type-box js-tipoff-typebox clearfix">
+		<div class="tipoff-loading">
+		  	<div class="bounce1"></div>
+			<div class="bounce2"></div>
+			<div class="bounce3"></div>
+		</div>
+	</div>
+	<div class="tipoff-content">
+		<textarea name="tipoff-content" class="tipoff-desc js-tipoff-desc" placeholder="写下举报理由"></textarea>
+		<div class="tipoff-text"><span class="js-tipoff-text">0</span>/150</div>
+	</div>
+	<div class="tipoff-btn-box clearfix">
+		<div class="r tipoff-submit-btn js-tipoff-submit" data-tipofftype="">提交</div>
+		<div class="r tipoff-cancel-btn js-tipoff-close">取消</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<div style="display: none">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f0cfcccd7b1393990c78efdeebff3968";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+(function (d) {
+window.bd_cpro_rtid="rHT4P1c";
+var s = d.createElement("script");s.type = "text/javascript";s.async = true;s.src = location.protocol + "//cpro.baidu.com/cpro/ui/rt.js";
+var s0 = d.getElementsByTagName("script")[0];s0.parentNode.insertBefore(s, s0);
+})(document);
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+</div>
+
+
+<div></div><div style="position: absolute; top: 100px; left: 100px; width: 164px; height: 164px; margin-left: -82px; margin-top: -82px; opacity: 1; display: none; transform: rotate(0deg) translate(0px, 0px);"><svg style="position: absolute; width: 100%; height: 100%;"><ellipse cy="0" cx="0" ry="7" rx="7" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="deeppink" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="7" rx="7" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="deeppink" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="7" rx="7" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="deeppink" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="7" rx="7" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="deeppink" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse><ellipse cy="0" cx="0" ry="7" rx="7" transform="rotate(0,0,0)" fill-opacity="1" stroke-linecap="" stroke-dashoffset="NaN " fill="deeppink" stroke-dasharray="NaN " stroke-opacity="1" stroke-width="0" stroke="transparent" style="opacity: 1; display: none;"></ellipse></svg></div><script type="text/javascript" src="./tf.name_scope() 和 tf.variable_scope() 的用法和玄机_慕课手记_files/advertisementReport.js.下载"></script></body></html>

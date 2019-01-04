@@ -1,0 +1,58 @@
+/*
+Skins css
+*/
+
+/*################### flat ########################*/
+.layer-content .flat {
+  overflow: hidden;
+}
+
+
+/*################### flat ########################*/
+.layer-content .flat-center {
+  overflow: hidden;
+}
+
+
+
+/*################### flat-right ########################*/
+.layer-content .flat-right {
+  overflow: hidden;
+}
+
+
+/*################### flat-left ########################*/
+.layer-content .flat-left {
+  overflow: hidden;
+}
+
+
+/*################### wc-center-price ########################*/
+.layer-content .wc-center-price {
+  overflow: hidden;
+  text-align: center;
+}
+
+
+.layer-content .wc-center-price .wc_sale_price  {
+
+}
+
+
+/*################### wc-center-cart ########################*/
+.layer-content .wc-center-cart {
+  overflow: hidden;
+  text-align: center;
+}
+
+
+.layer-content .wc-center-cart .wc_sale_price  {
+
+}
+
+
+
+
+
+
+
